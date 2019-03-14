@@ -29,18 +29,18 @@ export default {
       errorMsg: '',
       inviteLink: '',
       socket: io('localhost:3001')
-    }
+    };
   },
   methods: {
     createRoom() {
-      const roomId = this.$refs.roomIdInput.value
+      const roomId = this.$refs.roomIdInput.value;
 
       if (roomId) {
         this.socket.emit('joinRoom', roomId);
 
-        this.inviteLink = `${window.location.origin}/room/join/${roomId}`
+        this.inviteLink = `${window.location.origin}/room/join/${roomId}`;
       } else {
-        this.errorMsg = 'Empty room - Please enter valid ID'
+        this.errorMsg = 'Empty room - Please enter valid ID';
       }
     },
     copyToClipboard(e) {
