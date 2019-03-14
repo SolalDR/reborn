@@ -8,7 +8,15 @@ const io = require('socket.io')(server);
 
 io.on('connection', function(socket) {
   socket.on('joinRoom', function(roomId) {
-    socket.join(roomId)
-    console.log(`joined ${roomId}`, socket.rooms);
+    const rooms = io.sockets.adapter.rooms
+
+    if (!rooms[roomId]) {
+      socket.join(roomId)
+    } else {
+      const nbOfPlayer = rooms[roomId].length
+      nbOfPlayer < 2 ? socket.join(roomId) : console.log('Room is full')
+    }
+
+    console.log(`${roomId}`, `| Number of player: ${rooms[roomId].length}`);
   });
 });

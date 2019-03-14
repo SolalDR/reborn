@@ -23,7 +23,7 @@
 import io from 'socket.io-client'
 
 export default {
-  name: 'RoomSelection',
+  name: 'RoomCreate',
   data () {
     return {
       errorMsg: '',
@@ -38,7 +38,7 @@ export default {
       if (roomId) {
         this.socket.emit('joinRoom', roomId);
 
-        this.inviteLink = `${window.location.origin}/room/join/${roomId}`;
+        this.inviteLink = `${window.location.origin}#/room/join/${roomId}`;
       } else {
         this.errorMsg = 'Empty room - Please enter valid ID';
       }
