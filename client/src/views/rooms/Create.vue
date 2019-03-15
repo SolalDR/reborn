@@ -38,7 +38,7 @@ export default {
       if (roomId) {
         this.socket.emit('joinRoom', roomId);
 
-        this.inviteLink = `${window.location.origin}#/room/join/${roomId}`;
+        this.inviteLink = `${window.location.origin}#/rooms/${roomId}/join`;
       } else {
         this.errorMsg = 'Empty room - Please enter valid ID';
       }

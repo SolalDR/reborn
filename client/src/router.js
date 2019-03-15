@@ -20,14 +20,14 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
     },
     {
-      path: '/room/create',
-      name: 'roomCreate',
-      component: () => import('./views/room/Create.vue'),
+      path: '/rooms/create',
+      name: 'create-room',
+      component: () => import('./views/rooms/Create.vue'),
     },
     {
-      path: '/room/join/:id',
-      name: 'roomSelection',
-      component: () => import('./views/room/Join.vue'),
+      path: '/rooms/:id/join',
+      name: 'join-room',
+      component: () => import('./views/rooms/Join.vue'),
     },
   ],
 });
