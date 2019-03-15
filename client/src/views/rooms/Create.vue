@@ -20,15 +20,12 @@
 </template>
 
 <script>
-import io from 'socket.io-client'
-
 export default {
   name: 'RoomCreate',
   data () {
     return {
       errorMsg: '',
-      inviteLink: '',
-      socket: io('localhost:3001')
+      inviteLink: ''
     };
   },
   methods: {
@@ -36,7 +33,18 @@ export default {
       const roomId = this.$refs.roomIdInput.value;
 
       if (roomId) {
-        this.socket.emit('joinRoom', roomId);
+        this.$socket.emit('room:join', roomId);
+        this.$socket.on('room:connect', ({playerId, roomId}) => {
+          this.$store.commit('setPlayer', playerId);
+          this.$store.commit('setRoom', roomId);
+        })
+
+        this.$socket.on('game:start', (result)=>{
+          this.$store.commit('gameStart', result);
+          this.$router.push({name: 'game', params: {
+            id: roomId
+          }});
+        });
 
         this.inviteLink = `${window.location.origin}#/rooms/${roomId}/join`;
       } else {

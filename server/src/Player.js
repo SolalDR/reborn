@@ -8,4 +8,11 @@ export default class Player {
   assignRole(role){
     this.role = role;
   }
+
+  get infos(){
+    return {
+      id: this.id,
+      role: this.role
+    }
+  }
 }

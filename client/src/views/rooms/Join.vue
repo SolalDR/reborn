@@ -5,20 +5,31 @@
 </template>
 
 <script>
-import io from 'socket.io-client'
+
 
 export default {
   name: 'RoomJoin',
   data () {
     return {
-      msg: '',
-      socket: io('localhost:3001')
+      msg: ''
     };
   },
   mounted () {
-    const roomId = this.$router.history.current.params.id
+    const roomId = this.$router.history.current.params.id;
 
-    this.socket.emit('joinRoom', roomId);
+    this.$socket.emit('room:join', roomId);
+    this.$socket.on('game:start', (result)=>{
+      this.$store.commit('gameStart', result);
+      this.$router.push({name: 'game', params: {
+        id: roomId
+      }});
+    });
+
+    this.$socket.on('room:connect', ({playerId, roomId}) => {
+      this.$store.commit('setPlayer', playerId);
+      this.$store.commit('setRoom', roomId);
+    })
+
     this.msg = `Joined ${roomId}`
   },
   methods: {
