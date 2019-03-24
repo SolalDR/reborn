@@ -21,11 +21,11 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
     },
     {
-<<<<<<< HEAD
       path: '/debug',
       name: 'debug',
       component: Debug,
-=======
+    },
+    {
       path: '/rooms/create',
       name: 'create-room',
       component: () => import('./views/rooms/Create.vue'),
@@ -39,7 +39,6 @@ export default new Router({
       path: '/rooms/:id',
       name: 'game',
       component: () => import('./views/Game.vue'),
->>>>>>> feature/socket
     },
   ],
 });
