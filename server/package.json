@@ -3,7 +3,12 @@
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
-    "dev": "vue-cli-service serve",
+    "dev": "node ./index.js",
     "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "esm": "^3.2.17",
+    "express": "^4.16.4",
+    "socket.io": "^2.2.0"
   }
 }
