@@ -19,11 +19,16 @@ export default class Room {
   }
 
   launchGame(){
-    this.game = new Game(this.players, this.socket);
+    this.game = new Game({
+      players: this.players, 
+      socket: this.socket
+    });
+
     this.game.on('start', (infos)=>{
       this.socket.emit('game:start', infos);
       this.socket.broadcast.to(this.id).emit('game:start', infos);
     })
+    
     this.game.start();
   }
 }
