@@ -1,7 +1,9 @@
 import * as Reborn from "./index";
 import Emitter from "./utils/Emitter";
 import entityModels from "./entity/models";
+import metrics from "./metric"
 import World from "./World";
+
 
 /**
  * @param {[Player]} player
@@ -14,16 +16,32 @@ export default class Game extends Emitter {
   }){
     super();
     this.players = players;
+
+    // EntityModel
     this.entityModels = new Map();
     entityModels.forEach(model => {
-      this.entityModels.set(model.slug, new Reborn.EntityModel(model));
+      this.entityModels.set(model.slug, new Reborn.EntityModel({
+        ...model,
+        game: this
+      }));
     });
 
+    // Metrics
+    this.metrics = new Map();
+    metrics.forEach(metricConstructor => {
+      var metric = new metricConstructor();
+      this.metrics.set(metric.slug, metric);
+    });
+
+    // Timeline
     this.timeline = new Reborn.Timeline({
       interval,
     });
 
-    this.world = new World();
+    // World
+    this.world = new World({
+      game: this
+    });
   }
 
   /**

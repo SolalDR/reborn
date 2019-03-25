@@ -5,7 +5,7 @@ import Entity from "./entity";
 export default class World extends Emitter {
   constructor({
     game = null
-  }){
+  } = {}){
     super();
     this.game = game;
     this.entities = new Map();
@@ -21,7 +21,9 @@ export default class World extends Emitter {
   addEntity({
     model = null,
     position = null
-  } = {}, player = null){
+  } = {}){
+    console.log("---------", model, position);
+
     var entityModel = this.game.entityModels.get(model);
     if (!entityModel) {
       console.error(`World: Cannot add entity with model "${model}"`); return;
@@ -41,18 +43,19 @@ export default class World extends Emitter {
   }
 
   simulateMatch(){
-    var models = this.game.entityModels.keys();
-
+    var models = Array.from(this.game.entityModels.keys());
     for (var i=0; i<30; i++) {
       var entity = this.addEntity({
-        model:  models[Math.ceil(models.length*Math.random())],
+        model: models[Math.floor(models.length*Math.random())],
         position: [
           Math.ceil(Math.random()*this.grid.size[0]),
           Math.ceil(Math.random()*this.grid.size[1])
         ]
       });
-      console.log(entity.log());
-    }
 
+      if (entity) {
+        console.log(entity.log());
+      }
+    }
   }
 }

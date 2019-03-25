@@ -1,4 +1,4 @@
-import uuid from "../utils/uuid";
+import uuidGenerator from "../utils/uuid";
 
 /**
  * @param {String} uuid Unique ID 
@@ -8,7 +8,7 @@ import uuid from "../utils/uuid";
  */
 export default class Entity {
   constructor({
-    uuid = uuid(),
+    uuid = uuidGenerator(),
     position = null,
     model = null,
     states = new Map()
@@ -18,21 +18,36 @@ export default class Entity {
     this.model = model;
     if (this.model === null) return null;
     if (this.position === null) return null;
-
     this.states = states;
+
+    this.addState('creation');
+    this.addState('living');
+  }
+
+  destroy(){
+    this.states.forEach((_, slug) => {
+      this.removeState(slug);
+    })
   }
 
   addState(slug){
     var state = this.model.states[slug];
-    if (state) {
+    if (state && !this.states.has(slug)) {
       this.states.set(slug, state);
-      return;
+      state.enter(this.model.game);
+      return state;
     }
     console.error(`Entity: Cannot add state "${slug}" on model "${this.model.slug}"`);
   }
 
   removeState(slug){
-    this.states.delete(slug);
+    var state = this.states.get(slug);
+    if (state) {
+      state.leave(this.model.game);
+      this.states.delete(slug);
+      return; 
+    }
+    console.error(`Entity: Cannot found and remove state "${slug}"`);
   }
 
   /**

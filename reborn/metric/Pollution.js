@@ -1,4 +1,4 @@
-import Metric from "./index";
+import Metric from "./Metric";
 
 export default class Pollution extends Metric {
   constructor(){

@@ -7,17 +7,20 @@ import snakeCase from "./../utils/snakeCase";
  * @param {Number} health
  * @param {{x: Number, y: Number}} size A 2d vector which define the size an entity will take on the grid
  * @param {{State}} states A object that describe the different state
+ * @param {Game} game
  */
 export default class EntityModel {
   constructor({
     name = null,
     slug = null,
+    game = null,
     health = 100,
     size = {x: 1, y: 1},
-    states = {}
+    states = {},
   }){
     this.name = name;
     this.slug = slug === null ? snakeCase(name) : slug;
+    this.game = game;
     this.health = health;
     this.size = size;
 

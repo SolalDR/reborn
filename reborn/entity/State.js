@@ -23,17 +23,12 @@ class EntityState {
     this.leaveModifiers = leaveModifiers;
   }
   
-  applyEnterModifiers(){
+  enter(game){
     this.enterModifiers.forEach(modifier => {
-
     })
   }
 
-  applyRecursModifiers(){
-
-  }
-  
-  applyLeaveModifiers(){
+  leave(game){
 
   }
 }

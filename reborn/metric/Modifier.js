@@ -1,4 +1,4 @@
-import Metric from "./index";
+import Metric from "./Metric";
 
 /**
  * @param {String} name The name of the metric
