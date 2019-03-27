@@ -8,7 +8,6 @@ Below the squeleton of one of these
 var modelDescriptor = {
   name: String,
   slug: String, //[optionnal]
-  health: Number,
   size: {
     x: Number,
     y: Number

@@ -20,7 +20,6 @@ export default class EntityModel {
     this.name = name;
     this.slug = slug === null ? snakeCase(name) : slug;
     this.game = game;
-    this.health = health;
     this.size = size;
 
     // TODO Convert to Map
