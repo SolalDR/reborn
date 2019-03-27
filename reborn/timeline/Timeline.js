@@ -12,6 +12,9 @@ export default class Timeline extends Emitter {
     this.start();
   }
 
+  /**
+   * start the timeline
+   */
   start(){
     this.timestamp = Date.now();
     this.tick = setInterval(()=>{
@@ -42,6 +45,13 @@ export default class Timeline extends Emitter {
     clearInterval(this.tick);
   }
 
+  /**
+   * Add an event to the timeline
+   * @param {Number} delay 
+   * @param {Number} duration
+   * @param {Function} onComplete
+   * @param {Object} datas 
+   */
   add({
     delay = 0,
     duration = 0,
@@ -54,5 +64,6 @@ export default class Timeline extends Emitter {
 
     this.events.set( Symbol('TimelineEvent'), timelineEvent );
     if( onComplete ) timelineEvent.on('complete', onComplete);
+    return timelineEvent;
   }
 }

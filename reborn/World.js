@@ -14,9 +14,10 @@ export default class World extends Emitter {
   }
 
   /**
-   * @param {Player} player
+   * Add an entity
    * @param {String} model
    * @param {x: Number, y: Number} position
+   * @returns {Entity}
    */
   addEntity({
     model = null,
@@ -40,6 +41,11 @@ export default class World extends Emitter {
     return newEntity;
   }
 
+  /**
+   * Remove an entity
+   * @param {Entity} entity
+   * @returns {void}
+   */
   removeEntity(entity) {
     entity.destruct();
     this.entities.delete(entity.uuid);
