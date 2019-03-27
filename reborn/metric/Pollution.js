@@ -7,7 +7,7 @@ export default class Pollution extends Metric {
       min: 0,
       max: 100,
       value: 0,
-      recurentOperation: 0.1
+      recurentOperation: 0
     })
   }
 

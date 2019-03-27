@@ -1,9 +1,12 @@
 import Emitter from "./../utils/Emitter";
 
 /**
+ * @class Represent a state in the lifecycle of an Entity. It is the way to apply modification on the metrics.
  * @param {String} name The name availables are 'creation', 'mounted', 'destruction', 'living'
- * @param {Number} duration The duration before the state will be expired
- * @param {Modifier} entry
+ * @param {Number|null} duration The duration before the state will be expired. If no duration is specified the state stay 
+ * @param {{name: String, value: Number, checkBefore: Boolean}} enterModifiers
+ * @param {{name: String, value: Number, checkBefore: Boolean}} recurModifiers
+ * @param {{name: String, value: Number, checkBefore: Boolean}} leaveModifiers
  */
 class EntityState {
   constructor({
@@ -26,9 +29,10 @@ class EntityState {
   }
   
   /**
-   * Enter the state
+   * Enter the state: execute enter modifiers, modify recurent operation in metrics
    * @param {Reborn.Game} game 
    * @todo Check if checkBefore exist
+   * @returns {null}
    */
   enter(game){
     this.enterModifiers.forEach(modifier => {
@@ -42,15 +46,17 @@ class EntityState {
       var metric = game.metrics.get(modifier.name);
       if (metric) {
         var timeScaledValue = modifier.value*(game.timeline.interval/1000);
-        game.metrics.recurentOperation += timeScaledValue;
+        metric.recurentOperation += timeScaledValue;
+        
         return;
       }
     });
   }
 
   /**
-   * Leave the state
+   * Leave the state: execute leave modifiers discard recurent operation in metrics
    * @param {Reborn.Game} game 
+   * @returns {null}
    */
   leave(game){
     this.leaveModifiers.forEach(modifier => {
@@ -64,7 +70,7 @@ class EntityState {
       var metric = game.metrics.get(modifier.name);
       if (metric) {
         var timeScaledValue = modifier.value*(game.timeline.interval/1000);
-        game.metrics.recurentOperation -= timeScaledValue;
+        metric.recurentOperation -= timeScaledValue;
         return;
       }
     });
