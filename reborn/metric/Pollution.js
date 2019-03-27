@@ -1,5 +1,9 @@
 import Metric from "./Metric";
 
+/**
+ * Pollution metric
+ * @extends Metric
+ */
 export default class Pollution extends Metric {
   constructor(){
     super({
@@ -9,9 +13,5 @@ export default class Pollution extends Metric {
       value: 0,
       recurentOperation: 0
     })
-  }
-
-  modify(modifier){
-    modifier.apply(this, this);
   }
 }

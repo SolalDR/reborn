@@ -2,11 +2,13 @@ import Emitter from "../utils/Emitter";
 import snakeCase from "../utils/snakeCase";
 
 /**
+ * @class 
  * @param {String} name The name of the metric as it will be displayed in ui
  * @param {String} slug The slug of the metric (if not defined, the name of the metric will be converted to snake case)
- * @param {Number} value Value of the metric
+ * @param {Number} value Initial value of the metric
  * @param {Number} min Minimum value of the metric
  * @param {Number} max Maximum value of the metric
+ * @param {Number} recurentOperation A number that will be added on each tick of the timeline
  */
 class Metric extends Emitter {
   constructor({
@@ -43,6 +45,7 @@ class Metric extends Emitter {
 
   /**
    * Check if a limit is reached and fire an event if it does
+   * @returns {Boolean}
    */
   checkLimit(){
     if (this._value === this.min|| this.value === this.max) {

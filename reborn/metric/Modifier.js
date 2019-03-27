@@ -1,7 +1,8 @@
 import Metric from "./Metric";
 
 /**
- * @param {String} name The name of the metric
+ * @deprecated
+ * @param {String} name Name of the metric
  * @param {Number} value
  */
 export default class MetricModifier {
@@ -15,7 +16,7 @@ export default class MetricModifier {
     }
 
     if (isNaN(value)) {
-      console.error(`MetricModifier: The metric with name "${name}" is not defined`);
+      console.error(`MetricModifier: value must be a number`);
       return null;
     }
 
