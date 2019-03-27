@@ -22,8 +22,6 @@ export default class World extends Emitter {
     model = null,
     position = null
   } = {}){
-    console.log("---------", model, position);
-
     var entityModel = this.game.entityModels.get(model);
     if (!entityModel) {
       console.error(`World: Cannot add entity with model "${model}"`); return;
@@ -42,27 +40,46 @@ export default class World extends Emitter {
     return newEntity;
   }
 
-  removeEntity(uuid) {
-
+  removeEntity(entity) {
+    entity.destruct();
+    this.entities.delete(entity.uuid);
   }
 
-  simulateMatch(){
-    var models = Array.from(this.game.entityModels.keys());
-    for (var i=0; i<30; i++) {
-      var entity = this.addEntity({
-        model: models[Math.floor(models.length*Math.random())],
-        position: [
-          Math.ceil(Math.random()*this.grid.size[0]),
-          Math.ceil(Math.random()*this.grid.size[1])
-        ]
-      });
+  // simulateMatch(){
+  //   var models = Array.from(this.game.entityModels.keys());
+  //   for (var i=0; i<30; i++) {
+  //     var entity = this.addEntity({
+  //       model: models[Math.floor(models.length*Math.random())],
+  //       position: [
+  //         Math.ceil(Math.random()*this.grid.size[0]),
+  //         Math.ceil(Math.random()*this.grid.size[1])
+  //       ]
+  //     });
 
-      if (entity) {
-        // console.log(entity.log());
-      }
-    }
+  //     if (entity) {
+  //       // console.log(entity.log());
+  //     }
+  //   }
+  //   this.game.timeline.on('tick', ()=>{
+  //     console.log(this.game.metrics.get('pollution').value);
+  //   })
+  // }
+
+  simulateMatch(){
+    var entity = this.addEntity({
+      model: 'tree',
+      position: [0, 0]
+    });
+
+    console.log(this.entities.size);
+    setTimeout(()=>{
+      this.removeEntity(entity)
+      console.log(this.entities.size);
+    }, 10000)
+
     this.game.timeline.on('tick', ()=>{
       console.log(this.game.metrics.get('pollution').value);
     })
   }
 }
+

@@ -3,11 +3,23 @@ export default {
   name: "Arbre",
   states: {
     creation: {
-      duration: 0.5,
+      duration: 2000,
       enterModifiers: [
         {
           name: 'pollution',
-          value: -0.5
+          value: 5
+        }
+      ],
+      recurModifiers: [
+        {
+          name: 'pollution',
+          value: 0.1
+        }
+      ],
+      leaveModifiers: [
+        {
+          name: 'pollution',
+          value: 5
         }
       ]
     },
