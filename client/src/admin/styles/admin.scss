@@ -1,0 +1,18 @@
+@import "~vue-material/dist/theme/engine"; // Import the theme engine
+
+@include md-register-theme("default", (
+  primary: md-get-palette-color(blue, A400), // The primary color of your application
+  accent: md-get-palette-color(red, A200) // The accent and secondary color
+));
+
+@import "~vue-material/dist/theme/all"; // Apply the theme
+@import "./components/md/drawer.scss";
+
+.admin {
+  min-height: 100vh;
+  width: 100%;
+  .md-app {
+    min-height: 100vh;
+    width: 100%;
+  }
+}
