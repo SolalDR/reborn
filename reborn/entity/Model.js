@@ -2,21 +2,20 @@ import EntityState from "./State";
 import snakeCase from "./../utils/snakeCase";
 
 /**
+ * @class Describe an entity
  * @param {String} name The name of the model as it will be displayed in ui
  * @param {String} slug The slug of the model (if not defined, the name of the metric will be converted to snake case)
- * @param {Number} health
  * @param {{x: Number, y: Number}} size A 2d vector which define the size an entity will take on the grid
- * @param {{State}} states A object that describe the different state
+ * @param {Object<Object>} states An object that describe the different EntityState that will be created
  * @param {Game} game
  */
 export default class EntityModel {
   constructor({
     name = null,
     slug = null,
-    game = null,
-    health = 100,
     size = {x: 1, y: 1},
     states = {},
+    game = null,
   }){
     this.name = name;
     this.slug = slug === null ? snakeCase(name) : slug;
@@ -39,9 +38,9 @@ export default class EntityModel {
 
   /**
    * @param {String} name Name of the state
-   * @returns {Boolean} 
+   * @returns {Boolean}
    */
-  stateExist(name){
+  hasState(name){
     return !!this.states[name];
   }
 }

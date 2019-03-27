@@ -2,10 +2,11 @@ import uuidGenerator from "../utils/uuid";
 import Emitter from "./../utils/Emitter";
 
 /**
- * @param {String} uuid Unique ID 
- * @param {{x: Number, y: Number}} position The position in the grid
- * @param {Model} model A model that describe how the entity work
- * @param {[States]} states The current states of an entity
+ * @class Describe an entity based on a model
+ * @param {String} uuid A Unique ID, auto generated if not defined
+ * @param {{x: Number, y: Number}} position The position on the grid
+ * @param {EntityModel} model A model that describe how the entity work
+ * @param {[States]} states The activated states of the entity
  */
 export default class Entity extends Emitter {
   constructor({
@@ -25,11 +26,16 @@ export default class Entity extends Emitter {
     this.create();
   }
 
+  /**
+   * Enter the states "creation" and "living"
+   * When the state creation is passed, it run Entity::mount()
+   * @returns {void}
+   */
   create(){
     this.addState('living');
 
     // If creation state
-    if( this.model.stateExist('creation')) {
+    if( this.model.hasState('creation')) {
 
       this.on('add_state:creation', (creationState) => {
         this.once('remove_state:creation', () => {
@@ -53,9 +59,14 @@ export default class Entity extends Emitter {
     this.mount();
   }
 
+  /**
+   * Enter the states "mounted". If state "creation" still active, remove the state "creation"
+   * When the state mounted is removed, it run Entity::destruct()
+   * @returns {void}
+   */
   mount() {
     this.removeState('creation', true);
-    if( this.model.stateExist('mounted')) {
+    if( this.model.hasState('mounted')) {
       this.on('add_state:mounted', ()=>{
         this.once('remove_state:mounted', () => {
           this.destruct();
@@ -67,11 +78,16 @@ export default class Entity extends Emitter {
     this.destruct();
   }
 
+  /**
+   * Enter the states "destruction". If state "creation" or "mounted" are still activated, remove the states
+   * When the state destruction is removed, it run Entity::removeAllState()
+   * @returns {void}
+   */
   destruct() {
     // If state destruction is available
     this.removeState('mounted', true);
     this.removeState('creation', true);
-    if( this.model.stateExist('destruction')) {
+    if( this.model.hasState('destruction')) {
       this.on('add_state:destruction', (destructionState)=>{
         this.once('remove_state:destruction', () => {
           this.removeAllState();
@@ -97,20 +113,28 @@ export default class Entity extends Emitter {
     this.removeAllState();
   }
 
+  /**
+   * Remove all the states of the entity
+   */
   removeAllState(){
     // In this specific order
     this.removeState('living', true);
     this.removeState('destruction', true);
     this.removeState('mounted', true);
     this.removeState('creation', true);
+    this.emit('destroy');
   }
 
-  addState(slug, discret = false){
-    var state = this.model.states[slug];
-    if (state && !this.states.has(slug)) {
-      console.log('add state', slug);
-      this.states.set(slug, state);
-      console.log(this.states.keys())
+  /**
+   * Add a state to an entity if it is defined in the model. 
+   * @param {String} name The name of the state
+   * @param {Boolean} discret If true, the state will be added without firing an event
+   * @return {void|EntityState}
+   */
+  addState(name, discret = false){
+    var state = this.model.states[name];
+    if (state && !this.states.has(name)) {
+      this.states.set(name, state);
       state.enter(this.model.game);
       if (!discret) {
         this.emit(`add_state:${state.name}`, state);
@@ -119,13 +143,17 @@ export default class Entity extends Emitter {
     }
   }
 
-  removeState(slug, discret = false){
-    var state = this.states.get(slug);
+  /**
+   * Remove a state of an entity 
+   * @param {String} name The name of the state
+   * @param {Boolean} discret If true, the state will be removed without firing an event
+   * @return {void|EntityState}
+   */
+  removeState(name, discret = false){
+    var state = this.states.get(name);
     if (state) {
-      console.log('remove state', slug);
       state.leave(this.model.game);
-      this.states.delete(slug);
-      console.log(this.states.keys())
+      this.states.delete(name);
       if (!discret) {
         this.emit(`remove_state:${state.name}`, state);
       }
@@ -138,9 +166,13 @@ export default class Entity extends Emitter {
    * @return {string} The description of the entity
    */
   log() {
-    return `Entity: ${Array.from(this.states.keys())}, position: ${this.position}, model: ${this.model.slug}`;
+    return `states: ${Array.from(this.states.keys())}, position: ${this.position}, model: ${this.model.slug}`;
   }
 
+  /**
+   * Return infos on entity to send it to the socket
+   * @return {Object} THe description of the entity
+   */
   infos(){
     return {
       uuid: this.uuid,
