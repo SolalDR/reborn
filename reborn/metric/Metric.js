@@ -14,11 +14,13 @@ class Metric extends Emitter {
     slug = null,
     value = null,
     min = 0,
-    max = null
+    max = null,
+    recurentOperation = 0
   }){
     super();
     this.name = name;
     this.slug = slug === null ? snakeCase(name) : slug;
+    this.recurentOperation = recurentOperation;
     this.min = min;
     this.max = max;
     this.value = value;

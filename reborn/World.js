@@ -42,6 +42,10 @@ export default class World extends Emitter {
     return newEntity;
   }
 
+  removeEntity(uuid) {
+
+  }
+
   simulateMatch(){
     var models = Array.from(this.game.entityModels.keys());
     for (var i=0; i<30; i++) {
@@ -54,8 +58,11 @@ export default class World extends Emitter {
       });
 
       if (entity) {
-        console.log(entity.log());
+        // console.log(entity.log());
       }
     }
+    this.game.timeline.on('tick', ()=>{
+      console.log(this.game.metrics.get('pollution').value);
+    })
   }
 }

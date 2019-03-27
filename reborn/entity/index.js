@@ -20,11 +20,22 @@ export default class Entity {
     if (this.position === null) return null;
     this.states = states;
 
-    this.addState('creation');
+    if (this.model.stateExist('creation')) {
+      this.addState('creation');
+    } else if (this.model.stateExist('mounted')) {
+      this.addState('mounted');
+    }
+    
     this.addState('living');
   }
 
   destroy(){
+    this.states.forEach((_, slug) => {
+      this.removeState(slug);
+    })
+  }
+
+  forceDestroy(){
     this.states.forEach((_, slug) => {
       this.removeState(slug);
     })
@@ -37,7 +48,6 @@ export default class Entity {
       state.enter(this.model.game);
       return state;
     }
-    console.error(`Entity: Cannot add state "${slug}" on model "${this.model.slug}"`);
   }
 
   removeState(slug){

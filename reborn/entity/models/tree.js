@@ -7,7 +7,7 @@ export default {
       enterModifiers: [
         {
           name: 'pollution',
-          value: -0.2
+          value: -0.5
         }
       ]
     },

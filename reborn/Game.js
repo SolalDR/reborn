@@ -42,6 +42,12 @@ export default class Game extends Emitter {
     this.world = new World({
       game: this
     });
+
+    this.timeline.on('tick', ()=>{
+      this.metrics.forEach(metric => {
+        metric.value += metric.recurentOperation;
+      })
+    })
   }
 
   /**

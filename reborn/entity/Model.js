@@ -36,4 +36,12 @@ export default class EntityModel {
       }
     })
   }
+
+  /**
+   * @param {String} name Name of the state
+   * @returns {Boolean} 
+   */
+  stateExist(name){
+    return !!this.states[name];
+  }
 }

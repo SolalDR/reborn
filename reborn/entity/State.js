@@ -1,3 +1,5 @@
+import Emitter from "./../utils/Emitter";
+
 /**
  * @param {String} name The name availables are 'creation', 'mounted', 'destruction', 'living'
  * @param {Number} duration The duration before the state will be expired
@@ -23,13 +25,49 @@ class EntityState {
     this.leaveModifiers = leaveModifiers;
   }
   
+  /**
+   * Enter the state
+   * @param {Reborn.Game} game 
+   * @todo Check if checkBefore exist
+   */
   enter(game){
     this.enterModifiers.forEach(modifier => {
-    })
+      var metric = game.metrics.get(modifier.name);
+      if (metric) {
+        metric.value += modifier.value;
+      }
+    });
+    
+    this.recurModifiers.forEach(modifier => {
+      var metric = game.metrics.get(modifier.name);
+      if (metric) {
+        var timeScaledValue = modifier.value*(game.timeline.interval/1000);
+        game.metrics.recurentOperation += timeScaledValue;
+        return;
+      }
+    });
   }
 
+  /**
+   * Leave the state
+   * @param {Reborn.Game} game 
+   */
   leave(game){
-
+    this.leaveModifiers.forEach(modifier => {
+      var metric = game.metrics.get(modifier.name);
+      if (metric) {
+        metric.value += modifier.value;
+      }
+    });
+    
+    this.recurModifiers.forEach(modifier => {
+      var metric = game.metrics.get(modifier.name);
+      if (metric) {
+        var timeScaledValue = modifier.value*(game.timeline.interval/1000);
+        game.metrics.recurentOperation -= timeScaledValue;
+        return;
+      }
+    });
   }
 }
 
