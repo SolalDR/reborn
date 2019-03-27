@@ -18,7 +18,11 @@ export default class TimelineEvent extends Emitter {
     this.count = 0;
   }
 
+  /**
+   * Return infos on timeline event to log it or add a message to the history
+   * @return {string} The description of the event
+   */
   log(){
-    return `(${this.timecode}) TimelineEvent: ${this.datas.name ? this.datas.name : 'Anonyme'}; Number of execution: ${this.count}`
+    return `timecode: (${this.timecode}), ${this.datas.name ? this.datas.name : 'Anonyme'}; Number of execution: ${this.count}`
   }
 }
