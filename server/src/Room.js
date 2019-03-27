@@ -4,6 +4,7 @@ export default class Room {
   constructor(id, socket){
     this.id = id;
     this.socket = socket;
+    this.createdAt = Date.now();
     this._room = socket.adapter.rooms[this.id];
     this.length = 0;
     this.game = null;

@@ -9,13 +9,14 @@ import World from "./World";
  * @param {[Player]} player
  * @param {Number} interval
  */
-export default class Game extends Emitter {
+class Game extends Emitter {
   constructor({
     players = [],
     interval = 250
   }){
     super();
     this.players = players;
+    this.status = Game.PENDING;
 
     // EntityModel
     this.entityModels = new Map();
@@ -54,7 +55,22 @@ export default class Game extends Emitter {
    * Start the game
    */
   start() {
+    this.startedAt = Date.now();
+    this.status = Game.PLAYING;
     this.emit('start', this.infos);
+  }
+
+  /**
+   * Finish the game
+   */
+  finish(){
+    this.finishedAt = Date.now();
+    this.status = Game.FINISHED;
+    this.emit('finish', this.infos);
+  }
+
+  get timePlay() {
+    return this.status === Game.FINISHED ? this.finishedAt - this.startedAt : Date.now() - this.startedAt;
   }
 
   /**
@@ -73,3 +89,8 @@ export default class Game extends Emitter {
     }
   }
 }
+
+Game.PENDING = 1;
+Game.PLAYING = 2;
+Game.FINISHED = 3;
+export default Game;
