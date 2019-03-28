@@ -11,7 +11,7 @@
         </md-toolbar>
 
         <md-list>
-          <md-list-item>
+          <md-list-item to="/admin/rooms">
             <md-icon>videogame_asset</md-icon>
             <span class="md-list-item-text">Rooms</span>
           </md-list-item>
@@ -49,6 +49,13 @@ export default {
       default: 'Admin',
     },
   },
+
+  mounted() {
+    if (!this.$store.state.admin.token) {
+      this.$router.push('/admin/login');
+    }
+  },
+
   data() {
     return {
       sending: false,

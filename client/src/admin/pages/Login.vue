@@ -11,17 +11,6 @@
             <div class="md-layout md-gutter">
               <div class="md-layout-item md-size-100">
                 <md-field>
-                  <label for="first-name">Username</label>
-                  <md-input
-                    name="first-name"
-                    id="first-name"
-                    autocomplete="given-name"
-                    v-model="form.username.value" />
-                </md-field>
-              </div>
-
-              <div class="md-layout-item md-size-100">
-                <md-field>
                   <label for="last-name">Password</label>
                   <md-input
                   name="last-name"
@@ -32,6 +21,10 @@
                 </md-field>
               </div>
             </div>
+            <p>
+              {{this.form.error}}
+            </p>
+
           </md-card-content>
 
           <md-progress-bar md-mode="indeterminate" v-if="sending" />
@@ -52,9 +45,7 @@ export default {
     return {
       sending: false,
       form: {
-        username: {
-          value: '',
-        },
+        error: null,
         password: {
           value: '',
         },
@@ -65,10 +56,16 @@ export default {
   methods: {
     validateUser() {
       this.sending = true;
-      setTimeout(() => {
-        this.$router.push('/admin');
+      this.$socket.on('admin:authenticate', (response) => {
+        if (response.valid) {
+          this.$store.commit('admin/updateToken', response.token);
+          this.$router.push('/admin');
+        } else {
+          this.form.error = 'Le mot de passe est faux';
+          this.sending = false;
+        }
       });
-      return true;
+      this.$socket.emit('admin:authenticate', this.form.password.value);
     },
   },
 };

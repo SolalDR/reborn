@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import adminStore from './admin/store';
 
 Vue.use(Vuex);
 
@@ -22,5 +23,8 @@ export default new Vuex.Store({
       state.roomId = roomId;
       window.localStorage.roomId = roomId;
     },
+  },
+  modules: {
+    admin: adminStore,
   },
 });

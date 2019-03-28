@@ -1,4 +1,5 @@
 import Game from "./Game";
+import { throws } from "assert";
 
 export default class Room {
   constructor(id, socket){
@@ -31,5 +32,17 @@ export default class Room {
     })
     
     this.game.start();
+  }
+
+  get infos() {
+    return {
+      name: this.id,
+      createdAt: this.createdAt,
+      players: Array.from(this.players.values()).map(p => p.id),
+      game: this.game ? {
+        status: this.game.status,
+        startedAt: this.game.startedAt
+      } : null
+    }
   }
 }

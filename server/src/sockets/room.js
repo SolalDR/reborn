@@ -1,12 +1,17 @@
 import Room from '../Room';
 import Player from '../Player';
+import Bus from "./../Bus";
 
 /**
  * @this Socket
  */
 export default {
-  list(token, limit){
-
+  list(params){
+    if(process.token === params.token) {
+      var rooms = [];
+      process.rooms.forEach(room => rooms.push(room.infos));
+      this.emit('room:list', rooms);
+    }
   },
 
   join(roomId){
@@ -16,6 +21,7 @@ export default {
       const client = this.join(roomId);
       const room = new Room(roomId, this);
       process.rooms.set(roomId, room);
+      Bus.emit('room:add', roomId);
       room.addPlayer(new Player(client));
 
       this.emit('room:connect', {

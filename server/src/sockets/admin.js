@@ -1,8 +1,19 @@
+import Bus from "./../Bus";
+process.token = '1234';
+
 export default {
   authenticate(mdp){
     if( mdp === process.env.MDP ){
-      return true;
+      this.emit('admin:authenticate', {
+        valid: true,
+        token: process.token
+      });
+      return;
     }
-    return false;
+    this.emit('admin:authenticate', {
+      valid: false,
+      token: null
+    });
+
   }
 }
