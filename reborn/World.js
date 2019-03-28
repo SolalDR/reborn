@@ -80,12 +80,7 @@ export default class World extends Emitter {
     console.log(this.entities.size);
     setTimeout(()=>{
       this.removeEntity(entity)
-      console.log(this.entities.size);
     }, 10000)
-
-    this.game.timeline.on('tick', ()=>{
-      console.log(this.game.metrics.get('pollution').value);
-    })
   }
 }
 

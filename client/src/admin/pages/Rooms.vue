@@ -11,12 +11,18 @@
           <md-table-head>Statut</md-table-head>
         </md-table-row>
 
-        <md-table-row v-for="room in rooms" v-bind:key="room">
+        <md-table-row v-for="room in rooms" v-bind:key="room.createdAt">
           <md-table-cell>{{ room.name }}</md-table-cell>
-          <md-table-cell>{{ room.players.length }}</md-table-cell>
+          <md-table-cell>{{ room.players.filter(p => p.status === 1).length }}</md-table-cell>
           <md-table-cell>{{ formatDate(new Date(room.createdAt)) }}</md-table-cell>
-          <md-table-cell>{{ formatDate(new Date(room.game.startedAt)) }}</md-table-cell>
-          <md-table-cell>{{ room.game.status }}</md-table-cell>
+          <md-table-cell>
+            {{
+            room.game && room.game.startedAt
+              ? formatDate(new Date(room.game.startedAt))
+              : null
+            }}
+          </md-table-cell>
+          <md-table-cell>{{ room.game ? room.game.status : null }}</md-table-cell>
         </md-table-row>
       </md-table>
     </div>
@@ -33,12 +39,18 @@ export default {
   },
   created() {
     this.$socket.on('room:list', (rooms) => {
-      console.log(rooms);
       this.rooms = rooms;
+      this.rooms.forEach((room) => {
+        if (room.game) {
+          console.log(room.game.startedAt);
+        }
+      });
     });
-    this.$socket.on('room:add', (room) => {
-      console.log(room);
+
+    this.$socket.on('room:add', () => {
+      this.$socket.emit('room:list', { token: this.$store.state.admin.token });
     });
+
     this.$socket.emit('room:list', { token: this.$store.state.admin.token });
   },
   methods: {

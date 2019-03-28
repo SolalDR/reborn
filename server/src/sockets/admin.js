@@ -1,4 +1,5 @@
 import Bus from "./../Bus";
+import roomSocket from "./room";
 process.token = '1234';
 
 export default {
@@ -7,13 +8,27 @@ export default {
       this.emit('admin:authenticate', {
         valid: true,
         token: process.token
-      });
+      })
+
+      var onRoomListChange = () => {
+        roomSocket.list.call(this, {
+          token: process.token
+        });
+      }
+
+      Bus.on('room:add', onRoomListChange);
+      Bus.on('room:remove', onRoomListChange);
+      Bus.on('room:update', onRoomListChange);
+      this.on('disconnect', () => {
+        Bus.off('room:add', onRoomListChange);
+        Bus.off('room:remove', onRoomListChange);
+        Bus.off('room:update', onRoomListChange);
+      })
       return;
     }
     this.emit('admin:authenticate', {
       valid: false,
       token: null
     });
-
   }
 }
