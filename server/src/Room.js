@@ -1,6 +1,5 @@
 import Game from "./Game";
 import Emitter from "./../../reborn/utils/Emitter";
-import Bus from "./Bus";
 import Player from "./Player";
 
 export default class Room extends Emitter {
@@ -25,32 +24,49 @@ export default class Room extends Emitter {
       if(!this.roomActive) {
         process.rooms.delete(this.id);
       }
-      Bus.emit('room:update');
+      this.emit('update', this.infos);
     })
 
     this.length++;
-    Bus.emit('room:udpate', this);
+    this.emit('update', this.infos);
   }
-
 
   launchGame(){
     this.game = new Game({
-      players: this.players, 
-      socket: this.socket
+      players: this.players,
+      socket: this.socket,
+      room: this
     });
+    this.initSocketListeners();
 
     this.game.on('start', (infos)=>{
-      this.socket.emit('game:start', infos);
-      this.socket.broadcast.to(this.id).emit('game:start', infos);
-      Bus.emit('room:update', this);
-      this.emit('update');
+      this.emit('update', this.infos);
+      this.emit('start', infos);
     })
-
-    this.game.on('tick', (args) => this.emit('tick', args))
 
     this.game.start();
   }
 
+  /**
+   * Register all the events in the game which will be dispatched to players
+   */
+  initSocketListeners() {
+    this.on('start', (args) => this.dispatchToPlayers('game:start', args));
+    this.game.world.on('entity:add', (args) => this.dispatchToPlayers('entity:add', args));
+    this.game.world.on('entity:remove', (args) => this.dispatchToPlayers('entity:add', args));
+    this.game.world.on('entity:update', (args) => this.dispatchToPlayers('entity:update', args));
+  }
+
+  /**
+   * Dispatch a socket event to all the players connected
+   * @param {string} eventName Ex: room:update, entity:add
+   * @param {*} datas An object of datas passed to all the listeners
+   */
+  dispatchToPlayers(eventName, datas) {
+    this.players.forEach(player => {
+      player.socket.emit(eventName, datas);
+    })
+  }
 
   get roomActive() {
     var active = false;

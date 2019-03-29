@@ -61,6 +61,10 @@ export default {
         this.emit('entity:remove', entity);
       }
 
+      const entityUpdateCallback = (entity) => {
+        this.emit('entity:update', entity);
+      }
+
       const entitiesListCallback = () => {
         const entities = room.game.world.entitiesList.map(e => e.infos);
         this.emit('room:entities', entities);
@@ -75,24 +79,24 @@ export default {
         entitiesListCallback();
 
         // entity
-        room.on('tick', tickCallback);
+        room.game.on('tick', tickCallback);
         room.game.world.on('entity:add', entityAddCallback);
         room.game.world.on('entity:remove', entityRemoveCallback);
+        room.game.world.on('entity:update', entityUpdateCallback);
       }
 
       this.emit('admin:listen', room.infos);
 
       // If game is not defined wait to launch events
       gameListener();
-      room.on('update', () => {
-        if(!isListeningGame) gameListener()
-      })
+      room.on('start', gameListener());
 
       // Remove events when admin disconnects
       this.on('disconnect', () => {
-        room.off('tick', tickCallback);
-        room.game.off('entity:add', entityAddCallback);
-        room.game.off('entity:remove', entityRemoveCallback);
+        room.game.off('tick', tickCallback);
+        room.game.world.off('entity:add', entityAddCallback);
+        room.game.world.off('entity:remove', entityRemoveCallback);
+        room.game.world.off('entity:update', entityUpdateCallback);
       })
     }
   },

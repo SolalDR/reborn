@@ -1,18 +1,18 @@
 import * as Reborn from "../../reborn";
 
 export default class Game extends Reborn.Game {
-  constructor({ players = null, socket = null } = {}){
+  constructor({
+    players,
+    socket,
+    room
+  } = {}){
     super({
       players,
       interval: 250
     });
-
+    this.room = room;
     this.socket = socket;
     this.assignRoles();
-
-    this.timeline.on('tick', (events)=>{
-      // console.log('Tick', this.timeline.time);
-    })
   }
 
   assignRoles(){
