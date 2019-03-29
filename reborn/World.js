@@ -2,6 +2,12 @@ import Emitter from "./utils/Emitter";
 import Grid from "./Grid";
 import Entity from "./entity";
 
+/**
+ * @class Represent a physic environnement
+ * @property {Map} entities
+ * @property {Grid} grid
+ * @extends Emitter
+ */
 export default class World extends Emitter {
   constructor({
     game = null
@@ -16,7 +22,7 @@ export default class World extends Emitter {
   /**
    * Add an entity
    * @param {String} model
-   * @param {x: Number, y: Number} position
+   * @param {{x: Number, y: Number}} position
    * @returns {Entity}
    */
   addEntity({
@@ -63,7 +69,7 @@ export default class World extends Emitter {
       this.addEntity({
         model: Math.random() > 0.5 ? 'tree' : 'house',
         position: [
-          Math.floor(Math.random()*this.grid.size[0]), 
+          Math.floor(Math.random()*this.grid.size[0]),
           Math.floor(Math.random()*this.grid.size[1])
         ]
       })
