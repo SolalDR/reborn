@@ -2,7 +2,16 @@ import Bus from "./../Bus";
 import roomSocket from "./room";
 process.token = '1234';
 
+/**
+ * Define the sockets endpoints namespaced with admin
+ * @this Socket
+ */
 export default {
+
+  /**
+   * Authentification via admin:authenticate endpoint
+   * @param {string} mdp
+   */
   authenticate(mdp){
     if( mdp === process.env.MDP ){
       this.emit('admin:authenticate', {
@@ -32,49 +41,54 @@ export default {
     });
   },
 
+  /**
+   * Start listening to a room with admin:listen endpoint
+   * @param {string} token The token to anthenticate
+   * @param {string} name The name of the room you want to listen
+   */
   startListen({ token, name }) {
-    if (token === process.token) {
-      var room = process.rooms.get(name);
-      this.emit('admin:listen', room.infos);
-
-
-      var tickCallback = (args) => {
+    const room = process.rooms.get(name);
+    if (token === process.token && room) {
+      const tickCallback = (args) => {
         this.emit('admin:tick', args);
       };
 
-      var entityAddCallback = (entity) => {
+      const entityAddCallback = (entity) => {
         this.emit('entity:add', entity);
       }
 
-      var entityRemoveCallback = (entity) => {
+      const entityRemoveCallback = (entity) => {
         this.emit('entity:remove', entity);
       }
 
-      var entitiesListCallback = () => {
-        var entities = room.game.world.entitiesList.map(e => e.infos);
+      const entitiesListCallback = () => {
+        const entities = room.game.world.entitiesList.map(e => e.infos);
         this.emit('room:entities', entities);
       }
 
+      var isListeningGame = false;
 
+      // A listner
       function gameListener() {
-        var entities = room.game.world
-        room.on('tick', tickCallback);
+        if(!room.game) return;
+        isListeningGame = true;
+        entitiesListCallback();
 
         // entity
-        entitiesListCallback();
+        room.on('tick', tickCallback);
         room.game.world.on('entity:add', entityAddCallback);
         room.game.world.on('entity:remove', entityRemoveCallback);
       }
 
-      // If game is not defined wait to launch events
-      if(!room.game) {
-        room.on('update', () => {
-          if(room.game) gameListener()
-        })
-      } else {
-        gameListener();
-      }
+      this.emit('admin:listen', room.infos);
 
+      // If game is not defined wait to launch events
+      gameListener();
+      room.on('update', () => {
+        if(!isListeningGame) gameListener()
+      })
+
+      // Remove events when admin disconnects
       this.on('disconnect', () => {
         room.off('tick', tickCallback);
         room.game.off('entity:add', entityAddCallback);

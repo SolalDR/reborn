@@ -87,6 +87,7 @@ export default {
       component: 'overview',
     };
   },
+
   created() {
     this.$socket.emit('admin:listen', {
       token: this.$store.state.admin.token,
@@ -141,7 +142,7 @@ export default {
 };
 </script>
 
-<style lang="scss" >
+<style lang="scss">
 .admin-room {
   .md-card {
     margin-bottom: 32px;
