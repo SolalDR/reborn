@@ -173,7 +173,7 @@ export default class Entity extends Emitter {
    * Return infos on entity to send it to the socket
    * @return {Object} THe description of the entity
    */
-  infos(){
+  get infos(){
     return {
       uuid: this.uuid,
       position: this.position,

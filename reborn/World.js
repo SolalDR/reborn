@@ -38,7 +38,12 @@ export default class World extends Emitter {
     });
 
     this.entities.set(newEntity.uuid, newEntity);
+    this.emit('entity:add', newEntity.infos);
     return newEntity;
+  }
+
+  get entitiesList(){
+    return Array.from(this.entities.values());
   }
 
   /**
@@ -49,38 +54,20 @@ export default class World extends Emitter {
   removeEntity(entity) {
     entity.destruct();
     this.entities.delete(entity.uuid);
+    this.emit('entity:remove', entity.infos);
   }
 
-  // simulateMatch(){
-  //   var models = Array.from(this.game.entityModels.keys());
-  //   for (var i=0; i<30; i++) {
-  //     var entity = this.addEntity({
-  //       model: models[Math.floor(models.length*Math.random())],
-  //       position: [
-  //         Math.ceil(Math.random()*this.grid.size[0]),
-  //         Math.ceil(Math.random()*this.grid.size[1])
-  //       ]
-  //     });
-
-  //     if (entity) {
-  //       // console.log(entity.log());
-  //     }
-  //   }
-  //   this.game.timeline.on('tick', ()=>{
-  //     console.log(this.game.metrics.get('pollution').value);
-  //   })
-  // }
 
   simulateMatch(){
-    var entity = this.addEntity({
-      model: 'tree',
-      position: [0, 0]
-    });
-
-    console.log(this.entities.size);
-    setTimeout(()=>{
-      this.removeEntity(entity)
-    }, 10000)
+    setInterval(()=>{
+      this.addEntity({
+        model: Math.random() > 0.5 ? 'tree' : 'house',
+        position: [
+          Math.floor(Math.random()*this.grid.size[0]), 
+          Math.floor(Math.random()*this.grid.size[1])
+        ]
+      })
+    }, 1000)
   }
 }
 

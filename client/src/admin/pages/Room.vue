@@ -43,30 +43,47 @@
           </div>
         </md-card-content>
       </md-card>
+
+
+      <md-card>
+        <md-card-header>
+          <div class="md-title">Grille</div>
+        </md-card-header>
+
+        <md-card-content>
+          <grid-component
+            :size="[32, 32]"
+            :cells="entities"
+            @clickCell="onClickCell($event)"
+            />
+        </md-card-content>
+      </md-card>
     </div>
   </div>
 </template>
 
 <script>
 
-import Overview from './rooms/Overview.vue';
-import Map from './rooms/Map.vue';
-import History from './rooms/History.vue';
+// import Overview from './rooms/Overview.vue';
+// import Map from './rooms/Map.vue';
+// import History from './rooms/History.vue';
+import GridComponent from './rooms/Grid.vue';
 
 export default {
   name: 'Room',
 
-  component: {
-    Overview,
-    Map,
-    History,
+  components: {
+    // Overview,
+    // Map,
+    // History,
+    GridComponent,
   },
 
   data() {
     return {
       room: null,
       metrics: [],
-      entities: [],
+      entities: new Array(32 * 32).fill(null),
       component: 'overview',
     };
   },
@@ -78,19 +95,57 @@ export default {
 
     this.$socket.on('admin:listen', (room) => {
       this.room = room;
-      console.log(JSON.parse(JSON.stringify(room)));
+      this.onConnectRoom();
     });
 
-    this.$socket.on('admin:tick', ({ metrics, entities }) => {
-      this.metrics = metrics;
-      this.entities = entities;
-    });
+    this.entities[42] = {
+      model: 'tree',
+      color: '#CCC',
+    };
+
+    console.log(this.entities);
+  },
+
+  methods: {
+    onClickCell({ position, rank }) {
+      console.log(position, rank);
+    },
+
+    onConnectRoom() {
+      this.$socket.on('admin:tick', ({ metrics, entities }) => {
+        this.metrics = metrics;
+      });
+
+      this.$socket.on('room:entities', (entities) => {
+        console.log(entities);
+        entities.forEach((entity) => {
+          this.entities[entity.position[0] + entity.position[1] * 32] = {
+            ...entity,
+            color: '#CCC',
+          };
+        });
+      });
+
+      this.$socket.on('entity:add', (entity) => {
+        this.entities[entity.position[0] + entity.position[1] * 32] = {
+          ...entity,
+          color: '#CCC',
+        };
+      });
+
+      this.$socket.on('entity:remove', (entity) => {
+        this.entities[entity.position[0] + entity.position[1] * 32] = null;
+      });
+    },
   },
 };
 </script>
 
 <style lang="scss" >
 .admin-room {
+  .md-card {
+    margin-bottom: 32px;
+  }
   &__title {
     margin-bottom: 16px;
     margin-top: 0;

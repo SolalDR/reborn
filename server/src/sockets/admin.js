@@ -36,14 +36,49 @@ export default {
     if (token === process.token) {
       var room = process.rooms.get(name);
       this.emit('admin:listen', room.infos);
+
+
       var tickCallback = (args) => {
         this.emit('admin:tick', args);
       };
 
+      var entityAddCallback = (entity) => {
+        this.emit('entity:add', entity);
+      }
 
-      room.on('tick', tickCallback);
+      var entityRemoveCallback = (entity) => {
+        this.emit('entity:remove', entity);
+      }
+
+      var entitiesListCallback = () => {
+        var entities = room.game.world.entitiesList.map(e => e.infos);
+        this.emit('room:entities', entities);
+      }
+
+
+      function gameListener() {
+        var entities = room.game.world
+        room.on('tick', tickCallback);
+
+        // entity
+        entitiesListCallback();
+        room.game.world.on('entity:add', entityAddCallback);
+        room.game.world.on('entity:remove', entityRemoveCallback);
+      }
+
+      // If game is not defined wait to launch events
+      if(!room.game) {
+        room.on('update', () => {
+          if(room.game) gameListener()
+        })
+      } else {
+        gameListener();
+      }
+
       this.on('disconnect', () => {
         room.off('tick', tickCallback);
+        room.game.off('entity:add', entityAddCallback);
+        room.game.off('entity:remove', entityRemoveCallback);
       })
     }
   },

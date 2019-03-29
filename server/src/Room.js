@@ -43,6 +43,7 @@ export default class Room extends Emitter {
       this.socket.emit('game:start', infos);
       this.socket.broadcast.to(this.id).emit('game:start', infos);
       Bus.emit('room:update', this);
+      this.emit('update');
     })
 
     this.game.on('tick', (args) => this.emit('tick', args))

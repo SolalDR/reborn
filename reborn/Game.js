@@ -89,7 +89,8 @@ class Game extends Emitter {
    */
   get infos(){
     return {
-      players: this.playersList.map(player => player.infos)
+      players: this.playersList.map(player => player.infos),
+      grid: this.world.grid.size
     }
   }
 }
