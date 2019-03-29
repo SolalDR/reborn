@@ -11,7 +11,10 @@
           <md-table-head>Statut</md-table-head>
         </md-table-row>
 
-        <md-table-row v-for="room in rooms" v-bind:key="room.createdAt">
+        <md-table-row
+          @click="onClickRoom(room.name)"
+          v-for="room in rooms"
+          v-bind:key="room.createdAt">
           <md-table-cell>{{ room.name }}</md-table-cell>
           <md-table-cell>{{ room.players.filter(p => p.status === 1).length }}</md-table-cell>
           <md-table-cell>{{ formatDate(new Date(room.createdAt)) }}</md-table-cell>
@@ -59,6 +62,10 @@ export default {
         return '';
       }
       return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+    },
+    onClickRoom(roomName) {
+      console.log(`/admin/rooms/${roomName}`);
+      this.$router.push({ path: `/admin/rooms/${roomName}` });
     },
   },
 };

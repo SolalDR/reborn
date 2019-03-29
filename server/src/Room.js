@@ -1,10 +1,11 @@
 import Game from "./Game";
-import { throws } from "assert";
+import Emitter from "./../../reborn/utils/Emitter";
 import Bus from "./Bus";
 import Player from "./Player";
 
-export default class Room {
+export default class Room extends Emitter {
   constructor(id, socket){
+    super();
     this.id = id;
     this.socket = socket;
     this.createdAt = Date.now();
@@ -43,6 +44,8 @@ export default class Room {
       this.socket.broadcast.to(this.id).emit('game:start', infos);
       Bus.emit('room:update', this);
     })
+
+    this.game.on('tick', (args) => this.emit('tick', args))
 
     this.game.start();
   }

@@ -43,6 +43,14 @@ class Metric extends Emitter {
     return this._value;
   }
 
+  get infos() {
+    return {
+      value: this.value,
+      name: this.name,
+      slug: this.slug
+    }
+  } 
+
   /**
    * Check if a limit is reached and fire an event if it does
    * @returns {Boolean}

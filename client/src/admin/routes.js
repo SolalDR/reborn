@@ -12,6 +12,12 @@ export default [
     meta: { layout: 'admin' },
   },
   {
+    path: '/admin/rooms/:name',
+    name: 'rooms',
+    component: () => import('./pages/Room.vue'),
+    meta: { layout: 'admin' },
+  },
+  {
     path: '/admin/rooms',
     name: 'rooms',
     component: () => import('./pages/Rooms.vue'),

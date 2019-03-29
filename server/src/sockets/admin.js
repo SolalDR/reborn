@@ -30,5 +30,21 @@ export default {
       valid: false,
       token: null
     });
-  }
+  },
+
+  startListen({ token, name }) {
+    if (token === process.token) {
+      var room = process.rooms.get(name);
+      this.emit('admin:listen', room.infos);
+      var tickCallback = (args) => {
+        this.emit('admin:tick', args);
+      };
+
+
+      room.on('tick', tickCallback);
+      this.on('disconnect', () => {
+        room.off('tick', tickCallback);
+      })
+    }
+  },
 }

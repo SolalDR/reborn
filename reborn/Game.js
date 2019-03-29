@@ -44,9 +44,13 @@ class Game extends Emitter {
       game: this
     });
 
+    var metricsMap = Array.from(this.metrics.values());
     this.timeline.on('tick', ()=>{
       this.metrics.forEach(metric => {
         metric.value += metric.recurentOperation;
+      })
+      this.emit('tick', {
+        metrics: metricsMap.map(m => m.infos)
       })
     })
   }
