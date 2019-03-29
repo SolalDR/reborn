@@ -1,23 +1,48 @@
 <template>
   <div class="admin-room">
-    <span class="admin-room__title md-display-1">Room: {{ room.name }}</span>
+    <h1 class="admin-room__title md-display-1">Room: {{ room.name }}</h1>
     <div class="header">
       <md-tabs md-sync-route>
         <md-tab id="tab-home" md-label="Overview" @click="component = 'overview'">
+        </md-tab>
+        <md-tab id="tab-pages" md-label="History" @click="component = 'history'">
+        </md-tab>
+        <md-tab id="tab-posts" md-label="Map" @click="component = 'map'">
+        </md-tab>
+      </md-tabs>
+    </div>
+    <div>
+
+      <md-card class="md-size-50">
+        <md-card-header>
+          <div class="md-title">Overview</div>
+        </md-card-header>
+        <md-card-content>
+          <p>Créer à : {{ new Date(room.createdAt).toLocaleString() }}</p>
+          <p v-if="room.game">
+            Début du jeu : {{ new Date(room.game.startedAt).toLocaleString() }}
+          </p>
+          <p v-if="room.game && room.game.endedAt">
+            Terminé à : {{ new Date(room.game.endedAt).toLocaleString() }}
+          </p>
+          <p v-if="room.game && !room.game.endedAt">
+            Temps écoulé : {{  Math.floor((Date.now() - room.game.startedAt)*0.001) + 's' }}
+          </p>
+        </md-card-content>
+      </md-card>
+
+      <md-card>
+        <md-card-header>
+          <div class="md-title">Metrics</div>
+        </md-card-header>
+
+        <md-card-content>
           <div v-for="(metric, i) in metrics" :key="i">
             <p>{{ metric.name }}</p>
             <md-progress-bar md-mode="buffer" :md-buffer="100" :md-value="metric.value"></md-progress-bar>
           </div>
-        </md-tab>
-
-        <md-tab id="tab-pages" md-label="History" @click="component = 'history'">
-          History
-        </md-tab>
-
-        <md-tab id="tab-posts" md-label="Map" @click="component = 'map'">
-          Map
-        </md-tab>
-      </md-tabs>
+        </md-card-content>
+      </md-card>
     </div>
   </div>
 </template>
@@ -53,6 +78,7 @@ export default {
 
     this.$socket.on('admin:listen', (room) => {
       this.room = room;
+      console.log(JSON.parse(JSON.stringify(room)));
     });
 
     this.$socket.on('admin:tick', ({ metrics, entities }) => {
@@ -66,10 +92,15 @@ export default {
 <style lang="scss" >
 .admin-room {
   &__title {
-    margin-bottom: 32px;
+    margin-bottom: 16px;
+    margin-top: 0;
   }
   .md-tabs-navigation {
     margin-bottom: 32px;
+  }
+
+  .header {
+    display: none;
   }
 }
 </style>

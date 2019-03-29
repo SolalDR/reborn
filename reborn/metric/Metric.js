@@ -47,7 +47,8 @@ class Metric extends Emitter {
     return {
       value: this.value,
       name: this.name,
-      slug: this.slug
+      slug: this.slug,
+      recurentOperation: this.recurentOperation,
     }
   } 
 
