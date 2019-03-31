@@ -33,6 +33,7 @@ export default {
       this.$store.commit('setRoom', verifiedRoomId);
     });
 
+
     this.msg = `Joined ${roomId}`;
   },
   methods: {

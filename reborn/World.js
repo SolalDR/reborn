@@ -45,6 +45,10 @@ export default class World extends Emitter {
 
     this.entities.set(newEntity.uuid, newEntity);
     this.emit('entity:add', newEntity.infos);
+    newEntity.on('update', (infos) => {
+      this.emit('entity:update', infos);
+    })
+
     return newEntity;
   }
 

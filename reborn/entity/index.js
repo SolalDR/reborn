@@ -137,6 +137,7 @@ export default class Entity extends Emitter {
       this.states.set(name, state);
       state.enter(this.model.game);
       if (!discret) {
+        this.emit('update', this.infos);
         this.emit(`add_state:${state.name}`, state);
       }
       return state;
@@ -155,6 +156,7 @@ export default class Entity extends Emitter {
       state.leave(this.model.game);
       this.states.delete(name);
       if (!discret) {
+        this.emit('update', this.infos);
         this.emit(`remove_state:${state.name}`, state);
       }
       return;

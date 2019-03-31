@@ -7,6 +7,18 @@
 <script>
 export default {
   created() {
+    this.$socket.on('entity:add', () => {
+      console.log('Add entity');
+    });
+
+    this.$socket.on('entity:remove', () => {
+      console.log('Remove entity');
+    });
+
+    this.$socket.on('entity:update', () => {
+      console.log('Update entity');
+    });
+
     console.log(this.$store.state.playerId, window.localStorage.playerId);
     if (
       !this.$store.state.playerId && window.localStorage.playerId
