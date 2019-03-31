@@ -5,7 +5,12 @@
         class="grid__cell"
         @click="onClick(i)"
         v-for='i in (size[0]*size[1])'
-        :style="`--color: ${cells[i] ? cells[i].color : 'white'}`"
+        :class="{
+          'grid__cell-focus': cells[i] && cells[i].model === selectedModel,
+          'grid__cell-focus': cells[i] && cells[i].states && cells[i].states.indexOf(selectedState) >= 0,
+          'grid__cell-focus': cells[i] && cells[i].states && cells[i].states.indexOf(selectedState) >= 0,
+        }"
+        :style="`--color: ${cells[i] ? cells[i].color : 'white'}; --alpha: ${computeOpacity(cells[i])};`"
         :key='i'/>
     </div>
   </div>
@@ -23,6 +28,18 @@ export default {
       type: Array,
       default: () => [],
     },
+    selectedState: {
+      type: String,
+      default: '',
+    },
+    selectedRole: {
+      type: String,
+      default: '',
+    },
+    selectedModel: {
+      type: String,
+      default: '',
+    },
   },
   mounted() {
     console.log(this.cells);
@@ -33,12 +50,23 @@ export default {
     },
   },
   methods: {
+    computeOpacity(cell) {
+      if (!cell || !cell.states) return 0.1;
+      if (cell.states.indexOf('creation') >= 0
+      || cell.states.indexOf('destruction') >= 0) {
+        return 0.5;
+      }
+
+      if (cell.states.indexOf('mounted') >= 0) {
+        return 1;
+      }
+
+      return 0.1;
+    },
     onClick(i) {
       if (this.cells[i]) {
         console.log(this.cells[i]);
       }
-
-
       this.$emit('clickCell', {
         position: [i % this.size[0], Math.floor(i / this.size[1])],
       });
@@ -55,7 +83,8 @@ export default {
   width: 100%;
   &__cell {
     background-color: var(--color);
-    border: 1px solid #CCC;
+    opacity: var(--alpha);
+    border: 1px solid #000;
     transition: {
       duration: .1s;
       property: background-color;

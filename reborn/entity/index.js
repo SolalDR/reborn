@@ -56,6 +56,7 @@ export default class Entity extends Emitter {
       this.addState('creation');
       return;
     }
+
     this.mount();
   }
 

@@ -113,7 +113,7 @@ export default {
     },
 
     onConnectRoom() {
-      this.$socket.on('admin:tick', ({ metrics, entities }) => {
+      this.$socket.on('admin:tick', ({ metrics }) => {
         this.metrics = metrics;
       });
 
@@ -122,7 +122,7 @@ export default {
         entities.forEach((entity) => {
           this.entities[entity.position[0] + entity.position[1] * 32] = {
             ...entity,
-            color: '#CCC',
+            color: '#2979ff',
           };
         });
       });
@@ -130,7 +130,7 @@ export default {
       this.$socket.on('entity:add', (entity) => {
         this.entities[entity.position[0] + entity.position[1] * 32] = {
           ...entity,
-          color: '#CCC',
+          color: '#2979ff',
         };
       });
 

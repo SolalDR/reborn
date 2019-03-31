@@ -3,6 +3,7 @@ export default {
   name: "Logement",
   states: {
     creation: {
+      duration: 1000,
       enterModifiers: [
         {
           name: 'pollution',

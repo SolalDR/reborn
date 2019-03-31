@@ -3,7 +3,7 @@ export default {
   name: "Arbre",
   states: {
     creation: {
-      duration: 2000,
+      duration: 5000,
       enterModifiers: [
         {
           name: 'pollution',

@@ -77,7 +77,7 @@ export default class World extends Emitter {
           Math.floor(Math.random()*this.grid.size[1])
         ]
       })
-    }, 1000)
+    }, 5000)
   }
 }
 
