@@ -2,6 +2,12 @@ import Emitter from "./utils/Emitter";
 import Grid from "./Grid";
 import Entity from "./entity";
 
+/**
+ * @class Represent a physic environnement
+ * @property {Map} entities
+ * @property {Grid} grid
+ * @extends Emitter
+ */
 export default class World extends Emitter {
   constructor({
     game = null
@@ -16,7 +22,7 @@ export default class World extends Emitter {
   /**
    * Add an entity
    * @param {String} model
-   * @param {x: Number, y: Number} position
+   * @param {{x: Number, y: Number}} position
    * @returns {Entity}
    */
   addEntity({
@@ -38,7 +44,16 @@ export default class World extends Emitter {
     });
 
     this.entities.set(newEntity.uuid, newEntity);
+    this.emit('entity:add', newEntity.infos);
+    newEntity.on('update', (infos) => {
+      this.emit('entity:update', infos);
+    })
+
     return newEntity;
+  }
+
+  get entitiesList(){
+    return Array.from(this.entities.values());
   }
 
   /**
@@ -49,43 +64,20 @@ export default class World extends Emitter {
   removeEntity(entity) {
     entity.destruct();
     this.entities.delete(entity.uuid);
+    this.emit('entity:remove', entity.infos);
   }
 
-  // simulateMatch(){
-  //   var models = Array.from(this.game.entityModels.keys());
-  //   for (var i=0; i<30; i++) {
-  //     var entity = this.addEntity({
-  //       model: models[Math.floor(models.length*Math.random())],
-  //       position: [
-  //         Math.ceil(Math.random()*this.grid.size[0]),
-  //         Math.ceil(Math.random()*this.grid.size[1])
-  //       ]
-  //     });
-
-  //     if (entity) {
-  //       // console.log(entity.log());
-  //     }
-  //   }
-  //   this.game.timeline.on('tick', ()=>{
-  //     console.log(this.game.metrics.get('pollution').value);
-  //   })
-  // }
 
   simulateMatch(){
-    var entity = this.addEntity({
-      model: 'tree',
-      position: [0, 0]
-    });
-
-    console.log(this.entities.size);
-    setTimeout(()=>{
-      this.removeEntity(entity)
-      console.log(this.entities.size);
-    }, 10000)
-
-    this.game.timeline.on('tick', ()=>{
-      console.log(this.game.metrics.get('pollution').value);
-    })
+    setInterval(()=>{
+      this.addEntity({
+        model: Math.random() > 0.5 ? 'tree' : 'house',
+        position: [
+          Math.floor(Math.random()*this.grid.size[0]),
+          Math.floor(Math.random()*this.grid.size[1])
+        ]
+      })
+    }, 3000)
   }
 }
 

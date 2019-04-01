@@ -4,10 +4,10 @@ import entityModels from "./entity/models";
 import metrics from "./metric"
 import World from "./World";
 
-
 /**
- * @param {[Player]} player
- * @param {Number} interval
+ * @param {Player[]} players A list of players
+ * @param {Number} interval Timeline tick interval
+ * @extends Emitter
  */
 class Game extends Emitter {
   constructor({
@@ -44,9 +44,13 @@ class Game extends Emitter {
       game: this
     });
 
+    var metricsMap = Array.from(this.metrics.values());
     this.timeline.on('tick', ()=>{
       this.metrics.forEach(metric => {
         metric.value += metric.recurentOperation;
+      })
+      this.emit('tick', {
+        metrics: metricsMap.map(m => m.infos)
       })
     })
   }
@@ -74,18 +78,22 @@ class Game extends Emitter {
   }
 
   /**
-   * Returns the player as an array
+   * Return the players transformed in an array (originally a Map)
    */
   get playersList(){
     return Array.from(this.players.values());
   }
 
   /**
-   * Returns the game infos
+   * Returns the game infos<br>
+   * - An array of with players infos (see Player.infos)<br>
+   * - The grid size
+   * @returns {{players: Player[], grid: Number[]}}
    */
   get infos(){
     return {
-      players: this.playersList.map(player => player.infos)
+      players: this.playersList.map(player => player.infos),
+      grid: this.world.grid.size
     }
   }
 }

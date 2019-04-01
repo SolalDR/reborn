@@ -22,10 +22,10 @@
 <script>
 export default {
   name: 'RoomCreate',
-  data () {
+  data() {
     return {
       errorMsg: '',
-      inviteLink: ''
+      inviteLink: '',
     };
   },
   methods: {
@@ -34,16 +34,19 @@ export default {
 
       if (roomId) {
         this.$socket.emit('room:join', roomId);
-        this.$socket.on('room:connect', ({playerId, roomId}) => {
+        this.$socket.on('room:connect', ({ playerId, verifiedRoomId }) => {
           this.$store.commit('setPlayer', playerId);
-          this.$store.commit('setRoom', roomId);
-        })
+          this.$store.commit('setRoom', verifiedRoomId);
+        });
 
-        this.$socket.on('game:start', (result)=>{
+        this.$socket.on('game:start', (result) => {
           this.$store.commit('gameStart', result);
-          this.$router.push({name: 'game', params: {
-            id: roomId
-          }});
+          this.$router.push({
+            name: 'game',
+            params: {
+              id: roomId,
+            },
+          });
         });
 
         this.inviteLink = `${window.location.origin}#/rooms/${roomId}/join`;
@@ -51,16 +54,15 @@ export default {
         this.errorMsg = 'Empty room - Please enter valid ID';
       }
     },
-    copyToClipboard(e) {
+    copyToClipboard() {
       const tmpInput = document.createElement('input');
-
       document.body.appendChild(tmpInput);
       tmpInput.setAttribute('value', this.inviteLink);
       tmpInput.select();
       document.execCommand('copy');
       document.body.removeChild(tmpInput);
-    }
-  }
+    },
+  },
 };
 </script>
 

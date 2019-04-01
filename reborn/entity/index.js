@@ -6,7 +6,7 @@ import Emitter from "./../utils/Emitter";
  * @param {String} uuid A Unique ID, auto generated if not defined
  * @param {{x: Number, y: Number}} position The position on the grid
  * @param {EntityModel} model A model that describe how the entity work
- * @param {[States]} states The activated states of the entity
+ * @param {States[]} states The activated states of the entity
  */
 export default class Entity extends Emitter {
   constructor({
@@ -22,7 +22,7 @@ export default class Entity extends Emitter {
     if (this.model === null) return null;
     if (this.position === null) return null;
     this.states = states;
-    
+
     this.create();
   }
 
@@ -41,7 +41,7 @@ export default class Entity extends Emitter {
         this.once('remove_state:creation', () => {
           this.mount();
         })
-  
+
         // If there is a duration (wait and remove state)
         if (creationState.duration >= 0) {
           setTimeout(() => {
@@ -56,6 +56,7 @@ export default class Entity extends Emitter {
       this.addState('creation');
       return;
     }
+
     this.mount();
   }
 
@@ -126,7 +127,7 @@ export default class Entity extends Emitter {
   }
 
   /**
-   * Add a state to an entity if it is defined in the model. 
+   * Add a state to an entity if it is defined in the model.
    * @param {String} name The name of the state
    * @param {Boolean} discret If true, the state will be added without firing an event
    * @return {void|EntityState}
@@ -137,6 +138,7 @@ export default class Entity extends Emitter {
       this.states.set(name, state);
       state.enter(this.model.game);
       if (!discret) {
+        this.emit('update', this.infos);
         this.emit(`add_state:${state.name}`, state);
       }
       return state;
@@ -144,7 +146,7 @@ export default class Entity extends Emitter {
   }
 
   /**
-   * Remove a state of an entity 
+   * Remove a state of an entity
    * @param {String} name The name of the state
    * @param {Boolean} discret If true, the state will be removed without firing an event
    * @return {void|EntityState}
@@ -155,9 +157,10 @@ export default class Entity extends Emitter {
       state.leave(this.model.game);
       this.states.delete(name);
       if (!discret) {
+        this.emit('update', this.infos);
         this.emit(`remove_state:${state.name}`, state);
       }
-      return; 
+      return;
     }
   }
 
@@ -173,7 +176,7 @@ export default class Entity extends Emitter {
    * Return infos on entity to send it to the socket
    * @return {Object} THe description of the entity
    */
-  infos(){
+  get infos(){
     return {
       uuid: this.uuid,
       position: this.position,

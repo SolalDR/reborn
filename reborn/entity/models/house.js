@@ -3,10 +3,11 @@ export default {
   name: "Logement",
   states: {
     creation: {
+      duration: 1000,
       enterModifiers: [
         {
           name: 'pollution',
-          value: +0.5
+          value: 1
         },
         {
           name: 'money',
@@ -19,7 +20,7 @@ export default {
       recurModifiers: [
         {
           name: 'pollution',
-          value: 0.5
+          value: 1
         }
       ]
     },
