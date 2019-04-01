@@ -17,7 +17,8 @@ class Metric extends Emitter {
     value = null,
     min = null,
     max = null,
-    recurentOperation = 0
+    recurentOperation = 0,
+    inclusiveSet = true
   }){
     super();
     this.name = name;
@@ -26,6 +27,7 @@ class Metric extends Emitter {
     this.min = min;
     this.max = max;
     this.value = value;
+    this.inclusiveSet = inclusiveSet;
   }
 
   /**
@@ -57,9 +59,15 @@ class Metric extends Emitter {
    * Check if a limit is reached and fire an event if it does
    * @returns {Boolean}
    */
-  checkLimit(){
-    if (this._value === this.min|| this.value === this.max) {
-      this.emit('limitreached', this);
+  checkLimit(value = this._value, discret = false){
+    if (
+      this.inclusiveSet
+      ? value <= this.min|| value >= this.max
+      : value < this.min|| value > this.max
+      ) {
+      if (!discret) {
+        this.emit('limitreached', this);
+      }
       return true;
     }
     return false;
