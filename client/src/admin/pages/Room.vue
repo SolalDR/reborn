@@ -42,15 +42,31 @@
       </md-card>
 
 
-      <md-card>
+      <md-card class="grid">
         <md-card-header>
           <div class="md-title">Grille</div>
         </md-card-header>
 
         <md-card-content>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item grid__filter">
+              <md-field>
+                <label for="models">Models</label>
+                <md-select v-model="selectedModels" name="models" id="models" multiple>
+                  <md-option v-for="(model, i) in models" :key="'model'+i" :value="model.slug">
+                    {{ model.name }}
+                  </md-option>
+                </md-select>
+              </md-field>
+            </div>
+          </div>
+
           <grid-component
             :size="[32, 32]"
             :cells="entities"
+            :filtersModel="selectedModels"
+            :filtersState="selectedStates"
+            :filtersRole="selectedRoles"
             @clickCell="onClickCell($event)"
             />
         </md-card-content>
@@ -61,9 +77,7 @@
 
 <script>
 
-// import Overview from './rooms/Overview.vue';
-// import Map from './rooms/Map.vue';
-// import History from './rooms/History.vue';
+import models from '../../../../reborn/entity/models';
 import GridComponent from './rooms/Grid.vue';
 import Metric from '../components/Metric.vue';
 
@@ -71,9 +85,6 @@ export default {
   name: 'Room',
 
   components: {
-    // Overview,
-    // Map,
-    // History,
     Metric,
     GridComponent,
   },
@@ -83,6 +94,10 @@ export default {
       room: null,
       metrics: [],
       entities: new Array(32 * 32).fill(null),
+      models,
+      selectedModels: [],
+      selectedStates: [],
+      selectedRoles: [],
       component: 'overview',
     };
   },
@@ -103,6 +118,12 @@ export default {
       model: 'tree',
       color: '#CCC',
     };
+  },
+
+  computed: {
+    modelsName() {
+      return this.models.map(model => model.name);
+    },
   },
 
   methods: {
@@ -154,6 +175,12 @@ export default {
 
   .header {
     display: none;
+  }
+
+  .grid {
+    &__filter {
+      max-width: 25%;
+    }
   }
 }
 </style>

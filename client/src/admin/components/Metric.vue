@@ -6,7 +6,9 @@
           <span class="metric__value">
             {{ Math.floor(metric.value*1000)/1000 }}
           </span>
-          <span class="metric__value" :class="`metric__value--${metric.recurentOperation > 0 ? 'green' : 'red'}`">
+          <span
+            :class="`metric__value--${metric.recurentOperation > 0 ? 'green' : 'red'}`"
+            class="metric__value" >
             <md-icon>sync</md-icon>
             {{ Math.floor(metric.recurentOperation*1000)/1000 }}
           </span>
