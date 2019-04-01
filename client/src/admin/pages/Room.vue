@@ -115,10 +115,10 @@ export default {
     onConnectRoom() {
       this.$socket.on('admin:tick', ({ metrics }) => {
         this.metrics = metrics;
+        console.log(this.metrics[0].value, this.metrics[0].recurentOperation);
       });
 
       this.$socket.on('room:entities', (entities) => {
-        console.log(entities);
         entities.forEach((entity) => {
           this.entities[entity.position[0] + entity.position[1] * 32] = {
             ...entity,

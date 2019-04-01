@@ -2,7 +2,7 @@ import Emitter from "../utils/Emitter";
 import snakeCase from "../utils/snakeCase";
 
 /**
- * @class 
+ * @class
  * @param {String} name The name of the metric as it will be displayed in ui
  * @param {String} slug The slug of the metric (if not defined, the name of the metric will be converted to snake case)
  * @param {Number} value Initial value of the metric
@@ -15,7 +15,7 @@ class Metric extends Emitter {
     name = null,
     slug = null,
     value = null,
-    min = 0,
+    min = null,
     max = null,
     recurentOperation = 0
   }){
@@ -33,9 +33,10 @@ class Metric extends Emitter {
    */
   set value(value){
     if(isNaN(value)) return;
-    if (this.max) value = Math.min(this.max, value);
-    if (this.min) value = Math.max(this.min, value);
-    this._value = value;
+    var tmpValue = value;
+    if (this.max !== null) tmpValue = Math.min(this.max, tmpValue);
+    if (this.min !== null) tmpValue = Math.max(this.min, tmpValue);
+    this._value = tmpValue;
     this.checkLimit();
   }
 
@@ -50,7 +51,7 @@ class Metric extends Emitter {
       slug: this.slug,
       recurentOperation: this.recurentOperation,
     }
-  } 
+  }
 
   /**
    * Check if a limit is reached and fire an event if it does
