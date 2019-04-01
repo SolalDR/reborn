@@ -37,10 +37,7 @@
         </md-card-header>
 
         <md-card-content>
-          <div v-for="(metric, i) in metrics" :key="i">
-            <p>{{ metric.name }}</p>
-            <md-progress-bar md-mode="buffer" :md-buffer="100" :md-value="metric.value"></md-progress-bar>
-          </div>
+          <metric v-for="(metric, i) in metrics" :key="i" :metric="metric"/>
         </md-card-content>
       </md-card>
 
@@ -68,6 +65,7 @@
 // import Map from './rooms/Map.vue';
 // import History from './rooms/History.vue';
 import GridComponent from './rooms/Grid.vue';
+import Metric from '../components/Metric.vue';
 
 export default {
   name: 'Room',
@@ -76,6 +74,7 @@ export default {
     // Overview,
     // Map,
     // History,
+    Metric,
     GridComponent,
   },
 
@@ -97,14 +96,13 @@ export default {
     this.$socket.on('admin:listen', (room) => {
       this.room = room;
       this.onConnectRoom();
+      console.log(JSON.parse(JSON.stringify(room)));
     });
 
     this.entities[42] = {
       model: 'tree',
       color: '#CCC',
     };
-
-    console.log(this.entities);
   },
 
   methods: {
@@ -115,7 +113,6 @@ export default {
     onConnectRoom() {
       this.$socket.on('admin:tick', ({ metrics }) => {
         this.metrics = metrics;
-        console.log(this.metrics[0].value, this.metrics[0].recurentOperation);
       });
 
       this.$socket.on('room:entities', (entities) => {
