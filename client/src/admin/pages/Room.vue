@@ -36,11 +36,9 @@
           <div class="md-title">Metrics</div>
         </md-card-header>
 
-        <md-card-content>
-          <div v-for="(metric, i) in metrics" :key="i">
+        <md-card-content class="metrics">
+          <div v-for="(metric, i) in metrics" :key="i" class="metric">
             <p>{{ metric.name }}</p>
-            <!-- TODO: Remove this -->
-            <pre>{{ metric.value }}</pre>
             <md-progress-bar md-mode="buffer" :md-buffer="100" :md-value="metric.value"></md-progress-bar>
           </div>
         </md-card-content>
@@ -159,6 +157,16 @@ export default {
 
   .header {
     display: none;
+  }
+
+  .metrics {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    .metric {
+      width: 48%;
+    }
   }
 }
 </style>
