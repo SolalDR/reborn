@@ -77,5 +77,4 @@ class Metric extends Emitter {
 Metric.LIST = ['pollution', 'bio_diversity', 'satisfaction', 'energy', 'alimentation', 'population', 'money'];
 
 export default Metric;
-export {default as PollutionMetric} from "./Pollution";
 export {default as Modifier} from "./Modifier";
