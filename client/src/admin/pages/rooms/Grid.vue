@@ -6,8 +6,7 @@
         @click="onClick(i)"
         v-for='i in (size[0]*size[1])'
         :class="{
-          'grid__cell-focus': cells[i] && cells[i].model === selectedModel,
-          'grid__cell-focus': cells[i] && cells[i].states && cells[i].states.indexOf(selectedState) >= 0
+          'grid__cell--hidden': !modelVisible(cells[i]),
         }"
         :style="`--color: ${cells[i] ? cells[i].color : 'white'}; --alpha: ${computeOpacity(cells[i])};`"
         :key='i'/>
@@ -27,21 +26,13 @@ export default {
       type: Array,
       default: () => [],
     },
-    selectedState: {
-      type: String,
-      default: '',
-    },
-    selectedRole: {
-      type: String,
-      default: '',
-    },
-    selectedModel: {
-      type: String,
-      default: '',
+    filtersModel: {
+      type: Array,
+      default: () => [],
     },
   },
   mounted() {
-    console.log(this.cells);
+
   },
   computed: {
     height() {
@@ -63,12 +54,43 @@ export default {
       return 0.1;
     },
     onClick(i) {
-      if (this.cells[i]) {
-        console.log(this.cells[i]);
-      }
       this.$emit('clickCell', {
         position: [i % this.size[0], Math.floor(i / this.size[1])],
+        rank: i,
+        entity: this.cells[i],
       });
+    },
+
+    modelVisible(cell) {
+      if (this.filtersModel.length === 0 || !cell) return true;
+      if (!cell) return false;
+      if (this.filtersModel.indexOf(cell.model) < 0) {
+        return false;
+      }
+      return true;
+    },
+
+    stateVisible(cell) {
+      if (this.filtersState.length === 0 || !cell) return true;
+      if (!cell) return false;
+
+      let match = false;
+      cell.states.forEach((state) => {
+        if (this.filtersState.indexOf(state) < 0) {
+          match = true;
+        }
+      });
+
+      return match;
+    },
+
+    roleVisible(cell) {
+      if (this.filtersModel.length === 0 || !cell) return true;
+      if (!cell) return false;
+      if (this.filtersModel.indexOf(cell.model) < 0) {
+        return false;
+      }
+      return true;
     },
   },
 };
@@ -84,12 +106,13 @@ export default {
     background-color: var(--color);
     opacity: var(--alpha);
     border: 1px solid #000;
-    transition: {
-      duration: .1s;
-      property: background-color;
-    }
     &:hover {
       background-color: #EEE;
+    }
+
+    &--hidden {
+      background-color: white;
+      opacity: 0.1;
     }
   }
 }

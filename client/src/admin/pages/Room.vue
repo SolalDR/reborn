@@ -37,53 +37,104 @@
         </md-card-header>
 
         <md-card-content class="metrics">
-          <div v-for="(metric, i) in metrics" :key="i" class="metric">
-            <p>{{ metric.name }}</p>
-            <md-progress-bar md-mode="buffer" :md-buffer="100" :md-value="metric.value"></md-progress-bar>
-          </div>
+          <metric v-for="(metric, i) in metrics" :key="i" :metric="metric" class="metric"/>
         </md-card-content>
       </md-card>
 
 
-      <md-card>
+      <md-card class="grid">
         <md-card-header>
           <div class="md-title">Grille</div>
         </md-card-header>
 
         <md-card-content>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item grid__filter">
+              <md-field>
+                <label for="models">Models</label>
+                <md-select v-model="selectedModels" name="models" id="models" multiple>
+                  <md-option v-for="(model, i) in models" :key="'model'+i" :value="model.slug">
+                    {{ model.name }}
+                  </md-option>
+                </md-select>
+              </md-field>
+            </div>
+          </div>
+
           <grid-component
             :size="[32, 32]"
             :cells="entities"
+            :filtersModel="selectedModels"
             @clickCell="onClickCell($event)"
             />
         </md-card-content>
       </md-card>
     </div>
+
+    <md-dialog
+      v-if="currentCell && !!currentCell.entity"
+      :md-active.sync="currentCell && !!currentCell.entity">
+      <md-dialog-title>Souhaitez vous supprimer cette entité ?</md-dialog-title>
+      <md-dialog-content>
+        Entité de type "{{ currentCell.entity.model }}"<br>
+        <p class="md-small">{{ currentCell.entity.uuid }}</p>
+      </md-dialog-content>
+      <md-dialog-actions>
+        <md-button class="md-primary" @click="currentCell = false">Annuler</md-button>
+        <md-button class="md-primary" @click="onDeleteEntity()">Delete</md-button>
+      </md-dialog-actions>
+    </md-dialog>
+
+    <md-dialog
+      v-if="currentCell && !currentCell.entity"
+      :md-active.sync="currentCell && !currentCell.entity">
+      <md-dialog-title>Créer une entité</md-dialog-title>
+
+      <md-dialog-content>
+        <div class="md-layout md-gutter">
+          <md-field class="md-layout-item">
+            <label for="model-modal">Model</label>
+            <md-select v-model="entityModel" name="model-modal" id="model-modal">
+              <md-option v-for="(model, i) in models" :key="'model-modal-'+i" :value="model.slug">
+                {{ model.name }}
+              </md-option>
+            </md-select>
+          </md-field>
+        </div>
+      </md-dialog-content>
+
+      <md-dialog-actions>
+        <md-button class="md-primary" @click="currentCell = false">Close</md-button>
+        <md-button class="md-primary" @click="onAddEntity()">Save</md-button>
+      </md-dialog-actions>
+    </md-dialog>
+
   </div>
 </template>
 
 <script>
 
-// import Overview from './rooms/Overview.vue';
-// import Map from './rooms/Map.vue';
-// import History from './rooms/History.vue';
+import models from '../../../../reborn/entity/models';
 import GridComponent from './rooms/Grid.vue';
+import Metric from '../components/Metric.vue';
 
 export default {
   name: 'Room',
 
   components: {
-    // Overview,
-    // Map,
-    // History,
+    Metric,
     GridComponent,
   },
 
   data() {
     return {
-      room: null,
+      room: {},
       metrics: [],
       entities: new Array(32 * 32).fill(null),
+      models,
+      selectedModels: [],
+      currentCell: null,
+      entityModel: null,
       component: 'overview',
     };
   },
@@ -98,24 +149,23 @@ export default {
       this.room = room;
       this.onConnectRoom();
     });
+  },
 
-    this.entities[42] = {
-      model: 'tree',
-      color: '#CCC',
-    };
-
-    console.log(this.entities);
+  computed: {
+    modelsName() {
+      return this.models.map(model => model.name);
+    },
   },
 
   methods: {
-    onClickCell({ position, rank }) {
-      console.log(position, rank);
+    onClickCell(cell) {
+      if (this.currentCell) return;
+      this.currentCell = cell;
     },
 
     onConnectRoom() {
       this.$socket.on('admin:tick', ({ metrics }) => {
         this.metrics = metrics;
-        console.log(this.metrics[0].value, this.metrics[0].recurentOperation);
       });
 
       this.$socket.on('room:entities', (entities) => {
@@ -128,6 +178,7 @@ export default {
       });
 
       this.$socket.on('entity:add', (entity) => {
+        if (!entity) return;
         this.entities[entity.position[0] + entity.position[1] * 32] = {
           ...entity,
           color: '#2979ff',
@@ -135,8 +186,22 @@ export default {
       });
 
       this.$socket.on('entity:remove', (entity) => {
+        if (!entity) return;
         this.entities[entity.position[0] + entity.position[1] * 32] = null;
       });
+    },
+    onAddEntity() {
+      this.$socket.emit('entity:add', {
+        position: this.currentCell.position,
+        model: this.entityModel,
+      });
+      this.currentCell = false;
+    },
+
+    onDeleteEntity() {
+      if (!this.currentCell) return;
+      this.$socket.emit('entity:remove', this.currentCell.entity.uuid);
+      this.currentCell = false;
     },
   },
 };
@@ -166,6 +231,11 @@ export default {
 
     .metric {
       width: 48%;
+    }
+  }
+  .grid {
+    &__filter {
+      max-width: 25%;
     }
   }
 }
