@@ -48,6 +48,7 @@ export default {
    */
   startListen({ token, name }) {
     const room = process.rooms.get(name);
+    var self = this;
     if (token === process.token && room) {
       const tickCallback = (args) => {
         this.emit('admin:tick', args);
@@ -83,6 +84,13 @@ export default {
         room.game.world.on('entity:add', entityAddCallback);
         room.game.world.on('entity:remove', entityRemoveCallback);
         room.game.world.on('entity:update', entityUpdateCallback);
+        self.on('entity:add', (entity)=>{
+          var e = room.game.world.addEntity(entity);
+          console.log(e, entity);
+        });
+        self.on('entity:remove', (uuid) => {
+          room.game.world.removeEntity(room.game.world.entities.get(uuid));
+        });
       }
 
       this.emit('admin:listen', room.infos);

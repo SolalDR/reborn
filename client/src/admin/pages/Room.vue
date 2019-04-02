@@ -65,13 +65,50 @@
             :size="[32, 32]"
             :cells="entities"
             :filtersModel="selectedModels"
-            :filtersState="selectedStates"
-            :filtersRole="selectedRoles"
             @clickCell="onClickCell($event)"
             />
         </md-card-content>
       </md-card>
     </div>
+
+    <md-dialog
+      v-if="currentCell && !!currentCell.entity"
+      :md-active.sync="currentCell && !!currentCell.entity">
+      <md-dialog-title>Souhaitez vous supprimer cette entité ?</md-dialog-title>
+      <md-dialog-content>
+        Entité de type "{{ currentCell.entity.model }}"<br>
+        <p class="md-small">{{ currentCell.entity.uuid }}</p>
+      </md-dialog-content>
+      <md-dialog-actions>
+        <md-button class="md-primary" @click="currentCell = false">Annuler</md-button>
+        <md-button class="md-primary" @click="onDeleteEntity()">Delete</md-button>
+      </md-dialog-actions>
+    </md-dialog>
+
+    <md-dialog
+      v-if="currentCell && !currentCell.entity"
+      :md-active.sync="currentCell && !currentCell.entity">
+      <md-dialog-title>Créer une entité</md-dialog-title>
+
+      <md-dialog-content>
+        <div class="md-layout md-gutter">
+          <md-field class="md-layout-item">
+            <label for="model-modal">Model</label>
+            <md-select v-model="entityModel" name="model-modal" id="model-modal">
+              <md-option v-for="(model, i) in models" :key="'model-modal-'+i" :value="model.slug">
+                {{ model.name }}
+              </md-option>
+            </md-select>
+          </md-field>
+        </div>
+      </md-dialog-content>
+
+      <md-dialog-actions>
+        <md-button class="md-primary" @click="currentCell = false">Close</md-button>
+        <md-button class="md-primary" @click="onAddEntity()">Save</md-button>
+      </md-dialog-actions>
+    </md-dialog>
+
   </div>
 </template>
 
@@ -91,13 +128,13 @@ export default {
 
   data() {
     return {
-      room: null,
+      room: {},
       metrics: [],
       entities: new Array(32 * 32).fill(null),
       models,
       selectedModels: [],
-      selectedStates: [],
-      selectedRoles: [],
+      currentCell: null,
+      entityModel: null,
       component: 'overview',
     };
   },
@@ -111,13 +148,7 @@ export default {
     this.$socket.on('admin:listen', (room) => {
       this.room = room;
       this.onConnectRoom();
-      console.log(JSON.parse(JSON.stringify(room)));
     });
-
-    this.entities[42] = {
-      model: 'tree',
-      color: '#CCC',
-    };
   },
 
   computed: {
@@ -127,8 +158,9 @@ export default {
   },
 
   methods: {
-    onClickCell({ position, rank }) {
-      console.log(position, rank);
+    onClickCell(cell) {
+      if (this.currentCell) return;
+      this.currentCell = cell;
     },
 
     onConnectRoom() {
@@ -146,6 +178,7 @@ export default {
       });
 
       this.$socket.on('entity:add', (entity) => {
+        if (!entity) return;
         this.entities[entity.position[0] + entity.position[1] * 32] = {
           ...entity,
           color: '#2979ff',
@@ -153,8 +186,22 @@ export default {
       });
 
       this.$socket.on('entity:remove', (entity) => {
+        if (!entity) return;
         this.entities[entity.position[0] + entity.position[1] * 32] = null;
       });
+    },
+    onAddEntity() {
+      this.$socket.emit('entity:add', {
+        position: this.currentCell.position,
+        model: this.entityModel,
+      });
+      this.currentCell = false;
+    },
+
+    onDeleteEntity() {
+      if (!this.currentCell) return;
+      this.$socket.emit('entity:remove', this.currentCell.entity.uuid);
+      this.currentCell = false;
     },
   },
 };

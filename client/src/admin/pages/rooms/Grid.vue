@@ -54,13 +54,10 @@ export default {
       return 0.1;
     },
     onClick(i) {
-      if (this.cells[i]) {
-        console.log(this.cells[i]);
-      }
       this.$emit('clickCell', {
         position: [i % this.size[0], Math.floor(i / this.size[1])],
         rank: i,
-        cell: this.cells[i],
+        entity: this.cells[i],
       });
     },
 
