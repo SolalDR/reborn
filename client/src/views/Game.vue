@@ -19,6 +19,14 @@ export default {
       console.log('Update entity');
     });
 
+    this.$bus.$on('viewport:resize', ({ width, height }) => {
+      console.log(width, height);
+    });
+
+    this.$bus.$on('mouse:move', (event) => {
+      console.log(event);
+    });
+
     console.log(this.$store.state.playerId, window.localStorage.playerId);
     if (
       !this.$store.state.playerId && window.localStorage.playerId

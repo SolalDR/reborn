@@ -1,5 +1,8 @@
 module.exports = {
   root: true,
+  globals: {
+    "THREE": true
+  },
   env: {
     node: true,
   },
