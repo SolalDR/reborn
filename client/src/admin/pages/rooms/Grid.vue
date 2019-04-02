@@ -7,8 +7,7 @@
         v-for='i in (size[0]*size[1])'
         :class="{
           'grid__cell-focus': cells[i] && cells[i].model === selectedModel,
-          'grid__cell-focus': cells[i] && cells[i].states && cells[i].states.indexOf(selectedState) >= 0,
-          'grid__cell-focus': cells[i] && cells[i].states && cells[i].states.indexOf(selectedState) >= 0,
+          'grid__cell-focus': cells[i] && cells[i].states && cells[i].states.indexOf(selectedState) >= 0
         }"
         :style="`--color: ${cells[i] ? cells[i].color : 'white'}; --alpha: ${computeOpacity(cells[i])};`"
         :key='i'/>
