@@ -82,5 +82,6 @@ export default {
 
 .login {
   margin: auto;
+  width: 350px;
 }
 </style>

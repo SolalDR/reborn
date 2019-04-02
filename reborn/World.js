@@ -62,22 +62,24 @@ export default class World extends Emitter {
    * @returns {void}
    */
   removeEntity(entity) {
+    if (!entity) {
+      console.error(`World: Cannot remove entity "null"`); return;
+    }
     entity.destruct();
     this.entities.delete(entity.uuid);
     this.emit('entity:remove', entity.infos);
   }
 
-
   simulateMatch(){
-    setInterval(()=>{
-      this.addEntity({
-        model: Math.random() > 0.5 ? 'tree' : 'house',
-        position: [
-          Math.floor(Math.random()*this.grid.size[0]),
-          Math.floor(Math.random()*this.grid.size[1])
-        ]
-      })
-    }, 3000)
+    // setInterval(()=>{
+    //   this.addEntity({
+    //     model: Math.random() > 0.5 ? 'tree' : 'house',
+    //     position: [
+    //       Math.floor(Math.random()*this.grid.size[0]),
+    //       Math.floor(Math.random()*this.grid.size[1])
+    //     ]
+    //   })
+    // }, 3000)
   }
 }
 
