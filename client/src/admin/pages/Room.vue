@@ -1,6 +1,6 @@
 <template>
   <div class="admin-room">
-    <h1 class="admin-room__title md-display-1">Room: {{ room.name }}</h1>
+    <h1 class="admin-room__title md-display-1" v-if="room">Room: {{ room.name }}</h1>
     <div class="header">
       <md-tabs md-sync-route>
         <md-tab id="tab-home" md-label="Overview" @click="component = 'overview'">

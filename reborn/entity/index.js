@@ -26,16 +26,32 @@ export default class Entity extends Emitter {
     this.create();
   }
 
+  checkConstraint(modifiers) {
+    var constrained = false;
+    modifiers.forEach(modifier => {
+      if (modifier.checkConstraint) {
+        const metric = this.model.game.metrics.get(modifier.name)
+        if (metric.checkLimit(metric.value + modifier.value, true)) {
+          constrained = true;
+        }
+      }
+    });
+
+    return constrained;
+  }
+
   /**
    * Enter the states "creation" and "living"
    * When the state creation is passed, it run Entity::mount()
    * @returns {void}
    */
   create(){
-    this.addState('living');
+    if (this.checkConstraint(this.model.states.creation.enterModifiers)) {
+      return null;
+    }
 
     // If creation state
-    if( this.model.hasState('creation')) {
+    if(this.model.hasState('creation')) {
 
       this.on('add_state:creation', (creationState) => {
         this.once('remove_state:creation', () => {
@@ -53,6 +69,7 @@ export default class Entity extends Emitter {
         this.removeState('creation');
       })
 
+      this.addState('living');
       this.addState('creation');
       return;
     }

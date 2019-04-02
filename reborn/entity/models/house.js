@@ -12,7 +12,7 @@ export default {
         {
           name: 'money',
           value: -1000,
-          checkBefore: true
+          checkConstraint: true
         }
       ]
     },
