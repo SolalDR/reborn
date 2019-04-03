@@ -1,0 +1,34 @@
+<template>
+  <md-card class="md-size-50">
+    <md-card-header>
+      <div class="md-title">Overview</div>
+    </md-card-header>
+
+    <md-card-content>
+      <p>Créer à : {{ new Date(room.createdAt).toLocaleString() }}</p>
+      <p v-if="room.game">
+        Début du jeu : {{ new Date(room.game.startedAt).toLocaleString() }}
+      </p>
+      <p v-if="room.game && room.game.endedAt">
+        Terminé à : {{ new Date(room.game.endedAt).toLocaleString() }}
+      </p>
+      <p v-if="room.game && !room.game.endedAt">
+        Temps écoulé : {{  Math.floor((Date.now() - room.game.startedAt)*0.001) + 's' }}
+      </p>
+    </md-card-content>
+  </md-card>
+</template>
+
+<script>
+export default {
+  name: 'OverviewComponent',
+
+  props: {
+    room: {
+      type: Object,
+      required: true
+    }
+  }
+}
+</script>
+

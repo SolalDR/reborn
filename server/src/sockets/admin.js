@@ -86,7 +86,6 @@ export default {
         room.game.world.on('entity:update', entityUpdateCallback);
         self.on('entity:add', (entity)=>{
           var e = room.game.world.addEntity(entity);
-          console.log(e, entity);
         });
         self.on('entity:remove', (uuid) => {
           room.game.world.removeEntity(room.game.world.entities.get(uuid));

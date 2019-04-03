@@ -21,6 +21,8 @@
 
 <script>
 export default {
+  name: 'MetricComponent',
+
   props: {
     metric: {
       type: Object,

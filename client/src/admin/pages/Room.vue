@@ -9,24 +9,7 @@
         </template>
 
         <md-tab id="tab-overview" md-label="Overview">
-          <md-card class="md-size-50">
-            <md-card-header>
-              <div class="md-title">Overview</div>
-            </md-card-header>
-
-            <md-card-content>
-              <p>Créer à : {{ new Date(room.createdAt).toLocaleString() }}</p>
-              <p v-if="room.game">
-                Début du jeu : {{ new Date(room.game.startedAt).toLocaleString() }}
-              </p>
-              <p v-if="room.game && room.game.endedAt">
-                Terminé à : {{ new Date(room.game.endedAt).toLocaleString() }}
-              </p>
-              <p v-if="room.game && !room.game.endedAt">
-                Temps écoulé : {{  Math.floor((Date.now() - room.game.startedAt)*0.001) + 's' }}
-              </p>
-            </md-card-content>
-          </md-card>
+          <overview-component :room="room"/>
         </md-tab>
 
         <md-tab id="tab-metrics" md-label="Metrics">
@@ -36,7 +19,7 @@
             </md-card-header>
 
             <md-card-content class="metrics">
-              <metric v-for="(metric, i) in metrics" :key="i" :metric="metric" class="metric"/>
+              <metric-component v-for="(metric, i) in metrics" :key="i" :metric="metric" class="metric"/>
             </md-card-content>
           </md-card>
         </md-tab>
@@ -46,7 +29,15 @@
           md-label="Logs"
           :md-template-data="{ badge: unreadedLogs }"
           @click="unreadedLogs = 0">
-          <p>Logs content</p>
+          <md-card class="md-size-50 md-card--log">
+            <md-card-header>
+              <div class="md-title">Logs</div>
+            </md-card-header>
+
+            <md-card-content class="logs">
+              <log-component v-for="(log, index) in logs" :key="`log-${index}`" :log="log"/>
+            </md-card-content>
+          </md-card>
         </md-tab>
       </md-tabs>
     </header>
@@ -120,21 +111,21 @@
 </template>
 
 <script>
-
 import models from '../../../../reborn/entity/models';
-// TODO: Add templates in components
-// import Overview from './rooms/Overview.vue';
-// import Map from './rooms/Map.vue';
-// import History from './rooms/History.vue';
-import GridComponent from './rooms/Grid.vue';
-import Metric from '../components/Metric.vue';
+
+import GridComponent from '../components/rooms/Grid.vue';
+import LogComponent from '../components/rooms/Log.vue';
+import MetricComponent from '../components/rooms/Metric.vue';
+import OverviewComponent from '../components/rooms/Overview.vue';
 
 export default {
   name: 'Room',
 
   components: {
-    Metric,
     GridComponent,
+    LogComponent,
+    MetricComponent,
+    OverviewComponent,
   },
 
   data() {
@@ -146,7 +137,81 @@ export default {
       selectedModels: [],
       currentCell: null,
       entityModel: null,
-      logs: ['Log 1', 'Log 2', 'Log 1', 'Log 2', 'Log 1', 'Log 2', 'Log 1', 'Log 2', 'Log 1', 'Log 2', 'Log 1', 'Log 2'],
+      logs: [{
+        content: 'Log 1',
+        date: new Date().toLocaleString(),
+        type: 'info'
+      },
+      {
+        content: 'Log 2',
+        date: new Date().toLocaleString(),
+        type: 'error'
+      },
+      {
+        content: 'Log 3',
+        date: new Date().toLocaleString(),
+        type: 'info'
+      },
+      {
+        content: 'Log 4',
+        date: new Date().toLocaleString(),
+        type: 'info'
+      },
+      {
+        content: 'Log 5',
+        date: new Date().toLocaleString(),
+        type: 'info'
+      },
+      {
+        content: 'Log 6',
+        date: new Date().toLocaleString(),
+        type: 'info'
+      },
+      {
+        content: 'Log 7',
+        date: new Date().toLocaleString(),
+        type: 'info'
+      },
+      {
+        content: 'Log 8',
+        date: new Date().toLocaleString(),
+        type: 'info'
+      },
+      {
+        content: 'Log 9',
+        date: new Date().toLocaleString(),
+        type: 'error'
+      },
+      {
+        content: 'Log 10',
+        date: new Date().toLocaleString(),
+        type: 'info'
+      },
+      {
+        content: 'Log 11',
+        date: new Date().toLocaleString(),
+        type: 'info'
+      },
+      {
+        content: 'Log 12',
+        date: new Date().toLocaleString(),
+        type: 'error'
+      },
+      {
+        content: 'Log 13',
+        date: new Date().toLocaleString(),
+        type: 'info'
+      },
+      {
+        content: 'Log 14',
+        date: new Date().toLocaleString(),
+        type: 'info'
+      },
+      {
+        content: 'Log 15',
+        date: new Date().toLocaleString(),
+        type: 'info'
+      }],
       unreadedLogs: 0,
     };
   },
@@ -246,6 +311,16 @@ export default {
 
   .md-card {
     margin-bottom: 32px;
+
+    &--log {
+      height: 60vh;
+
+      .logs {
+        overflow-y: scroll;
+        height: 78%;
+        line-height: 14px;
+      }
+    }
   }
   &__title {
     margin-bottom: 16px;
