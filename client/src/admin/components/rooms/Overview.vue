@@ -13,7 +13,7 @@
         Terminé à : {{ new Date(room.game.endedAt).toLocaleString() }}
       </p>
       <p v-if="room.game && !room.game.endedAt">
-        Temps écoulé : {{  Math.floor((Date.now() - room.game.startedAt)*0.001) + 's' }}
+        Temps écoulé : {{ `${currentTime}s` }}
       </p>
     </md-card-content>
   </md-card>
@@ -28,6 +28,16 @@ export default {
       type: Object,
       required: true
     }
+  },
+
+  data () {
+    return {
+      currentTime: Math.floor((Date.now() - this.room.game.startedAt)*0.001)
+    }
+  },
+
+  mounted () {
+    setInterval(() => {this.currentTime++}, 1000);
   }
 }
 </script>

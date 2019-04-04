@@ -9,7 +9,7 @@
         </template>
 
         <md-tab id="tab-overview" md-label="Overview">
-          <overview-component :room="room"/>
+          <overview-component v-if="room" :room="room"/>
         </md-tab>
 
         <md-tab id="tab-metrics" md-label="Metrics">
@@ -130,7 +130,7 @@ export default {
 
   data() {
     return {
-      room: {},
+      room: null,
       metrics: [],
       entities: new Array(32 * 32).fill(null),
       models,
