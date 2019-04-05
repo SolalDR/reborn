@@ -8,7 +8,7 @@ import store from './store';
 import Viewport from './plugins/Viewport';
 import Socket from './plugins/Socket';
 import { VueBus } from './plugins/Bus';
-import Mouse from './plugins/Mouse';
+import { MousePlugin } from './plugins/Mouse';
 
 // Layouts
 import DefaultLayout from './layouts/Default.vue';
@@ -18,6 +18,7 @@ import AdminDefaultLayout from './admin/layouts/Default.vue';
 import './registerServiceWorker';
 import 'vue-material/dist/vue-material.min.css';
 import './admin/styles/admin.scss';
+import './assets/styles/global/main.scss';
 
 Vue.config.productionTip = false;
 
@@ -29,7 +30,7 @@ Vue.component('admin-default-layout', AdminDefaultLayout);
 // Plugins
 Vue.use(VueBus);
 Vue.use(VueMaterial);
-Vue.use(Mouse);
+Vue.use(MousePlugin);
 Vue.use(Viewport);
 Vue.use(Socket);
 

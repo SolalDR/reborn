@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import EuclideanSphere from '../maths/EuclideanSphere';
-import config, { timingFunctions } from '../../config';
 
 /**
  * @author solaldr
@@ -57,14 +56,6 @@ class OrbitControls {
       this.computePosition();
       this.object.lookAt(this.look);
     }
-  }
-
-  initGui(cameraFolder) {
-    const folder = cameraFolder.addFolder('Orbit');
-    folder.add(this, 'radius', 1, 20);
-    folder.add(config.camera.mobile.controls.orbit.radius, 'min', 1, 20);
-    folder.add(config.camera.mobile.controls.orbit.radius, 'max', 1, 20);
-    folder.add(config.camera.mobile.controls.orbit.radius, 'timingFunction', timingFunctions);
   }
 }
 

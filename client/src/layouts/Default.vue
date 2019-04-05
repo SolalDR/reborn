@@ -1,6 +1,6 @@
 <template>
   <div class="layout layout-default">
-    <div id="nav">
+    <div id="nav" class="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
       <router-link to="/rooms/create">Room Creation</router-link>
@@ -8,3 +8,9 @@
     <slot/>
   </div>
 </template>
+
+<style lang="scss">
+.nav {
+  position: fixed;
+}
+</style>

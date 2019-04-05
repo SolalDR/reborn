@@ -1,82 +1,56 @@
 import OrbitControls from './OrbitControls';
 import RailsControl from './RailsControl';
-import config from '../../config';
+import bus from '../../plugins/Bus';
+import mouse from '../../plugins/Mouse';
+import Viewport from '../../plugins/Viewport';
 
 class Control {
   constructor({
     camera = null,
-    scene = null,
-    vue = null,
   } = {}) {
-    this.configCamera = config.camera[vue.$context.device];
-    if (!this.configCamera) {
-      this.configCamera = config.camera.desktop;
-    }
-
     this.orbit = new OrbitControls({
       object: camera,
-      radius: this.configCamera.controls.orbit.radius.max,
-      phi: this.configCamera.controls.orbit.phi,
-      theta: this.configCamera.controls.orbit.theta,
-      enabled: false,
-      target: this.configCamera.carousel.lookAt,
+      radius: 12,
+      enabled: true,
+      look: new THREE.Vector3(),
     });
 
     this.rails = new RailsControl({
       object: camera,
     });
 
-    this.mouse = vue.$mouse;
-    this.bus = vue.$bus;
+    this.mouse = mouse;
+    this.bus = bus;
     this.camera = camera;
     this.state = {
       phi: this.orbit.phi,
       theta: this.orbit.theta,
     };
 
-    // Desktop
-    const device = vue.$context.getDevice().type;
-    if (device !== 'mobile' && device !== 'tablet') {
-      this.bus.$on('mouse:move', (mouse) => {
-        this.state.theta = -mouse.xUnit * 0.08;
-        this.state.phi = this.configCamera.controls.orbit.phi + mouse.yUnit * 0.08;
-      });
-      return;
-    }
+    let phi = 0;
+    let theta = 0;
 
-    // Mobile & tablet
-    this.bus.$on('mouse:move', (mouse) => {
-      this.state.theta = mouse.xDrag / window.innerWidth * 0.1;
+    this.mouse.$on('dragstart', () => {
+      phi = this.state.phi;
+      theta = this.state.theta;
     });
 
-    this.bus.$on('touch:click', (mouse) => {
-      setTimeout(() => {
-        this.state.theta = 0;
-        this.state.phi = this.configCamera.controls.orbit.phi;
-      }, 500);
+    this.mouse.$on('dragmove', (e) => {
+      this.state.theta = theta - (e.delta.x / Viewport.height) * 5.0;
+      this.state.phi = phi - (e.delta.y / Viewport.width) * 5.0;
     });
 
-    const orientation = new THREE.Vector2();
-    window.addEventListener('deviceorientation', (event) => {
-      orientation.set(
-        event.gamma / 90,
-        THREE.Math.clamp(event.beta, -90, 90) / 90,
-      );
-
-      this.state.theta = orientation.x * 0.13;
-      this.state.phi = this.configCamera.controls.orbit.phi + orientation.y * 0.02;
+    let wheel = 5;
+    this.mouse.$on('wheel', ({ event }) => {
+      wheel += event.deltaY / 100;
+      this.orbit.radius = Math.max(5, wheel);
     });
   }
 
   loop() {
     this.orbit.update();
-    this.orbit.theta += (this.state.theta - this.orbit.theta) * this.configCamera.controls.paralax.speed;
-    this.orbit.phi += (this.state.phi - this.orbit.phi) * this.configCamera.controls.paralax.speed;
-  }
-
-  initGui(cameraFolder) {
-    cameraFolder.add(this.configCamera.controls.paralax, 'speed', 0, 0.2).name('Paralax Speed');
-    this.orbit.initGui(cameraFolder);
+    this.orbit.theta += (this.state.theta - this.orbit.theta) * 0.1;
+    this.orbit.phi += (this.state.phi - this.orbit.phi) * 0.1;
   }
 }
 
