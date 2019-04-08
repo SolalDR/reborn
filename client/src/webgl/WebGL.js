@@ -1,19 +1,31 @@
 import Viewport from '../plugins/Viewport';
-import GameMap from './components/GameMap';
+import GameMap from './components/map';
 import Controls from './controls';
+import Cluster from './components/Cluster';
+import Raycaster from './core/Raycaster';
 
 export default class WebGL {
   constructor(canvas) {
     this.canvas = canvas;
-    this.camera = new THREE.PerspectiveCamera(45, Viewport.width / Viewport.height, 1, 1000);
+
+    // Renderer
+    this.scene = new THREE.Scene();
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
+      antialias: false,
     });
-    this.renderer.setClearColor(0xb7eeff);
-    this.renderer.setSize(Viewport.width, Viewport.height);
+
+    // Camera
+    this.camera = new THREE.PerspectiveCamera(45, Viewport.width / Viewport.height, 1, 1000);
     this.controls = new Controls({
       camera: this.camera,
     });
+
+    this.raycaster = new Raycaster({
+      scene: this.scene,
+      camera: this.camera,
+    });
+
 
     this.initScene();
     this.loop();
@@ -23,11 +35,16 @@ export default class WebGL {
     Viewport.$on('resize', () => {
       this.renderer.setSize(Viewport.width, Viewport.height);
     });
+
+    this.raycaster.on('cast', (intersections) => {
+      console.log(intersections);
+    });
   }
 
   initScene() {
-    this.scene = new THREE.Scene();
-    this.scene.fog = new THREE.Fog(0xb7eeff, 40, 50);
+    this.renderer.setClearColor(0xb7eeff);
+    this.renderer.setSize(Viewport.width, Viewport.height);
+    this.scene.fog = new THREE.Fog(0xb7eeff, 60, 150);
 
     const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
     this.scene.add(ambientLight);
@@ -37,13 +54,13 @@ export default class WebGL {
 
     this.map = new GameMap();
     this.scene.add(this.map);
+    this.raycaster.object = this.map.floor;
 
-    const cube = new THREE.Mesh(
-      new THREE.BoxGeometry(),
-      new THREE.MeshPhongMaterial(),
-    );
+    const geometry = new THREE.BoxBufferGeometry();
+    const material = new THREE.MeshPhongMaterial();
+    const cubeCluster = new Cluster(geometry, material);
 
-    this.scene.add(cube);
+    this.scene.add(cubeCluster.mesh);
 
     light.position.set(100, 100, 100);
     this.camera.position.set(0, 20, 20);

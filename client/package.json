@@ -21,6 +21,7 @@
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "@babel/preset-es2017": "^7.0.0-beta.53",
     "@vue/cli-plugin-babel": "^3.0.4",
     "@vue/cli-plugin-eslint": "^3.0.4",
     "@vue/cli-plugin-pwa": "^3.5.1",

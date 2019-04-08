@@ -5,7 +5,8 @@ window.THREE = THREE;
 /**
  * @class
  * Radial control can rotate arround a point based on radial coord.
- * The coords are just like geo coords but defining between [-π;π] for theta (azimuth) & [-π/2, π/2] for phi (elevation)
+ * The coords are just like geo coords but defining between
+ * [-π;π] for theta (azimuth) & [-π/2, π/2] for phi (elevation)
  */
 class RailsControl extends Emitter {
   constructor({

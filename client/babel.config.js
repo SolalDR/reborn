@@ -1,5 +1,9 @@
 module.exports = {
   presets: [
-    '@vue/app',
+    ['@vue/app', {
+      targets: {
+        chrome: 70,
+      },
+    }],
   ],
 };
