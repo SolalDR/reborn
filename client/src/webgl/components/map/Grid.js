@@ -25,11 +25,22 @@ class Grid extends THREE.Mesh {
     );
 
     this.size = size;
+    this.box = new THREE.Box2(
+      new THREE.Vector2(0, 0),
+      new THREE.Vector2(31, 31),
+    );
 
     this.cellSize = cellSize;
     this.rotation.x = -Math.PI / 2;
 
     this.position.copy(position);
+  }
+
+  checkIntersection(bbox) {
+    if (!this.box.containsBox(bbox)) return false;
+
+
+    return true;
   }
 
   getCellFromUV(uv, destination = new THREE.Vector2()) {

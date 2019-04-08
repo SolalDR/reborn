@@ -23,6 +23,9 @@ class Raycaster extends Emitter {
         if (a.length) {
           this.emit('cast', a[0]);
           Bus.$emit('cast', a[0]);
+        } else {
+          this.emit('cast', null);
+          Bus.$emit('cast', null);
         }
       }
     });

@@ -1,8 +1,9 @@
 import Viewport from '../plugins/Viewport';
 import GameMap from './components/map';
 import Controls from './controls';
-import Cluster from './components/Cluster';
+import Cluster from './components/cluster';
 import Raycaster from './core/Raycaster';
+import mouse from '../plugins/Mouse';
 
 export default class WebGL {
   constructor(canvas) {
@@ -59,9 +60,18 @@ export default class WebGL {
     this.scene.add(this.map);
     this.raycaster.object = this.map.floor;
 
-    const geometry = new THREE.BoxBufferGeometry();
-    const material = new THREE.MeshPhongMaterial();
+    const geometry = new THREE.SphereBufferGeometry();
+    const material = new THREE.MeshToonMaterial();
     const cubeCluster = new Cluster(geometry, material);
+
+    mouse.$on('click', () => {
+      if (!mouse.dragDelta) {
+        cubeCluster.addItem({
+          position: this.map.gridHelper.position,
+          rotation: new THREE.Euler(0, Math.PI * 2 * Math.random(), 0),
+        });
+      }
+    });
 
     this.scene.add(cubeCluster.mesh);
 

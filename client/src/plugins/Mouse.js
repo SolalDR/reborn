@@ -29,11 +29,11 @@ const mouse = new Vue({
     },
 
     onMouseup(event) {
-      this.$emit('dragend');
       this.$emit('click', {
         mouse: this,
         event,
       });
+      this.$emit('dragend');
     },
 
     onMouseWheel(event) {
@@ -51,19 +51,18 @@ const mouse = new Vue({
 
     this.$on('dragstart', () => {
       const origin = this.position.clone();
-      let delta = new THREE.Vector2();
-
       const callbackMove = (event) => {
-        delta = this.position.clone().sub(origin);
+        this.dragDelta = this.position.clone().sub(origin);
         this.$emit('dragmove', {
           mouse: this,
-          delta,
+          delta: this.dragDelta,
           event,
         });
       };
 
       this.$on('move', callbackMove);
       this.$once('dragend', () => {
+        this.dragDelta = null;
         this.$off('move', callbackMove);
       });
     });
