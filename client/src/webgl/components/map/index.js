@@ -7,10 +7,12 @@ const loader = new THREE.TextureLoader();
 export default class GameMap extends THREE.Group {
   constructor({
     resolution = 2,
+    cellSize = 1,
     size = new THREE.Vector2(32, 32),
   } = {}) {
     super();
     this.size = size;
+    this.cellSize = cellSize;
     this.resolution = resolution;
 
     this.initFloor();
@@ -18,8 +20,10 @@ export default class GameMap extends THREE.Group {
 
     const gridParams = {
       size,
+      cellSize,
       position: new THREE.Vector3(0, 1, 0),
     };
+
     this.grid = new Grid(gridParams);
     this.gridHelper = new GridHelper(gridParams);
     this.gridHelper.setSize(2, 3);
@@ -27,20 +31,7 @@ export default class GameMap extends THREE.Group {
 
     Bus.$on('cast', (intersection) => {
       const cell = this.grid.getCellFromUV(intersection.uv);
-
-      const x = this.gridHelper.scale.x % 2 === 1
-        ? cell.x - size.x / 2 + 0.5
-        : cell.x - size.x / 2 + (
-          (intersection.uv.x * size.x) % 1 > 0.5 ? 1 : 0
-        );
-
-      const y = this.gridHelper.scale.y % 2 === 1
-        ? -cell.y + size.y / 2 - 0.5
-        : -cell.y + size.y / 2 + (
-          (intersection.uv.y * size.y) % 1 > 0.5 ? -1 : 0
-        );
-
-      this.gridHelper.position.set(x, 1.05, y);
+      this.gridHelper.updatePosition(cell, intersection.uv);
     });
 
 
@@ -52,8 +43,8 @@ export default class GameMap extends THREE.Group {
 
   initFloor() {
     const geometry = new THREE.BoxGeometry(
-      this.size.x,
-      this.size.y,
+      this.size.x * this.cellSize,
+      this.size.y * this.cellSize,
       1.5,
       this.size.x * this.resolution,
       this.size.y * this.resolution,
@@ -89,8 +80,8 @@ export default class GameMap extends THREE.Group {
 
   initWater() {
     const geometry = new THREE.PlaneGeometry(
-      this.size.x * 10,
-      this.size.y * 10,
+      this.size.x * this.cellSize * 10,
+      this.size.y * this.cellSize * 10,
     );
 
     const material = new THREE.MeshToonMaterial({

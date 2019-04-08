@@ -52,7 +52,10 @@ export default class WebGL {
     const light = new THREE.DirectionalLight(0xFFFFFF, 0.5);
     this.scene.add(light);
 
-    this.map = new GameMap();
+    this.map = new GameMap({
+      cellSize: 1,
+      size: new THREE.Vector2(32, 32),
+    });
     this.scene.add(this.map);
     this.raycaster.object = this.map.floor;
 

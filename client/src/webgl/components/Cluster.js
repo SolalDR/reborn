@@ -50,14 +50,14 @@ class Cluster extends THREE.Group {
   }
 
 
-  // addItem({
-  //   // position = new THREE.Vector3(),
-  // } = {}) {
-  //   // if (isNaN(this.availables[0])) return;
+  addItem({
+    position = new THREE.Vector3(),
+  } = {}) {
+    if (this.availables[0] >= 0) return;
 
-  //   // const rank = this.availables[0];
-
-  // }
+    console.log(position);
+    // const rank = this.availables[0];
+  }
 
   getPositionAt(i) {
     if (this.entities[i]) {
