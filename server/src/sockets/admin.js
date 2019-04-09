@@ -48,6 +48,7 @@ export default {
    */
   startListen({ token, name }) {
     const room = process.rooms.get(name);
+
     var self = this;
     if (token === process.token && room) {
       const tickCallback = (args) => {
@@ -72,7 +73,6 @@ export default {
       }
 
       const entriesHistoryUpdateCallback = (entry) => {
-        // console.log('on update callback', entry);
         this.emit('history:update', entry);
       }
       room.historic.on('update', entriesHistoryUpdateCallback);
@@ -95,7 +95,6 @@ export default {
         room.game.world.on('entity:remove', entityRemoveCallback);
         room.game.world.on('entity:update', entityUpdateCallback);
         self.on('entity:add', (entity)=>{
-          console.log('add entity fron admin client')
           var e = room.game.world.addEntity(entity);
         });
         self.on('entity:remove', (uuid) => {
@@ -107,7 +106,7 @@ export default {
 
       // If game is not defined wait to launch events
       gameListener();
-      room.on('start', gameListener());
+      room.on('start', gameListener);
 
       // Remove events when admin disconnects
       this.on('disconnect', () => {

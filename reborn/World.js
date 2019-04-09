@@ -43,8 +43,6 @@ export default class World extends Emitter {
       model: entityModel
     });
 
-    console.log('hello entity');
-
     this.entities.set(newEntity.uuid, newEntity);
     this.emit('entity:add', newEntity.infos);
     newEntity.on('update', (infos) => {
