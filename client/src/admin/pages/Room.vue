@@ -36,8 +36,8 @@
           <div class="md-title">Metrics</div>
         </md-card-header>
 
-        <md-card-content>
-          <metric v-for="(metric, i) in metrics" :key="i" :metric="metric"/>
+        <md-card-content class="metrics">
+          <metric v-for="(metric, i) in metrics" :key="i" :metric="metric" class="metric"/>
         </md-card-content>
       </md-card>
 
@@ -224,6 +224,15 @@ export default {
     display: none;
   }
 
+  .metrics {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    .metric {
+      width: 48%;
+    }
+  }
   .grid {
     &__filter {
       max-width: 25%;

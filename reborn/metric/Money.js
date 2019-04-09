@@ -1,7 +1,7 @@
 import Metric from "./Metric";
 
 /**
- * Pollution metric
+ * Money metric
  * @extends Metric
  */
 export default class Money extends Metric {
