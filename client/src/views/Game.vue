@@ -1,11 +1,17 @@
 <template>
-  <p>
-    {{ $store.state.playerId }}
-  </p>
+  <main class="game">
+    <scene/>
+  </main>
 </template>
 
 <script>
+import Scene from '../components/Scene.vue';
+
 export default {
+  components: {
+    Scene,
+  },
+
   created() {
     this.$socket.on('entity:add', () => {
       console.log('Add entity');
@@ -18,24 +24,14 @@ export default {
     this.$socket.on('entity:update', () => {
       console.log('Update entity');
     });
-
-    console.log(this.$store.state.playerId, window.localStorage.playerId);
-    if (
-      !this.$store.state.playerId && window.localStorage.playerId
-      && !this.$store.state.roomId && window.localStorage.roomId
-    ) {
-      console.log('Need to retrieve room');
-      this.$socket.emit('room:retrieve', this.$store.state.roomId);
-      this.$socket.on('room:retrieve', (results) => {
-        this.$store.commit('gameStart', results);
-        this.$router.push({
-          name: 'game',
-          params: {
-            id: results.roomId,
-          },
-        });
-      });
-    }
   },
 };
 </script>
+
+<style lang="scss">
+.game {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+</style>

@@ -1,5 +1,5 @@
 import Game from "./Game";
-import Emitter from "./../../reborn/utils/Emitter";
+import Emitter from "@solaldr/emitter";
 import Player from "./Player";
 
 export default class Room extends Emitter {
