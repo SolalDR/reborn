@@ -71,6 +71,16 @@ export default {
         this.emit('room:entities', entities);
       }
 
+      const entriesHistoryUpdateCallback = (entry) => {
+        // console.log('on update callback', entry);
+        this.emit('history:update', entry);
+      }
+      room.historic.on('update', entriesHistoryUpdateCallback);
+      this.on('history:list', () => {
+        const entries = room.historic.entries.map(e => e.infos);
+        this.emit('history:list', entries)
+      });
+
       var isListeningGame = false;
 
       // A listner
@@ -85,6 +95,7 @@ export default {
         room.game.world.on('entity:remove', entityRemoveCallback);
         room.game.world.on('entity:update', entityUpdateCallback);
         self.on('entity:add', (entity)=>{
+          console.log('add entity fron admin client')
           var e = room.game.world.addEntity(entity);
         });
         self.on('entity:remove', (uuid) => {
@@ -101,6 +112,7 @@ export default {
       // Remove events when admin disconnects
       this.on('disconnect', () => {
         room.game.off('tick', tickCallback);
+        room.historic.off('update', entriesHistoryUpdateCallback);
         room.game.world.off('entity:add', entityAddCallback);
         room.game.world.off('entity:remove', entityRemoveCallback);
         room.game.world.off('entity:update', entityUpdateCallback);
