@@ -33,8 +33,6 @@ class Cluster extends THREE.Group {
         `mat4 _instanceMatrix = getInstanceMatrix();
          vec3 transformedNormal =  transposeMat3( inverse( mat3( modelViewMatrix * _instanceMatrix ) ) ) * objectNormal ;`,
       );
-
-      console.log(program.vertexShader);
     };
 
     const translationBuffer = new Float32Array(limit * 3);
