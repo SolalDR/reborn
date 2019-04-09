@@ -69,7 +69,7 @@ export default class Room extends Emitter {
       player.socket.emit(eventName, datas);
     })
 
-    this.historic.addEntry('log', `Dispatched to player ${eventName}, ${JSON.stringify(datas)}`);
+    this.historic.addEntry('log', eventName, datas);
   }
 
   get roomActive() {

@@ -6,10 +6,11 @@ export default class Historic extends Emitter {
     this.entries = [];
   }
 
-  addEntry (type, entryContent) {
+  addEntry (type, eventName, datas) {
     const entry = {
-      content: entryContent,
+      datas: datas,
       date: new Date(),
+      eventName: eventName,
       type: type
     };
 

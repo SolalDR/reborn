@@ -35,7 +35,7 @@
             </md-card-header>
 
             <md-card-content class="logs">
-              <log-component v-for="(log, index) in logs" :key="`log-${index}`" :log="log"/>
+              <entry-component v-for="(entry, index) in entries" :key="`entry-${index}`" :entry="entry"/>
             </md-card-content>
           </md-card>
         </md-tab>
@@ -114,7 +114,7 @@
 import models from '../../../../reborn/entity/models';
 
 import GridComponent from '../components/rooms/Grid.vue';
-import LogComponent from '../components/rooms/Log.vue';
+import EntryComponent from '../components/rooms/Entry.vue';
 import MetricComponent from '../components/rooms/Metric.vue';
 import OverviewComponent from '../components/rooms/Overview.vue';
 
@@ -123,7 +123,7 @@ export default {
 
   components: {
     GridComponent,
-    LogComponent,
+    EntryComponent,
     MetricComponent,
     OverviewComponent,
   },
@@ -137,97 +137,35 @@ export default {
       selectedModels: [],
       currentCell: null,
       entityModel: null,
-      logs: [{
-        content: 'Log 1',
-        date: new Date().toLocaleString(),
-        type: 'info'
-      },
-      {
-        content: 'Log 2',
-        date: new Date().toLocaleString(),
-        type: 'error'
-      },
-      {
-        content: 'Log 3',
-        date: new Date().toLocaleString(),
-        type: 'info'
-      },
-      {
-        content: 'Log 4',
-        date: new Date().toLocaleString(),
-        type: 'info'
-      },
-      {
-        content: 'Log 5',
-        date: new Date().toLocaleString(),
-        type: 'info'
-      },
-      {
-        content: 'Log 6',
-        date: new Date().toLocaleString(),
-        type: 'info'
-      },
-      {
-        content: 'Log 7',
-        date: new Date().toLocaleString(),
-        type: 'info'
-      },
-      {
-        content: 'Log 8',
-        date: new Date().toLocaleString(),
-        type: 'info'
-      },
-      {
-        content: 'Log 9',
-        date: new Date().toLocaleString(),
-        type: 'error'
-      },
-      {
-        content: 'Log 10',
-        date: new Date().toLocaleString(),
-        type: 'info'
-      },
-      {
-        content: 'Log 11',
-        date: new Date().toLocaleString(),
-        type: 'info'
-      },
-      {
-        content: 'Log 12',
-        date: new Date().toLocaleString(),
-        type: 'error'
-      },
-      {
-        content: 'Log 13',
-        date: new Date().toLocaleString(),
-        type: 'info'
-      },
-      {
-        content: 'Log 14',
-        date: new Date().toLocaleString(),
-        type: 'info'
-      },
-      {
-        content: 'Log 15',
-        date: new Date().toLocaleString(),
-        type: 'info'
-      }],
+      entries: [],
       unreadedLogs: 0,
     };
   },
 
   created() {
-    this.unreadedLogs = this.logs.length;
-
     this.$socket.emit('admin:listen', {
-      token: this.$store.state.admin.token,
-      name: this.$route.params.name,
+        token: this.$store.state.admin.token,
+        name: this.$route.params.name,
     });
 
     this.$socket.on('admin:listen', (room) => {
+      console.log('ON ADMIN LISTEN')
       this.room = room;
       this.onConnectRoom();
     });
+  },
+
+  beforeDestroy () {
+    // Fixed double event trigger
+    // TODO: Remove all 'removeAllListeners' & use Vue-socket.io
+    console.log('REMOVED ALL EVENTS');
+    this.$socket.removeAllListeners('admin:listen');
+    this.$socket.removeAllListeners('admin:tick');
+    this.$socket.removeAllListeners('room:entities');
+    this.$socket.removeAllListeners('entity:add');
+    this.$socket.removeAllListeners('entity:remove');
+    this.$socket.removeAllListeners('history:list');
+    this.$socket.removeAllListeners('history:update');
   },
 
   computed: {
@@ -243,6 +181,8 @@ export default {
     },
 
     onConnectRoom() {
+      console.log('On connect Room:', this.$socket);
+
       this.$socket.on('admin:tick', ({ metrics }) => {
         this.metrics = metrics;
       });
@@ -267,6 +207,21 @@ export default {
       this.$socket.on('entity:remove', (entity) => {
         if (!entity) return;
         this.entities[entity.position[0] + entity.position[1] * 32] = null;
+      });
+
+      this.$socket.emit('history:list');
+      this.$socket.on('history:list', (entries) => {
+        console.log('history:list', entries);
+        if (!entries) return;
+        this.entries = entries
+        this.unreadedLogs = this.entries.length;
+      });
+
+      this.$socket.on('history:update', (entry) => {
+        console.log('history:update', entry);
+        if (!entry) return;
+        this.entries.push(entry);
+        this.unreadedLogs++;
       });
     },
     onAddEntity() {

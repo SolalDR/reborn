@@ -77,7 +77,9 @@ export default {
       }
       room.historic.on('update', entriesHistoryUpdateCallback);
       this.on('history:list', () => {
-        const entries = room.historic.entries.map(e => e.infos);
+        // const entries = room.historic.entries.map(e => e.infos);
+        const entries = room.historic.entries;
+        console.log(entries);
         this.emit('history:list', entries)
       });
 
