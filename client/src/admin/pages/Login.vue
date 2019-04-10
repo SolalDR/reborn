@@ -53,18 +53,21 @@ export default {
     };
   },
 
+  sockets: {
+    'admin:authenticate' (response) {
+      if (response.valid) {
+        this.$store.commit('admin/updateToken', response.token);
+        this.$router.push('/admin');
+      } else {
+        this.form.error = 'Le mot de passe est faux';
+        this.sending = false;
+      }
+    }
+  },
+
   methods: {
     validateUser() {
       this.sending = true;
-      this.$socket.on('admin:authenticate', (response) => {
-        if (response.valid) {
-          this.$store.commit('admin/updateToken', response.token);
-          this.$router.push('/admin');
-        } else {
-          this.form.error = 'Le mot de passe est faux';
-          this.sending = false;
-        }
-      });
       this.$socket.emit('admin:authenticate', this.form.password.value);
     },
   },

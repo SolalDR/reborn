@@ -40,20 +40,20 @@ export default {
       rooms: [],
     };
   },
-  created() {
-    this.$socket.on('room:list', (rooms) => {
+  sockets: {
+    'room:list': function (rooms) {
       this.rooms = rooms;
       this.rooms.forEach((room) => {
         if (room.game) {
           console.log(room.game.startedAt);
         }
       });
-    });
-
-    this.$socket.on('room:add', () => {
+    },
+    'room:add': function () {
       this.$socket.emit('room:list', { token: this.$store.state.admin.token });
-    });
-
+    },
+  },
+  created() {
     this.$socket.emit('room:list', { token: this.$store.state.admin.token });
   },
   methods: {

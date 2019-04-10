@@ -25,11 +25,6 @@
             <md-icon>settings</md-icon>
             <span class="md-list-item-text">Config</span>
           </md-list-item>
-
-          <md-list-item>
-            <md-icon>av_timer</md-icon>
-            <span class="md-list-item-text">Logs</span>
-          </md-list-item>
         </md-list>
       </md-app-drawer>
 
