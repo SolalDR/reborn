@@ -1,0 +1,17 @@
+{
+  "name": "reborn-server",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node ./index.js",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "bcrypt": "^3.0.5",
+    "dotenv": "^7.0.0",
+    "esm": "^3.2.17",
+    "express": "^4.16.4",
+    "lodash": "^4.17.11",
+    "socket.io": "^2.2.0"
+  }
+}

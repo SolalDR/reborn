@@ -1,29 +1,26 @@
 {
   "name": "reborn",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.0.1",
+  "description": "A simulation game in webgl (THREE.js)",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "client:install": "cd client && npm install",
+    "server:install": "cd server && npm install",
+    "install": "concurrently \"npm run client:install\" \"npm run server:install\"",
+    "server:build": "cd server && npm run build",
+    "client:build": "cd client && npm run build",
+    "build": "concurrently \"npm run server:build\" \"npm run client:build\"",
+    "server:dev": "cd server && npm run dev",
+    "client:dev": "cd client && npm run dev",
+    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\""
   },
-  "dependencies": {
-    "register-service-worker": "^1.6.2",
-    "vue": "^2.6.6",
-    "vue-router": "^3.0.1",
-    "vuex": "^3.0.1"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SolalDR/reborn.git"
   },
-  "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.4",
-    "@vue/cli-plugin-eslint": "^3.0.4",
-    "@vue/cli-plugin-pwa": "^3.5.1",
-    "@vue/cli-service": "^3.0.4",
-    "@vue/eslint-config-airbnb": "^4.0.0",
-    "babel-eslint": "^10.0.1",
-    "eslint": "^5.8.0",
-    "eslint-plugin-vue": "^5.0.0",
-    "node-sass": "^4.9.0",
-    "sass-loader": "^7.1.0",
-    "vue-template-compiler": "^2.5.21"
-  }
+  "author": "SolalDR & Eronne",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SolalDR/reborn/issues"
+  },
+  "homepage": "https://github.com/SolalDR/reborn#readme"
 }

@@ -1,0 +1,35 @@
+{
+  "name": "reborn-client",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "glslify-loader": "^2.0.0",
+    "raw-loader": "^1.0.0",
+    "register-service-worker": "^1.6.2",
+    "three": "^0.102.1",
+    "vue": "^2.6.6",
+    "vue-material": "latest",
+    "vue-router": "^3.0.1",
+    "vue-socket.io": "^3.0.7",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.0.4",
+    "@vue/cli-plugin-eslint": "^3.0.4",
+    "@vue/cli-plugin-pwa": "^3.5.1",
+    "@vue/cli-service": "^3.0.4",
+    "@vue/eslint-config-airbnb": "^4.0.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.8.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "node-sass": "^4.9.0",
+    "sass-loader": "^7.1.0",
+    "vue-template-compiler": "^2.5.21",
+    "webpack": "^4.29.6"
+  }
+}
