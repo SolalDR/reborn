@@ -1,11 +1,17 @@
 <template>
-  <p>
-    {{ $store.state.playerId }}
-  </p>
+  <main class="game">
+    <scene/>
+  </main>
 </template>
 
 <script>
+import Scene from '../components/Scene.vue';
+
 export default {
+  components: {
+    Scene,
+  },
+
   sockets: {
     'entity:add': function () {
       console.log('Add entity');
@@ -43,3 +49,11 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.game {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+</style>

@@ -1,4 +1,5 @@
-import Emitter from "./../../reborn/utils/Emitter";
+import Emitter from "@solaldr/emitter";
+
 class Bus extends Emitter {
   constructor(){
     super();

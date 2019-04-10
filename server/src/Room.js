@@ -1,5 +1,5 @@
 import Game from "./Game";
-import Emitter from "./../../reborn/utils/Emitter";
+import Emitter from "@solaldr/emitter";
 import Historic from "./Historic"
 import Player from "./Player";
 
