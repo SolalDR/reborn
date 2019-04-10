@@ -142,30 +142,50 @@ export default {
     };
   },
 
-  created() {
-    this.$socket.emit('admin:listen', {
-        token: this.$store.state.admin.token,
-        name: this.$route.params.name,
-    });
-
-    this.$socket.on('admin:listen', (room) => {
-      console.log('ON ADMIN LISTEN')
+  sockets: {
+    'admin:listen': function (room) {
       this.room = room;
       this.onConnectRoom();
-    });
+    },
+    'admin:tick': function ({ metrics }) {
+      this.metrics = metrics;
+    },
+    'room:entities': function (entities) {
+      entities.forEach((entity) => {
+        this.entities[entity.position[0] + entity.position[1] * 32] = {
+          ...entity,
+          color: '#2979ff',
+        };
+      });
+    },
+    'entity:add': function (entity) {
+      if (!entity) return;
+      this.entities[entity.position[0] + entity.position[1] * 32] = {
+        ...entity,
+        color: '#2979ff',
+      };
+    },
+    'entity:remove': function (entity) {
+      if (!entity) return;
+      this.entities[entity.position[0] + entity.position[1] * 32] = null;
+    },
+    'history:list': function (entries) {
+      if (!entries) return;
+      this.entries = entries;
+      this.unreadedLogs = this.entries.length;
+    },
+    'history:update': function (entry) {
+      if (!entry) return;
+      this.entries.push(entry);
+      this.unreadedLogs++;
+    },
   },
 
-  beforeDestroy () {
-    // Fixed double event trigger
-    // TODO: Remove all 'removeAllListeners' & use Vue-socket.io
-    console.log('REMOVED ALL EVENTS');
-    this.$socket.removeAllListeners('admin:listen');
-    this.$socket.removeAllListeners('admin:tick');
-    this.$socket.removeAllListeners('room:entities');
-    this.$socket.removeAllListeners('entity:add');
-    this.$socket.removeAllListeners('entity:remove');
-    this.$socket.removeAllListeners('history:list');
-    this.$socket.removeAllListeners('history:update');
+  created() {
+    this.$socket.emit('admin:listen', {
+      token: this.$store.state.admin.token,
+      name: this.$route.params.name,
+    });
   },
 
   computed: {
@@ -181,48 +201,7 @@ export default {
     },
 
     onConnectRoom() {
-      console.log('On connect Room:', this.$socket);
-
-      this.$socket.on('admin:tick', ({ metrics }) => {
-        this.metrics = metrics;
-      });
-
-      this.$socket.on('room:entities', (entities) => {
-        entities.forEach((entity) => {
-          this.entities[entity.position[0] + entity.position[1] * 32] = {
-            ...entity,
-            color: '#2979ff',
-          };
-        });
-      });
-
-      this.$socket.on('entity:add', (entity) => {
-        if (!entity) return;
-        this.entities[entity.position[0] + entity.position[1] * 32] = {
-          ...entity,
-          color: '#2979ff',
-        };
-      });
-
-      this.$socket.on('entity:remove', (entity) => {
-        if (!entity) return;
-        this.entities[entity.position[0] + entity.position[1] * 32] = null;
-      });
-
       this.$socket.emit('history:list');
-      this.$socket.on('history:list', (entries) => {
-        console.log('history:list', entries);
-        if (!entries) return;
-        this.entries = entries
-        this.unreadedLogs = this.entries.length;
-      });
-
-      this.$socket.on('history:update', (entry) => {
-        console.log('history:update', entry);
-        if (!entry) return;
-        this.entries.push(entry);
-        this.unreadedLogs++;
-      });
     },
     onAddEntity() {
       this.$socket.emit('entity:add', {

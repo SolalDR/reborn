@@ -1,8 +1,6 @@
-import Vue from 'vue';
-import io from 'socket.io-client';
+import VueSocketIO from 'vue-socket.io';
 
-export default {
-  install() {
-    Vue.prototype.$socket = io('localhost:3001');
-  },
-};
+export default new VueSocketIO({
+  debug: true,
+  connection: 'localhost:3001',
+});

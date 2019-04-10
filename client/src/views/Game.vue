@@ -6,35 +6,39 @@
 
 <script>
 export default {
-  created() {
-    this.$socket.on('entity:add', () => {
+  sockets: {
+    'entity:add': function () {
       console.log('Add entity');
-    });
+    },
 
-    this.$socket.on('entity:remove', () => {
+    'entity:remove': function () {
       console.log('Remove entity');
-    });
+    },
 
-    this.$socket.on('entity:update', () => {
+    'entity:update': function () {
       console.log('Update entity');
-    });
+    },
 
+    'room:retrieve': function (results) {
+      this.$store.commit('gameStart', results);
+      this.$router.push({
+        name: 'game',
+        params: {
+          id: results.roomId,
+        },
+      });
+    },
+  },
+
+  created() {
     console.log(this.$store.state.playerId, window.localStorage.playerId);
+
     if (
       !this.$store.state.playerId && window.localStorage.playerId
       && !this.$store.state.roomId && window.localStorage.roomId
     ) {
       console.log('Need to retrieve room');
       this.$socket.emit('room:retrieve', this.$store.state.roomId);
-      this.$socket.on('room:retrieve', (results) => {
-        this.$store.commit('gameStart', results);
-        this.$router.push({
-          name: 'game',
-          params: {
-            id: results.roomId,
-          },
-        });
-      });
     }
   },
 };
