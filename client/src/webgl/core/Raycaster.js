@@ -14,7 +14,7 @@ class Raycaster extends Emitter {
     this.object = object;
     this.scene = scene;
     this.camera = camera;
-    this.intersections = [];
+    this.intersection = null;
 
     mouse.$on('move', () => {
       if (this.object) {
@@ -23,9 +23,11 @@ class Raycaster extends Emitter {
         if (a.length) {
           this.emit('cast', a[0]);
           Bus.$emit('cast', a[0]);
+          this.intersection = a[0];
         } else {
           this.emit('cast', null);
           Bus.$emit('cast', null);
+          this.intersection = null;
         }
       }
     });

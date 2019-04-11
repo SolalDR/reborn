@@ -28,7 +28,7 @@ export default {
     },
   },
 
-  created() {
+  mounted() {
     // Load game assets
     AssetsManager.loader.addGroup({
       name: 'models',

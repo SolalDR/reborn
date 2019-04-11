@@ -10,9 +10,11 @@ class Control {
   } = {}) {
     this.orbit = new OrbitControls({
       object: camera,
-      radius: 12,
+      radius: 25,
       enabled: true,
       look: new THREE.Vector3(),
+      phi: Math.PI / 8,
+      theta: Math.PI / 4,
     });
 
     this.rails = new RailsControl({
@@ -37,7 +39,7 @@ class Control {
 
     this.mouse.$on('dragmove', (e) => {
       this.state.theta = theta - (e.delta.x / Viewport.height) * 5.0;
-      this.state.phi = phi - (e.delta.y / Viewport.width) * 5.0;
+      this.state.phi = Math.min(Math.PI / 3, Math.max(0.1, phi - (e.delta.y / Viewport.width) * 5.0));
     });
 
     let wheel = 5;

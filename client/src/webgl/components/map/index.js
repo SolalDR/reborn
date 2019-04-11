@@ -45,7 +45,7 @@ export default class GameMap extends THREE.Group {
     });
 
 
-    this.add(this.grid);
+    // this.add(this.grid);
     this.add(this.gridHelper);
     this.add(this.floor);
     this.add(this.water);
@@ -53,10 +53,9 @@ export default class GameMap extends THREE.Group {
 
 
   initFloor() {
-    const geometry = new THREE.BoxGeometry(
+    const geometry = new THREE.PlaneGeometry(
       this.size.x * this.cellSize,
       this.size.y * this.cellSize,
-      1.5,
       this.size.x * this.resolution,
       this.size.y * this.resolution,
       1,
@@ -71,11 +70,11 @@ export default class GameMap extends THREE.Group {
       // flatShading: true,
     });
 
-    loader.load('/game/ile.png', () => {
-      // material.displacementMap = texture;
-      // material.bumpMap = texture;
-      // material.displacementScale = 5;
-      // material.bumpScale = 5;
+    loader.load('/game/ile.png', (texture) => {
+      material.displacementMap = texture;
+      material.bumpMap = texture;
+      material.displacementScale = 2;
+      material.bumpScale = 0.5;
       material.needsUpdate = true;
     });
 
@@ -86,7 +85,7 @@ export default class GameMap extends THREE.Group {
 
     geometry.rotateX(-Math.PI / 2);
     this.floor = new THREE.Mesh(geometry, material);
-    this.floor.position.y = 0;
+    this.floor.position.y = -0.1;
   }
 
   initWater() {
