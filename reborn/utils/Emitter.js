@@ -1,6 +1,7 @@
 /**
  * @class An abstract class to implement event system https://gist.github.com/SolalDR/3d41b385ab863e996bfaf5344a09eea5
  * @abstract
+ * @deprecated
  * @author SolalDR - solal.dussout-revel@hotmail.fr
  */
 class Event {

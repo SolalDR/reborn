@@ -13,7 +13,7 @@ export default {
    * @param {string} mdp
    */
   authenticate(mdp){
-    if( mdp === process.env.MDP ){
+    if( mdp === process.env.MDP || process.env.DEBUG ){
       this.emit('admin:authenticate', {
         valid: true,
         token: process.token
@@ -48,6 +48,7 @@ export default {
    */
   startListen({ token, name }) {
     const room = process.rooms.get(name);
+
     var self = this;
     if (token === process.token && room) {
       const tickCallback = (args) => {
@@ -71,6 +72,17 @@ export default {
         this.emit('room:entities', entities);
       }
 
+      const entriesHistoryUpdateCallback = (entry) => {
+        this.emit('history:update', entry);
+      }
+      room.historic.on('update', entriesHistoryUpdateCallback);
+      this.on('history:list', () => {
+        // const entries = room.historic.entries.map(e => e.infos);
+        const entries = room.historic.entries;
+        console.log(entries);
+        this.emit('history:list', entries)
+      });
+
       var isListeningGame = false;
 
       // A listner
@@ -86,7 +98,6 @@ export default {
         room.game.world.on('entity:update', entityUpdateCallback);
         self.on('entity:add', (entity)=>{
           var e = room.game.world.addEntity(entity);
-          console.log(e, entity);
         });
         self.on('entity:remove', (uuid) => {
           room.game.world.removeEntity(room.game.world.entities.get(uuid));
@@ -97,11 +108,12 @@ export default {
 
       // If game is not defined wait to launch events
       gameListener();
-      room.on('start', gameListener());
+      room.on('start', gameListener);
 
       // Remove events when admin disconnects
       this.on('disconnect', () => {
         room.game.off('tick', tickCallback);
+        room.historic.off('update', entriesHistoryUpdateCallback);
         room.game.world.off('entity:add', entityAddCallback);
         room.game.world.off('entity:remove', entityRemoveCallback);
         room.game.world.off('entity:update', entityUpdateCallback);

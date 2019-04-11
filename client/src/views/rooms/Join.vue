@@ -9,6 +9,25 @@
 
 export default {
   name: 'RoomJoin',
+  sockets: {
+    'room:connect': function ({ playerId, verifiedRoomId }) {
+      console.log('-- ROOM JOINED');
+      this.$store.commit('setPlayer', playerId);
+      this.$store.commit('setRoom', verifiedRoomId);
+    },
+    'game:start': function (result) {
+      console.log('-- GAME STARTED');
+      const roomId = this.$router.history.current.params.id;
+
+      this.$store.commit('gameStart', result);
+      this.$router.push({
+        name: 'game',
+        params: {
+          id: roomId,
+        },
+      });
+    },
+  },
   data() {
     return {
       msg: '',
@@ -18,25 +37,7 @@ export default {
     const roomId = this.$router.history.current.params.id;
 
     this.$socket.emit('room:join', roomId);
-    this.$socket.on('game:start', (result) => {
-      this.$store.commit('gameStart', result);
-      this.$router.push({
-        name: 'game',
-        params: {
-          id: roomId,
-        },
-      });
-    });
-
-    this.$socket.on('room:connect', ({ playerId, verifiedRoomId }) => {
-      this.$store.commit('setPlayer', playerId);
-      this.$store.commit('setRoom', verifiedRoomId);
-    });
-
-
     this.msg = `Joined ${roomId}`;
-  },
-  methods: {
   },
 };
 </script>

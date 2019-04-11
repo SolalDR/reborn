@@ -1,5 +1,6 @@
 import Game from "./Game";
 import Emitter from "@solaldr/emitter";
+import Historic from "./Historic"
 import Player from "./Player";
 
 export default class Room extends Emitter {
@@ -11,6 +12,7 @@ export default class Room extends Emitter {
     this._room = socket.adapter.rooms[this.id];
     this.length = 0;
     this.game = null;
+    this.historic = new Historic()
     this.players = new Map();
     if( !this._room ){
       return null;
@@ -66,6 +68,8 @@ export default class Room extends Emitter {
     this.players.forEach(player => {
       player.socket.emit(eventName, datas);
     })
+
+    this.historic.addEntry('log', eventName, datas);
   }
 
   get roomActive() {

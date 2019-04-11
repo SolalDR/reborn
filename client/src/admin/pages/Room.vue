@@ -1,75 +1,74 @@
 <template>
   <div class="admin-room">
     <h1 class="admin-room__title md-display-1" v-if="room">Room: {{ room.name }}</h1>
-    <div class="header">
-      <md-tabs md-sync-route>
-        <md-tab id="tab-home" md-label="Overview" @click="component = 'overview'">
+
+    <header>
+      <md-tabs>
+        <template slot="md-tab" slot-scope="{ tab }">
+          {{ tab.label }} <i class="badge" v-if="tab.data.badge">{{ tab.data.badge }}</i>
+        </template>
+
+        <md-tab id="tab-overview" md-label="Overview">
+          <overview-component v-if="room" :room="room"/>
         </md-tab>
-        <md-tab id="tab-pages" md-label="History" @click="component = 'history'">
+
+        <md-tab id="tab-metrics" md-label="Metrics">
+          <md-card>
+            <md-card-header>
+              <div class="md-title">Metrics</div>
+            </md-card-header>
+
+            <md-card-content class="metrics">
+              <metric-component v-for="(metric, i) in metrics" :key="i" :metric="metric" class="metric"/>
+            </md-card-content>
+          </md-card>
         </md-tab>
-        <md-tab id="tab-posts" md-label="Map" @click="component = 'map'">
+
+        <md-tab
+          id="tab-logs"
+          md-label="Logs"
+          :md-template-data="{ badge: unreadedLogs }"
+          @click="unreadedLogs = 0">
+          <md-card class="md-size-50 md-card--log">
+            <md-card-header>
+              <div class="md-title">Logs</div>
+            </md-card-header>
+
+            <md-card-content class="logs">
+              <entry-component v-for="(entry, index) in entries" :key="`entry-${index}`" :entry="entry"/>
+            </md-card-content>
+          </md-card>
         </md-tab>
       </md-tabs>
-    </div>
-    <div>
+    </header>
 
-      <md-card class="md-size-50">
-        <md-card-header>
-          <div class="md-title">Overview</div>
-        </md-card-header>
-        <md-card-content>
-          <p>Créer à : {{ new Date(room.createdAt).toLocaleString() }}</p>
-          <p v-if="room.game">
-            Début du jeu : {{ new Date(room.game.startedAt).toLocaleString() }}
-          </p>
-          <p v-if="room.game && room.game.endedAt">
-            Terminé à : {{ new Date(room.game.endedAt).toLocaleString() }}
-          </p>
-          <p v-if="room.game && !room.game.endedAt">
-            Temps écoulé : {{  Math.floor((Date.now() - room.game.startedAt)*0.001) + 's' }}
-          </p>
-        </md-card-content>
-      </md-card>
+    <md-card class="grid">
+      <md-card-header>
+        <div class="md-title">Grille</div>
+      </md-card-header>
 
-      <md-card>
-        <md-card-header>
-          <div class="md-title">Metrics</div>
-        </md-card-header>
-
-        <md-card-content class="metrics">
-          <metric v-for="(metric, i) in metrics" :key="i" :metric="metric" class="metric"/>
-        </md-card-content>
-      </md-card>
-
-
-      <md-card class="grid">
-        <md-card-header>
-          <div class="md-title">Grille</div>
-        </md-card-header>
-
-        <md-card-content>
-          <div class="md-layout md-gutter">
-            <div class="md-layout-item grid__filter">
-              <md-field>
-                <label for="models">Models</label>
-                <md-select v-model="selectedModels" name="models" id="models" multiple>
-                  <md-option v-for="(model, i) in models" :key="'model'+i" :value="model.slug">
-                    {{ model.name }}
-                  </md-option>
-                </md-select>
-              </md-field>
-            </div>
+      <md-card-content>
+        <div class="md-layout md-gutter">
+          <div class="md-layout-item grid__filter">
+            <md-field>
+              <label for="models">Models</label>
+              <md-select v-model="selectedModels" name="models" id="models" multiple>
+                <md-option v-for="(model, i) in models" :key="'model'+i" :value="model.slug">
+                  {{ model.name }}
+                </md-option>
+              </md-select>
+            </md-field>
           </div>
+        </div>
 
-          <grid-component
-            :size="[32, 32]"
-            :cells="entities"
-            :filtersModel="selectedModels"
-            @clickCell="onClickCell($event)"
-            />
-        </md-card-content>
-      </md-card>
-    </div>
+        <grid-component
+          :size="[32, 32]"
+          :cells="entities"
+          :filtersModel="selectedModels"
+          @clickCell="onClickCell($event)"
+          />
+      </md-card-content>
+    </md-card>
 
     <md-dialog
       v-if="currentCell && !!currentCell.entity"
@@ -108,46 +107,84 @@
         <md-button class="md-primary" @click="onAddEntity()">Save</md-button>
       </md-dialog-actions>
     </md-dialog>
-
   </div>
 </template>
 
 <script>
-
 import models from '../../../../reborn/entity/models';
-import GridComponent from './rooms/Grid.vue';
-import Metric from '../components/Metric.vue';
+
+import GridComponent from '../components/rooms/Grid.vue';
+import EntryComponent from '../components/rooms/Entry.vue';
+import MetricComponent from '../components/rooms/Metric.vue';
+import OverviewComponent from '../components/rooms/Overview.vue';
 
 export default {
   name: 'Room',
 
   components: {
-    Metric,
     GridComponent,
+    EntryComponent,
+    MetricComponent,
+    OverviewComponent,
   },
 
   data() {
     return {
-      room: {},
+      room: null,
       metrics: [],
       entities: new Array(32 * 32).fill(null),
       models,
       selectedModels: [],
       currentCell: null,
       entityModel: null,
-      component: 'overview',
+      entries: [],
+      unreadedLogs: 0,
     };
+  },
+
+  sockets: {
+    'admin:listen': function (room) {
+      this.room = room;
+      this.onConnectRoom();
+    },
+    'admin:tick': function ({ metrics }) {
+      this.metrics = metrics;
+    },
+    'room:entities': function (entities) {
+      entities.forEach((entity) => {
+        this.entities[entity.position[0] + entity.position[1] * 32] = {
+          ...entity,
+          color: '#2979ff',
+        };
+      });
+    },
+    'entity:add': function (entity) {
+      if (!entity) return;
+      this.entities[entity.position[0] + entity.position[1] * 32] = {
+        ...entity,
+        color: '#2979ff',
+      };
+    },
+    'entity:remove': function (entity) {
+      if (!entity) return;
+      this.entities[entity.position[0] + entity.position[1] * 32] = null;
+    },
+    'history:list': function (entries) {
+      if (!entries) return;
+      this.entries = entries;
+      this.unreadedLogs = this.entries.length;
+    },
+    'history:update': function (entry) {
+      if (!entry) return;
+      this.entries.push(entry);
+      this.unreadedLogs++;
+    },
   },
 
   created() {
     this.$socket.emit('admin:listen', {
       token: this.$store.state.admin.token,
       name: this.$route.params.name,
-    });
-
-    this.$socket.on('admin:listen', (room) => {
-      this.room = room;
-      this.onConnectRoom();
     });
   },
 
@@ -164,31 +201,7 @@ export default {
     },
 
     onConnectRoom() {
-      this.$socket.on('admin:tick', ({ metrics }) => {
-        this.metrics = metrics;
-      });
-
-      this.$socket.on('room:entities', (entities) => {
-        entities.forEach((entity) => {
-          this.entities[entity.position[0] + entity.position[1] * 32] = {
-            ...entity,
-            color: '#2979ff',
-          };
-        });
-      });
-
-      this.$socket.on('entity:add', (entity) => {
-        if (!entity) return;
-        this.entities[entity.position[0] + entity.position[1] * 32] = {
-          ...entity,
-          color: '#2979ff',
-        };
-      });
-
-      this.$socket.on('entity:remove', (entity) => {
-        if (!entity) return;
-        this.entities[entity.position[0] + entity.position[1] * 32] = null;
-      });
+      this.$socket.emit('history:list');
     },
     onAddEntity() {
       this.$socket.emit('entity:add', {
@@ -207,10 +220,41 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .admin-room {
+  header {
+    .badge {
+      // TODO: Add scss variables
+      width: 19px;
+      height: 19px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background: red;
+      border-radius: 50%;
+      color: white;
+      font-size: 10px;
+      font-style: normal;
+      font-weight: 600;
+      letter-spacing: -.05em;
+    }
+  }
+
   .md-card {
     margin-bottom: 32px;
+
+    &--log {
+      height: 60vh;
+
+      .logs {
+        overflow-y: scroll;
+        height: 78%;
+        line-height: 14px;
+      }
+    }
   }
   &__title {
     margin-bottom: 16px;
@@ -218,10 +262,6 @@ export default {
   }
   .md-tabs-navigation {
     margin-bottom: 32px;
-  }
-
-  .header {
-    display: none;
   }
 
   .metrics {
