@@ -1,5 +1,5 @@
+import Emitter from "@solaldr/emitter";
 import TimelineEvent from "./Event";
-import Emitter from "./../utils/Emitter";
 
 export default class Timeline extends Emitter {
   constructor({
@@ -47,10 +47,10 @@ export default class Timeline extends Emitter {
 
   /**
    * Add an event to the timeline
-   * @param {Number} delay 
+   * @param {Number} delay
    * @param {Number} duration
    * @param {Function} onComplete
-   * @param {Object} datas 
+   * @param {Object} datas
    */
   add({
     delay = 0,

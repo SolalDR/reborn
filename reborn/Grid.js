@@ -3,7 +3,7 @@
  * @extends Array
  * @param {Integer[]} size The size of the grid (default is [32, 32])
  */
-export default class Grid extends Array{
+export default class Grid extends Array {
   constructor({
     size = [32, 32]
   } = {}){

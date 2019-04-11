@@ -25,27 +25,9 @@ export default {
     'entity:update': function () {
       console.log('Update entity');
     },
-
-    'room:retrieve': function (results) {
-      this.$store.commit('gameStart', results);
-      this.$router.push({
-        name: 'game',
-        params: {
-          id: results.roomId,
-        },
-      });
-    },
   },
 
   created() {
-    if (
-      !this.$store.state.playerId && window.localStorage.playerId
-      && !this.$store.state.roomId && window.localStorage.roomId
-    ) {
-      console.log('Need to retrieve room');
-      this.$socket.emit('room:retrieve', this.$store.state.roomId);
-    }
-
     AssetsManager.loader.addGroup({
       name: 'models',
       base: '/3d',

@@ -6,19 +6,22 @@ import World from "./World";
 
 /**
  * @param {Player[]} players A list of players
- * @param {Number} interval Timeline tick interval
  * @extends Emitter
  */
 class Game extends Emitter {
   constructor({
-    players = [],
-    interval = 250
+    players = []
   }){
     super();
     this.players = players;
     this.status = Game.PENDING;
 
-    // EntityModel
+    this.initModels();
+    this.initMetrics();
+    this.initWorld();
+  }
+
+  initModels() {
     this.entityModels = new Map();
     entityModels.forEach(model => {
       this.entityModels.set(model.slug, new Reborn.EntityModel({
@@ -26,33 +29,20 @@ class Game extends Emitter {
         game: this
       }));
     });
+  }
 
-    // Metrics
+  initMetrics() {
     this.metrics = new Map();
     metrics.forEach(metricConstructor => {
       var metric = new metricConstructor();
       this.metrics.set(metric.slug, metric);
     });
+  }
 
-    // Timeline
-    this.timeline = new Reborn.Timeline({
-      interval,
-    });
-
-    // World
+  initWorld() {
     this.world = new World({
       game: this
     });
-
-    var metricsMap = Array.from(this.metrics.values());
-    this.timeline.on('tick', ()=>{
-      this.metrics.forEach(metric => {
-        metric.value += metric.recurentOperation;
-      })
-      this.emit('tick', {
-        metrics: metricsMap.map(m => m.infos)
-      })
-    })
   }
 
   /**

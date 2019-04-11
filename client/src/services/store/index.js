@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import adminStore from './admin/store';
+import adminStore from '../../admin/store';
+import Reborn from '../../game';
 
 Vue.use(Vuex);
 
@@ -10,8 +11,10 @@ export default new Vuex.Store({
     game: null,
   },
   mutations: {
-    gameStart(state, game) {
-      state.game = game;
+    'SOCKET_game:start': function (state, game) {
+      state.game = new Reborn.Game({
+        players: game.players.map(p => new Reborn.Player(p)),
+      });
     },
 
     setPlayer(state, playerId) {

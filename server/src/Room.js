@@ -1,7 +1,8 @@
-import Game from "./Game";
+import Game from "./game/Game";
+import Player from "./game/Player";
+
 import Emitter from "@solaldr/emitter";
 import Historic from "./Historic"
-import Player from "./Player";
 
 export default class Room extends Emitter {
   constructor(id, socket){

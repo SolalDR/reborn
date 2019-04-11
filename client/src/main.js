@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueMaterial from 'vue-material';
 import App from './App.vue';
 import router from './router';
-import store from './store';
+import store from './services/store';
 
 // Plugins
 import Viewport from './plugins/Viewport';

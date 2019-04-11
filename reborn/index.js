@@ -1,19 +1,17 @@
-// Timeline
-export {default as Timeline} from "./timeline/Timeline";
-export {default as TimelineEvent} from "./timeline/Event";
-
 // Role
 export {default as CityRole} from "./role/City";
 export {default as NatureRole} from "./role/Nature";
 export {default as Role} from "./role/Role";
 
 // Metric
-export {default as Metrics} from "./metric";
+export {default as metrics} from "./metric";
 export {default as Metric} from "./metric/Metric";
 
 // Entity
 export {default as EntityModel} from "./entity/Model";
 export {default as EntityState} from "./entity/State";
+export {default as models} from "./entity/models";
+export {default as categories} from "./categories";
 
 // Main
 export {default as Game} from "./Game";

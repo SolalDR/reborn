@@ -16,7 +16,6 @@ export default class World extends Emitter {
     this.game = game;
     this.entities = new Map();
     this.grid = new Grid();
-    this.simulateMatch();
   }
 
   /**
@@ -68,18 +67,6 @@ export default class World extends Emitter {
     entity.destruct();
     this.entities.delete(entity.uuid);
     this.emit('entity:remove', entity.infos);
-  }
-
-  simulateMatch(){
-    // setInterval(()=>{
-    //   this.addEntity({
-    //     model: Math.random() > 0.5 ? 'tree' : 'house',
-    //     position: [
-    //       Math.floor(Math.random()*this.grid.size[0]),
-    //       Math.floor(Math.random()*this.grid.size[1])
-    //     ]
-    //   })
-    // }, 3000)
   }
 }
 

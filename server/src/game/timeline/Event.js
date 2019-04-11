@@ -1,4 +1,4 @@
-import Emitter from "./../utils/Emitter";
+import Emitter from "@solaldr/emitter";
 
 /**
  * @param {Number|null} delay If this value is defined, the timeline will wait before executing the event

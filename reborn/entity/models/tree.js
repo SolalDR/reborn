@@ -1,5 +1,7 @@
 export default {
   slug: "tree",
+  category: "vegegation",
+  color: "#00FF00",
   name: "Arbre",
   states: {
     creation: {

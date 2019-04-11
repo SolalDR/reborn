@@ -1,5 +1,7 @@
 export default {
   slug: "house",
+  category: "satisfaction",
+  color: "#FF0000",
   name: "Logement",
   states: {
     creation: {
