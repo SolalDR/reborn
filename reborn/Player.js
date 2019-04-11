@@ -13,6 +13,7 @@ class Player {
     role = null,
     status = Player.ACTIVE
   }) {
+
     this.id = id;
 
     this.role = role;
@@ -40,7 +41,7 @@ class Player {
   get infos(){
     return {
       id: this.id,
-      role: this.role.name,
+      role: this.role ? this.role.name : null,
       status: this.status
     }
   }

@@ -8,8 +8,8 @@ export default {
       duration: 1000,
       enterModifiers: [
         {
-          name: 'pollution',
-          value: 1
+          name: 'purity',
+          value: -1
         },
         {
           name: 'money',
@@ -21,8 +21,8 @@ export default {
     mounted: {
       recurModifiers: [
         {
-          name: 'pollution',
-          value: 1
+          name: 'purity',
+          value: -1
         }
       ]
     },

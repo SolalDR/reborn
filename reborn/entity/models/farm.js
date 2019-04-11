@@ -1,19 +1,13 @@
 export default {
   slug: "farm",
-  category: "satisfaction",
-  color: "#FF0000",
-  name: "Logement",
+  category: "alimentation",
+  name: "Ferme",
   states: {
     creation: {
-      duration: 1000,
       enterModifiers: [
         {
-          name: 'pollution',
-          value: 1
-        },
-        {
           name: 'money',
-          value: -1000,
+          value: -4000,
           checkConstraint: true
         }
       ]
@@ -21,8 +15,12 @@ export default {
     mounted: {
       recurModifiers: [
         {
-          name: 'pollution',
+          name: 'alimentation',
           value: 1
+        },
+        {
+          name: 'purity',
+          value: -1
         }
       ]
     },
