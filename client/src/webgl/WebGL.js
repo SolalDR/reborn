@@ -38,8 +38,7 @@ export default class WebGL {
       this.renderer.setSize(Viewport.width, Viewport.height);
     });
 
-    this.raycaster.on('cast', (intersections) => {
-      console.log(intersections);
+    this.raycaster.on('cast', () => {
     });
   }
 
@@ -63,10 +62,6 @@ export default class WebGL {
 
 
     AssetsManager.loader.on('load:models', (results) => {
-      console.log(results.maison);
-
-      // const geometry = new THREE.SphereBufferGeometry();
-      console.log(results.maison.result.scene.children[0].geometry);
       const material = new THREE.MeshToonMaterial({
         vertexColors: THREE.VertexColors,
       });
