@@ -6,6 +6,7 @@
 
 <script>
 import Scene from '../components/Scene.vue';
+import AssetsManager from '../services/assets/Manager';
 
 export default {
   components: {
@@ -17,6 +18,8 @@ export default {
       console.log('Add entity');
     });
 
+    this.$bus.$emit('hello');
+
     this.$socket.on('entity:remove', () => {
       console.log('Remove entity');
     });
@@ -24,6 +27,23 @@ export default {
     this.$socket.on('entity:update', () => {
       console.log('Update entity');
     });
+
+    AssetsManager.loader.addGroup({
+      name: 'models',
+      base: '/3d',
+      files: [
+        {
+          name: 'tree',
+          path: '/arbre_test.glb',
+        },
+        {
+          name: 'maison',
+          path: '/maison_test.glb',
+        },
+      ],
+    });
+
+    AssetsManager.loader.loadGroup('models');
   },
 };
 </script>

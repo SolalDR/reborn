@@ -4,6 +4,7 @@ import Controls from './controls';
 import Cluster from './components/cluster';
 import Raycaster from './core/Raycaster';
 import mouse from '../plugins/Mouse';
+import AssetsManager from '../services/assets/Manager';
 
 export default class WebGL {
   constructor(canvas) {
@@ -37,8 +38,7 @@ export default class WebGL {
       this.renderer.setSize(Viewport.width, Viewport.height);
     });
 
-    this.raycaster.on('cast', (intersections) => {
-      console.log(intersections);
+    this.raycaster.on('cast', () => {
     });
   }
 
@@ -60,20 +60,25 @@ export default class WebGL {
     this.scene.add(this.map);
     this.raycaster.object = this.map.floor;
 
-    const geometry = new THREE.SphereBufferGeometry();
-    const material = new THREE.MeshToonMaterial();
-    const cubeCluster = new Cluster(geometry, material);
 
-    mouse.$on('click', () => {
-      if (!mouse.dragDelta) {
-        cubeCluster.addItem({
-          position: this.map.gridHelper.position,
-          rotation: new THREE.Euler(0, Math.PI * 2 * Math.random(), 0),
-        });
-      }
+    AssetsManager.loader.on('load:models', (results) => {
+      const material = new THREE.MeshToonMaterial({
+        vertexColors: THREE.VertexColors,
+      });
+      const cubeCluster = new Cluster(results.maison.result.scene.children[0].geometry, material);
+
+      mouse.$on('click', () => {
+        if (!mouse.dragDelta) {
+          cubeCluster.addItem({
+            position: this.map.gridHelper.position,
+            rotation: new THREE.Euler(0, Math.PI * 2 * Math.random(), 0),
+          });
+        }
+      });
+
+      this.scene.add(cubeCluster.mesh);
     });
 
-    this.scene.add(cubeCluster.mesh);
 
     light.position.set(100, 100, 100);
     this.camera.position.set(0, 20, 20);
