@@ -7,6 +7,7 @@
 <script>
 import Scene from '../components/Scene.vue';
 import AssetsManager from '../services/assets/Manager';
+import Reborn from '../game';
 
 export default {
   components: {
@@ -25,40 +26,21 @@ export default {
     'entity:update': function () {
       console.log('Update entity');
     },
-
-    'room:retrieve': function (results) {
-      this.$store.commit('gameStart', results);
-      this.$router.push({
-        name: 'game',
-        params: {
-          id: results.roomId,
-        },
-      });
-    },
   },
 
   created() {
-    if (
-      !this.$store.state.playerId && window.localStorage.playerId
-      && !this.$store.state.roomId && window.localStorage.roomId
-    ) {
-      console.log('Need to retrieve room');
-      this.$socket.emit('room:retrieve', this.$store.state.roomId);
-    }
-
+    // Load game assets
     AssetsManager.loader.addGroup({
       name: 'models',
-      base: '/3d',
-      files: [
-        {
-          name: 'tree',
-          path: '/arbre_test.glb',
-        },
-        {
-          name: 'maison',
-          path: '/maison_test.glb',
-        },
-      ],
+      base: '/3d/models/',
+      files: Reborn.models.map(({ slug }) => ({
+        name: slug,
+        path: `${slug}.glb`,
+      })),
+    });
+
+    AssetsManager.loader.on('load:models', () => {
+      this.$socket.emit('player:ready');
     });
 
     AssetsManager.loader.loadGroup('models');

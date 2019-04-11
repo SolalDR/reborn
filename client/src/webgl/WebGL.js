@@ -6,6 +6,9 @@ import Raycaster from './core/Raycaster';
 import mouse from '../plugins/Mouse';
 import AssetsManager from '../services/assets/Manager';
 
+// import blobVertex from './shaders/blob.vert';
+// import blobFragment from './shaders/blob.frag';
+
 export default class WebGL {
   constructor(canvas) {
     this.canvas = canvas;
@@ -59,6 +62,20 @@ export default class WebGL {
     });
     this.scene.add(this.map);
     this.raycaster.object = this.map.floor;
+
+    // const geometry = new THREE.DodecahedronGeometry(3, 5);
+    // this.morphElement = new THREE.Points(geometry, new THREE.ShaderMaterial({
+    //   uniforms: {
+    //     u_time: {
+    //       value: 0.0,
+    //     },
+    //   },
+    //   vertexShader: blobVertex,
+    //   fragmentShader: blobFragment,
+    //   transparent: true,
+    // }));
+    // this.scene.add(this.morphElement);
+    // this.morphElement.position.y = 5;
 
 
     AssetsManager.loader.on('load:models', (results) => {

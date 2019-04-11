@@ -1,26 +1,24 @@
 export default {
-  slug: "house",
-  category: "satisfaction",
-  color: "#FF0000",
-  name: "Logement",
+  slug: "farm",
+  category: "alimentation",
+  name: "Ferme",
   role: 'city',
   states: {
     creation: {
-      duration: 1000,
       enterModifiers: [
         {
-          name: 'purity',
-          value: -1
-        },
-        {
           name: 'money',
-          value: -1000,
+          value: -4000,
           checkConstraint: true
         }
       ]
     },
     mounted: {
       recurModifiers: [
+        {
+          name: 'alimentation',
+          value: 1
+        },
         {
           name: 'purity',
           value: -1
