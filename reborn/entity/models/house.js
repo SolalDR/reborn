@@ -3,6 +3,7 @@ export default {
   category: "satisfaction",
   color: "#FF0000",
   name: "Logement",
+  role: 'city',
   states: {
     creation: {
       duration: 1000,

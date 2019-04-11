@@ -7,6 +7,7 @@
 <script>
 import Scene from '../components/Scene.vue';
 import AssetsManager from '../services/assets/Manager';
+import Reborn from '../game';
 
 export default {
   components: {
@@ -28,19 +29,18 @@ export default {
   },
 
   created() {
+    // Load game assets
     AssetsManager.loader.addGroup({
       name: 'models',
-      base: '/3d',
-      files: [
-        {
-          name: 'tree',
-          path: '/arbre_test.glb',
-        },
-        {
-          name: 'maison',
-          path: '/maison_test.glb',
-        },
-      ],
+      base: '/3d/models/',
+      files: Reborn.models.map(({ slug }) => ({
+        name: slug,
+        path: `${slug}.glb`,
+      })),
+    });
+
+    AssetsManager.loader.on('load:models', () => {
+      this.$socket.emit('player:ready');
     });
 
     AssetsManager.loader.loadGroup('models');

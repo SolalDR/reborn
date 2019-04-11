@@ -3,6 +3,7 @@ export default {
   category: "vegegation",
   color: "#00FF00",
   name: "Arbre",
+  role: "nature",
   states: {
     creation: {
       duration: 1000,

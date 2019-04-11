@@ -17,6 +17,12 @@ export default new Vuex.Store({
       });
     },
 
+    'SOCKET_timeline:tick': function (state, { metrics }) {
+      metrics.forEach((metric) => {
+        state.game.metrics.get(metric.slug).update(metric);
+      });
+    },
+
     setPlayer(state, playerId) {
       state.playerId = playerId;
       window.localStorage.playerId = playerId;

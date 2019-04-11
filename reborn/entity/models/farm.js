@@ -2,6 +2,7 @@ export default {
   slug: "farm",
   category: "alimentation",
   name: "Ferme",
+  role: 'city',
   states: {
     creation: {
       enterModifiers: [

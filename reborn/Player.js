@@ -13,17 +13,9 @@ class Player {
     role = null,
     status = Player.ACTIVE
   }) {
-
     this.id = id;
-
-    this.role = role;
-    if (role instanceof String) {
-      this.role = role === roles.NatureRole.name
-        ? roles.NatureRole
-        : roles.CityRole;
-    }
-
     this.status = status;
+    this.assignRole(role);
   }
 
   /**
@@ -31,7 +23,13 @@ class Player {
    * @param {Reborn.Role} role
    */
   assignRole(role){
-    this.role = role;
+    if (typeof role === 'string') {
+      this.role = role === roles.NatureRole.name
+        ? roles.NatureRole
+        : roles.CityRole;
+    } else {
+      this.role = role;
+    }
   }
 
   /**
