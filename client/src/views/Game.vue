@@ -134,9 +134,7 @@ export default {
     });
 
     AssetsManager.loader.loadGroup('models');
-  },
 
-  mounted() {
     document.addEventListener('keydown', this.addShortcuts);
   },
 
@@ -150,8 +148,6 @@ export default {
       this.entitiesShortcuts(e);
       this.settingsShortcut(e);
       this.fullscreenShortcurt(e);
-
-      console.log(e);
     },
     keyHasShortcut(e, keyCodes) {
       const currentKeyCode = e.which;
