@@ -1,0 +1,10 @@
+.settings-enter-active {
+  transition: all .3s ease;
+}
+.settings-leave-active {
+  transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.settings-enter, .settings-leave-to {
+  transform: translateY(10px);
+  opacity: 0;
+}

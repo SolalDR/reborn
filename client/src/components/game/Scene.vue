@@ -4,9 +4,10 @@
 
 <script>
 import Vue from 'vue';
-import WebGL from '../webgl/WebGL';
+import WebGL from '../../webgl/WebGL';
 
 export default {
+  name: 'scene',
   mounted() {
     if (Vue.prototype.$webgl) {
       console.warn('Scene.vue: Already a webgl context in vue prototype');

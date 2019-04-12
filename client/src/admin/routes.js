@@ -13,7 +13,7 @@ export default [
   },
   {
     path: '/admin/rooms/:name',
-    name: 'rooms',
+    name: 'room',
     component: () => import('./pages/Room.vue'),
     meta: { layout: 'admin' },
   },
