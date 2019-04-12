@@ -1,5 +1,5 @@
 import Room from '../Room';
-import Player from '../Player';
+import Player from '../game/Player';
 import Bus from "./../Bus";
 
 /**

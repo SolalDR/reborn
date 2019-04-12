@@ -55,6 +55,11 @@ class Metric extends Emitter {
     }
   }
 
+  update(infos) {
+    this.value = infos.value;
+    this.recurentOperation = infos.recurentOperation;
+  }
+
   /**
    * Check if a limit is reached and fire an event if it does
    * @returns {Boolean}
@@ -74,7 +79,7 @@ class Metric extends Emitter {
   }
 }
 
-Metric.LIST = ['pollution', 'bio_diversity', 'satisfaction', 'energy', 'alimentation', 'population', 'money'];
+Metric.LIST = ['purity', 'bio_diversity', 'satisfaction', 'energy', 'alimentation', 'population', 'money'];
 
 export default Metric;
 export {default as Modifier} from "./Modifier";

@@ -64,7 +64,6 @@ export default {
       return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
     },
     onClickRoom(roomName) {
-      console.log(`/admin/rooms/${roomName}`);
       this.$router.push({ path: `/admin/rooms/${roomName}` });
     },
   },

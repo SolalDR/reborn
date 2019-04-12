@@ -13,7 +13,13 @@ export default {
       console.warn('Scene.vue: Already a webgl context in vue prototype');
     }
 
-    Vue.prototype.$webgl = new WebGL(this.$el);
+    Vue.prototype.$webgl = new WebGL(this.$el, {
+      store: this.$store,
+    });
+  },
+
+  beforeDestroy() {
+    Vue.prototype.$webgl = null;
   },
 };
 </script>

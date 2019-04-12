@@ -4,21 +4,26 @@ import Controls from './controls';
 import Cluster from './components/cluster';
 import Raycaster from './core/Raycaster';
 import mouse from '../plugins/Mouse';
+import AssetsManager from '../services/assets/Manager';
+import Renderer from './renderer';
+
+// import blobVertex from './shaders/blob.vert';
+// import blobFragment from './shaders/blob.frag';
 
 export default class WebGL {
   constructor(canvas) {
     this.canvas = canvas;
 
-    // Renderer
+    // Camera
     this.scene = new THREE.Scene();
-    this.renderer = new THREE.WebGLRenderer({
-      canvas: this.canvas,
-      antialias: false,
+    this.camera = new THREE.PerspectiveCamera(45, Viewport.width / Viewport.height, 1, 100);
+    this.controls = new Controls({
+      camera: this.camera,
     });
 
-    // Camera
-    this.camera = new THREE.PerspectiveCamera(45, Viewport.width / Viewport.height, 1, 1000);
-    this.controls = new Controls({
+    this.renderer = new Renderer({
+      canvas,
+      scene: this.scene,
       camera: this.camera,
     });
 
@@ -26,7 +31,6 @@ export default class WebGL {
       scene: this.scene,
       camera: this.camera,
     });
-
 
     this.initScene();
     this.loop();
@@ -37,14 +41,11 @@ export default class WebGL {
       this.renderer.setSize(Viewport.width, Viewport.height);
     });
 
-    this.raycaster.on('cast', (intersections) => {
-      console.log(intersections);
+    this.raycaster.on('cast', () => {
     });
   }
 
   initScene() {
-    this.renderer.setClearColor(0xb7eeff);
-    this.renderer.setSize(Viewport.width, Viewport.height);
     this.scene.fog = new THREE.Fog(0xb7eeff, 60, 150);
 
     const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
@@ -60,20 +61,23 @@ export default class WebGL {
     this.scene.add(this.map);
     this.raycaster.object = this.map.floor;
 
-    const geometry = new THREE.SphereBufferGeometry();
-    const material = new THREE.MeshToonMaterial();
-    const cubeCluster = new Cluster(geometry, material);
+    AssetsManager.loader.on('load:models', (results) => {
+      const material = new THREE.MeshToonMaterial({
+        vertexColors: THREE.VertexColors,
+      });
+      const cubeCluster = new Cluster(results.house.result.scene.children[0].geometry, material);
+      mouse.$on('click', () => {
+        if (!mouse.dragDelta && this.raycaster.intersection) {
+          cubeCluster.addItem({
+            position: this.map.gridHelper.position,
+            rotation: new THREE.Euler(0, Math.PI * 2 * Math.random(), 0),
+          });
+        }
+      });
 
-    mouse.$on('click', () => {
-      if (!mouse.dragDelta) {
-        cubeCluster.addItem({
-          position: this.map.gridHelper.position,
-          rotation: new THREE.Euler(0, Math.PI * 2 * Math.random(), 0),
-        });
-      }
+      this.scene.add(cubeCluster.mesh);
     });
 
-    this.scene.add(cubeCluster.mesh);
 
     light.position.set(100, 100, 100);
     this.camera.position.set(0, 20, 20);
@@ -83,6 +87,6 @@ export default class WebGL {
   loop() {
     requestAnimationFrame(this.loop.bind(this));
     this.controls.loop();
-    this.renderer.render(this.scene, this.camera);
+    this.renderer.render();
   }
 }

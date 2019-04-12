@@ -55,6 +55,8 @@ import Indicator from '../components/game/Indicator.vue';
 import Settings from '../components/game/Settings.vue';
 import YearsCounter from '../components/game/YearsCounter.vue';
 import Category from '../components/game/Category.vue';
+import AssetsManager from '../services/assets/Manager';
+import Reborn from '../game';
 
 export default {
   components: {
@@ -114,28 +116,24 @@ export default {
     'entity:update': function () {
       console.log('Update entity');
     },
-
-    'room:retrieve': function (results) {
-      this.$store.commit('gameStart', results);
-      this.$router.push({
-        name: 'game',
-        params: {
-          id: results.roomId,
-        },
-      });
-    },
   },
 
-  created() {
-    console.log(this.$store.state.playerId, window.localStorage.playerId);
+  mounted() {
+    // Load game assets
+    AssetsManager.loader.addGroup({
+      name: 'models',
+      base: '/3d/models/',
+      files: Reborn.models.map(({ slug }) => ({
+        name: slug,
+        path: `${slug}.glb`,
+      })),
+    });
 
-    if (
-      !this.$store.state.playerId && window.localStorage.playerId
-      && !this.$store.state.roomId && window.localStorage.roomId
-    ) {
-      console.log('Need to retrieve room');
-      this.$socket.emit('room:retrieve', this.$store.state.roomId);
-    }
+    AssetsManager.loader.on('load:models', () => {
+      this.$socket.emit('player:ready');
+    });
+
+    AssetsManager.loader.loadGroup('models');
   },
 
   mounted() {

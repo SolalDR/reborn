@@ -1,13 +1,16 @@
 export default {
   slug: "house",
+  category: "satisfaction",
+  color: "#FF0000",
   name: "Logement",
+  role: 'city',
   states: {
     creation: {
       duration: 1000,
       enterModifiers: [
         {
-          name: 'pollution',
-          value: 1
+          name: 'purity',
+          value: -1
         },
         {
           name: 'money',
@@ -19,8 +22,8 @@ export default {
     mounted: {
       recurModifiers: [
         {
-          name: 'pollution',
-          value: 1
+          name: 'purity',
+          value: -1
         }
       ]
     },
