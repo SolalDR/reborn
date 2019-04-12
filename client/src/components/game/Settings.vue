@@ -36,9 +36,6 @@ export default {
   },
 
   methods: {
-    closeSettings(e) {
-      if (e.key) this.$emit('closeSettings');
-    },
     leaveGame() {
       console.log('leave game');
     },

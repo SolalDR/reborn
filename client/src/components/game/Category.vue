@@ -1,14 +1,14 @@
 <template>
-  <div class="entity" @click="$emit('setCurrentEntity', entity.index)">
-    {{ entity.index }}
+  <div class="category" @click="$emit('setCurrentCategory', category.index)">
+    {{ category.index }}
   </div>
 </template>
 
 <script>
 export default {
-  name: 'entity',
+  name: 'category',
   props: {
-    entity: {
+    category: {
       type: Object,
       required: true,
     },
@@ -17,14 +17,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .entity {
-    $size: 80px;
+  .category {
+    $size: 38px;
 
     overflow: hidden;
     @include useFlex();
     width: $size;
     height: $size;
-    border-radius: 50%;
     background-color: rgba(getColor(basics, white), .7);
     border: 2px solid transparent;
     transition: all .3s ease;
