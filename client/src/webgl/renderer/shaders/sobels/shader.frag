@@ -10,7 +10,7 @@ float when_gt(float x, float y) {
   return max(sign(x - y), 0.0);
 }
 
-void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth, out vec4 outputColor) {
+void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
 
   float stepx = step*0.001;
   float stepy = step*0.001*aspect;

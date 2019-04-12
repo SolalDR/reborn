@@ -1,7 +1,7 @@
 import { Uniform } from 'three';
 import { Effect, BlendFunction } from 'postprocessing';
 
-import fragment from '../shaders/sobels/shader.frag';
+import fragment from '../shaders/film/shader.frag';
 
 /**
  * A sobel effect
@@ -10,7 +10,7 @@ import fragment from '../shaders/sobels/shader.frag';
  * http://www.forceflow.be
  */
 
-export default class SobelEffect extends Effect {
+export default class FilmEffect extends Effect {
   /**
    * Constructs a new bokeh effect.
    *
@@ -21,18 +21,18 @@ export default class SobelEffect extends Effect {
 
   constructor({
     blendFunction = BlendFunction.NORMAL,
-    step = 1,
-    intensity = 1,
-    threshold = 0.5,
+    intensity = 0.1,
+    offset = 0,
   } = {}) {
-    super('SobelEffect', fragment, {
+    super('FilmEffect', fragment, {
       blendFunction,
       // attributes: EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH,
       uniforms: new Map([
-        ['step', new Uniform(step)],
         ['intensity', new Uniform(intensity)],
-        ['threshold', new Uniform(threshold)],
+        ['offset', new Uniform(offset)],
       ]),
     });
+
+    // console.log(EffectAttribute.CONVOLUTION);
   }
 }
