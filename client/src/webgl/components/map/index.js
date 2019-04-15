@@ -1,6 +1,7 @@
 import Grid from './Grid';
 import Bus from '../../../plugins/Bus';
 import GridHelper from './GridHelper';
+import Generator from './generator/Generator';
 
 const loader = new THREE.TextureLoader();
 
@@ -62,19 +63,17 @@ export default class GameMap extends THREE.Group {
     );
 
     const material = new THREE.MeshToonMaterial({
-      color: 0xCDB380,
+      // color: 0xCDB380,
+      vertexColors: THREE.FaceColors,
       bumpScale: 0.1,
       specular: 0x798133,
       reflectivity: 0,
       shininess: 0,
-      // flatShading: true,
+      // wireframe: true,
+      flatShading: false,
     });
 
-    loader.load('/game/ile.png', (texture) => {
-      material.displacementMap = texture;
-      material.bumpMap = texture;
-      material.displacementScale = 2;
-      material.bumpScale = 0.5;
+    loader.load('/game/ile.png', () => {
       material.needsUpdate = true;
     });
 
@@ -84,7 +83,7 @@ export default class GameMap extends THREE.Group {
     });
 
     geometry.rotateX(-Math.PI / 2);
-    this.floor = new THREE.Mesh(geometry, material);
+    this.floor = new THREE.Mesh(new Generator().geometry, material);
     this.floor.position.y = -0.1;
   }
 
