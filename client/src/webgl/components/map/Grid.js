@@ -48,6 +48,12 @@ class Grid extends THREE.Mesh {
     destination.y = Math.floor(uv.y * this.size.y);
     return destination;
   }
+
+  getCellFromPosition(point, destination = new THREE.Vector2()) {
+    destination.x = Math.floor(point.x + this.size.x / 2);
+    destination.y = Math.floor(point.z + this.size.y / 2);
+    return destination;
+  }
 }
 
 export default Grid;

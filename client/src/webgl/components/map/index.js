@@ -1,7 +1,7 @@
 import Grid from './Grid';
 import Bus from '../../../plugins/Bus';
 import GridHelper from './GridHelper';
-import Generator from './generator/Generator';
+import generateMap from './generator/Generator';
 
 const loader = new THREE.TextureLoader();
 
@@ -28,13 +28,14 @@ export default class GameMap extends THREE.Group {
     this.grid = new Grid(gridParams);
     this.gridHelper = new GridHelper(gridParams);
     this.gridHelper.setSize(1, 1);
+    this.add(this.gridHelper);
 
 
     Bus.$on('cast', (intersection) => {
-      if (intersection) {
+      if (intersection && intersection.face.normal.y > 0.99) {
         this.gridHelper.visible = true;
-        const cell = this.grid.getCellFromUV(intersection.uv);
-        this.gridHelper.updatePosition(cell, intersection.uv);
+        const cell = this.grid.getCellFromPosition(intersection.point);
+        this.gridHelper.updatePosition(cell, intersection.point);
         if (!this.grid.checkIntersection(this.gridHelper.box)) {
           this.gridHelper.material.color.set(0xFF0000);
         } else {
@@ -44,24 +45,10 @@ export default class GameMap extends THREE.Group {
         this.gridHelper.visible = false;
       }
     });
-
-
-    // this.add(this.grid);
-    this.add(this.gridHelper);
-    this.add(this.floor);
-    this.add(this.water);
   }
 
 
   initFloor() {
-    const geometry = new THREE.PlaneGeometry(
-      this.size.x * this.cellSize,
-      this.size.y * this.cellSize,
-      this.size.x * this.resolution,
-      this.size.y * this.resolution,
-      1,
-    );
-
     const material = new THREE.MeshToonMaterial({
       // color: 0xCDB380,
       vertexColors: THREE.FaceColors,
@@ -82,9 +69,13 @@ export default class GameMap extends THREE.Group {
       material.needsUpdate = true;
     });
 
-    geometry.rotateX(-Math.PI / 2);
-    this.floor = new THREE.Mesh(new Generator().geometry, material);
-    this.floor.position.y = -0.1;
+    generateMap().then(({ geometry, grid }) => {
+      this.floor = new THREE.Mesh(geometry, material);
+      this.floor.position.y = -0.1;
+      this.add(this.floor);
+
+      this.grid = grid;
+    });
   }
 
   initWater() {
@@ -100,5 +91,6 @@ export default class GameMap extends THREE.Group {
 
     geometry.rotateX(-Math.PI / 2);
     this.water = new THREE.Mesh(geometry, material);
+    this.add(this.water);
   }
 }

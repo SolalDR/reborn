@@ -1,148 +1,108 @@
-import SimplexNoise from 'simplex-noise';
+import MyWorker from './map.worker.js';
 
-const simplex = new SimplexNoise(Math.random);
-
-
-export default class Generator {
-  constructor({
-    floorColor = new THREE.Color(0xb7c39b),
-    wallColor = new THREE.Color(0x9b989f),
-  } = {}) {
-    this.floorColor = floorColor;
-    this.wallColor = wallColor;
-
-    const stage = [{
-      count: 1,
-      height: 5,
-      width: 32,
-      depth: 32,
-      start: new THREE.Vector2(0, 0),
-    }];
+const worker = new MyWorker();
 
 
-    this.geometry = new THREE.Geometry();
-    this.generateMap(stage);
-    this.generateColors();
-    this.removeExtraFaces();
+export default (seed = Math.random()) => {
+  // Seed random function
+  function random() {
+    const x = Math.cos(Math.sin(seed += 1.421542) * 1.50782) * 10000;
+    return x - Math.floor(x);
   }
 
+  // Define worker params
+  worker.postMessage({
+    seed,
+    stages: [
+      {
+        shape: {
+          definition: 200,
+          radius: 16,
+          position: [0, 0],
+          noiseIntensity: 0.2,
+        },
+        height: 0.5,
+      },
+      {
+        shape: {
+          definition: 200,
+          radius: 10,
+          position: [
+            random() * 32 - 16,
+            random() * 32 - 16,
+          ],
+          noiseIntensity: 0.2,
+        },
+        height: 2,
+      },
+      {
+        shape: {
+          definition: 200,
+          radius: 10,
+          position: [
+            random() * 32 - 16,
+            random() * 32 - 16,
+          ],
+          noiseIntensity: 0.2,
+        },
+        height: 4,
+      },
+      {
+        shape: {
+          definition: 200,
+          radius: 4,
+          position: [
+            random() * 4 - 2,
+            random() * 4 - 2,
+          ],
+          noiseIntensity: 0.1,
+        },
+        height: 6,
+      },
+    ],
+  });
 
-  generateStageShape({
-    definition = 200,
-    radius = 16,
-    position = new THREE.Vector2(),
-    noiseIntensity = 0.2,
-  } = {}) {
-    const stepAngle = 2 * Math.PI / definition;
-    let angle = 0;
-    const tmpP = new THREE.Vector2();
-    const points = [];
 
-    // All points
-    for (let i = 0; i < definition; i += 1) {
-      angle = stepAngle * i;
-      tmpP.set(
-        Math.cos(angle) * radius,
-        Math.sin(angle) * radius,
-      );
+  let resolver = null;
+  const promiseCallback = (resolve) => {
+    resolver = resolve;
+  };
 
-      points.push(new THREE.Vector2(
-        tmpP.x - tmpP.x * simplex.noise2D(tmpP.x / radius, tmpP.y / radius) * noiseIntensity + position.x,
-        tmpP.y - tmpP.y * simplex.noise2D(tmpP.x / radius, tmpP.y / radius) * noiseIntensity + position.y,
+
+  // When worker finish
+  worker.onmessage = function (event) {
+    const geometry = new THREE.Geometry();
+
+    // Attribute faces
+    event.data.faces.forEach((face) => {
+      geometry.faces.push(new THREE.Face3(
+        face.a,
+        face.b,
+        face.c,
+        new THREE.Vector3(face.normal.x, face.normal.y, face.normal.z),
+        new THREE.Color(face.color.r, face.color.g, face.color.b),
+        face.materialIndex,
       ));
-    }
-
-    console.log(this);
-    return points;
-  }
-
-  generateStageGeometry({
-    points = [],
-    height = 0.5,
-  } = {}) {
-    const shape = new THREE.Shape();
-    shape.moveTo(points[0].x, points[0].y);
-    points.forEach((p, i) => {
-      shape.lineTo(points[i].x, points[i].y);
     });
 
-    const geometry = new THREE.ExtrudeGeometry(shape, {
-      steps: 1,
-      depth: height,
-      bevelEnabled: true,
-      bevelThickness: 0.2,
-      bevelSize: 0.2,
-      bevelSegments: 5,
+    // Attribute vertices
+    event.data.vertices.forEach((vertice) => {
+      geometry.vertices.push(new THREE.Vector3(vertice.x, vertice.y, vertice.z));
     });
 
-    geometry.rotateX(-Math.PI / 2);
-    this.geometry.merge(geometry);
-  }
+    geometry.computeFaceNormals();
+    geometry.computeVertexNormals();
 
-  generateMap() {
-    this.generateStageGeometry({
-      points: this.generateStageShape(),
-      height: 0.5,
+    console.log(event.data.grid);
+    // Resolve promise
+    resolver({
+      geometry,
+      grid: event.data.grid,
     });
 
-    this.generateStageGeometry({
-      points: this.generateStageShape({
-        radius: 10,
-        position: new THREE.Vector2(
-          Math.random() * 32 - 16,
-          Math.random() * 32 - 16,
-        ),
-        noiseIntensity: 0.2,
-      }),
-      height: 4,
-    });
+    // Close worker
+    worker.terminate();
+  };
 
-    this.generateStageGeometry({
-      points: this.generateStageShape({
-        radius: 10,
-        position: new THREE.Vector2(
-          Math.random() * 32 - 16,
-          Math.random() * 32 - 16,
-        ),
-        noiseIntensity: 0.2,
-      }),
-      height: 2,
-    });
-
-    this.generateStageGeometry({
-      points: this.generateStageShape({
-        radius: 4,
-        position: new THREE.Vector2(
-          Math.random() * 4 - 2,
-          Math.random() * 4 - 2,
-        ),
-        noiseIntensity: 0.1,
-      }),
-      height: 6,
-    });
-  }
-
-  generateColors() {
-    this.geometry.faces.forEach((face) => {
-      if (Math.abs(face.normal.y) < 0.001) {
-        face.color = this.wallColor;
-      } else {
-        face.color = this.floorColor;
-      }
-    });
-    this.geometry.colorsNeedUpdate = true;
-    this.geometry.elementsNeedsUpdate = true;
-  }
-
-  removeExtraFaces() {
-    const faces = [];
-    this.geometry.faces.forEach((face) => {
-      if (face.normal.y > -0.001) {
-        faces.push(face);
-      }
-    });
-
-    this.geometry.faces = faces;
-    this.geometry.elementsNeedsUpdate = true;
-  }
-}
+  return new Promise(promiseCallback);
+};

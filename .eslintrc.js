@@ -18,7 +18,8 @@ module.exports = {
     'prefer-destructuring': 0,
     'func-names': 0,
     'max-len': 0,
-    'no-bitwise': 0
+    'no-bitwise': 0,
+    'import/extensions': 0
   },
   parserOptions: {
     parser: 'babel-eslint',
