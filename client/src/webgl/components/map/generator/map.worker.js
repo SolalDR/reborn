@@ -172,7 +172,9 @@ const generator = {
           ) && (
             (topLeft.distance + topRight.distance + bottomRight.distance + bottomLeft.distance) / 4 === topLeft.distance
           )) {
-          this.grid[i + j * 32] = true;
+          this.grid[i + j * 32] = {
+            altitude: results[i + j * 32].point.y,
+          };
         }
       }
     }

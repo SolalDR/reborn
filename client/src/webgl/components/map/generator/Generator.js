@@ -93,7 +93,6 @@ export default (seed = Math.random()) => {
     geometry.computeFaceNormals();
     geometry.computeVertexNormals();
 
-    console.log(event.data.grid);
     // Resolve promise
     resolver({
       geometry,

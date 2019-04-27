@@ -1,58 +1,38 @@
-import vertexShader from './shaders/grid.vert';
-import fragmentShader from './shaders/grid.frag';
+import Reborn from '../../../game';
 
-class Grid extends THREE.Mesh {
-  constructor({
-    cellSize = 1,
-    size = new THREE.Vector2(32, 32),
-    position = new THREE.Vector3(),
-  } = {}) {
-    super(
-      new THREE.PlaneGeometry(size.x * cellSize, size.y * cellSize),
-      new THREE.ShaderMaterial({
-        vertexShader,
-        fragmentShader,
-        uniforms: {
-          size: {
-            value: size,
-          },
-          width: {
-            value: 0.002,
-          },
-        },
-        transparent: true,
-      }),
-    );
+class Grid extends Reborn.Grid {
+  constructor() {
+    super();
 
-    this.size = size;
     this.box = new THREE.Box2(
       new THREE.Vector2(0, 0),
       new THREE.Vector2(31, 31),
     );
-
-    this.cellSize = cellSize;
-    this.rotation.x = -Math.PI / 2;
-
-    this.position.copy(position);
   }
 
   checkIntersection(bbox) {
     if (!this.box.containsBox(bbox)) return false;
-
-
     return true;
   }
 
-  getCellFromUV(uv, destination = new THREE.Vector2()) {
-    destination.x = Math.floor(uv.x * this.size.x);
-    destination.y = Math.floor(uv.y * this.size.y);
+  getCell(point, destination = new THREE.Vector2()) {
+    destination.x = Math.floor(point.x + this.size[0] / 2);
+    destination.y = Math.floor(point.z + this.size[1] / 2);
     return destination;
   }
 
-  getCellFromPosition(point, destination = new THREE.Vector2()) {
-    destination.x = Math.floor(point.x + this.size.x / 2);
-    destination.y = Math.floor(point.z + this.size.y / 2);
-    return destination;
+  checkSpace(min, max = null) {
+    const distance = new THREE.Vector2().copy(max).sub(min);
+
+    // console.log(this);
+    for (let i = 0; i < distance.x; i++) {
+      for (let j = 0; j < distance.y; j++) {
+        if (!this.get(min.x, min.y)) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 }
 

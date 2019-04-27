@@ -61,7 +61,6 @@ export default class Renderer {
 
   initEvents() {
     Viewport.$on('resize', () => {
-      console.log(this.camera);
       this.renderer.setSize(Viewport.width, Viewport.height);
       this.composer.setSize(Viewport.width, Viewport.height);
       this.camera.aspect = Viewport.ratio;
