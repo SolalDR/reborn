@@ -26,26 +26,26 @@ export default (seed = Math.random()) => {
       {
         shape: {
           definition: 200,
-          radius: 10,
+          radius: 8,
           position: [
-            random() * 32 - 16,
-            random() * 32 - 16,
+            Math.random() * 8 - 4,
+            Math.random() * 8 - 4,
           ],
           noiseIntensity: 0.2,
         },
-        height: 2,
+        height: 1,
       },
       {
         shape: {
           definition: 200,
-          radius: 10,
+          radius: 8,
           position: [
-            random() * 32 - 16,
-            random() * 32 - 16,
+            Math.random() * 8 - 4,
+            Math.random() * 8 - 4,
           ],
           noiseIntensity: 0.2,
         },
-        height: 4,
+        height: 2,
       },
       {
         shape: {
@@ -57,17 +57,15 @@ export default (seed = Math.random()) => {
           ],
           noiseIntensity: 0.1,
         },
-        height: 6,
+        height: 4,
       },
     ],
   });
-
 
   let resolver = null;
   const promiseCallback = (resolve) => {
     resolver = resolve;
   };
-
 
   // When worker finish
   worker.onmessage = function (event) {

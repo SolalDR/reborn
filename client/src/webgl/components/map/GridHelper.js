@@ -18,7 +18,7 @@ class GridHelper extends THREE.Mesh {
     this.rotation.x = -Math.PI / 2;
   }
 
-  updatePosition(cell, point) {
+  updatePosition(cell, point, position = this.position) {
     // Update cell
     this.cell = cell;
 
@@ -34,19 +34,8 @@ class GridHelper extends THREE.Mesh {
       : cell.y - this.size.y / 2 + (
         (point.z + this.size.y / 2) % 1 > 0.5 ? -1 : 0
       );
-    this.position.set(x, point.y + 0.1, y);
 
-    // console.log(this.position);
-
-    // Compute bbox
-    this.box.min.x = cell.x - Math.floor(this.scale.x / 2) - (
-      this.xPeer && (point.x + this.size.x / 2) % 1 > 0.5 ? -1 : 0
-    );
-    this.box.min.y = cell.y - Math.floor(this.scale.y / 2) - (
-      this.yPeer && (point.z + this.size.y / 2) % 1 > 0.5 ? 1 : 0
-    );
-    this.box.max.x = this.box.min.x + this.scale.x - 1;
-    this.box.max.y = this.box.min.y + this.scale.y - 1;
+    position.set(x, point.y + 0.1, y);
   }
 
 

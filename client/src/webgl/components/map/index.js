@@ -33,13 +33,16 @@ export default class GameMap extends THREE.Group {
     Bus.$on('cast', (intersection) => {
       if (intersection && intersection.face.normal.y > 0.99) {
         this.gridHelper.visible = true;
+
+        // Récupère les coordonnée de cellule courante
         const cell = this.grid.getCell(intersection.point);
-        const a = this.grid.get(cell);
 
-        // this.grid.checkSpace(cell);
-        // console.log(cell, this.grid.get(cell));
+        // Récupère l'index de la case
+        // const a = this.grid.get(cell);
 
+        const a = this.grid.checkSpace(intersection.point, this.gridHelper.scale);
         this.gridHelper.updatePosition(cell, intersection.point);
+
         if (!a) {
           this.gridHelper.material.color.set(0xFF0000);
         } else {
@@ -70,6 +73,31 @@ export default class GameMap extends THREE.Group {
       grid.forEach((value, i) => {
         this.grid.register(i, value);
       });
+
+      const geo = new THREE.PlaneGeometry(1, 1);
+      geo.rotateX(-Math.PI / 2);
+      const mat = new THREE.MeshBasicMaterial({
+        transparent: true,
+        color: 0x00FF00,
+      });
+
+      for (let i = 0; i < this.grid.size[0]; i++) {
+        for (let j = 0; j < this.grid.size[1]; j++) {
+          const cell = this.grid.get({ x: i, y: j });
+          // console.log(cell);
+
+          if (cell) {
+            const mesh = new THREE.Mesh(geo, mat);
+            mesh.position.set(
+              i - this.grid.size[0] / 2 + 0.5,
+              cell.altitude,
+              j - this.grid.size[1] / 2 + 0.5,
+            );
+
+            this.add(mesh);
+          }
+        }
+      }
 
       this.raycaster.object = this.floor;
     });

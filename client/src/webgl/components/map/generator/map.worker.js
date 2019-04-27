@@ -40,8 +40,8 @@ const generator = {
 
       // Coordonnées avec noise
       points.push(new Vector2(
-        tmpP.x - tmpP.x * this.simplex.noise2D(tmpP.x / radius, tmpP.y / radius) * noiseIntensity + position[0],
-        tmpP.y - tmpP.y * this.simplex.noise2D(tmpP.x / radius, tmpP.y / radius) * noiseIntensity + position[1],
+        tmpP.x - tmpP.x * ((this.simplex.noise2D(tmpP.x / radius, tmpP.y / radius) + 1) / 2) * noiseIntensity + position[0],
+        tmpP.y - tmpP.y * ((this.simplex.noise2D(tmpP.x / radius, tmpP.y / radius) + 1) / 2) * noiseIntensity + position[1],
       ));
     }
 
@@ -170,7 +170,7 @@ const generator = {
           (
             topLeft && topRight && bottomRight && bottomLeft
           ) && (
-            (topLeft.distance + topRight.distance + bottomRight.distance + bottomLeft.distance) / 4 === topLeft.distance
+            Math.abs((topLeft.distance + topRight.distance + bottomRight.distance + bottomLeft.distance) / 4 - topLeft.distance) < 0.001
           )) {
           this.grid[i + j * 32] = {
             altitude: results[i + j * 32].point.y,
