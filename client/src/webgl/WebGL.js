@@ -39,12 +39,13 @@ export default class WebGL extends Emitter {
       camera: this.camera,
     });
 
-    this.initCluster();
+    this.initClusters();
+    this.initLights();
     this.initScene();
     this.loop();
   }
 
-  initCluster() {
+  initClusters() {
     this.clusters = new Map();
     const models = AssetsManager.loader.getFiles('models');
     const material = new THREE.MeshToonMaterial({
@@ -63,13 +64,6 @@ export default class WebGL extends Emitter {
 
   initScene() {
     this.scene.fog = new THREE.Fog(0xb7eeff, 60, 150);
-
-    const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
-    this.scene.add(ambientLight);
-
-    const light = new THREE.DirectionalLight(0xFFFFFF, 0.5);
-    this.scene.add(light);
-
     this.map = new GameMap({
       cellSize: 1,
       size: new THREE.Vector2(32, 32),
@@ -82,24 +76,22 @@ export default class WebGL extends Emitter {
       if (!mouse.dragDelta && this.raycaster.intersection) {
         this.emit('addItem', {
           position: this.map.gridHelper.position,
-          rotation: new THREE.Euler(0, Math.PI * 2 * Math.random(), 0),
+          rotation: new THREE.Euler(0, Math.floor(Math.random() * 4) * Math.PI / 2, 0),
         });
       }
     });
 
-    AssetsManager.loader.on('load:models', (results) => {
-      const material = new THREE.MeshToonMaterial({
-        vertexColors: THREE.VertexColors,
-      });
-      const cubeCluster = new Cluster(results.house.result.scene.children[0].geometry, material);
-
-      this.scene.add(cubeCluster.mesh);
-    });
-
-
-    light.position.set(100, 100, 100);
     this.camera.position.set(0, 20, 20);
     this.camera.lookAt(new THREE.Vector3());
+  }
+
+  initLights() {
+    const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
+    this.scene.add(ambientLight);
+
+    const light = new THREE.DirectionalLight(0xFFFFFF, 0.5);
+    this.scene.add(light);
+    light.position.set(100, 100, 100);
   }
 
   loop() {

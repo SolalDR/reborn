@@ -17,6 +17,10 @@ export default {
       store: this.$store,
     });
 
+    Vue.prototype.$webgl.on('addItem', () => {
+      console.log(this.$store.state.game);
+    });
+
     this.$emit('mounted');
   },
 
