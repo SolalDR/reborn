@@ -208,11 +208,10 @@ export default {
     },
     onWebGLInit() {
       this.$webgl.on('addItem', (item) => {
-        this.$socket.emit('entity:add', {
-          ...item,
-          model: 'house'
+        this.$store.state.game.entityModels.get('house').cluster.addItem({
+          position: item.position,
+          rotation: item.rotation,
         });
-        console.log(item);
       });
     },
   },
