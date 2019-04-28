@@ -14,4 +14,5 @@ process.io.on('connection', function(socket) {
   socket.on('admin:listen', socketAdmin.startListen.bind(socket));
   socket.on('room:join', socketRoom.join.bind(socket));
   socket.on('room:list', socketRoom.list.bind(socket));
+  socket.on('entity:add', () => {console.log('receive entity:add')})
 });

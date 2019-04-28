@@ -3,11 +3,14 @@ import Reborn from '../../../game';
 class Grid extends Reborn.Grid {
   constructor() {
     super();
-
     this.box = new THREE.Box2(
       new THREE.Vector2(0, 0),
       new THREE.Vector2(31, 31),
     );
+  }
+
+  register(i, value) {
+    super.register(i, value);
   }
 
   checkIntersection(bbox) {
@@ -35,12 +38,6 @@ class Grid extends Reborn.Grid {
     const xPeer = scale.x % 2 === 0;
     const yPeer = scale.y % 2 === 0;
 
-    const x = !this.xPeer
-      ? cell.x - this.size[0] / 2 + 0.5
-      : cell.x - this.size[0] / 2 + (
-        (point.x + this.size[0] / 2) % 1 > 0.5 ? 1 : 0
-      );
-
     // Compute bbox
     this.box.min.x = cell.x - Math.floor(scale.x / 2) + (
       xPeer && (point.x + this.size[0] / 2) % 1 > 0.5 ? 1 : 0
@@ -49,14 +46,6 @@ class Grid extends Reborn.Grid {
     this.box.min.y = cell.y - Math.floor(scale.y / 2) + (
       yPeer && (point.z + this.size[1] / 2) % 1 > 0.5 ? 1 : 0
     );
-
-    // const y = !this.yPeer
-    //   ? cell.y - this.size[1] / 2 + 0.5
-    //   : cell.y - this.size[1] / 2 + (
-    //     (point.z + this.size[1] / 2) % 1 > 0.5 ? 1 : 0
-    //   );
-
-    console.log(this.box.min.x, x);
 
     this.box.max.x = this.box.min.x + scale.x - 1;
     this.box.max.y = this.box.min.y + scale.y - 1;

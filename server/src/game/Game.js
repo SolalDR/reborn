@@ -21,13 +21,13 @@ export default class Game extends Reborn.Game {
     });
 
     var metricsMap = Array.from(this.metrics.values());
-    this.timeline.on('tick', ()=>{
+    this.timeline.on('tick', () => {
       this.metrics.forEach(metric => {
         metric.value += metric.recurentOperation;
-      })
+      });
       this.emit('tick', {
         metrics: metricsMap.map(m => m.infos)
-      })
+      });
     })
   }
 
@@ -36,7 +36,7 @@ export default class Game extends Reborn.Game {
    */
   initWorld() {
     this.world = new World({
-      game: this
+      game: this,
     });
   }
 

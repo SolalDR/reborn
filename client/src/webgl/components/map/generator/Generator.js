@@ -2,7 +2,6 @@ import MyWorker from './map.worker.js';
 
 const worker = new MyWorker();
 
-
 export default (seed = Math.random()) => {
   // Seed random function
   function random() {
@@ -28,8 +27,8 @@ export default (seed = Math.random()) => {
           definition: 200,
           radius: 8,
           position: [
-            Math.random() * 8 - 4,
-            Math.random() * 8 - 4,
+            random() * 8 - 4,
+            random() * 8 - 4,
           ],
           noiseIntensity: 0.2,
         },
@@ -40,8 +39,8 @@ export default (seed = Math.random()) => {
           definition: 200,
           radius: 8,
           position: [
-            Math.random() * 8 - 4,
-            Math.random() * 8 - 4,
+            random() * 8 - 4,
+            random() * 8 - 4,
           ],
           noiseIntensity: 0.2,
         },
@@ -91,14 +90,14 @@ export default (seed = Math.random()) => {
     geometry.computeFaceNormals();
     geometry.computeVertexNormals();
 
+    // Close worker
+    worker.terminate();
+
     // Resolve promise
     resolver({
       geometry,
       grid: event.data.grid,
     });
-
-    // Close worker
-    worker.terminate();
   };
 
   return new Promise(promiseCallback);

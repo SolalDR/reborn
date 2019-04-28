@@ -10,11 +10,13 @@ import World from "./World";
  */
 class Game extends Emitter {
   constructor({
-    players = []
-  }){
+    players = [],
+    seed = Math.random()
+  } = {}){
     super();
     this.players = players;
     this.status = Game.PENDING;
+    this.seed = seed;
 
     this.initModels();
     this.initMetrics();
@@ -83,7 +85,8 @@ class Game extends Emitter {
   get infos(){
     return {
       players: this.playersList.map(player => player.infos),
-      grid: this.world.grid.size
+      grid: this.world.grid.size,
+      seed: this.seed
     }
   }
 }

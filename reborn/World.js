@@ -26,7 +26,8 @@ export default class World extends Emitter {
    */
   addEntity({
     model = null,
-    position = null
+    position = null,
+    rotation = null,
   } = {}){
     var entityModel = this.game.entityModels.get(model);
     if (!entityModel) {
@@ -39,7 +40,8 @@ export default class World extends Emitter {
 
     var newEntity = new Entity({
       position,
-      model: entityModel
+      rotation,
+      model: entityModel,
     });
 
     this.entities.set(newEntity.uuid, newEntity);

@@ -1,6 +1,7 @@
 <template>
   <main class="game">
-    <scene v-if="$store.state.game" @mounted="onWebGLInit"/>
+    <!-- TODO: Change loaded with callback socket player:ready -->
+    <scene v-if="$store.state.game && loaded" @mounted="onWebGLInit"/>
     <div class="game__interface">
       <div class="metrics">
         <!-- TODO: Bind metrics -->
@@ -60,12 +61,6 @@ import config from '../config';
 import GameHelpers from './helpers/Game';
 
 export default {
-  data() {
-    return {
-      loaded: false,
-    };
-  },
-
   components: {
     Category,
     YearsCounter,
@@ -78,6 +73,7 @@ export default {
 
   data() {
     return {
+      loaded: false,
       // Category
       currentCategory: 0,
       categories: [{
@@ -94,35 +90,37 @@ export default {
       }],
       // Entity
       currentEntity: 0,
-      entities: [{
-        name: 'Entity 1',
-      },
-      {
-        name: 'Entity 2',
-      },
-      {
-        name: 'Entity 3',
-      },
-      {
-        name: 'Entity 4',
-      }],
+      entities: [
+        {
+          name: 'Entity 1',
+        },
+        {
+          name: 'Entity 2',
+        },
+        {
+          name: 'Entity 3',
+        },
+        {
+          name: 'Entity 4',
+        },
+      ],
       // Settings
       showSettings: false,
     };
   },
 
   sockets: {
-    'entity:add': function () {
-      console.log('Add entity');
-    },
+    // 'entity:add': function () {
+    //   console.log('Add entity');
+    // },
 
-    'entity:remove': function () {
-      console.log('Remove entity');
-    },
+    // 'entity:remove': function () {
+    //   console.log('Remove entity');
+    // },
 
-    'entity:update': function () {
-      console.log('Update entity');
-    },
+    // 'entity:update': function () {
+    //   console.log('Update entity');
+    // },
   },
 
   mounted() {
@@ -137,6 +135,7 @@ export default {
     });
 
     AssetsManager.loader.on('load:models', () => {
+      this.loaded = true;
       this.$socket.emit('player:ready');
 
       // If server don't enabled launch game
@@ -161,14 +160,15 @@ export default {
       this.settingsShortcut(e);
       this.fullscreenShortcurt(e);
     },
+
     keyHasShortcut(e, keyCodes) {
       const currentKeyCode = e.which;
       const keyIndex = keyCodes.indexOf(currentKeyCode);
-
       if (keyIndex >= 0) {
         return keyIndex;
       }
     },
+
     categoriesShortcuts(e) {
       const keyCodes = [112, 113, 114, 115];
       const categoryIndex = this.keyHasShortcut(e, keyCodes);
@@ -208,9 +208,9 @@ export default {
     },
     onWebGLInit() {
       this.$webgl.on('addItem', (item) => {
-        this.$store.state.game.entityModels.get('house').cluster.addItem({
-          position: item.position,
-          rotation: item.rotation,
+        this.$socket.emit('entity:add', {
+          ...item,
+          model: 'house',
         });
       });
     },

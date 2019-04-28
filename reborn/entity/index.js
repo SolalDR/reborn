@@ -12,12 +12,14 @@ export default class Entity extends Emitter {
   constructor({
     uuid = uuidGenerator(),
     position = null,
+    rotation = null,
     model = null,
     states = new Map()
   }){
     super();
     this.uuid = uuid;
     this.position = position;
+    this.rotation = rotation;
     this.model = model;
     if (this.model === null) return null;
     if (this.position === null) return null;
@@ -197,6 +199,7 @@ export default class Entity extends Emitter {
     return {
       uuid: this.uuid,
       position: this.position,
+      rotation: this.rotation,
       model: this.model.slug,
       states: Array.from(this.states.keys())
     }

@@ -39,6 +39,12 @@ export default class WebGL extends Emitter {
       camera: this.camera,
     });
 
+    this.map = new GameMap({
+      cellSize: 1,
+      size: new THREE.Vector2(32, 32),
+      raycaster: this.raycaster,
+    });
+
     this.initClusters();
     this.initLights();
     this.initScene();
@@ -46,29 +52,22 @@ export default class WebGL extends Emitter {
   }
 
   initClusters() {
-    this.clusters = new Map();
+    this.clusters = {};
     const models = AssetsManager.loader.getFiles('models');
     const material = new THREE.MeshToonMaterial({
       vertexColors: THREE.VertexColors,
     });
 
     Object.keys(models).forEach((modelName) => {
-      this.clusters.set(modelName, new Cluster(models[modelName].result.scene.children[0].geometry, material));
-      const cluster = this.clusters.get(modelName);
-      if (this.game.entityModels.has(modelName)) {
-        this.game.entityModels.get(modelName).cluster = cluster;
-        this.scene.add(cluster.mesh);
-      }
+      this.clusters[modelName] = new Cluster(models[modelName].result.scene.children[0].geometry, material);
+      this.scene.add(this.clusters[modelName].mesh);
     });
+
+    this.store.commit('setClusters', this.clusters);
   }
 
   initScene() {
     this.scene.fog = new THREE.Fog(0xb7eeff, 60, 150);
-    this.map = new GameMap({
-      cellSize: 1,
-      size: new THREE.Vector2(32, 32),
-      raycaster: this.raycaster,
-    });
 
     this.scene.add(this.map);
 
@@ -91,6 +90,7 @@ export default class WebGL extends Emitter {
 
     const light = new THREE.DirectionalLight(0xFFFFFF, 0.5);
     this.scene.add(light);
+
     light.position.set(100, 100, 100);
   }
 

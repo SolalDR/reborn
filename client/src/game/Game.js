@@ -8,9 +8,11 @@ import store from '../services/store';
 export default class Game extends Reborn.Game {
   constructor({
     players = null,
+    seed = null,
   } = {}) {
-    super({ players });
+    super({ players, seed });
     this.currentModel = null;
+    this.clusters = null;
   }
 
   get player() {

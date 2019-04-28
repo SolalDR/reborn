@@ -21,6 +21,7 @@ export default class EntityModel {
     this.slug = slug === null ? snakeCase(name) : slug;
     this.game = game;
     this.size = size;
+    this.cluster = null;
 
     // TODO Convert to Map
     this.states = {};

@@ -2,6 +2,7 @@ import Grid from './Grid';
 import Bus from '../../../plugins/Bus';
 import GridHelper from './GridHelper';
 import generateMap from './generator/Generator';
+import store from '@/services/store';
 
 export default class GameMap extends THREE.Group {
   constructor({
@@ -16,30 +17,63 @@ export default class GameMap extends THREE.Group {
     this.resolution = resolution;
     this.raycaster = raycaster;
 
-    this.initFloor();
-    this.initWater();
-
     const gridParams = {
       size,
       cellSize,
       position: new THREE.Vector3(0, 1, 0),
     };
 
-    this.grid = new Grid(gridParams);
-    this.gridHelper = new GridHelper(gridParams);
-    this.gridHelper.setSize(2, 2);
-    this.add(this.gridHelper);
+    /**
+     * Génère la carte de manière aléatoire basé sur la seed passé en paramètre
+     * @return {geometry, grid}
+     */
+    generateMap(store.state.game.seed).then(({ geometry, grid }) => {
+      // BUG: Si this grid est déclaré en dehors de ce bloc il permet son héritage de Reborn.Grid et devient un type object.
+      this.grid = new Grid(gridParams);
 
+      grid.forEach((value, i) => {
+        this.grid.register(i, value);
+      });
+
+      this.gridHelper = new GridHelper(gridParams);
+      this.gridHelper.setSize(2, 2);
+      this.add(this.gridHelper);
+      this.initCastEvent();
+      this.initWater();
+      this.initFloor(geometry);
+      this.displayPlayground();
+    });
+  }
+
+  /**
+   * Affiche le sol
+   */
+  initFloor(geometry) {
+    const material = new THREE.MeshToonMaterial({
+      vertexColors: THREE.FaceColors,
+      bumpScale: 0.1,
+      specular: 0x798133,
+      reflectivity: 0,
+      shininess: 0,
+      flatShading: false,
+    });
+
+    this.floor = new THREE.Mesh(geometry, material);
+    this.floor.position.y = -0.1;
+    this.add(this.floor);
+    this.raycaster.object = this.floor;
+  }
+
+  /**
+   * Init l'écoute de l'évenement de raycasting pour bouger le helper
+   */
+  initCastEvent() {
     Bus.$on('cast', (intersection) => {
       if (intersection && intersection.face.normal.y > 0.99) {
         this.gridHelper.visible = true;
 
         // Récupère les coordonnée de cellule courante
         const cell = this.grid.getCell(intersection.point);
-
-        // Récupère l'index de la case
-        // const a = this.grid.get(cell);
-
         const a = this.grid.checkSpace(intersection.point, this.gridHelper.scale);
         this.gridHelper.updatePosition(cell, intersection.point);
 
@@ -54,32 +88,9 @@ export default class GameMap extends THREE.Group {
     });
   }
 
-
-  initFloor() {
-    const material = new THREE.MeshToonMaterial({
-      vertexColors: THREE.FaceColors,
-      bumpScale: 0.1,
-      specular: 0x798133,
-      reflectivity: 0,
-      shininess: 0,
-      flatShading: false,
-    });
-
-    generateMap().then(({ geometry, grid }) => {
-      this.floor = new THREE.Mesh(geometry, material);
-      this.floor.position.y = -0.1;
-      this.add(this.floor);
-
-      grid.forEach((value, i) => {
-        this.grid.register(i, value);
-      });
-
-      this.raycaster.object = this.floor;
-
-      this.displayPlayground();
-    });
-  }
-
+  /**
+   * Outil de debug pour afficher les case disponibles
+   */
   displayPlayground() {
     const geo = new THREE.PlaneGeometry(1, 1);
     geo.rotateX(-Math.PI / 2);
@@ -108,6 +119,9 @@ export default class GameMap extends THREE.Group {
     }
   }
 
+  /**
+   * Afficher l'eau
+   */
   initWater() {
     const geometry = new THREE.PlaneGeometry(
       this.size.x * this.cellSize * 10,

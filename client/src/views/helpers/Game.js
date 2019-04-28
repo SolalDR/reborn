@@ -15,6 +15,7 @@ export default {
           status: Reborn.Player.ACTIVE,
         },
       ],
+      seed: Math.random(),
     });
   },
 };

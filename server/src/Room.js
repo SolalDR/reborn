@@ -60,6 +60,11 @@ export default class Room extends Emitter {
     this.game.world.on('entity:add', (args) => this.dispatchToPlayers('entity:add', args));
     this.game.world.on('entity:remove', (args) => this.dispatchToPlayers('entity:add', args));
     this.game.world.on('entity:update', (args) => this.dispatchToPlayers('entity:update', args));
+
+    this.players.forEach(player => {
+      player.socket.on('entity:add',    (entity) => this.game.world.addEntity(entity));
+      player.socket.on('entity:remove', (entity) => this.game.world.removeEntity(entity));
+    })
   }
 
   /**
