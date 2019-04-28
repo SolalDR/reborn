@@ -1,7 +1,13 @@
 const webpack = require('webpack');
 
 module.exports = {
+  chainWebpack: (config) => {
+    config.module.rule('js').exclude.add(/\.worker\.js$/);
+  },
   configureWebpack: {
+    output: {
+      globalObject: 'this',
+    },
     module: {
       rules: [
         {
@@ -11,6 +17,16 @@ module.exports = {
             'raw-loader',
             'glslify-loader',
           ],
+        },
+        {
+          test: /\.worker\.js$/,
+          use: {
+            loader: 'worker-loader',
+            options: {
+              inline: true,
+              // publicPath: '/workers/'
+            },
+          },
         },
       ],
     },

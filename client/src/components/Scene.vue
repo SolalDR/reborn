@@ -12,9 +12,16 @@ export default {
       console.warn('Scene.vue: Already a webgl context in vue prototype');
     }
 
-    Vue.prototype.$webgl = new WebGL(this.$el, {
+    Vue.prototype.$webgl = new WebGL({
+      canvas: this.$el,
       store: this.$store,
     });
+
+    Vue.prototype.$webgl.on('addItem', () => {
+      console.log(this.$store.state.game);
+    });
+
+    this.$emit('mounted');
   },
 
   beforeDestroy() {

@@ -1,3 +1,4 @@
+import GridCase from "./GridCase";
 /**
  * @class Represent the world grid
  * @extends Array
@@ -13,12 +14,30 @@ export default class Grid extends Array {
   }
 
   /**
+   * Register a new grid case
+   */
+  register(index, value = null) {
+    this[index] = value ? new GridCase(
+      Math.floor(index / this.size[0]),
+      index % this.size[1],
+      value) : null;
+  }
+
+  /**
    * Check if an area is already reserved to an element
    * @param {Integer[]} position A vec2 defining the coords in the grid
    * @param {Integer[]} size An vec2 defining the size of the element
    * @returns {Boolean} Return true if there is space
    */
-  checkSpace(position, size){
+  checkSpace(position, size = {x: 1, y: 1}){
+    for (var i=0; i<size.x; i++) {
+      for (var j=0; j<size.y; j++) {
+        if (this.get(position)) {
+
+        }
+      }
+    }
+
     return true;
   }
 
@@ -28,8 +47,8 @@ export default class Grid extends Array {
    * @param {Integer} y
    * @return {null|Entity}
    */
-  get(x, y) {
-    return this[x*this.size[0] + y];
+  get(coord) {
+    return this[coord.x*this.size[0] + coord.y];
   }
 
   /**

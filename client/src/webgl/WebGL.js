@@ -1,3 +1,4 @@
+import Emitter from '@solaldr/emitter';
 import Viewport from '../plugins/Viewport';
 import GameMap from './components/map';
 import Controls from './controls';
@@ -7,12 +8,18 @@ import mouse from '../plugins/Mouse';
 import AssetsManager from '../services/assets/Manager';
 import Renderer from './renderer';
 
-// import blobVertex from './shaders/blob.vert';
-// import blobFragment from './shaders/blob.frag';
-
-export default class WebGL {
-  constructor(canvas) {
+export default class WebGL extends Emitter {
+  constructor({
+    canvas = null,
+    store = null,
+  } = {}) {
+    super();
     this.canvas = canvas;
+    this.store = store;
+
+    if (this.store.state.game) {
+      this.game = this.store.state.game;
+    }
 
     // Camera
     this.scene = new THREE.Scene();
@@ -32,56 +39,59 @@ export default class WebGL {
       camera: this.camera,
     });
 
+    this.initClusters();
+    this.initLights();
     this.initScene();
     this.loop();
   }
 
-  initEvents() {
-    Viewport.$on('resize', () => {
-      this.renderer.setSize(Viewport.width, Viewport.height);
+  initClusters() {
+    this.clusters = new Map();
+    const models = AssetsManager.loader.getFiles('models');
+    const material = new THREE.MeshToonMaterial({
+      vertexColors: THREE.VertexColors,
     });
 
-    this.raycaster.on('cast', () => {
+    Object.keys(models).forEach((modelName) => {
+      this.clusters.set(modelName, new Cluster(models[modelName].result.scene.children[0].geometry, material));
+      const cluster = this.clusters.get(modelName);
+      if (this.game.entityModels.has(modelName)) {
+        this.game.entityModels.get(modelName).cluster = cluster;
+        this.scene.add(cluster.mesh);
+      }
     });
   }
 
   initScene() {
     this.scene.fog = new THREE.Fog(0xb7eeff, 60, 150);
+    this.map = new GameMap({
+      cellSize: 1,
+      size: new THREE.Vector2(32, 32),
+      raycaster: this.raycaster,
+    });
 
+    this.scene.add(this.map);
+
+    mouse.$on('click', () => {
+      if (!mouse.dragDelta && this.raycaster.intersection) {
+        this.emit('addItem', {
+          position: this.map.gridHelper.position,
+          rotation: new THREE.Euler(0, Math.floor(Math.random() * 4) * Math.PI / 2, 0),
+        });
+      }
+    });
+
+    this.camera.position.set(0, 20, 20);
+    this.camera.lookAt(new THREE.Vector3());
+  }
+
+  initLights() {
     const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
     this.scene.add(ambientLight);
 
     const light = new THREE.DirectionalLight(0xFFFFFF, 0.5);
     this.scene.add(light);
-
-    this.map = new GameMap({
-      cellSize: 1,
-      size: new THREE.Vector2(32, 32),
-    });
-    this.scene.add(this.map);
-    this.raycaster.object = this.map.floor;
-
-    AssetsManager.loader.on('load:models', (results) => {
-      const material = new THREE.MeshToonMaterial({
-        vertexColors: THREE.VertexColors,
-      });
-      const cubeCluster = new Cluster(results.house.result.scene.children[0].geometry, material);
-      mouse.$on('click', () => {
-        if (!mouse.dragDelta && this.raycaster.intersection) {
-          cubeCluster.addItem({
-            position: this.map.gridHelper.position,
-            rotation: new THREE.Euler(0, Math.PI * 2 * Math.random(), 0),
-          });
-        }
-      });
-
-      this.scene.add(cubeCluster.mesh);
-    });
-
-
     light.position.set(100, 100, 100);
-    this.camera.position.set(0, 20, 20);
-    this.camera.lookAt(new THREE.Vector3());
   }
 
   loop() {
