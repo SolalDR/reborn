@@ -35,15 +35,28 @@ class Grid extends Reborn.Grid {
     const xPeer = scale.x % 2 === 0;
     const yPeer = scale.y % 2 === 0;
 
+    const x = !this.xPeer
+      ? cell.x - this.size[0] / 2 + 0.5
+      : cell.x - this.size[0] / 2 + (
+        (point.x + this.size[0] / 2) % 1 > 0.5 ? 1 : 0
+      );
 
     // Compute bbox
-    this.box.min.x = cell.x - Math.floor(scale.x / 2) - (
-      xPeer && (point.x + this.size[0] / 2) % 1 > 0.5 ? -1 : 0
+    this.box.min.x = cell.x - Math.floor(scale.x / 2) + (
+      xPeer && (point.x + this.size[0] / 2) % 1 > 0.5 ? 1 : 0
     );
 
-    this.box.min.y = cell.y - Math.floor(scale.y / 2) - (
+    this.box.min.y = cell.y - Math.floor(scale.y / 2) + (
       yPeer && (point.z + this.size[1] / 2) % 1 > 0.5 ? 1 : 0
     );
+
+    // const y = !this.yPeer
+    //   ? cell.y - this.size[1] / 2 + 0.5
+    //   : cell.y - this.size[1] / 2 + (
+    //     (point.z + this.size[1] / 2) % 1 > 0.5 ? 1 : 0
+    //   );
+
+    console.log(this.box.min.x, x);
 
     this.box.max.x = this.box.min.x + scale.x - 1;
     this.box.max.y = this.box.min.y + scale.y - 1;
@@ -54,8 +67,8 @@ class Grid extends Reborn.Grid {
 
     for (let i = 0; i < distance.x; i++) {
       for (let j = 0; j < distance.y; j++) {
-        console.log(cell, this.get(cell, { x: this.box.min.x, y: this.box.min.y }));
-        if (!this.get({ x: this.box.min.x, y: this.box.min.y })) {
+        // console.log(cell, this.get(cell, { x: this.box.min.x, y: this.box.min.y }));
+        if (!this.get({ x: this.box.min.x + i, y: this.box.min.y + j })) {
           return false;
         }
       }

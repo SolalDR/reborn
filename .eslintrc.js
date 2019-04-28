@@ -20,7 +20,8 @@ module.exports = {
     'max-len': 0,
     'no-bitwise': 0,
     'import/extensions': 0,
-    'no-plusplus': 0
+    'no-plusplus': 0,
+    'arrow-body-style': 0
   },
   parserOptions: {
     parser: 'babel-eslint',

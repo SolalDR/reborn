@@ -27,7 +27,7 @@ export default class GameMap extends THREE.Group {
 
     this.grid = new Grid(gridParams);
     this.gridHelper = new GridHelper(gridParams);
-    this.gridHelper.setSize(1, 1);
+    this.gridHelper.setSize(2, 2);
     this.add(this.gridHelper);
 
     Bus.$on('cast', (intersection) => {
@@ -74,33 +74,38 @@ export default class GameMap extends THREE.Group {
         this.grid.register(i, value);
       });
 
-      const geo = new THREE.PlaneGeometry(1, 1);
-      geo.rotateX(-Math.PI / 2);
-      const mat = new THREE.MeshBasicMaterial({
-        transparent: true,
-        color: 0x00FF00,
-      });
+      this.raycaster.object = this.floor;
 
-      for (let i = 0; i < this.grid.size[0]; i++) {
-        for (let j = 0; j < this.grid.size[1]; j++) {
-          const cell = this.grid.get({ x: i, y: j });
-          // console.log(cell);
+      this.displayPlayground();
+    });
+  }
 
-          if (cell) {
-            const mesh = new THREE.Mesh(geo, mat);
-            mesh.position.set(
-              i - this.grid.size[0] / 2 + 0.5,
-              cell.altitude,
-              j - this.grid.size[1] / 2 + 0.5,
-            );
+  displayPlayground() {
+    const geo = new THREE.PlaneGeometry(1, 1);
+    geo.rotateX(-Math.PI / 2);
+    const mat = new THREE.MeshBasicMaterial({
+      color: 0x00FF00,
+      transparent: true,
+      opacity: 0.5,
+    });
 
-            this.add(mesh);
-          }
+    for (let i = 0; i < this.grid.size[0]; i++) {
+      for (let j = 0; j < this.grid.size[1]; j++) {
+        const cell = this.grid.get({ x: i, y: j });
+        // console.log(cell);
+
+        if (cell) {
+          const mesh = new THREE.Mesh(geo, mat);
+          mesh.position.set(
+            i - this.grid.size[0] / 2 + 0.5,
+            cell.altitude,
+            j - this.grid.size[1] / 2 + 0.5,
+          );
+
+          this.add(mesh);
         }
       }
-
-      this.raycaster.object = this.floor;
-    });
+    }
   }
 
   initWater() {

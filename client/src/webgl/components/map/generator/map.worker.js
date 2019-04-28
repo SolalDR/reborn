@@ -166,15 +166,18 @@ const generator = {
         bottomLeft = results[i + (j + 1) * 32];
 
         // Si les sommets sont non-null et ont la même hauteur
-        if (
-          (
-            topLeft && topRight && bottomRight && bottomLeft
-          ) && (
-            Math.abs((topLeft.distance + topRight.distance + bottomRight.distance + bottomLeft.distance) / 4 - topLeft.distance) < 0.001
-          )) {
-          this.grid[i + j * 32] = {
-            altitude: results[i + j * 32].point.y,
-          };
+
+        if (topLeft && topRight && bottomRight && bottomLeft) {
+          const averageHeight = (topLeft.distance + topRight.distance + bottomRight.distance + bottomLeft.distance) / 4;
+          if (
+            Math.abs(averageHeight - topLeft.distance) < 0.01
+            && Math.abs(averageHeight - topRight.distance) < 0.01
+            && Math.abs(averageHeight - bottomRight.distance) < 0.01
+            && Math.abs(averageHeight - bottomLeft.distance) < 0.01) {
+            this.grid[i + j * 32] = {
+              altitude: results[i + j * 32].point.y,
+            };
+          }
         }
       }
     }
