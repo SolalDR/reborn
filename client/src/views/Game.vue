@@ -1,7 +1,7 @@
 <template>
   <main class="game">
     <!-- TODO: Change loaded with callback socket player:ready -->
-    <scene v-if="$store.state.game && loaded" @mounted="onWebGLInit"/>
+    <scene @mounted="onWebGLInit"/>
     <div class="game__interface">
       <div class="metrics">
         <!-- TODO: Bind metrics -->
@@ -55,10 +55,6 @@ import Indicator from '../components/game/Indicator.vue';
 import Settings from '../components/game/Settings.vue';
 import YearsCounter from '../components/game/YearsCounter.vue';
 import Category from '../components/game/Category.vue';
-import AssetsManager from '../services/assets/Manager';
-import Reborn from '../game';
-import config from '../config';
-import GameHelpers from './helpers/Game';
 
 export default {
   components: {
@@ -110,9 +106,17 @@ export default {
   },
 
   sockets: {
-    // 'entity:add': function () {
-    //   console.log('Add entity');
-    // },
+    'entity:add': function (item) {
+      const cluster = this.$webgl.clusters[item.model];
+      console.log(item);
+      if (cluster) {
+        console.log(cluster);
+        cluster.addItem({
+          position: new THREE.Vector3(item.position.x, item.position.y, item.position.z),
+          rotation: new THREE.Euler(item.rotation._x, item.rotation._y, item.rotation._z),
+        });
+      }
+    },
 
     // 'entity:remove': function () {
     //   console.log('Remove entity');
@@ -123,29 +127,13 @@ export default {
     // },
   },
 
+  created() {
+    if (!this.$store.state.game) {
+      this.$router.push('/');
+    }
+  },
+
   mounted() {
-    // Load game assets
-    AssetsManager.loader.addGroup({
-      name: 'models',
-      base: '/3d/models/',
-      files: Reborn.models.map(({ slug }) => ({
-        name: slug,
-        path: `${slug}.glb`,
-      })),
-    });
-
-    AssetsManager.loader.on('load:models', () => {
-      this.loaded = true;
-      this.$socket.emit('player:ready');
-
-      // If server don't enabled launch game
-      if (!config.server.enabled) {
-        GameHelpers.simulateNewGame.call(this);
-      }
-    });
-
-    AssetsManager.loader.loadGroup('models');
-
     document.addEventListener('keydown', this.addShortcuts);
   },
 
@@ -207,7 +195,9 @@ export default {
       this.currentEntity = index;
     },
     onWebGLInit() {
+      console.log('listen add item')
       this.$webgl.on('addItem', (item) => {
+        console.log('entity add on webgl init')
         this.$socket.emit('entity:add', {
           ...item,
           model: 'house',

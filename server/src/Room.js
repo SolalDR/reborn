@@ -54,7 +54,7 @@ export default class Room extends Emitter {
    * Register all the events in the game which will be dispatched to players
    */
   initSocketListeners() {
-    this.on('start', (args) => this.dispatchToPlayers('game:start', args));
+    this.on('start', (args) => this.dispatchToPlayers('game:create', args));
 
     this.game.on('tick', (args) => this.dispatchToPlayers('timeline:tick', args));
     this.game.world.on('entity:add', (args) => this.dispatchToPlayers('entity:add', args));

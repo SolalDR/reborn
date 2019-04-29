@@ -11,11 +11,10 @@ export default {
   name: 'RoomJoin',
   sockets: {
     'room:connect': function ({ playerId, verifiedRoomId }) {
-      console.log('-- ROOM JOINED');
       this.$store.commit('setPlayer', playerId);
       this.$store.commit('setRoom', verifiedRoomId);
     },
-    'game:start': function () {
+    'game:create': function () {
       const roomId = this.$router.history.current.params.id;
       this.$router.push({
         name: 'game',

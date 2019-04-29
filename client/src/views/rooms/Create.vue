@@ -30,12 +30,10 @@ export default {
   },
   sockets: {
     'room:connect': function ({ playerId, verifiedRoomId }) {
-      console.log('-- ROOM CONNECT');
-
       this.$store.commit('setPlayer', playerId);
       this.$store.commit('setRoom', verifiedRoomId);
     },
-    'game:start': function () {
+    'game:create': function () {
       const roomId = this.$refs.roomIdInput.value;
       this.$router.push({
         name: 'game',

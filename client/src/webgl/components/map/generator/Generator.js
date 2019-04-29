@@ -96,7 +96,7 @@ export default (seed = Math.random()) => {
     // Resolve promise
     resolver({
       geometry,
-      grid: event.data.grid,
+      gridDatas: event.data.gridDatas,
     });
   };
 
