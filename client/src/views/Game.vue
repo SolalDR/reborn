@@ -48,6 +48,8 @@
 </template>
 
 <script>
+import Vue from 'vue';
+import Reborn from '../game';
 import Metric from '../components/game/Metric.vue';
 import Entity from '../components/game/Entity.vue';
 import Scene from '../components/game/Scene.vue';
@@ -107,10 +109,10 @@ export default {
 
   sockets: {
     'entity:add': function (item) {
+      console.log('entity:add receive');
       const cluster = this.$webgl.clusters[item.model];
-      console.log(item);
+      console.log(cluster, item);
       if (cluster) {
-        console.log(cluster);
         cluster.addItem({
           position: new THREE.Vector3(item.position.x, item.position.y, item.position.z),
           rotation: new THREE.Euler(item.rotation._x, item.rotation._y, item.rotation._z),
@@ -130,7 +132,13 @@ export default {
   created() {
     if (!this.$store.state.game) {
       this.$router.push('/');
+      return;
     }
+
+    Vue.prototype.$game = new Reborn.Game({
+      players: this.$store.state.game.players.map(p => new Reborn.Player(p)),
+      seed: this.$store.state.game.seed,
+    });
   },
 
   mounted() {
@@ -195,9 +203,9 @@ export default {
       this.currentEntity = index;
     },
     onWebGLInit() {
-      console.log('listen add item')
+      console.log(this.$webgl);
       this.$webgl.on('addItem', (item) => {
-        console.log('entity add on webgl init')
+        console.log('entity:add emit');
         this.$socket.emit('entity:add', {
           ...item,
           model: 'house',

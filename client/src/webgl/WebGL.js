@@ -13,15 +13,11 @@ import generateMap from './components/map/generator/Generator';
 export default class WebGL extends Emitter {
   constructor({
     canvas = null,
-    store = null,
+    game = null,
   } = {}) {
     super();
     this.canvas = canvas;
-    this.store = store;
-
-    if (this.store.state.game) {
-      this.game = this.store.state.game;
-    }
+    this.game = game;
 
     // Camera
     this.scene = new THREE.Scene();
@@ -65,18 +61,18 @@ export default class WebGL extends Emitter {
       this.emit('clusters:created');
     };
 
-    const models = AssetsManager.loader.getFiles('models');
-    if (models) {
+    if (AssetsManager.loader.isLoaded('models')) {
+      const models = AssetsManager.loader.getFiles('models');
       initClusters(models);
     } else {
-      AssetsManager.loader.on('load:models', (m) => {
-        initClusters(m);
+      AssetsManager.loader.on('load:models', (models) => {
+        initClusters(models);
       });
     }
   }
 
   initMap() {
-    const mapPromise = generateMap(this.store.state.game.seed);
+    const mapPromise = generateMap(this.game.seed);
     mapPromise.then(({ gridDatas, geometry }) => {
       this.map = new GameMap({
         gridDatas: Array.from(gridDatas),
