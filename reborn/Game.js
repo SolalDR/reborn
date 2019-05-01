@@ -11,9 +11,11 @@ import World from "./World";
 class Game extends Emitter {
   constructor({
     players = [],
-    seed = Math.random()
+    seed = Math.random(),
+    createdAt = Date.now()
   } = {}){
     super();
+    this.createdAt = createdAt;
     this.players = players;
     this.status = Game.PENDING;
     this.seed = seed;
@@ -51,7 +53,7 @@ class Game extends Emitter {
    * Start the game
    */
   start() {
-    this.startedAt = Date.now();
+    this.startedAt = Date.now() + 7000;
     this.status = Game.PLAYING;
     this.emit('start', this.infos);
   }
@@ -84,9 +86,12 @@ class Game extends Emitter {
    */
   get infos(){
     return {
+      status: this.status,
       players: this.playersList.map(player => player.infos),
       grid: this.world.grid.size,
-      seed: this.seed
+      seed: this.seed,
+      startedAt: this.startedAt ? this.startedAt : null,
+      createdAt: this.createdAt,
     }
   }
 }

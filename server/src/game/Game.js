@@ -40,6 +40,12 @@ export default class Game extends Reborn.Game {
     });
   }
 
+  start() {
+    this.timeline.start();
+    super.start();
+    console.log('game:start')
+  }
+
   assignRoles(){
     const playersList = this.playersList;
     const playerNature = this.players.get(playersList.map(p => p.id)[Math.floor(Math.random()*2)]);

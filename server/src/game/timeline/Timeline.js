@@ -9,7 +9,6 @@ export default class Timeline extends Emitter {
     this.time = 0;
     this.interval = interval;
     this.events = new Map();
-    this.start();
   }
 
   /**
