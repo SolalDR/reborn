@@ -13,7 +13,7 @@ export default class Room extends Emitter {
     this._room = socket.adapter.rooms[this.id];
     this.length = 0;
     this.game = null;
-    this.historic = new Historic()
+    this.historic = new Historic();
     this.players = new Map();
     if( !this._room ){
       return null;

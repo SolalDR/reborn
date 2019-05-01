@@ -1,4 +1,7 @@
 import * as Reborn from "../../../reborn";
+
+import ConstraintManager from './constraint/Manager';
+import NotificationManager from './notification/Manager';
 import World from "./World";
 import Timeline from "./timeline/Timeline"
 
@@ -15,6 +18,17 @@ export default class Game extends Reborn.Game {
     this.socket = socket;
     this.assignRoles();
 
+    // ConstraintManager
+    this.constraintManager = new ConstraintManager({
+      game: this
+      // TODO: Bind constraints
+    });
+
+    // NotificationManager
+    this.notificationManager = new NotificationManager({
+      socket: this.socket
+    });
+
     // Timeline
     this.timeline = new Timeline({
       interval: 250,
@@ -24,10 +38,17 @@ export default class Game extends Reborn.Game {
     this.timeline.on('tick', ()=>{
       this.metrics.forEach(metric => {
         metric.value += metric.recurentOperation;
-      })
+      });
+
+      const tickArgs = metricsMap.map(m => m.infos);
       this.emit('tick', {
-        metrics: metricsMap.map(m => m.infos)
-      })
+        metrics: tickArgs
+      });
+      this.constraintManager.checkConstraints(tickArgs);
+
+      this.constraintManager.on('notification:trigger', notification => {
+        this.notificationManager.triggerNotification(notification);
+      });
     })
   }
 

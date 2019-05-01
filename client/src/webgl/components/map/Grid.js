@@ -56,7 +56,7 @@ class Grid extends Reborn.Grid {
     //     (point.z + this.size[1] / 2) % 1 > 0.5 ? 1 : 0
     //   );
 
-    console.log(this.box.min.x, x);
+    // console.log(this.box.min.x, x);
 
     this.box.max.x = this.box.min.x + scale.x - 1;
     this.box.max.y = this.box.min.y + scale.y - 1;
