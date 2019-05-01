@@ -31,7 +31,7 @@ export default {
     const interval = setInterval(() => {
       this.countdown--;
       if (this.countdown === 0) {
-        this.emit('finish');
+        this.$emit('finish');
         clearInterval(interval);
       }
     }, 1000)

@@ -24,32 +24,40 @@ export default {
     role: 'city',
   },
 
-  purity: {
+  recycling: {
     order: 4,
-    slug: 'purity',
-    color: '#abffa9',
-    name: 'Pureté',
+    slug: 'recycling',
+    color: '#6ea3ff',
+    name: 'Recyclage',
     role: 'city',
   },
 
-  vegegation: {
+  plant: {
     order: 1,
-    slug: 'vegegation',
+    slug: 'plant',
     color: '#abffa9',
-    name: 'Végegation',
+    name: 'Plantes',
+    role: 'nature',
+  },
+
+  tree: {
+    order: 2,
+    slug: 'tree',
+    color: '#27293f',
+    name: 'Arbres',
     role: 'nature',
   },
 
   rock: {
-    order: 2,
+    order: 4,
     slug: 'rock',
-    color: '#27293f',
-    name: 'Minerai',
+    color: '#f90',
+    name: 'Roche',
     role: 'nature',
   },
 
   skill: {
-    order: 3,
+    order: 4,
     slug: 'skill',
     color: '#f90',
     name: 'Pouvoir',
