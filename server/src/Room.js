@@ -34,7 +34,7 @@ export default class Room extends Emitter {
     this.emit('update', this.infos);
   }
 
-  launchGame(){
+  createGame(){
     this.game = new Game({
       players: this.players,
       socket: this.socket,
@@ -44,24 +44,39 @@ export default class Room extends Emitter {
 
     this.game.on('start', (infos)=>{
       this.emit('update', this.infos);
-      this.emit('start', infos);
+      this.emit('start', this.infos);
     })
 
-    this.game.start();
+    this.emit('update', this.infos);
+    this.emit('create', this.game.infos);
+  }
+
+  checkPlayersReady() {
+    let ready = true;
+    this.players.forEach((player) => {
+      if(!player.ready) ready = false;
+    })
+    console.log('check player ready:', ready);
+    return ready;
   }
 
   /**
    * Register all the events in the game which will be dispatched to players
    */
   initSocketListeners() {
-    this.on('start', (args) => this.dispatchToPlayers('game:start', args));
+    this.on('create', (args) => this.dispatchToPlayers('game:create', args));
 
+    this.game.on('start', (args) => this.dispatchToPlayers('game:start', args));
     this.game.on('tick', (args) => this.dispatchToPlayers('timeline:tick', args));
     this.game.world.on('entity:add', (args) => this.dispatchToPlayers('entity:add', args));
     this.game.world.on('entity:remove', (args) => this.dispatchToPlayers('entity:add', args));
     this.game.world.on('entity:update', (args) => this.dispatchToPlayers('entity:update', args));
 
     this.players.forEach(player => {
+      player.socket.on('player:ready',  () => {
+        player.ready = true;
+        if(this.checkPlayersReady()) this.game.start();
+      })
       player.socket.on('entity:add',    (entity) => this.game.world.addEntity(entity));
       player.socket.on('entity:remove', (entity) => this.game.world.removeEntity(entity));
     })
@@ -95,10 +110,7 @@ export default class Room extends Emitter {
       name: this.id,
       createdAt: this.createdAt,
       players: Array.from(this.players.values()).map(p => p.infos),
-      game: this.game ? {
-        status: this.game.status,
-        startedAt: this.game.startedAt
-      } : null
+      game: this.game ? this.game.infos : null,
     }
   }
 }

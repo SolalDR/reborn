@@ -46,7 +46,7 @@ export default {
       });
       Bus.emit('rooms:update');
       if( room.players.size === 2 ){
-        room.launchGame();
+        room.createGame();
       }
     }
   }

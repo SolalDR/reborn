@@ -12,6 +12,7 @@ class Player extends Reborn.Player {
     });
     this._client = clientSocket;
     this.socket = socket;
+    this.ready = false;
   }
 }
 

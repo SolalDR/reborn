@@ -154,7 +154,7 @@ const generator = {
       bottomLeft;
 
     // Grille finale
-    this.grid = new Array(results.length).fill(null);
+    this.gridDatas = new Array(results.length).fill(null);
 
     // Pour chaque sommet jusqu'à (n - 1)
     for (let i = 0; i < 31; i += 1) {
@@ -174,7 +174,7 @@ const generator = {
             && Math.abs(averageHeight - topRight.distance) < 0.01
             && Math.abs(averageHeight - bottomRight.distance) < 0.01
             && Math.abs(averageHeight - bottomLeft.distance) < 0.01) {
-            this.grid[i + j * 32] = {
+            this.gridDatas[i + j * 32] = {
               altitude: results[i + j * 32].point.y,
             };
           }
@@ -207,7 +207,7 @@ const generator = {
     postMessage({
       vertices: this.geometry.vertices,
       faces: this.geometry.faces,
-      grid: this.grid,
+      gridDatas: this.gridDatas,
     });
   },
 };

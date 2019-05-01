@@ -7,19 +7,17 @@ import Raycaster from './core/Raycaster';
 import mouse from '../plugins/Mouse';
 import AssetsManager from '../services/assets/Manager';
 import Renderer from './renderer';
+import generateMap from './components/map/generator/Generator';
+
 
 export default class WebGL extends Emitter {
   constructor({
     canvas = null,
-    store = null,
+    game = null,
   } = {}) {
     super();
     this.canvas = canvas;
-    this.store = store;
-
-    if (this.store.state.game) {
-      this.game = this.store.state.game;
-    }
+    this.game = game;
 
     // Camera
     this.scene = new THREE.Scene();
@@ -38,48 +36,70 @@ export default class WebGL extends Emitter {
       scene: this.scene,
       camera: this.camera,
     });
+  }
 
-    this.map = new GameMap({
-      cellSize: 1,
-      size: new THREE.Vector2(32, 32),
-      raycaster: this.raycaster,
-    });
-
+  init() {
     this.initClusters();
+    this.initMap();
     this.initLights();
     this.initScene();
     this.loop();
   }
 
   initClusters() {
-    this.clusters = {};
-    const models = AssetsManager.loader.getFiles('models');
-    const material = new THREE.MeshToonMaterial({
-      vertexColors: THREE.VertexColors,
-    });
+    const initClusters = (models) => {
+      this.clusters = {};
+      const material = new THREE.MeshToonMaterial({
+        vertexColors: THREE.VertexColors,
+      });
 
-    Object.keys(models).forEach((modelName) => {
-      this.clusters[modelName] = new Cluster(models[modelName].result.scene.children[0].geometry, material);
-      this.scene.add(this.clusters[modelName].mesh);
-    });
+      Object.keys(models).forEach((modelName) => {
+        this.clusters[modelName] = new Cluster(models[modelName].result.scene.children[0].geometry, material);
+        this.scene.add(this.clusters[modelName].mesh);
+      });
 
-    this.store.commit('setClusters', this.clusters);
+      this.emit('clusters:created');
+    };
+
+    if (AssetsManager.loader.isLoaded('models')) {
+      const models = AssetsManager.loader.getFiles('models');
+      initClusters(models);
+    } else {
+      AssetsManager.loader.on('load:models', (models) => {
+        initClusters(models);
+      });
+    }
+  }
+
+  initMap() {
+    const mapPromise = generateMap(this.game.seed);
+    mapPromise.then(({ gridDatas, geometry }) => {
+      this.map = new GameMap({
+        gridDatas: Array.from(gridDatas),
+        geometry,
+        cellSize: 1,
+        size: new THREE.Vector2(32, 32),
+        raycaster: this.raycaster,
+      });
+
+      this.scene.add(this.map);
+
+      mouse.$on('click', () => {
+        if (!mouse.dragDelta && this.raycaster.intersection) {
+          this.emit('addItem', {
+            position: this.map.gridHelper.position,
+            rotation: new THREE.Euler(0, Math.floor(Math.random() * 4) * Math.PI / 2, 0),
+          });
+        }
+      });
+
+      this.emit('map:created');
+    });
+    return mapPromise;
   }
 
   initScene() {
     this.scene.fog = new THREE.Fog(0xb7eeff, 60, 150);
-
-    this.scene.add(this.map);
-
-    mouse.$on('click', () => {
-      if (!mouse.dragDelta && this.raycaster.intersection) {
-        this.emit('addItem', {
-          position: this.map.gridHelper.position,
-          rotation: new THREE.Euler(0, Math.floor(Math.random() * 4) * Math.PI / 2, 0),
-        });
-      }
-    });
-
     this.camera.position.set(0, 20, 20);
     this.camera.lookAt(new THREE.Vector3());
   }

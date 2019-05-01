@@ -1,8 +1,6 @@
 import Grid from './Grid';
 import Bus from '../../../plugins/Bus';
 import GridHelper from './GridHelper';
-import generateMap from './generator/Generator';
-import store from '@/services/store';
 
 export default class GameMap extends THREE.Group {
   constructor({
@@ -10,6 +8,8 @@ export default class GameMap extends THREE.Group {
     cellSize = 1,
     size = new THREE.Vector2(32, 32),
     raycaster = null,
+    geometry = null,
+    gridDatas = null,
   } = {}) {
     super();
     this.size = size;
@@ -23,26 +23,21 @@ export default class GameMap extends THREE.Group {
       position: new THREE.Vector3(0, 1, 0),
     };
 
-    /**
-     * Génère la carte de manière aléatoire basé sur la seed passé en paramètre
-     * @return {geometry, grid}
-     */
-    generateMap(store.state.game.seed).then(({ geometry, grid }) => {
-      // BUG: Si this grid est déclaré en dehors de ce bloc il permet son héritage de Reborn.Grid et devient un type object.
-      this.grid = new Grid(gridParams);
 
-      grid.forEach((value, i) => {
-        this.grid.register(i, value);
-      });
+    this.grid = new Grid(gridParams);
+    for (let i = 0; i < gridDatas.length; i++) {
+      this.grid.register(i, gridDatas[i]);
+    }
 
-      this.gridHelper = new GridHelper(gridParams);
-      this.gridHelper.setSize(2, 2);
-      this.add(this.gridHelper);
-      this.initCastEvent();
-      this.initWater();
-      this.initFloor(geometry);
-      this.displayPlayground();
-    });
+    this.gridHelper = new GridHelper(gridParams);
+    this.gridHelper.setSize(2, 2);
+
+    this.add(this.gridHelper);
+
+    this.initCastEvent();
+    this.initWater();
+    this.initFloor(geometry);
+    this.displayPlayground();
   }
 
   /**

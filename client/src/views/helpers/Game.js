@@ -2,7 +2,7 @@ import Reborn from '../../game';
 
 export default {
   simulateNewGame() {
-    this.$store.commit('SOCKET_game:start', {
+    this.$store.commit('SOCKET_game:create', {
       players: [
         {
           id: 1,

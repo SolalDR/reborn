@@ -23,7 +23,7 @@
 - room:entities
 
 ### Game
-- game:start
+- game:create
 - game:create
 
 ### Player
