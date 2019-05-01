@@ -3,17 +3,17 @@
     <div class="panel">
       <p>Vous incarnez</p>
 
-      <!-- TODO: Binding with current player role -->
-      <p>La civilisation</p>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit autem, tenetur, suscipit est veniam sit a, magnam libero explicabo commodi assumenda quam consequuntur! Perferendis aspernatur illum velit repellat perspiciatis error.</p>
+      <p>{{ title }}</p>
+      <p>{{ description }}</p>
 
-      <button>
-        Voir le tutoriel
-      </button>
+      <div v-if="!pending">
+        <button>Voir le tutoriel</button>
+        <button @click="start">Commencer</button>
+      </div>
 
-      <button @click="start">
-        Commencer
-      </button>
+      <div v-if="pending">
+        <p>En attente de votre adversaire</p>
+      </div>
     </div>
   </div>
 </template>
@@ -22,8 +22,29 @@
 export default {
   name: 'tutorial',
 
+  data() {
+    return {
+      pending: false,
+    };
+  },
+
+  computed: {
+    title() {
+      return this.$game.player.role.name === 'city'
+        ? 'La Civilisation'
+        : 'La Nature';
+    },
+
+    description() {
+      return this.$game.player.role.name === 'city'
+        ? 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit autem, tenetur, suscipit est veniam sit a, magnam libero explicabo commodi assumenda quam consequuntur! Perferendis aspernatur illum velit repellat perspiciatis error.'
+        : 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit autem, tenetur, suscipit est veniam sit a, magnam libero explicabo commodi assumenda quam consequuntur! Perferendis aspernatur illum velit repellat perspiciatis error.';
+    },
+  },
+
   methods: {
     start() {
+      this.pending = true;
       this.$emit('start');
     },
   },

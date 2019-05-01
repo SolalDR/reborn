@@ -7,9 +7,11 @@
       <loader v-if="status === 'loading'"/>
     </transition>
 
-    <transition>
+    <transition name="fade">
       <tutorial v-if="status === 'pending'" @start="onPlayerReady"/>
     </transition>
+
+    <countdown v-if="status === 'initializing'"/>
 
     <div class="game__interface" v-if="interfaceVisible">
       <!-- TODO: Bind metrics -->
@@ -46,6 +48,7 @@ import Reborn from '../game';
 import Loader from '../components/Loader.vue';
 import Scene from '../components/game/Scene.vue';
 import Tutorial from '../components/game/Tutorial.vue';
+import Countdown from '../components/game/Countdown.vue';
 import Metric from '../components/game/Metric.vue';
 import Indicator from '../components/game/Indicator.vue';
 import Inventory from '../components/game/Inventory.vue';
@@ -62,6 +65,7 @@ export default {
     Inventory,
     Loader,
     Tutorial,
+    Countdown,
   },
 
   data() {
@@ -88,12 +92,10 @@ export default {
 
       setTimeout(() => {
         this.status = 'initializing';
-        console.log('initializing');
       }, Math.max(0, timeout - 5000));
 
       setTimeout(() => {
         this.status = 'playing';
-        console.log('playing');
       }, Math.max(0, timeout + 1));
     },
   },
