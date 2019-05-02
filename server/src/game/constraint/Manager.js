@@ -1,4 +1,5 @@
 import Emitter from '../../../../reborn/utils/Emitter';
+import constraints from "./list"
 
 class ConstraintManager extends Emitter {
   constructor({
@@ -6,14 +7,22 @@ class ConstraintManager extends Emitter {
   }) {
     super();
     this.game = game;
+    this.constraintMetrics = constraints.map(constraint => constraint.metrics)
   }
 
-  checkConstraints(constraints) {
-    console.log('--------------');
-    console.log(constraints);
-    console.log('--------------');
+  checkConstraints({
+    metrics = null
+  }) {
+    this.constraintMetrics.forEach(constraint => {
+      console.log('CONSTRAINTS METRICS');
+      console.log(constraint);
 
-    // TODO: Emit 'notification:trigger' on constraint validation for notification
+      // constraint.metrics.forEach(constraintMetrics => {
+        // console.log(metrics.filter(metric => metric.slug === constraintMetrics.slug && metric.value < 20));
+      // });
+    });
+
+    // TODO: Emit 'constraint:validated' once
   }
 
   get infos(){
