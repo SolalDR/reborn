@@ -1,14 +1,14 @@
 <template>
-  <div class="entity" @click="$emit('setCurrentEntity', entity.index)">
-    {{ entity.index }}
+  <div class="model" @click="$emit('setCurrentModel', model.index)">
+    {{ model.name }}
   </div>
 </template>
 
 <script>
 export default {
-  name: 'entity',
+  name: 'model',
   props: {
-    entity: {
+    model: {
       type: Object,
       required: true,
     },
@@ -17,7 +17,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .entity {
+  .model {
     $size: 80px;
 
     overflow: hidden;

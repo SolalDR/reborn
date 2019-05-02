@@ -1,6 +1,6 @@
 export default {
   slug: "flour",
-  category: "vegegation",
+  category: "plant",
   color: "#00FF00",
   name: "Fleur",
   role: "nature",

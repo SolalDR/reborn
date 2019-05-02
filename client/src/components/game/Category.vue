@@ -1,6 +1,6 @@
 <template>
   <div class="category" @click="$emit('setCurrentCategory', category.index)">
-    {{ category.index }}
+    {{ category.name }}
   </div>
 </template>
 

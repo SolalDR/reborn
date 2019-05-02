@@ -1,5 +1,6 @@
 export default {
 
+  // City categories
   alimentation: {
     order: 1,
     slug: 'alimentation',
@@ -32,19 +33,20 @@ export default {
     role: 'city',
   },
 
-  plant: {
-    order: 1,
-    slug: 'plant',
-    color: '#abffa9',
-    name: 'Plantes',
-    role: 'nature',
-  },
-
+  // Tree
   tree: {
     order: 2,
     slug: 'tree',
     color: '#27293f',
     name: 'Arbres',
+    role: 'nature',
+  },
+
+  plant: {
+    order: 1,
+    slug: 'plant',
+    color: '#abffa9',
+    name: 'Plantes',
     role: 'nature',
   },
 

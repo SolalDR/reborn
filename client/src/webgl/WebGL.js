@@ -84,8 +84,8 @@ export default class WebGL extends Emitter {
 
       this.scene.add(this.map);
 
-      mouse.$on('click', () => {
-        if (!mouse.dragDelta && this.raycaster.intersection) {
+      mouse.$on('click', ({ event }) => {
+        if (!mouse.dragDelta && this.raycaster.intersection && event.target === this.canvas) {
           this.emit('addItem', {
             position: this.map.gridHelper.position,
             rotation: new THREE.Euler(0, Math.floor(Math.random() * 4) * Math.PI / 2, 0),

@@ -1,6 +1,6 @@
 export default {
   slug: "tree",
-  category: "vegegation",
+  category: "tree",
   color: "#00FF00",
   name: "Arbre",
   role: "nature",
