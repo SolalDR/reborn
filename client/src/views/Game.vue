@@ -98,6 +98,14 @@ export default {
       const now = Date.now();
       const timeout = startedAt - now;
 
+      this.gauges = this.$game.player.role.gauges.map((gauge) => {
+        return this.$game.metrics.get(gauge).infos;
+      });
+
+      this.indicators = this.$game.player.role.indicators.map((indicator) => {
+        return this.$game.metrics.get(indicator).infos;
+      });
+
       setTimeout(() => {
         this.status = 'initializing';
       }, Math.max(0, timeout - 5000));

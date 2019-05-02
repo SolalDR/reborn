@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import adminStore from '../../admin/store';
-import Reborn from '../../game';
 
 Vue.use(Vuex);
 

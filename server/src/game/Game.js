@@ -41,9 +41,13 @@ export default class Game extends Reborn.Game {
   }
 
   start() {
-    this.timeline.start();
     super.start();
-    console.log('game:start')
+    this.startedAt = Date.now() + 7000;
+
+    var timeout = this.startedAt - Date.now();
+    setTimeout(() => {
+      this.timeline.start();
+    }, timeout);
   }
 
   assignRoles(){

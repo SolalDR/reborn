@@ -4,7 +4,7 @@
       :key="index"
       class="indicator">
       <label>{{ indicator.name }}</label>
-      <input :value="indicator.value" type="range"/>
+      <span>{{ indicator.value }}</span>
     </div>
   </div>
 </template>
