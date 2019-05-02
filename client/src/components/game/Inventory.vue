@@ -51,6 +51,9 @@ export default {
         this.categories.push(category);
       }
     });
+
+    this.setCurrentCategory(this.categories[0]);
+    this.setCurrentModel(this.models[0]);
   },
 
   methods: {
@@ -75,15 +78,15 @@ export default {
       this.currentCategory = category;
       this.models = [];
       this.models = Reborn.models.filter((model) => {
-        console.log(model.category, this.currentCategory);
         return model.role === this.$game.player.role.name
           && model.category === this.currentCategory.slug;
       });
+      this.$emit('selectCategory', this.currentCategory);
     },
 
     setCurrentModel(model) {
-      // TODO: Update 3D asset
       this.currentModel = model;
+      this.$emit('selectModel', this.currentModel);
     },
   },
 };

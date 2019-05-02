@@ -29,7 +29,7 @@
         <indicator v-for="(indicator, index) in 2" :key="index" :indicator="{}"/>
       </div>
 
-      <inventory />
+      <inventory @selectModel="onSelectModel"/>
 
       <div @click="showSettings = true" class="settings-cta">
         Settings
@@ -72,6 +72,8 @@ export default {
     return {
       status: null, // null => loading => pending => initializing => playing
       showSettings: false,
+      currentModel: null,
+      currentCategory: null,
     };
   },
 
@@ -158,12 +160,18 @@ export default {
       }
     },
 
+    onSelectModel(model) {
+      if (model) {
+        this.currentModel = model;
+      }
+    },
+
     onWebGLInit() {
       this.status = 'pending';
       this.$webgl.on('addItem', (item) => {
         this.$socket.emit('entity:add', {
           ...item,
-          model: 'house',
+          model: this.currentModel.slug,
         });
       });
     },
