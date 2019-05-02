@@ -19,7 +19,7 @@
 
       <!-- TODO: Bind currentYear value -->
       <div class="years-counter">
-        <years-counter :currentYear="75"/>
+        <years-counter :currentYear="year"/>
       </div>
 
       <inventory @selectModel="onSelectModel"/>
@@ -69,6 +69,7 @@ export default {
       currentCategory: null,
       gauges: null,
       indicators: null,
+      year: 0,
     };
   },
 
@@ -83,7 +84,7 @@ export default {
       }
     },
 
-    'timeline:tick': function ({ metrics }) {
+    'timeline:tick': function ({ metrics, elapsed }) {
       // TODO: Improve performance
       this.gauges = metrics.filter((metric) => {
         return this.$game.player.role.gauges.indexOf(metric.slug) >= 0;
@@ -92,6 +93,8 @@ export default {
       this.indicators = metrics.filter((metric) => {
         return this.$game.player.role.indicators.indexOf(metric.slug) >= 0;
       });
+
+      this.year = Math.floor(elapsed / 1000); // One year per second
     },
 
     'game:start': function ({ startedAt }) {
