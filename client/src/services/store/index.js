@@ -10,15 +10,10 @@ export default new Vuex.Store({
     playerId: null,
     roomId: null,
     game: null,
-    clusters: null,
   },
   mutations: {
     'SOCKET_game:create': function (state, game) {
       state.game = game;
-    },
-
-    'SOCKET_timeline:tick': function (state, { metrics }) {
-      state.game.metrics = metrics;
     },
 
     setPlayer(state, playerId) {

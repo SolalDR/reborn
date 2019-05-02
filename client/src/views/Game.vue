@@ -14,16 +14,12 @@
     <countdown v-if="status === 'initializing'"/>
 
     <div class="game__interface" v-if="interfaceVisible">
-      <metric-list />
+      <gauge-list :list="this.gauges"/>
+      <indicator-list :list="this.indicators"/>
 
       <!-- TODO: Bind currentYear value -->
       <div class="years-counter">
         <years-counter :currentYear="75"/>
-      </div>
-
-      <!-- TODO: Bind indicators -->
-      <div class="indicators">
-        <indicator v-for="(indicator, index) in 2" :key="index" :indicator="{}"/>
       </div>
 
       <inventory @selectModel="onSelectModel"/>
@@ -46,8 +42,8 @@ import Loader from '../components/Loader.vue';
 import Scene from '../components/game/Scene.vue';
 import Tutorial from '../components/game/Tutorial.vue';
 import Countdown from '../components/game/Countdown.vue';
-import MetricList from '../components/game/MetricList.vue';
-import Indicator from '../components/game/Indicator.vue';
+import GaugeList from '../components/game/GaugeList.vue';
+import IndicatorList from '../components/game/IndicatorList.vue';
 import Inventory from '../components/game/Inventory.vue';
 import Settings from '../components/game/Settings.vue';
 import YearsCounter from '../components/game/YearsCounter.vue';
@@ -56,9 +52,9 @@ export default {
   components: {
     YearsCounter,
     Settings,
-    Indicator,
+    GaugeList,
+    IndicatorList,
     Scene,
-    MetricList,
     Inventory,
     Loader,
     Tutorial,
@@ -71,6 +67,8 @@ export default {
       showSettings: false,
       currentModel: null,
       currentCategory: null,
+      gauges: null,
+      indicators: null,
     };
   },
 
@@ -83,6 +81,17 @@ export default {
           rotation: new THREE.Euler(item.rotation._x, item.rotation._y, item.rotation._z),
         });
       }
+    },
+
+    'timeline:tick': function ({ metrics }) {
+      // TODO: Improve performance
+      this.gauges = metrics.filter((metric) => {
+        return this.$game.player.role.gauges.indexOf(metric.slug) >= 0;
+      });
+
+      this.indicators = metrics.filter((metric) => {
+        return this.$game.player.role.indicators.indexOf(metric.slug) >= 0;
+      });
     },
 
     'game:start': function ({ startedAt }) {
@@ -194,20 +203,20 @@ export default {
       position: absolute;
     }
 
-    .metric-list {
+    .gauge-list {
       top: 0;
       left: 0;
+    }
+
+    .indicator-list {
+      top: 0;
+      right: 0;
     }
 
     .years-counter {
       top: 0;
       left: 50%;
       transform: translateX(-50%);
-    }
-
-    .indicators {
-      top: 0;
-      right: 0;
     }
 
     .inventory {
