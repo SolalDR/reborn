@@ -14,10 +14,7 @@
     <countdown v-if="status === 'initializing'"/>
 
     <div class="game__interface" v-if="interfaceVisible">
-      <!-- TODO: Bind metrics -->
-      <div class="metrics">
-        <metric v-for="(metric, index) in 2" :key="index" :metric="{}"/>
-      </div>
+      <metric-list />
 
       <!-- TODO: Bind currentYear value -->
       <div class="years-counter">
@@ -49,7 +46,7 @@ import Loader from '../components/Loader.vue';
 import Scene from '../components/game/Scene.vue';
 import Tutorial from '../components/game/Tutorial.vue';
 import Countdown from '../components/game/Countdown.vue';
-import Metric from '../components/game/Metric.vue';
+import MetricList from '../components/game/MetricList.vue';
 import Indicator from '../components/game/Indicator.vue';
 import Inventory from '../components/game/Inventory.vue';
 import Settings from '../components/game/Settings.vue';
@@ -61,7 +58,7 @@ export default {
     Settings,
     Indicator,
     Scene,
-    Metric,
+    MetricList,
     Inventory,
     Loader,
     Tutorial,
@@ -197,7 +194,7 @@ export default {
       position: absolute;
     }
 
-    .metrics {
+    .metric-list {
       top: 0;
       left: 0;
     }
