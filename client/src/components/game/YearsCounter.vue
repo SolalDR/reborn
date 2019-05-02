@@ -15,5 +15,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .years-counter {}
+.years-counter {
+
+}
 </style>

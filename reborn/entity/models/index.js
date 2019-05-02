@@ -1,17 +1,17 @@
-import central from "./central";
+import factory from "./factory";
 import cinema from "./cinema";
 import farm from "./farm";
-import flour from "./flour";
+import flower from "./flower";
 import garbage from "./garbage";
 import house from "./house";
 import rock from "./rock";
 import tree from "./tree";
 
 export default [
-  central,
+  factory,
   cinema,
   farm,
-  flour,
+  flower,
   garbage,
   house,
   rock,
