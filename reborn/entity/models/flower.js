@@ -1,8 +1,8 @@
 export default {
-  slug: "tree",
-  category: "tree",
+  slug: "flour",
+  category: "plant",
   color: "#00FF00",
-  name: "Arbre",
+  name: "Fleur",
   role: "nature",
   states: {
     creation: {
@@ -22,14 +22,6 @@ export default {
         }
       ]
     },
-    destruction: {
-      leaveModifiers: [
-        {
-          name: 'money',
-          value: 100
-        }
-      ]
-    }
   }
 }
 

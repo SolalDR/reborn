@@ -20,13 +20,17 @@ export default class Game extends Reborn.Game {
       interval: 250,
     });
 
+    var timeRatio = 250/1000;
+
+
     var metricsMap = Array.from(this.metrics.values());
     this.timeline.on('tick', () => {
       this.metrics.forEach(metric => {
-        metric.value += metric.recurentOperation;
+        metric.value += metric.recurentOperation * timeRatio;
       });
       this.emit('tick', {
-        metrics: metricsMap.map(m => m.infos)
+        metrics: metricsMap.map(m => m.infos),
+        elapsed: Date.now() - this.startedAt
       });
     })
   }
@@ -41,9 +45,13 @@ export default class Game extends Reborn.Game {
   }
 
   start() {
-    this.timeline.start();
     super.start();
-    console.log('game:start')
+    this.startedAt = Date.now() + 7000;
+
+    var timeout = this.startedAt - Date.now();
+    setTimeout(() => {
+      this.timeline.start();
+    }, timeout);
   }
 
   assignRoles(){

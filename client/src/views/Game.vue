@@ -7,27 +7,22 @@
       <loader v-if="status === 'loading'"/>
     </transition>
 
-    <transition>
+    <transition name="fade">
       <tutorial v-if="status === 'pending'" @start="onPlayerReady"/>
     </transition>
 
+    <countdown v-if="status === 'initializing'"/>
+
     <div class="game__interface" v-if="interfaceVisible">
-      <!-- TODO: Bind metrics -->
-      <div class="metrics">
-        <metric v-for="(metric, index) in 2" :key="index" :metric="{}"/>
-      </div>
+      <gauge-list :list="this.gauges"/>
+      <indicator-list :list="this.indicators"/>
 
       <!-- TODO: Bind currentYear value -->
       <div class="years-counter">
-        <years-counter :currentYear="75"/>
+        <years-counter :currentYear="year"/>
       </div>
 
-      <!-- TODO: Bind indicators -->
-      <div class="indicators">
-        <indicator v-for="(indicator, index) in 2" :key="index" :indicator="{}"/>
-      </div>
-
-      <inventory />
+      <inventory @selectModel="onSelectModel"/>
 
       <div @click="showSettings = true" class="settings-cta">
         Settings
@@ -46,8 +41,9 @@ import Reborn from '../game';
 import Loader from '../components/Loader.vue';
 import Scene from '../components/game/Scene.vue';
 import Tutorial from '../components/game/Tutorial.vue';
-import Metric from '../components/game/Metric.vue';
-import Indicator from '../components/game/Indicator.vue';
+import Countdown from '../components/game/Countdown.vue';
+import GaugeList from '../components/game/GaugeList.vue';
+import IndicatorList from '../components/game/IndicatorList.vue';
 import Inventory from '../components/game/Inventory.vue';
 import Settings from '../components/game/Settings.vue';
 import YearsCounter from '../components/game/YearsCounter.vue';
@@ -56,18 +52,24 @@ export default {
   components: {
     YearsCounter,
     Settings,
-    Indicator,
+    GaugeList,
+    IndicatorList,
     Scene,
-    Metric,
     Inventory,
     Loader,
     Tutorial,
+    Countdown,
   },
 
   data() {
     return {
       status: null, // null => loading => pending => initializing => playing
       showSettings: false,
+      currentModel: null,
+      currentCategory: null,
+      gauges: null,
+      indicators: null,
+      year: 0,
     };
   },
 
@@ -82,18 +84,37 @@ export default {
       }
     },
 
+    'timeline:tick': function ({ metrics, elapsed }) {
+      // TODO: Improve performance
+      this.gauges = metrics.filter((metric) => {
+        return this.$game.player.role.gauges.indexOf(metric.slug) >= 0;
+      });
+
+      this.indicators = metrics.filter((metric) => {
+        return this.$game.player.role.indicators.indexOf(metric.slug) >= 0;
+      });
+
+      this.year = Math.floor(elapsed / 1000); // One year per second
+    },
+
     'game:start': function ({ startedAt }) {
       const now = Date.now();
       const timeout = startedAt - now;
 
+      this.gauges = this.$game.player.role.gauges.map((gauge) => {
+        return this.$game.metrics.get(gauge).infos;
+      });
+
+      this.indicators = this.$game.player.role.indicators.map((indicator) => {
+        return this.$game.metrics.get(indicator).infos;
+      });
+
       setTimeout(() => {
         this.status = 'initializing';
-        console.log('initializing');
       }, Math.max(0, timeout - 5000));
 
       setTimeout(() => {
         this.status = 'playing';
-        console.log('playing');
       }, Math.max(0, timeout + 1));
     },
   },
@@ -156,12 +177,18 @@ export default {
       }
     },
 
+    onSelectModel(model) {
+      if (model) {
+        this.currentModel = model;
+      }
+    },
+
     onWebGLInit() {
       this.status = 'pending';
       this.$webgl.on('addItem', (item) => {
         this.$socket.emit('entity:add', {
           ...item,
-          model: 'house',
+          model: this.currentModel.slug,
         });
       });
     },
@@ -181,30 +208,26 @@ export default {
   overflow: hidden;
 
   &__interface {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    position: static;
 
     & > div {
       position: absolute;
     }
 
-    .metrics {
+    .gauge-list {
       top: 0;
       left: 0;
+    }
+
+    .indicator-list {
+      top: 0;
+      right: 0;
     }
 
     .years-counter {
       top: 0;
       left: 50%;
       transform: translateX(-50%);
-    }
-
-    .indicators {
-      top: 0;
-      right: 0;
     }
 
     .inventory {

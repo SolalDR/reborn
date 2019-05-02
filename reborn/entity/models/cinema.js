@@ -1,14 +1,14 @@
 export default {
-  slug: "farm",
-  category: "alimentation",
-  name: "Ferme",
+  slug: "cinema",
+  category: "satisfaction",
+  name: "Cinéma",
   role: 'city',
   states: {
     creation: {
       enterModifiers: [
         {
           name: 'money',
-          value: -4000,
+          value: -2000,
           checkConstraint: true
         }
       ]
@@ -16,13 +16,9 @@ export default {
     mounted: {
       recurModifiers: [
         {
-          name: 'alimentation',
-          value: 3
+          name: 'satisfaction',
+          value: 1
         },
-        {
-          name: 'purity',
-          value: -1
-        }
       ]
     },
   }

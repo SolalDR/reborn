@@ -4,70 +4,56 @@
       <category v-for="(category, index) in categories"
         :key="`category-${index}`"
         :category="{index: index, ...category}"
-        @setCurrentCategory="setCurrentCategory"
-        :class="{'category--current': index === currentCategory}"/>
+        @setCurrentCategory="setCurrentCategory(category)"
+        :class="{'category--current': category.slug === currentCategory.slug}"/>
     </div>
 
-    <div class="entities">
-      <entity v-for="(entity, index) in entities"
-        :key="`entity-${index}`"
-        :entity="{index: index, ...entity}"
-        @setCurrentEntity="setCurrentEntity"
-        :class="{'entity--current': index === currentEntity}"/>
+    <div class="models">
+      <model v-for="(model, index) in models"
+        :key="`model-${index}`"
+        :model="{index: index, ...model}"
+        @setCurrentModel="setCurrentModel(model)"
+        :class="{'model--current': model.name === currentModel.name}"/>
     </div>
   </div>
 </template>
 
 <script>
-import Entity from './Entity.vue';
+import Model from './Model.vue';
 import Category from './Category.vue';
+import Reborn from '../../game';
 
 export default {
   data() {
     return {
-      // Category
       currentCategory: 0,
-      categories: [{
-        name: 'Category 1',
-      },
-      {
-        name: 'Category 2',
-      },
-      {
-        name: 'Category 3',
-      },
-      {
-        name: 'Category 4',
-      }],
-      // Entity
-      currentEntity: 0,
-      entities: [
-        {
-          name: 'Entity 1',
-        },
-        {
-          name: 'Entity 2',
-        },
-        {
-          name: 'Entity 3',
-        },
-        {
-          name: 'Entity 4',
-        },
-      ],
+      categories: [],
+      currentModel: 0,
+      models: [],
     };
   },
 
   components: {
     Category,
-    Entity,
+    Model,
   },
 
   mounted() {
     this.$bus.$on('shortcut', (key) => {
-      this.categoriesShortcuts(key);
-      this.entitiesShortcuts(key);
+      // this.categoriesShortcuts(key);
+      // this.entitiesShortcuts(key);
     });
+
+    this.categories = [];
+    Object.keys(Reborn.categories).forEach((key) => {
+      const category = Reborn.categories[key];
+      if (category.role === this.$game.player.role.name) {
+        this.categories.push(category);
+      }
+    });
+
+    this.setCurrentCategory(this.categories[0]);
+    this.setCurrentModel(this.models[0]);
   },
 
   methods: {
@@ -88,13 +74,19 @@ export default {
       if (entityIndex >= 0) this.setCurrentEntity(entityIndex);
     },
 
-    setCurrentCategory(index) {
-      this.currentCategory = index;
+    setCurrentCategory(category) {
+      this.currentCategory = category;
+      this.models = [];
+      this.models = Reborn.models.filter((model) => {
+        return model.role === this.$game.player.role.name
+          && model.category === this.currentCategory.slug;
+      });
+      this.$emit('selectCategory', this.currentCategory);
     },
 
-    setCurrentEntity(index) {
-      // TODO: Update 3D asset
-      this.currentEntity = index;
+    setCurrentModel(model) {
+      this.currentModel = model;
+      this.$emit('selectModel', this.currentModel);
     },
   },
 };
@@ -115,7 +107,7 @@ export default {
     transform: translateY(-100%);
   }
 
-  .entities {
+  .models {
     @include useFlex(space-between);
   }
 }

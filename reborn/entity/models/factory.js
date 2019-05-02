@@ -1,14 +1,14 @@
 export default {
-  slug: "farm",
-  category: "alimentation",
-  name: "Ferme",
+  slug: "factory",
+  category: "energy",
+  name: "Usine",
   role: 'city',
   states: {
     creation: {
       enterModifiers: [
         {
           name: 'money',
-          value: -4000,
+          value: -10000,
           checkConstraint: true
         }
       ]
@@ -16,15 +16,23 @@ export default {
     mounted: {
       recurModifiers: [
         {
-          name: 'alimentation',
-          value: 3
+          name: 'energy',
+          value: 4
         },
         {
           name: 'purity',
-          value: -1
+          value: -2
         }
       ]
     },
+    destruction: {
+      leaveModifiers: [
+        {
+          name: 'money',
+          value: 3000
+        }
+      ]
+    }
   }
 }
 
