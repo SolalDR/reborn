@@ -1,28 +1,32 @@
 import Emitter from '../../../../reborn/utils/Emitter';
-import constraints from "./list"
+import Constraint from './Constraint';
+import constraints from "./list";
 
+/**
+ * @extends Emitter
+ * @class ConstraintManager
+ */
 class ConstraintManager extends Emitter {
   constructor({
     game = null
   }) {
     super();
     this.game = game;
-    this.constraintMetrics = constraints.map(constraint => constraint.metrics)
+    this.constraints = new Map();
+    constraints.forEach(constraint => {
+      this.constraints.set(constraint.slug,  new Constraint(constraint));
+    });
   }
 
+  /**
+   * Check all the constraint, this method is called in the timeline:tick
+   */
   checkConstraints({
     metrics = null
   }) {
-    this.constraintMetrics.forEach(constraint => {
-      console.log('CONSTRAINTS METRICS');
-      console.log(constraint);
-
-      // constraint.metrics.forEach(constraintMetrics => {
-        // console.log(metrics.filter(metric => metric.slug === constraintMetrics.slug && metric.value < 20));
-      // });
+    this.constraints.forEach(constraint => {
+      constraint.check(this.game);
     });
-
-    // TODO: Emit 'constraint:validated' once
   }
 
   get infos(){

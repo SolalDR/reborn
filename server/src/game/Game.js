@@ -26,7 +26,6 @@ export default class Game extends Reborn.Game {
     // ConstraintManager
     this.constraintManager = new ConstraintManager({
       game: this
-      // TODO: Bind constraints
     });
 
     // NotificationManager
@@ -39,6 +38,8 @@ export default class Game extends Reborn.Game {
     // Tick
     const metricsMap = Array.from(this.metrics.values());
     this.timeline.on('tick', ()=>{
+      this.constraintManager.checkConstraints();
+
       this.metrics.forEach(metric => {
         metric.value += metric.recurentOperation;
       });
