@@ -1,5 +1,5 @@
 export default {
-  slug: "flour",
+  slug: "flower",
   category: "plant",
   color: "#00FF00",
   name: "Fleur",

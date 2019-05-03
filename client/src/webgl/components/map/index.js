@@ -37,7 +37,9 @@ export default class GameMap extends THREE.Group {
     this.initCastEvent();
     this.initWater();
     this.initFloor(geometry);
-    this.displayPlayground();
+
+    // TODO: Add in config
+    // this.displayPlayground();
   }
 
   /**

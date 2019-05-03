@@ -47,6 +47,7 @@ class Grid extends Reborn.Grid {
       yPeer && (point.z + this.size[1] / 2) % 1 > 0.5 ? 1 : 0
     );
 
+
     this.box.max.x = this.box.min.x + scale.x - 1;
     this.box.max.y = this.box.min.y + scale.y - 1;
 
