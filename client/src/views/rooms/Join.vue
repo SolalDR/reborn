@@ -14,7 +14,8 @@ export default {
       this.$store.commit('setPlayer', playerId);
       this.$store.commit('setRoom', verifiedRoomId);
     },
-    'game:create': function () {
+    'game:create': function (game) {
+      this.$store.commit('setGame', game);
       const roomId = this.$router.history.current.params.id;
       this.$router.push({
         name: 'game',

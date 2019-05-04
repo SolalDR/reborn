@@ -1,6 +1,5 @@
 <template>
   <main class="game">
-
     <scene @mounted="onWebGLInit"/>
 
     <transition name="fade">
@@ -49,6 +48,7 @@ import Settings from '../components/game/Settings.vue';
 import YearsCounter from '../components/game/YearsCounter.vue';
 
 export default {
+  name: 'Game',
   components: {
     YearsCounter,
     Settings,
