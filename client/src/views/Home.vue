@@ -14,13 +14,15 @@
           <div class="actions__item">
             <button class="cta--bordered" @click="createRoom">Challenger un ami</button>
 
-            <div class="invite-link" v-if="roomId">
-              <p class="room-id cta--bordered">{{ roomId }}</p>
+            <transition name="fade">
+              <div class="invite-link" v-if="roomId">
+                <p class="room-id cta--bordered">{{ roomId }}</p>
 
-              <div class="copy-to-clipboard" @click="copyToClipboard">
-                <img src="@/assets/icons/home/copy-to-clipboard.svg" alt="Copier le lien">
+                <div class="copy-to-clipboard" @click="copyToClipboard">
+                  <img src="@/assets/icons/home/copy-to-clipboard.svg" alt="Copier le lien">
+                </div>
               </div>
-            </div>
+            </transition>
           </div>
         </div>
       </div>
@@ -105,14 +107,19 @@ export default {
       }
 
       .actions {
+        position: relative;
         @include useFlex(space-between, flex-start);
         margin: 7rem auto 0;
         width: 61rem;
 
         .invite-link {
-          position: relative;
+          position: absolute;
+          bottom: -6rem;
+          right: 0;
 
           .room-id {
+            cursor: default;
+            margin: 0;
             border: none;
             text-align: center;
 
@@ -122,13 +129,15 @@ export default {
           }
 
           .copy-to-clipboard {
+            $size: 3.6rem;
+
             cursor: pointer;
             @include useFlex();
             position: absolute;
-            bottom: -1.8rem;
-            right: -1.8rem;
-            width: 3.6rem;
-            height: 3.6rem;
+            bottom: -$size / 2;
+            right: -$size / 2;
+            width: $size;
+            height: $size;
             background-color: getColor(basics, white);
             border: 1px solid getColor(basics, black);
             border-radius: 50%;
