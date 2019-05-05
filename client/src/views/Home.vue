@@ -149,8 +149,10 @@ export default {
     .about__cta {
       z-index: 1;
       position: fixed;
-      bottom: 3rem;
+      top: 3rem;
       right: 3rem;
+      text-transform: uppercase;
+      @include fontSize(24);
     }
   }
 </style>

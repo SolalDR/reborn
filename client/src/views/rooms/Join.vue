@@ -1,12 +1,4 @@
-<template>
-  <div>
-    <p>{{msg}}</p>
-  </div>
-</template>
-
 <script>
-
-
 export default {
   name: 'RoomJoin',
   sockets: {
@@ -34,10 +26,7 @@ export default {
     const roomId = this.$router.history.current.params.id;
 
     this.$socket.emit('room:join', roomId);
-    this.msg = `Joined ${roomId}`;
+    this.msg = `Joining ${roomId}...`;
   },
 };
 </script>
-
-<style scoped lang="scss">
-</style>

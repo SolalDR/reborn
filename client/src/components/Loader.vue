@@ -14,21 +14,16 @@
 
 <style lang="scss">
 .loader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background: white;
-  z-index: 999;
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
   font-weight: bold;
+
   p {
     font-size: 4rem;
     margin: 2rem;
+
     span {
       display: inline-block;
       animation: {
