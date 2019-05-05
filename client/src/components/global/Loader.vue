@@ -8,9 +8,21 @@
       <span>R</span>
       <span>N</span>
     </p>
-    <span>is loading</span>
+    <span>{{ text }}</span>
   </div>
 </template>
+
+<script>
+export default {
+  name: 'loader',
+  props: {
+    text: {
+      type: String,
+      default: 'is loading...',
+    },
+  },
+};
+</script>
 
 <style lang="scss">
 .loader {

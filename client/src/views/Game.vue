@@ -40,7 +40,7 @@
 <script>
 import Vue from 'vue';
 import Reborn from '../game';
-import Loader from '../components/Loader.vue';
+import Loader from '../components/global/Loader.vue';
 import Scene from '../components/game/Scene.vue';
 import Introduction from '../components/game/Introduction.vue';
 import Countdown from '../components/game/Countdown.vue';

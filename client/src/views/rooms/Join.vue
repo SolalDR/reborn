@@ -1,6 +1,19 @@
+<template>
+  <div class="join">
+    <loader :text="`Joining ${$router.history.current.params.id}...`"/>
+  </div>
+</template>
+
 <script>
+import Loader from '../../components/global/Loader'
+import Overlay from "../../components/global/Overlay";
+
 export default {
   name: 'RoomJoin',
+  components: {
+    Overlay,
+    Loader
+  },
   sockets: {
     'room:connect': function ({ playerId, verifiedRoomId }) {
       this.$store.commit('setPlayer', playerId);
@@ -30,3 +43,10 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+  .join {
+    @include useFlex();
+    height: 100vh;
+  }
+</style>
