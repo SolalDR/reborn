@@ -1,17 +1,20 @@
 <template>
   <main class="game">
-
     <scene @mounted="onWebGLInit"/>
 
     <transition name="fade">
-      <loader v-if="status === 'loading'"/>
-    </transition>
+      <overlay v-if="showOverlay">
+        <transition name="fade">
+          <loader v-if="status === 'loading'"/>
+        </transition>
 
-    <transition name="fade">
-      <tutorial v-if="status === 'pending'" @start="onPlayerReady"/>
-    </transition>
+        <transition name="fade">
+          <introduction v-if="status === 'pending'" @start="onPlayerReady"/>
+        </transition>
 
-    <countdown v-if="status === 'initializing'"/>
+        <countdown v-if="status === 'initializing'"/>
+      </overlay>
+    </transition>
 
     <div class="game__interface" v-if="interfaceVisible">
       <gauge-list :list="this.gauges"/>
@@ -31,25 +34,27 @@
         <settings v-if="showSettings" @closeSettings="showSettings = false"/>
       </transition>
     </div>
-
   </main>
 </template>
 
 <script>
 import Vue from 'vue';
 import Reborn from '../game';
-import Loader from '../components/Loader.vue';
+import Loader from '../components/global/Loader.vue';
 import Scene from '../components/game/Scene.vue';
-import Tutorial from '../components/game/Tutorial.vue';
+import Introduction from '../components/game/Introduction.vue';
 import Countdown from '../components/game/Countdown.vue';
 import GaugeList from '../components/game/GaugeList.vue';
 import IndicatorList from '../components/game/IndicatorList.vue';
 import Inventory from '../components/game/Inventory.vue';
 import Settings from '../components/game/Settings.vue';
 import YearsCounter from '../components/game/YearsCounter.vue';
+import Overlay from "../components/global/Overlay";
 
 export default {
+  name: 'Game',
   components: {
+    Overlay,
     YearsCounter,
     Settings,
     GaugeList,
@@ -57,13 +62,14 @@ export default {
     Scene,
     Inventory,
     Loader,
-    Tutorial,
+    Introduction,
     Countdown,
   },
 
   data() {
     return {
       status: null, // null => loading => pending => initializing => playing
+      showOverlay: true,
       showSettings: false,
       currentModel: null,
       currentCategory: null,
@@ -114,6 +120,7 @@ export default {
       }, Math.max(0, timeout - 5000));
 
       setTimeout(() => {
+        this.showOverlay = false;
         this.status = 'playing';
       }, Math.max(0, timeout + 1));
     },
@@ -146,8 +153,7 @@ export default {
 
   computed: {
     interfaceVisible() {
-      return this.status === 'initializing'
-        || this.status === 'playing';
+      return this.status === 'playing';
     },
   },
 
