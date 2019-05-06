@@ -1,5 +1,6 @@
 <template>
   <div class="countdown">
+    <p class="countdown__title">Création du terrain...</p>
     <p class="countdown__count">{{ countdown }}</p>
   </div>
 </template>
@@ -31,11 +32,10 @@ export default {
     const interval = setInterval(() => {
       this.countdown--;
       if (this.countdown === 0) {
-        this.$emit('finish');
         clearInterval(interval);
       }
-    }, 1000)
-  }
+    }, 1000);
+  },
 };
 </script>
 
@@ -52,8 +52,12 @@ export default {
   justify-content: center;
   text-align: center;
 
+  &__title {
+    font-size: 3.6rem;
+  }
+
   &__count {
-    font-size: 4rem;
+    font-size: 9.6rem;
   }
 }
 </style>

@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
+import About from './views/About';
+
 import adminRoutes from './admin/routes';
 
 Vue.use(Router);
@@ -14,9 +16,9 @@ export default new Router({
       component: Home,
     },
     {
-      path: '/rooms/create',
-      name: 'create-room',
-      component: () => import('./views/rooms/Create.vue'),
+      path: '/about',
+      name: 'about',
+      component: About,
     },
     {
       path: '/rooms/:id/join',

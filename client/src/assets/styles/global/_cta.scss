@@ -1,0 +1,27 @@
+@mixin cta-properties {
+  outline: none;
+  cursor: pointer;
+  padding: 0;
+  color: getColor(basics, black);
+  @include fontSize(20);
+  font-weight: bold;
+  border: none;
+}
+
+.cta {
+  @include cta-properties;
+}
+
+.cta--bordered {
+  @include cta-properties;
+  padding: 1.2rem;
+  width: 27rem;
+  background-color: getColor(basics, white);
+  border: .2rem solid getColor(basics, black);
+  border-radius: 1rem;
+  transition: all .3s ease;
+
+  &:hover {
+    box-shadow: 3px 3px 0px 0px rgba(0,0,0,1);
+  }
+}
