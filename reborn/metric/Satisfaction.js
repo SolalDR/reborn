@@ -5,7 +5,7 @@ import Metric from "./Metric";
  * @extends Metric
  */
 export default class Satisfaction extends Metric {
-  constructor(){
+  constructor() {
     super({
       name: "Satisfaction",
       min: 0,

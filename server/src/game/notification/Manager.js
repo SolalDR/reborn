@@ -1,26 +1,33 @@
 import notifications from './list';
 import Notification from './Notification';
+import Emitter from "@solaldr/emitter"
 
-class NotificationManager {
+class NotificationManager extends Emitter {
   constructor({
-    socket = null
-  }) {
-    this.socket = socket;
+    game = null,
+  } = {}) {
+    super();
     this.notifications = [];
-    notifications.forEach(notification => {
-      this.notifications.push(new Notification(notification));
+    notifications.forEach(notif => {
+
+      const constraint = game.constraintManager.get(notif.constraint);
+      console.log(constraint);
+      const notification = new Notification({
+        ...notif,
+        constraint
+      });
+
+      notification.on('send', (message) => {
+        console.log('manager send notification');
+        this.emit('notification:send', message);
+      })
+
+      this.notifications.push(notification);
     });
   }
 
-  triggerNotification(notification) {
-    this.socket.emit('notification:trigger', notification);
-    console.log('TRIGGER:', notification);
-  }
-
   get infos(){
-    return {
-      socket: this.socket
-    };
+    return {};
   }
 }
 

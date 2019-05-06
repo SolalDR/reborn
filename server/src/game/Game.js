@@ -29,11 +29,9 @@ export default class Game extends Reborn.Game {
     });
 
     // NotificationManager
-    // TODO: Start listening this.constraintManager events
     this.notificationManager = new NotificationManager({
-      socket: this.socket
+      game: this,
     });
-    this.initNotificationListener();
 
     // Tick
     const metricsMap = Array.from(this.metrics.values());
@@ -45,10 +43,6 @@ export default class Game extends Reborn.Game {
       });
 
       this.emit('tick', {
-        metrics: metricsMap.map(m => m.infos)
-      });
-
-      this.constraintManager.checkConstraints({
         metrics: metricsMap.map(m => m.infos)
       });
     })
@@ -70,9 +64,5 @@ export default class Game extends Reborn.Game {
 
     const playerCity = playersList.find(p => p.id !== playerNature.id);
     playerCity.assignRole(Reborn.CityRole);
-  }
-
-  initNotificationListener() {
-    // TODO: Listen to events from this.constraintManager
   }
 }

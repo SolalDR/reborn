@@ -1,18 +1,60 @@
+import Emitter from "@solaldr/emitter";
+
 /**
  * Represent a notification
  * @param {string} id
  */
-class Notification {
+class Notification extends Emitter {
+
+  /**
+   * @constructor
+   */
   constructor({
-    name = null,
-    content = null,
-    targetRole = null,
-    constraints = {}
-  }) {
-    this.name = name;
-    this.content = content;
-    this.targetRole = targetRole;
-    this.constraints = constraints
+    constraint = null,
+    regularOrder = true,
+    role = null,
+    messages = [],
+  } = {}) {
+    super();
+    this.constraint = constraint;
+    this.regularOrder = regularOrder;
+    this.role = role;
+    this.messages = messages.map(message => {
+      return {
+        count: 0,
+        repeat: null,
+        ...message,
+      }
+    });
+
+    this.initEvents();
+  }
+
+  initEvents() {
+    this.constraint.on('change', ({ regularOrder }) => {
+      if (regularOrder === this.regularOrder) {
+        const message = this.selectNextMessage();
+        if (message) {
+          this.emit('send', message);
+        }
+      }
+    })
+  }
+
+  selectNextMessage() {
+    var minCount = Infinity;
+    this.messages.forEach(message => {
+      if (message.count < minCount) {
+        minCount = message.count;
+      }
+    });
+
+    var availables = this.messages.filter(message => {
+      return message.count === minCount && (!message.repeat || message.count < message.repeat);
+    })
+
+    var message = availables[Math.floor(Math.random()*availables.length)];
+    return message ? message : null;
   }
 
   /**

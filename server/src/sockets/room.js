@@ -15,7 +15,6 @@ export default {
   },
 
   join(roomId){
-    console.log(this.id, 'joined', roomId)
     const socketRooms = process.io.sockets.adapter.rooms
 
     // If creating the room

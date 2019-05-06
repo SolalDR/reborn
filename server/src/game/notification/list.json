@@ -1,10 +1,10 @@
 [
   {
-    "constraint": "notification-1",
-    "order": "regular",
+    "constraint": "money-low",
+    "regularOrder": false,
     "role": "city",
     "stacks": [],
-    "choices": [
+    "messages": [
       {
         "name": "Notification 1",
         "content": "Texte de la notification 1",

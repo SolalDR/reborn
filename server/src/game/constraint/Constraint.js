@@ -1,3 +1,5 @@
+import Emitter from "@solaldr/emitter";
+
 class Constraint extends Emitter {
   constructor({
     slug = null,
@@ -10,11 +12,11 @@ class Constraint extends Emitter {
     this.value = null;
   }
 
-  check(game) {
+  check(game, discret = false) {
     var newValue = this.test(game);
     this.changed = (this.value === newValue) ? false : true;
     this.value = newValue;
-    if(this.changed) {
+    if(this.changed && !discret) {
       this.emit('change', {
         regularOrder: this.value
       });
