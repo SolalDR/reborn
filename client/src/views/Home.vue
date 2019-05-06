@@ -90,6 +90,7 @@ export default {
     height: 100vh;
 
     .trailer {
+      object-fit: cover;
       z-index: 0;
       position: absolute;
       min-width: 100vw;
