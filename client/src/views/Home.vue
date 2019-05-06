@@ -92,7 +92,8 @@ export default {
     .trailer {
       z-index: 0;
       position: absolute;
-      width: 100vw;
+      min-width: 100vw;
+      min-height: 100vh;
     }
 
     &__content {
