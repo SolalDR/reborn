@@ -11,7 +11,7 @@ export default class Money extends Metric {
       min: 0,
       max: Infinity,
       value: 10000,
-      recurentOperation: 0,
+      recurentOperation: -200,
       inclusiveSet: false,
     })
   }

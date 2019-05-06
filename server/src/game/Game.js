@@ -1,4 +1,7 @@
 import * as Reborn from "../../../reborn";
+
+import ConstraintManager from './constraint/Manager';
+import NotificationManager from './notification/Manager';
 import World from "./World";
 import Timeline from "./timeline/Timeline"
 
@@ -20,14 +23,25 @@ export default class Game extends Reborn.Game {
       interval: 250,
     });
 
+    // ConstraintManager
+    this.constraintManager = new ConstraintManager({
+      game: this
+    });
+
+    // NotificationManager
+    this.notificationManager = new NotificationManager({
+      game: this,
+    });
+
     var timeRatio = 250/1000;
-
-
-    var metricsMap = Array.from(this.metrics.values());
+    const metricsMap = Array.from(this.metrics.values());
     this.timeline.on('tick', () => {
+      this.constraintManager.checkConstraints();
+
       this.metrics.forEach(metric => {
         metric.value += metric.recurentOperation * timeRatio;
       });
+
       this.emit('tick', {
         metrics: metricsMap.map(m => m.infos),
         elapsed: Date.now() - this.startedAt

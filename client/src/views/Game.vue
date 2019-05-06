@@ -117,6 +117,10 @@ export default {
         this.status = 'playing';
       }, Math.max(0, timeout + 1));
     },
+
+    'notification:send': function (event) {
+      console.log(event);
+    },
   },
 
   created() {
