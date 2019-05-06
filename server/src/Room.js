@@ -56,7 +56,7 @@ export default class Room extends Emitter {
     this.players.forEach((player) => {
       if(!player.ready) ready = false;
     })
-    console.log('check player ready:', ready);
+
     return ready;
   }
 

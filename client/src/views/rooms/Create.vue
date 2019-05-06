@@ -30,10 +30,12 @@ export default {
   },
   sockets: {
     'room:connect': function ({ playerId, verifiedRoomId }) {
+      this.$store.commit('debug/log', { content: 'room:connect (receive)', label: 'socket' });
       this.$store.commit('setPlayer', playerId);
       this.$store.commit('setRoom', verifiedRoomId);
     },
     'game:create': function () {
+      this.$store.commit('debug/log', { content: 'game:create (receive)', label: 'socket' });
       const roomId = this.$refs.roomIdInput.value;
       this.$router.push({
         name: 'game',
@@ -48,6 +50,7 @@ export default {
       const roomId = this.$refs.roomIdInput.value;
       if (roomId) {
         this.$socket.emit('room:join', roomId);
+        this.$store.commit('debug/log', { content: 'room:join (emit)', label: 'socket' });
         this.inviteLink = `${window.location.origin}#/rooms/${roomId}/join`;
       } else {
         this.errorMsg = 'Empty room - Please enter valid ID';

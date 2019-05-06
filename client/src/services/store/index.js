@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import adminStore from '../../admin/store';
+import debugStore from './debug';
 
 Vue.use(Vuex);
 
@@ -27,5 +28,6 @@ export default new Vuex.Store({
   },
   modules: {
     admin: adminStore,
+    debug: debugStore,
   },
 });

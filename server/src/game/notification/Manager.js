@@ -11,14 +11,12 @@ class NotificationManager extends Emitter {
     notifications.forEach(notif => {
 
       const constraint = game.constraintManager.get(notif.constraint);
-      console.log(constraint);
       const notification = new Notification({
         ...notif,
         constraint
       });
 
       notification.on('send', (message) => {
-        console.log('manager send notification');
         this.emit('notification:send', message);
       })
 

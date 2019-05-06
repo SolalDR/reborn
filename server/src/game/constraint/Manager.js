@@ -17,7 +17,6 @@ class ConstraintManager extends Emitter {
       this.constraints.set(constraint.slug,  new Constraint(constraint));
     });
 
-    // console.log(this.constraints);
     this.checkConstraints(true);
   }
 

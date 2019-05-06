@@ -26,13 +26,10 @@ export default class FilmEffect extends Effect {
   } = {}) {
     super('FilmEffect', fragment, {
       blendFunction,
-      // attributes: EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH,
       uniforms: new Map([
         ['intensity', new Uniform(intensity)],
         ['offset', new Uniform(offset)],
       ]),
     });
-
-    // console.log(EffectAttribute.CONVOLUTION);
   }
 }

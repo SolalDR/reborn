@@ -50,13 +50,10 @@ class Grid extends Reborn.Grid {
     this.box.max.x = this.box.min.x + scale.x - 1;
     this.box.max.y = this.box.min.y + scale.y - 1;
 
-    // console.log(cell);
-
     const distance = new THREE.Vector2().copy(this.box.max).sub(this.box.min).addScalar(1);
 
     for (let i = 0; i < distance.x; i++) {
       for (let j = 0; j < distance.y; j++) {
-        // console.log(cell, this.get(cell, { x: this.box.min.x, y: this.box.min.y }));
         if (!this.get({ x: this.box.min.x + i, y: this.box.min.y + j })) {
           return false;
         }

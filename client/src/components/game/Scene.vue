@@ -13,7 +13,6 @@ export default {
       console.warn('Scene.vue: Already a webgl context in vue prototype');
     }
 
-    console.log(this.$game);
     // Init webgl
     Vue.prototype.$webgl = new WebGL({
       canvas: this.$el,

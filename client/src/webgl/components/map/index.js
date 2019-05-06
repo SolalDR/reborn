@@ -100,7 +100,6 @@ export default class GameMap extends THREE.Group {
     for (let i = 0; i < this.grid.size[0]; i++) {
       for (let j = 0; j < this.grid.size[1]; j++) {
         const cell = this.grid.get({ x: i, y: j });
-        // console.log(cell);
 
         if (cell) {
           const mesh = new THREE.Mesh(geo, mat);

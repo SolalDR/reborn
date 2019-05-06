@@ -75,6 +75,7 @@ export default {
 
   sockets: {
     'entity:add': function (item) {
+      this.$store.commit('debug/log', { content: 'entity:add (receive)', label: 'socket' });
       const cluster = this.$webgl.clusters[item.model];
       if (cluster) {
         cluster.addItem({
@@ -85,7 +86,8 @@ export default {
     },
 
     'timeline:tick': function ({ metrics, elapsed }) {
-      // TODO: Improve performance
+      this.$store.commit('debug/log', { content: 'timeline:tick (receive)', label: 'socket' });
+
       this.gauges = metrics.filter((metric) => {
         return this.$game.player.role.gauges.indexOf(metric.slug) >= 0;
       });
@@ -98,6 +100,8 @@ export default {
     },
 
     'game:start': function ({ startedAt }) {
+      this.$store.commit('debug/log', { content: 'game:start (receive)', label: 'socket' });
+
       const now = Date.now();
       const timeout = startedAt - now;
 
@@ -110,16 +114,18 @@ export default {
       });
 
       setTimeout(() => {
+        this.$store.commit('debug/log', { content: 'game: initializing', label: 'socket' });
         this.status = 'initializing';
       }, Math.max(0, timeout - 5000));
 
       setTimeout(() => {
+        this.$store.commit('debug/log', { content: 'game: playing', label: 'socket' });
         this.status = 'playing';
       }, Math.max(0, timeout + 1));
     },
 
-    'notification:send': function (event) {
-      console.log(event);
+    'notification:send': function () {
+      this.$store.commit('debug/log', { content: 'notification:send (receive)', label: 'socket' });
     },
   },
 
@@ -188,6 +194,8 @@ export default {
     },
 
     onWebGLInit() {
+      this.$store.commit('debug/log', { content: 'game: onWebGLInit', label: 'webgl' });
+      this.$store.commit('debug/log', { content: 'game: pending', label: 'socket' });
       this.status = 'pending';
       this.$webgl.on('addItem', (item) => {
         this.$socket.emit('entity:add', {
@@ -198,10 +206,10 @@ export default {
     },
 
     onPlayerReady() {
+      this.$store.commit('debug/log', { content: 'game: onPlayerReady', label: 'webgl' });
       this.$socket.emit('player:ready');
     },
   },
-
 };
 </script>
 
