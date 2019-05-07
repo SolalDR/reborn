@@ -33,6 +33,8 @@
 </template>
 
 <script>
+import config from '../config';
+
 export default {
   name: 'home',
   data() {
@@ -43,19 +45,8 @@ export default {
     };
   },
   sockets: {
-    'room:connect': function ({ playerId, verifiedRoomId }) {
-      this.$store.commit('setPlayer', playerId);
-      this.$store.commit('setRoom', verifiedRoomId);
-    },
-    'game:create': function (game) {
-      this.$store.commit('setGame', game);
-      this.$router.push({
-        name: 'game',
-        params: {
-          id: this.roomId,
-        },
-      });
-    },
+    'room:connect': args => this.onRoomConnect(args),
+    'game:create': () => this.onGameCreate(),
   },
   mounted() {
     setTimeout(() => {
@@ -67,10 +58,20 @@ export default {
       console.log('Join Room');
     },
     createRoom() {
+      this.$store.commit('debug/log', { content: 'home: createRoom', label: 'default' });
       this.roomId = Math.random().toString(36).substr(2, 9);
-      this.$socket.emit('room:join', this.roomId);
+
       this.inviteLink = `${window.location.origin}#/rooms/${this.roomId}/join`;
+
+      if (!config.server.enabled) {
+        this.$store.commit('debug/log', { content: 'simulate room:join (emit)', label: 'socket' });
+        this.simulate();
+      } else {
+        this.$store.commit('debug/log', { content: 'room:join (emit)', label: 'socket' });
+        this.$socket.emit('room:join', this.roomId);
+      }
     },
+
     copyToClipboard() {
       const tmpInput = document.createElement('input');
       document.body.appendChild(tmpInput);
@@ -78,6 +79,46 @@ export default {
       tmpInput.select();
       document.execCommand('copy');
       document.body.removeChild(tmpInput);
+    },
+
+
+    /**
+     * socket
+     */
+    onRoomConnect({ playerId, verifiedRoomId }) {
+      this.$store.commit('debug/log', { content: 'room:connect (receive)', label: 'socket' });
+      this.$store.commit('setPlayer', playerId);
+      this.$store.commit('setRoom', verifiedRoomId);
+    },
+
+    onGameCreate(game) {
+      this.$store.commit('debug/log', { content: 'game:create (receive)', label: 'socket' });
+      this.$store.commit('setGame', game);
+      this.$router.push({
+        name: 'game',
+        params: {
+          id: this.roomId,
+        },
+      });
+    },
+
+    simulate() {
+      setTimeout(() => this.onRoomConnect({
+        playerId: 1,
+        verifiedRoomId: this.roomId,
+      }), 100);
+
+      setTimeout(() => this.onGameCreate({
+        seed: Math.random(),
+        status: 1,
+        grid: [32, 32],
+        startedAt: Date.now() + 5000,
+        createdAt: Date.now(),
+        players: [
+          { id: 1, role: 'city', status: 1 },
+          { id: 2, role: 'nature', status: 1 },
+        ],
+      }), 200);
     },
   },
 };

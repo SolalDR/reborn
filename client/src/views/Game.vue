@@ -148,6 +148,8 @@ export default {
       players: this.$store.state.game.players.map(p => new Reborn.Player(p)),
       seed: this.$store.state.game.seed,
     });
+
+    console.log(this.$game);
   },
 
   mounted() {
