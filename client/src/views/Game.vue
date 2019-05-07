@@ -174,8 +174,6 @@ export default {
         default: break;
       }
     });
-
-    console.log(this.$store.state.roomId);
   },
 
   computed: {

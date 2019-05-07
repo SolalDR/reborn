@@ -48,6 +48,9 @@ export default {
     this.getCollection();
 
     this.roomDocument = this.firestore.collection(this.collectionName).doc(this.$store.state.roomId);
+    this.roomDocument.onSnapshot(() => {
+      this.getCollection();
+    });
   },
   methods: {
     initFirebase() {
@@ -105,6 +108,7 @@ export default {
       this.roomDocument.set(documentOpts)
         .then(() => {
           this.canSave = false;
+          this.getCollection();
           console.log('Added document');
         })
         .catch((error) => {
