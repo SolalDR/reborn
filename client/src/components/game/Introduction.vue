@@ -25,7 +25,7 @@ export default {
     return {
       pending: false,
       tips: [
-        'Surveillez vos jauges,<br>  la partie s’arrête si une jauge atteint un niveau critique.'
+        'Surveillez vos jauges,<br> la partie s’arrête si une jauge atteint un niveau critique.'
       ]
     };
   },
@@ -40,8 +40,8 @@ export default {
     texts() {
       return this.$game.player.role.name === 'city'
         ? [
-            'Vous êtes à la tête des survivants.<br>  Tous ont faim et besoin d’un toit. Tentez de bâtir une nouvelle civilisation viable.',
-            'Pour cela, il va falloir prélever des ressources à la nature.<br>  Mais attention, celles-ci sont disponibles en nombre limité et il ne faudrait  pas reproduire les erreurs du passé.'
+            'Vous êtes à la tête des survivants.<br> Tous ont faim et besoin d’un toit. Tentez de bâtir une nouvelle civilisation viable.',
+            'Pour cela, il va falloir prélever des ressources à la nature.<br> Mais attention, celles-ci sont disponibles en nombre limité et il ne faudrait pas reproduire les erreurs du passé.',
           ]
         : [
             'Lorem ipsum dolor sit amet consectetur adipisicing elit.<br> Impedit autem, tenetur, suscipit est veniam sit a, magnam libero explicabo commodi assumenda quam consequuntur!',
@@ -51,7 +51,7 @@ export default {
 
     currentTip() {
       return this.tips[0];
-    }
+    },
   },
 
   methods: {
