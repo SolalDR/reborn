@@ -2,17 +2,13 @@
   <main class="game">
     <scene @mounted="onWebGLInit"/>
 
-    <transition name="fade" mode="out-in">
-      <overlay v-if="showOverlay">
-        <transition name="fade">
+    <transition name="fade">
+      <overlay v-if="isStarting">
+        <transition name="fade" mode="out-in">
           <loader v-if="status === 'loading'"/>
-        </transition>
-
-        <transition name="fade">
           <introduction v-if="status === 'pending'" @start="onPlayerReady"/>
+          <countdown v-if="status === 'initializing'"/>
         </transition>
-
-        <countdown v-if="status === 'initializing'"/>
       </overlay>
     </transition>
 
@@ -34,6 +30,14 @@
         <settings v-if="showSettings" @closeSettings="showSettings = false"/>
       </transition>
     </div>
+
+    <transition name="fade">
+      <overlay v-if="isEnded">
+        <transition name="fade" mode="out-in">
+          <!-- TODO: Add components with v-if status -->
+        </transition>
+      </overlay>
+    </transition>
   </main>
 </template>
 
@@ -49,7 +53,7 @@ import IndicatorList from '../components/game/IndicatorList.vue';
 import Inventory from '../components/game/Inventory.vue';
 import Settings from '../components/game/Settings.vue';
 import YearsCounter from '../components/game/YearsCounter.vue';
-import Overlay from "../components/global/Overlay";
+import Overlay from '../components/global/Overlay';
 
 export default {
   name: 'Game',
@@ -69,7 +73,8 @@ export default {
   data() {
     return {
       status: null, // null => loading => pending => initializing => playing
-      showOverlay: true,
+      isStarting: true,
+      isEnded: false,
       showSettings: false,
       currentModel: null,
       currentCategory: null,
@@ -126,7 +131,7 @@ export default {
 
       setTimeout(() => {
         this.$store.commit('debug/log', { content: 'game: playing', label: 'socket' });
-        this.showOverlay = false;
+        this.isStarting = false;
         this.status = 'playing';
       }, Math.max(0, timeout + 1));
     },

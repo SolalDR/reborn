@@ -23,7 +23,7 @@ export default new Router({
     {
       path: '/leaderboard',
       name: 'leaderboard',
-      component: () => import('./components/game/end/End.vue'),
+      component: () => import('./components/game/End.vue'),
     },
     {
       path: '/rooms/:id/join',
