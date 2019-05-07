@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="leaderboard__header">
-      <p>Meilleures survies</p>
+      <p>Survivants</p>
     </div>
 
     <div class="leaderboard__body">
@@ -17,7 +17,7 @@
         </div>
       </transition>
 
-      <p @click="$emit('updateStatus', 'explanations')" class="cta--bordered">Retour</p>
+      <p @click="tryAgain" class="cta--bordered">Rejouer</p>
     </div>
   </div>
 </template>
@@ -33,6 +33,9 @@ export default {
   components: {
     Leaderboard,
   },
+  props: {
+    tryAgain: Function,
+  },
   data() {
     return {
       canSave: true,
@@ -44,11 +47,7 @@ export default {
     this.initFirebase();
     this.getCollection();
 
-    // TODO: Update DocId
-    this.roomDocument = this.firestore.collection(this.collectionName).doc('ROOMID');
-    this.roomDocument.onSnapshot((doc) => {
-      console.log(doc.data());
-    });
+    this.roomDocument = this.firestore.collection(this.collectionName).doc(this.$store.state.roomId);
   },
   methods: {
     initFirebase() {
@@ -79,21 +78,28 @@ export default {
       }
     },
     updateName() {
-      // TODO: Check key to modify depending role
       this.canSave = false;
 
       this.roomDocument.update({
-        cityName: this.name,
+        [`${this.$game.player.role.name}Name`]: this.name,
       });
 
       this.getCollection();
     },
     createDocument() {
-      const documentOpts = {
-        // TODO: Add value for role
-        score: 'score',
+      const cityOpts = {
         cityName: this.name,
-        natureName: 'NatureName',
+        natureName: '',
+      };
+
+      const natureOpts = {
+        cityName: '',
+        natureName: this.name,
+      };
+
+      const documentOpts = {
+        score: 'score',
+        ...this.$game.player.role.name === 'city' ? cityOpts : natureOpts,
       };
 
       this.roomDocument.set(documentOpts)

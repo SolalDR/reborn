@@ -34,7 +34,13 @@
     <transition name="fade">
       <overlay v-if="isEnded">
         <transition name="fade" mode="out-in">
-          <!-- TODO: Add components with v-if status -->
+          <explanations v-if="status === 'explanations'"
+                        @updateStatus="updateStatus"
+                        :tryAgain="tryAgain"/>
+
+          <saving v-if="status === 'saving'"
+                  @updateStatus="updateStatus"
+                  :tryAgain="tryAgain"/>
         </transition>
       </overlay>
     </transition>
@@ -54,10 +60,14 @@ import Inventory from '../components/game/Inventory.vue';
 import Settings from '../components/game/Settings.vue';
 import YearsCounter from '../components/game/YearsCounter.vue';
 import Overlay from '../components/global/Overlay';
+import Explanations from '../components/game/Explanations';
+import Saving from '../components/game/Saving';
 
 export default {
   name: 'Game',
   components: {
+    Saving,
+    Explanations,
     Overlay,
     YearsCounter,
     Settings,
@@ -72,7 +82,7 @@ export default {
 
   data() {
     return {
-      status: null, // null => loading => pending => initializing => playing
+      status: null, // null => loading => pending => initializing => playing => explanations => saving => leaderboard
       isStarting: true,
       isEnded: false,
       showSettings: false,
@@ -219,6 +229,14 @@ export default {
     onPlayerReady() {
       this.$store.commit('debug/log', { content: 'game: onPlayerReady', label: 'webgl' });
       this.$socket.emit('player:ready');
+    },
+
+    updateStatus(status) {
+      this.status = status;
+    },
+
+    tryAgain() {
+      console.log('Try Again');
     },
   },
 };

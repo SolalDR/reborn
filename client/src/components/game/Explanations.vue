@@ -29,10 +29,8 @@
 <script>
 export default {
   name: 'explanations',
-  methods: {
-    tryAgain() {
-      console.log('Try Again');
-    },
+  props: {
+    tryAgain: Function,
   },
 };
 </script>

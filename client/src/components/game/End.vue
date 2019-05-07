@@ -3,9 +3,9 @@
   <overlay>
     <div class='leaderboard'>
       <transition name="fade" mode="out-in">
-        <explanations v-if="status === 'explanations'" @updateStatus="updateStatus"/>
+        <explanations v-if="status === 'explanations'" @updateStatus="updateStatus" :tryAgain="tryAgain"/>
 
-        <saving v-if="status === 'saving'" @updateStatus="updateStatus"/>
+        <saving v-if="status === 'saving'" @updateStatus="updateStatus" :tryAgain="tryAgain"/>
       </transition>
     </div>
   </overlay>
@@ -31,6 +31,9 @@ export default {
   methods: {
     updateStatus(status) {
       this.status = status;
+    },
+    tryAgain() {
+      console.log('Try Again');
     },
   },
 };
