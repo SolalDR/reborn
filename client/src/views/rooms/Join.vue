@@ -15,10 +15,10 @@ export default {
     Loader,
   },
   sockets: {
-    'room:connect': function ({ playerId, verifiedRoomId }) {
+    'room:connect': function ({ playerId, roomId }) {
       this.$store.commit('debug/log', { content: 'room:connect (receive)', label: 'socket' });
       this.$store.commit('setPlayer', playerId);
-      this.$store.commit('setRoom', verifiedRoomId);
+      this.$store.commit('setRoom', roomId);
     },
 
     'game:create': function (game) {

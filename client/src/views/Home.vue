@@ -43,9 +43,9 @@ export default {
     };
   },
   sockets: {
-    'room:connect': function ({ playerId, verifiedRoomId }) {
+    'room:connect': function ({ playerId, roomId }) {
       this.$store.commit('setPlayer', playerId);
-      this.$store.commit('setRoom', verifiedRoomId);
+      this.$store.commit('setRoom', roomId);
     },
     'game:create': function (game) {
       this.$store.commit('setGame', game);
