@@ -1,4 +1,5 @@
 <template>
+  <!-- TODO: Transfert this component in Game.vue -->
   <!-- TODO: Remove overlay component -->
   <overlay>
     <div class='leaderboard'>
@@ -8,6 +9,7 @@
         <saving v-if="status === 'saving'"
                 :firestore="firestore"
                 :collection="collection"
+                :collectionName="collectionName"
                 @updateStatus="updateStatus"/>
       </transition>
     </div>
@@ -22,8 +24,6 @@ import Overlay from '../../global/Overlay';
 import Explanations from './Explanations';
 import Saving from './Saving';
 
-const COLLECTION_NAME = 'leaderboard';
-
 export default {
   name: 'end',
   components: {
@@ -34,6 +34,7 @@ export default {
   data() {
     return {
       collection: [],
+      collectionName: 'leaderboard',
       status: 'explanations', // explanations => saving => leaderboard
     };
   },
@@ -52,7 +53,7 @@ export default {
       this.firestore = firebase.firestore();
     },
     getCollection() {
-      this.firestore.collection(COLLECTION_NAME).get().then((querySnapshot) => {
+      this.firestore.collection(this.collectionName).get().then((querySnapshot) => {
         this.collection = querySnapshot.docs;
       });
     },
