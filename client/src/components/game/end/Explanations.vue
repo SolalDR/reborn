@@ -14,9 +14,6 @@
       <div class="leaderboard__actions">
         <p class="cta--bordered" @click="$emit('updateStatus', 'saving')">Sauvegarder votre score</p>
         <p class="cta--bordered" @click="tryAgain">Rejouer</p>
-
-        <!-- TODO: REMOVE THIS -->
-        <p class="cta--bordered" @click="$emit('updateStatus', 'leaderboard')">Listing</p>
       </div>
     </div>
 

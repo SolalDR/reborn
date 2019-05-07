@@ -5,9 +5,10 @@
       <transition name="fade" mode="out-in">
         <explanations v-if="status === 'explanations'" @updateStatus="updateStatus"/>
 
-        <saving v-if="status === 'saving'" :firestore="firestore"  @updateStatus="updateStatus"/>
-
-        <leaderboard v-if="status === 'leaderboard'" :collection="collection" @updateStatus="updateStatus"/>
+        <saving v-if="status === 'saving'"
+                :firestore="firestore"
+                :collection="collection"
+                @updateStatus="updateStatus"/>
       </transition>
     </div>
   </overlay>
@@ -20,7 +21,6 @@ import 'firebase/firestore';
 import Overlay from '../../global/Overlay';
 import Explanations from './Explanations';
 import Saving from './Saving';
-import Leaderboard from './Leaderboard';
 
 const COLLECTION_NAME = 'leaderboard';
 
@@ -30,7 +30,6 @@ export default {
     Overlay,
     Explanations,
     Saving,
-    Leaderboard,
   },
   data() {
     return {
