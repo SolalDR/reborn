@@ -1,51 +1,33 @@
 <template>
-  <overlay>
-    <div class='leaderboard'>
-      <p>Hello</p>
+  <div>
+    <div class="leaderboard__header">
+      <p>Meilleures survies</p>
     </div>
-  </overlay>
+
+    <div class="leaderboard__body">
+      <ul>
+        <li></li>
+        <li>Civilisation</li>
+        <li>Nature</li>
+      </ul>
+
+      <ul>
+        <li v-for="(doc, index) in collection" :key="`leaderboard-doc-${index}`">
+          {{ doc.data().score }} {{ doc.data().cityName }} {{ doc.data().natureName }}
+        </li>
+      </ul>
+    </div>
+
+    <div class="leaderboard__footer">
+      <p @click="$emit('updateStatus', 'explanations')" class="cta--bordered">Retour</p>
+    </div>
+  </div>
 </template>
 
 <script>
-import * as firebase from 'firebase/app';
-import 'firebase/firestore';
-
-import Overlay from '../../global/Overlay';
-
 export default {
   name: 'leaderboard',
-  components: {
-    Overlay,
-  },
-  data() {
-    return {
-      entries: [],
-    };
-  },
-  created() {
-    const firebaseConfig = {
-      apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
-      authDomain: process.env.VUE_APP_FIREBASE_AUTH_DOMAIN,
-      projectId: process.env.VUE_APP_FIREBASE_PROJECT_ID,
-    };
-    firebase.initializeApp(firebaseConfig);
-
-    this.firestore = firebase.firestore();
-    console.log(this.firestore.collection('leaderboard').get().then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        console.log(`${doc.id} =>`, doc.data());
-      });
-    }));
-
-    /*
-    * 1_ Get 'leaderboard collection'
-    * 2_ Check if roomId is present in response
-    *   --> FALSE: add document in collection with roomID & object values
-    *   --> TRUE: update name of player
-    *
-    * TODO: Use .onSnpashot for name updates
-    * */
-  },
+  props: ['collection'],
 };
 </script>
 

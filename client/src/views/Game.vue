@@ -2,7 +2,7 @@
   <main class="game">
     <scene @mounted="onWebGLInit"/>
 
-    <transition name="fade">
+    <transition name="fade" mode="out-in">
       <overlay v-if="showOverlay">
         <transition name="fade">
           <loader v-if="status === 'loading'"/>
