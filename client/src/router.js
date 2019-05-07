@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from './views/Home.vue';
+import Home from './views/Home';
 import About from './views/About';
 
 import adminRoutes from './admin/routes';
@@ -19,6 +19,11 @@ export default new Router({
       path: '/about',
       name: 'about',
       component: About,
+    },
+    {
+      path: '/leaderboard',
+      name: 'leaderboard',
+      component: () => import('./components/game/end/Leaderboard.vue'),
     },
     {
       path: '/rooms/:id/join',
