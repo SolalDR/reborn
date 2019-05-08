@@ -81,10 +81,10 @@ export default {
   },
 
   sockets: {
-    'entity:add': item => this.onEntityAdd(item),
-    'timeline:tick': args => this.onTimelineTick(args),
-    'game:start': args => this.onGameStart(args),
-    'notification:send': () => this.onNotificationSend(),
+    'entity:add': function (item) { this.onEntityAdd(item); },
+    'timeline:tick': function (args) { this.onTimelineTick(args); },
+    'game:start': function (args) { this.onGameStart(args); },
+    'notification:send': function () { this.onNotificationSend(); },
   },
 
   created() {

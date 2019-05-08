@@ -45,8 +45,12 @@ export default {
     };
   },
   sockets: {
-    'room:connect': args => this.onRoomConnect(args),
-    'game:create': () => this.onGameCreate(),
+    'room:connect': function (args) {
+      this.onRoomConnect(args);
+    },
+    'game:create': function (args) {
+      this.onGameCreate(args);
+    },
   },
   mounted() {
     setTimeout(() => {
