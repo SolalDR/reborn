@@ -8,6 +8,7 @@ import mouse from '../plugins/Mouse';
 import AssetsManager from '../services/assets/Manager';
 import Renderer from './renderer';
 import generateMap from './components/map/generator/Generator';
+import LineSystem from './components/LineSystem';
 
 
 export default class WebGL extends Emitter {
@@ -69,6 +70,10 @@ export default class WebGL extends Emitter {
         initClusters(models);
       });
     }
+
+    this.clouds = new LineSystem();
+    this.scene.add(this.clouds.mesh);
+    console.log(this.clouds);
   }
 
   initMap() {

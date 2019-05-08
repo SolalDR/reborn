@@ -1,0 +1,23 @@
+{
+  "name": "global",
+  "groups": [
+    {
+      "name": "sounds",
+      "base": "/sounds/",
+      "files": []
+    },
+    {
+      "name": "images",
+      "files": [
+        {
+          "name": "cloud_line",   
+          "path": "/svg/cloud_line.svg"  
+        },
+        {
+          "name": "cloud_brush",   
+          "path": "/png/cloud_brush.png"  
+        }
+      ]
+    }
+  ]
+}
