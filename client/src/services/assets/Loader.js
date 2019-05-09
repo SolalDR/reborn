@@ -55,15 +55,12 @@ class Loader extends Emitter {
 
   get(group = null) {
     return new Promise((resolve) => {
-
       if (this.isLoaded(group)) {
-        console.log('already load');
         resolve(this.getFiles(group));
         return;
       }
 
       this.on(`load:${group}`, (results) => {
-        console.log(`load:${group}`);
         resolve(results);
       });
     });

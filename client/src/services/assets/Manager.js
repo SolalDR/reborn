@@ -1,10 +1,9 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import Loader from './Loader';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import SVGLoader from 'three-svg-loader';
+import Loader from './Loader';
 import DRACOLoader from './loaders/DRACOLoader';
-import OBJLoader from './loaders/OBJLoader';
-// import SoundLoader from './loaders/SoundLoader';
 
 import globalDatas from '../../datas/global.json';
 
@@ -56,6 +55,10 @@ class Manager {
   main() {
     this.loader.addGroup(globalDatas);
     this.loader.loadGroup('global');
+  }
+
+  get(name) {
+    return this.loader.get(name);
   }
 }
 

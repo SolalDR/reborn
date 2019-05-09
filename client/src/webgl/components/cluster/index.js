@@ -13,19 +13,14 @@ class Cluster {
     this.limit = limit;
     this.dynamic = dynamic;
     this.hiddenLocation = hiddenLocation;
-
     this.availables = new Array(limit);
     this.entities = new Array(limit).fill(false);
 
     this.geometry = new THREE.InstancedBufferGeometry().copy(geometry);
-
-
     this.material = material.clone();
-
 
     this.setupInstanceGeometry();
     this.setupMaterial();
-
 
     this.mesh = new THREE.Mesh(this.geometry, this.material);
   }
@@ -64,7 +59,6 @@ class Cluster {
 
   setupMaterial() {
     this.material.onBeforeCompile = (program) => {
-      console.log(beforeVertexChunk);
       program.vertexShader = `${beforeVertexChunk}\n\r${program.vertexShader}`;
 
       program.vertexShader = program.vertexShader.replace(
@@ -85,7 +79,7 @@ class Cluster {
     scale = null,
     rotation = null,
   } = {}) {
-    if (Number.isNaN(this.availables[0])) return;
+    if (Number.isNaN(this.availables[0])) return null;
 
     const index = this.availables[0];
     this.availables.shift();
@@ -105,6 +99,8 @@ class Cluster {
       this.setRotationAt(index, rotation);
       this.geometry.attributes.instanceQuaternion.needsUpdate = true;
     }
+
+    return index;
   }
 
   /**

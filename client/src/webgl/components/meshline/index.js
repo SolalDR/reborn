@@ -1,10 +1,8 @@
 import * as THREE from "three";
-import includeVertex from "../cluster/include_vertex.glsl";
 
 function MeshLine() {
 
   this.positions = [];
-
   this.previous = [];
   this.next = [];
   this.side = [];
@@ -399,7 +397,6 @@ MeshLine.prototype.advance = function(position) {
 };
 
 THREE.ShaderChunk[ 'meshline_vert' ] = [
-  includeVertex,
   '',
   THREE.ShaderChunk.logdepthbuf_pars_vertex,
   THREE.ShaderChunk.fog_pars_vertex,
@@ -745,9 +742,9 @@ MeshLineMaterial.prototype.copy = function ( source ) {
   this.sizeAttenuation = source.sizeAttenuation;
   this.near = source.near;
   this.far = source.far;
-  this.dashArray.copy( source.dashArray );
-  this.dashOffset.copy( source.dashOffset );
-  this.dashRatio.copy( source.dashRatio );
+  this.dashArray = source.dashArray;
+  this.dashOffset = source.dashOffset;
+  this.dashRatio = source.dashRatio;
   this.useDash = source.useDash;
   this.visibility = source.visibility;
   this.alphaTest = source.alphaTest;
