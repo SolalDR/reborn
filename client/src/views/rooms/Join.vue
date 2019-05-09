@@ -17,8 +17,12 @@ export default {
   },
 
   sockets: {
-    'room:connect': this.onRoomConnect,
-    'game:create': this.onRoomCreate,
+    'room:connect': function (args) {
+      this.onRoomConnect(args);
+    },
+    'game:create': function (args) {
+      this.onGameCreate(args);
+    },
   },
 
   data() {
@@ -43,7 +47,7 @@ export default {
       this.$store.commit('setRoom', verifiedRoomId);
     },
 
-    onRoomCreate(game) {
+    onGameCreate(game) {
       this.$store.commit('debug/log', { content: 'game:create (receive)', label: 'socket' });
       this.$store.commit('setGame', game);
       const roomId = this.$router.history.current.params.id;

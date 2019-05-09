@@ -13,7 +13,7 @@ class Loader extends Emitter {
     this.pendingFiles = [];
     this.loadedFiles = [];
     this.groups = [];
-    this.verbose = false;
+    this.verbose = true;
     this.rules = rules;
   }
 
@@ -41,15 +41,29 @@ class Loader extends Emitter {
   /**
    * Return the list of loaded file in a specific group
    * @param {string|null} group
+   * @private
    */
   getFiles(group = null) {
     const results = {};
     this.loadedFiles.forEach((file) => {
       if ((group === null || file.groups.indexOf(group) >= 0)) {
-        results[file.name] = file;
+        results[file.name] = file.result;
       }
     });
     return results;
+  }
+
+  get(group = null) {
+    return new Promise((resolve) => {
+      if (this.isLoaded(group)) {
+        resolve(this.getFiles(group));
+        return;
+      }
+
+      this.on(`load:${group}`, (results) => {
+        resolve(results);
+      });
+    });
   }
 
 
@@ -59,9 +73,9 @@ class Loader extends Emitter {
    */
   onLoad(file, result) {
     this.loadedFiles.push({
+      result,
       name: file.name,
       path: file.path,
-      result,
       groups: file.groups,
     });
 
@@ -206,7 +220,8 @@ class Loader extends Emitter {
         this.onProgress(file);
       },
       (e) => {
-        if (this.verbose) console.log('Loader:', e);
+        this.onLoad(file, e);
+        if (this.verbose) console.error(`Loader: Cannot load file "${file.name}" with path "${file.path}"`);
       },
     );
 
