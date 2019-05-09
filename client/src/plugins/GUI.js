@@ -1,4 +1,5 @@
 import Dat from 'dat.gui';
+import 'three-dat.gui';
 
 const GUI = {
   gui: {},
