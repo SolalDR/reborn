@@ -2,7 +2,6 @@
 import {
   EffectComposer, EffectPass, RenderPass, BloomEffect,
 } from 'postprocessing';
-import Dat from 'dat.gui';
 import Viewport from '../../plugins/Viewport';
 import SobelEffect from './effects/SobelEffect';
 import FilmEffect from './effects/FilmEffect';
@@ -19,7 +18,6 @@ export default class Renderer {
     this.scene = scene;
     this.camera = camera;
     this.clock = new THREE.Clock();
-    this.gui = new Dat.GUI();
     this.initRenderer();
     this.initComposer();
     this.initEvents();
