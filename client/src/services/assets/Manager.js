@@ -1,10 +1,11 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+import SVGLoader from 'three-svg-loader';
 import Loader from './Loader';
-
 import DRACOLoader from './loaders/DRACOLoader';
-// import SoundLoader from './loaders/SoundLoader';
-import OBJLoader from './loaders/OBJLoader';
+
+import globalDatas from '../../datas/global.json';
 
 class Manager {
   constructor() {
@@ -33,6 +34,10 @@ class Manager {
           test: /\.(?:png|jpg|jpeg)/,
           loader: new THREE.TextureLoader(),
         },
+        {
+          test: /\.(?:svg)/,
+          loader: new SVGLoader(),
+        },
         // {
         //   test: /\.(?:mp3|wav)/,
         //   loader: new SoundLoader(),
@@ -43,6 +48,17 @@ class Manager {
         },
       ],
     });
+
+    this.main();
+  }
+
+  main() {
+    this.loader.addGroup(globalDatas);
+    this.loader.loadGroup('global');
+  }
+
+  get(name) {
+    return this.loader.get(name);
   }
 }
 

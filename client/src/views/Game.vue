@@ -62,6 +62,7 @@ import YearsCounter from '../components/game/YearsCounter.vue';
 import Overlay from '../components/global/Overlay';
 import Explanations from '../components/game/Explanations';
 import Saving from '../components/game/Saving';
+import config from '../config';
 
 export default {
   name: 'Game',
@@ -95,60 +96,10 @@ export default {
   },
 
   sockets: {
-    'entity:add': function (item) {
-      this.$store.commit('debug/log', { content: 'entity:add (receive)', label: 'socket' });
-      const cluster = this.$webgl.clusters[item.model];
-      if (cluster) {
-        cluster.addItem({
-          position: new THREE.Vector3(item.position.x, item.position.y, item.position.z),
-          rotation: new THREE.Euler(item.rotation._x, item.rotation._y, item.rotation._z),
-        });
-      }
-    },
-
-    'timeline:tick': function ({ metrics, elapsed }) {
-      this.$store.commit('debug/log', { content: 'timeline:tick (receive)', label: 'socket' });
-
-      this.gauges = metrics.filter((metric) => {
-        return this.$game.player.role.gauges.indexOf(metric.slug) >= 0;
-      });
-
-      this.indicators = metrics.filter((metric) => {
-        return this.$game.player.role.indicators.indexOf(metric.slug) >= 0;
-      });
-
-      this.year = Math.floor(elapsed / 1000); // One year per second
-    },
-
-    'game:start': function ({ startedAt }) {
-      this.$store.commit('debug/log', { content: 'game:start (receive)', label: 'socket' });
-
-      const now = Date.now();
-      const timeout = startedAt - now;
-
-      this.gauges = this.$game.player.role.gauges.map((gauge) => {
-        return this.$game.metrics.get(gauge).infos;
-      });
-
-      this.indicators = this.$game.player.role.indicators.map((indicator) => {
-        return this.$game.metrics.get(indicator).infos;
-      });
-
-      setTimeout(() => {
-        this.$store.commit('debug/log', { content: 'game: initializing', label: 'socket' });
-        this.status = 'initializing';
-      }, Math.max(0, timeout - 5000));
-
-      setTimeout(() => {
-        this.$store.commit('debug/log', { content: 'game: playing', label: 'socket' });
-        this.isStarting = false;
-        this.status = 'playing';
-      }, Math.max(0, timeout + 1));
-    },
-
-    'notification:send': function () {
-      this.$store.commit('debug/log', { content: 'notification:send (receive)', label: 'socket' });
-    },
+    'entity:add': function (item) { this.onEntityAdd(item); },
+    'timeline:tick': function (args) { this.onTimelineTick(args); },
+    'game:start': function (args) { this.onGameStart(args); },
+    'notification:send': function () { this.onNotificationSend(); },
   },
 
   created() {
@@ -224,6 +175,10 @@ export default {
           model: this.currentModel.slug,
         });
       });
+
+      if (!config.server.enabled) {
+        this.simulateGameStart();
+      }
     },
 
     onPlayerReady() {
@@ -237,6 +192,70 @@ export default {
 
     tryAgain() {
       console.log('Try Again');
+    },
+    
+    /**
+     * socket
+     */
+    onEntityAdd(item) {
+      this.$store.commit('debug/log', { content: 'entity:add (receive)', label: 'socket' });
+      const cluster = this.$webgl.clusters[item.model];
+      if (cluster) {
+        cluster.addItem({
+          position: new THREE.Vector3(item.position.x, item.position.y, item.position.z),
+          rotation: new THREE.Euler(item.rotation._x, item.rotation._y, item.rotation._z),
+        });
+      }
+    },
+
+    onTimelineTick({ metrics, elapsed }) {
+      this.$store.commit('debug/log', { content: 'timeline:tick (receive)', label: 'socket' });
+
+      this.gauges = metrics.filter((metric) => {
+        return this.$game.player.role.gauges.indexOf(metric.slug) >= 0;
+      });
+
+      this.indicators = metrics.filter((metric) => {
+        return this.$game.player.role.indicators.indexOf(metric.slug) >= 0;
+      });
+
+      this.year = Math.floor(elapsed / 1000); // One year per second
+    },
+
+    onGameStart({ startedAt }) {
+      this.$store.commit('debug/log', { content: 'game:start (receive)', label: 'socket' });
+
+      const now = Date.now();
+      const timeout = startedAt - now;
+
+      this.gauges = this.$game.player.role.gauges.map((gauge) => {
+        return this.$game.metrics.get(gauge).infos;
+      });
+
+      this.indicators = this.$game.player.role.indicators.map((indicator) => {
+        return this.$game.metrics.get(indicator).infos;
+      });
+
+      setTimeout(() => {
+        this.$store.commit('debug/log', { content: 'game: initializing', label: 'socket' });
+        this.status = 'initializing';
+      }, Math.max(0, timeout - 5000));
+
+      setTimeout(() => {
+        this.$store.commit('debug/log', { content: 'game: playing', label: 'socket' });
+        this.showOverlay = false;
+        this.status = 'playing';
+      }, Math.max(0, timeout + 1));
+    },
+
+    onNotificationSend() {
+      this.$store.commit('debug/log', { content: 'notification:send (receive)', label: 'socket' });
+    },
+
+    simulateGameStart() {
+      setTimeout(() => {
+        this.onGameStart({ startedAt: Date.now() + 7000 });
+      }, 500);
     },
   },
 };

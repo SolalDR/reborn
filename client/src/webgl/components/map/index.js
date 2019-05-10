@@ -126,7 +126,7 @@ export default class GameMap extends THREE.Group {
 
     const material = new THREE.MeshToonMaterial({
       color: 0x036564,
-      // specular: 0x3f7a85,
+      specular: 0x3f7a85,
     });
 
     geometry.rotateX(-Math.PI / 2);

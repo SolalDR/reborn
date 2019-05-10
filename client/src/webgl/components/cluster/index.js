@@ -1,50 +1,42 @@
-import { Mesh } from 'three';
+import * as THREE from 'three';
 import beforeVertexChunk from './include_vertex.glsl';
 
 const q = new THREE.Quaternion();
 
-class Cluster extends THREE.Group {
+class Cluster {
   constructor(geometry, material, {
     limit = 100,
     hiddenLocation = new THREE.Vector3(1, 1, 1),
     dynamic = true,
   } = {}) {
-    super();
     this.offset = 0;
     this.limit = limit;
-    this.hiddenLocation = new THREE.Vector3(1, 1, 1);
-    this.geometry = new THREE.InstancedBufferGeometry().copy(geometry);
-    this.geometry.maxInstancedCount = 0;
-    this.material = material.clone();
+    this.dynamic = dynamic;
+    this.hiddenLocation = hiddenLocation;
     this.availables = new Array(limit);
     this.entities = new Array(limit).fill(false);
-    this.dynamic = dynamic;
 
-    this.material.onBeforeCompile = (program) => {
-      program.vertexShader = `${beforeVertexChunk}\n\r${program.vertexShader}`;
+    this.geometry = new THREE.InstancedBufferGeometry().copy(geometry);
+    this.material = material.clone();
 
-      program.vertexShader = program.vertexShader.replace(
-        '#include <begin_vertex>',
-        'vec3 transformed = ( _instanceMatrix * vec4( position , 1. )).xyz;',
-      );
+    this.setupInstanceGeometry();
+    this.setupMaterial();
 
-      program.vertexShader = program.vertexShader.replace(
-        '#include <defaultnormal_vertex>',
-        `mat4 _instanceMatrix = getInstanceMatrix();
-         vec3 transformedNormal =  transposeMat3( inverse( mat3( modelViewMatrix * _instanceMatrix ) ) ) * objectNormal ;`,
-      );
-    };
+    this.mesh = new THREE.Mesh(this.geometry, this.material);
+  }
 
-    const translationBuffer = new Float32Array(limit * 3);
-    const rotationBuffer = new Float32Array(limit * 4);
-    const scaleBuffer = new Float32Array(limit * 3);
+  setupInstanceGeometry() {
+    this.geometry.maxInstancedCount = 0;
+    const translationBuffer = new Float32Array(this.limit * 3);
+    const rotationBuffer = new Float32Array(this.limit * 4);
+    const scaleBuffer = new Float32Array(this.limit * 3);
 
-    for (let i = 0; i < limit; i += 1) {
+    for (let i = 0; i < this.limit; i += 1) {
       this.availables[i] = i;
 
-      translationBuffer[i * 3] = hiddenLocation.x;
-      translationBuffer[i * 3 + 1] = hiddenLocation.y;
-      translationBuffer[i * 3 + 2] = hiddenLocation.z;
+      translationBuffer[i * 3] = this.hiddenLocation.x;
+      translationBuffer[i * 3 + 1] = this.hiddenLocation.y;
+      translationBuffer[i * 3 + 2] = this.hiddenLocation.z;
 
       rotationBuffer[i * 4] = q.x;
       rotationBuffer[i * 4 + 1] = q.y;
@@ -60,11 +52,26 @@ class Cluster extends THREE.Group {
     this.geometry.addAttribute('instanceQuaternion', new THREE.InstancedBufferAttribute(rotationBuffer, 4, false));
     this.geometry.addAttribute('instanceScale', new THREE.InstancedBufferAttribute(scaleBuffer, 3, false));
 
-    this.geometry.attributes.instancePosition.setDynamic(dynamic);
-    this.geometry.attributes.instanceQuaternion.setDynamic(dynamic);
-    this.geometry.attributes.instanceScale.setDynamic(dynamic);
+    this.geometry.attributes.instancePosition.setDynamic(this.dynamic);
+    this.geometry.attributes.instanceQuaternion.setDynamic(this.dynamic);
+    this.geometry.attributes.instanceScale.setDynamic(this.dynamic);
+  }
 
-    this.mesh = new Mesh(this.geometry, this.material);
+  setupMaterial() {
+    this.material.onBeforeCompile = (program) => {
+      program.vertexShader = `${beforeVertexChunk}\n\r${program.vertexShader}`;
+
+      program.vertexShader = program.vertexShader.replace(
+        '#include <begin_vertex>',
+        'vec3 transformed = ( _instanceMatrix * vec4( position , 1. )).xyz;',
+      );
+
+      program.vertexShader = program.vertexShader.replace(
+        '#include <defaultnormal_vertex>',
+        `mat4 _instanceMatrix = getInstanceMatrix();
+         vec3 transformedNormal =  transposeMat3( inverse( mat3( modelViewMatrix * _instanceMatrix ) ) ) * objectNormal ;`,
+      );
+    };
   }
 
   addItem({
@@ -72,7 +79,7 @@ class Cluster extends THREE.Group {
     scale = null,
     rotation = null,
   } = {}) {
-    if (Number.isNaN(this.availables[0])) return;
+    if (Number.isNaN(this.availables[0])) return null;
 
     const index = this.availables[0];
     this.availables.shift();
@@ -92,6 +99,8 @@ class Cluster extends THREE.Group {
       this.setRotationAt(index, rotation);
       this.geometry.attributes.instanceQuaternion.needsUpdate = true;
     }
+
+    return index;
   }
 
   /**
@@ -116,19 +125,3 @@ class Cluster extends THREE.Group {
 }
 
 export default Cluster;
-
-// {
-//   id,
-//   name,
-//   content,
-//   role,         // Nature, Civilisation, null
-//   count,        // Nombre de fois ou elle a été appelé
-//   limit,        // Limit du nombre de fois ou elle a été appelé
-//   constraints: [
-//     {
-//       name: 'money',
-//       value: 10,
-//       direction: 'ASC' || 'DESC'
-//     }
-//   ]
-// }

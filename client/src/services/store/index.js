@@ -11,10 +11,8 @@ export default new Vuex.Store({
     roomId: null,
     game: null,
   },
+
   mutations: {
-    /* 'SOCKET_game:create': function (state, game) {
-      state.game = game;
-    }, */
     setGame(state, game) {
       state.game = game;
     },
