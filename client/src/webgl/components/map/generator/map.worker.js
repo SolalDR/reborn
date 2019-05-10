@@ -6,9 +6,6 @@ import SimplexNoise from 'simplex-noise';
 
 
 const generator = {
-  floorColor: new Color(0xb7c39b),
-  wallColor: new Color(0x9b989f),
-
   /**
    * Etape 1:
    * Génèrer des formes sinusoidale (shape)
@@ -72,8 +69,8 @@ const generator = {
       depth: height,
       bevelEnabled: true,
       bevelThickness: 0.2,
-      bevelSize: 0.2,
-      bevelSegments: 5,
+      bevelSize: 0,
+      bevelSegments: 2,
     });
 
     // Rotate la géométrie pour avoir la shape vers le haut
@@ -184,7 +181,12 @@ const generator = {
   },
 
 
-  init(seed, stages) {
+  init(seed, stages, {
+    floorColor = new Color(0xb7c39b),
+    wallColor = new Color(0x9b989f),
+  } = {}) {
+    this.floorColor = floorColor;
+    this.wallColor = wallColor;
     this.seed = seed;
     this.stages = stages;
     this.simplex = new SimplexNoise(this.seed);
@@ -215,6 +217,9 @@ const generator = {
 
 onmessage = function (event) {
   if (event.data.seed) {
-    generator.init(event.data.seed, event.data.stages);
+    generator.init(event.data.seed, event.data.stages, {
+      floorColor: event.floorColor,
+      wallColor: event.wallColor,
+    });
   }
 };

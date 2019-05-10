@@ -1,6 +1,8 @@
 import Grid from './Grid';
-import Bus from '../../../plugins/Bus';
 import GridHelper from './GridHelper';
+import Bus from '@/plugins/Bus';
+import GUI from '@/plugins/GUI';
+
 
 export default class GameMap extends THREE.Group {
   constructor({
@@ -54,6 +56,8 @@ export default class GameMap extends THREE.Group {
       shininess: 0,
       flatShading: false,
     });
+
+    GUI.map.addMaterial('Ground', material);
 
     this.floor = new THREE.Mesh(geometry, material);
     this.floor.position.y = -0.1;
@@ -120,14 +124,17 @@ export default class GameMap extends THREE.Group {
    */
   initWater() {
     const geometry = new THREE.PlaneGeometry(
-      this.size.x * this.cellSize * 10,
-      this.size.y * this.cellSize * 10,
+      this.size.x * this.cellSize * 100,
+      this.size.y * this.cellSize * 100,
     );
 
     const material = new THREE.MeshToonMaterial({
-      color: 0x036564,
-      specular: 0x3f7a85,
+      color: 0xA7E3BD,
+      specular: 0x000000,
+      shininess: 0,
     });
+
+    GUI.map.addMaterial('Water', material);
 
     geometry.rotateX(-Math.PI / 2);
     this.water = new THREE.Mesh(geometry, material);

@@ -14,10 +14,16 @@ export const initGui = () => {
   GUI.rendering = GUI.gui.addFolder('Rendu');
 
   // Camera
-  GUI.scene = GUI.gui.addFolder('Contrôles');
+  GUI.controls = GUI.gui.addFolder('Contrôles');
 
-  // Oiseaux, poissons, vent, Map
+  // Scene
+  GUI.scene = GUI.gui.addFolder('Scene');
+
+  // Oiseaux, poissons, vent
   GUI.environnement = GUI.gui.addFolder('Environnement');
+
+  // Map
+  GUI.map = GUI.gui.addFolder('Map');
 };
 
 export const destroyGui = () => {

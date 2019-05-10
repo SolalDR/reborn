@@ -11,6 +11,8 @@ export default (seed = Math.random()) => {
 
   // Define worker params
   worker.postMessage({
+    floorColor: new THREE.Color(0xb7c39b),
+    wallColor: new THREE.Color(0x9b989f),
     seed,
     stages: [
       {

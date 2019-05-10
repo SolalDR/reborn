@@ -22,6 +22,7 @@ export default class LineCluster extends Cluster {
 
   setupMaterial() {
     this.material.onBeforeCompile = (program) => {
+      console.log(program);
       program.vertexShader = `${beforeVertexChunk}\n\r${program.vertexShader}`;
       program.vertexShader = program.vertexShader.replace(
         'attribute vec3 instancePosition;',
@@ -41,8 +42,6 @@ export default class LineCluster extends Cluster {
         'c.a *= ceil(mod(vCounters + dashOffset, dashArray) - (dashArray * dashRatio));',
         'c.a *= ceil(mod(vCounters + dashOffset + vDashOffset, dashArray) - (dashArray * dashRatio));',
       );
-
-      console.log(program.fragmentShader);
     };
   }
 
