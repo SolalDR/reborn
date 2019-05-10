@@ -193,7 +193,7 @@ export default {
     tryAgain() {
       console.log('Try Again');
     },
-    
+
     /**
      * socket
      */
@@ -243,7 +243,7 @@ export default {
 
       setTimeout(() => {
         this.$store.commit('debug/log', { content: 'game: playing', label: 'socket' });
-        this.showOverlay = false;
+        this.isStarting = false;
         this.status = 'playing';
       }, Math.max(0, timeout + 1));
     },

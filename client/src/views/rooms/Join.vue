@@ -1,7 +1,9 @@
 <template>
-  <div class="join">
-    <loader :text="`Joining ${$router.history.current.params.id}...`"/>
-  </div>
+  <overlay>
+    <div class="join">
+      <loader :text="`Joining ${$router.history.current.params.id}...`"/>
+    </div>
+  </overlay>
 </template>
 
 <script>
@@ -41,7 +43,7 @@ export default {
     /**
      * socket
      */
-    onRoomConnect({ playerId, verifiedRoomId }) {
+    onRoomConnect({ playerId, roomId }) {
       this.$store.commit('debug/log', { content: 'room:connect (receive)', label: 'socket' });
       this.$store.commit('setPlayer', playerId);
       this.$store.commit('setRoom', roomId);
