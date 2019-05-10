@@ -155,10 +155,12 @@ export default {
       this.$store.commit('debug/log', { content: 'game: pending', label: 'socket' });
       this.status = 'pending';
       this.$webgl.on('addItem', (item) => {
-        this.$socket.emit('entity:add', {
-          ...item,
-          model: this.currentModel.slug,
-        });
+        const params = { ...item, model: this.currentModel.slug };
+        if (!config.server.enabled) {
+          this.onEntityAdd({ ...params, uuid: Math.floor(Math.random() * 1000), states: ['mounted', 'living'] });
+          return;
+        }
+        this.$socket.emit('entity:add', params);
       });
 
       if (!config.server.enabled) {
