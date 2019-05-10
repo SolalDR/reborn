@@ -11,6 +11,7 @@
     "@solaldr/animate": "^0.1.1",
     "@solaldr/emitter": "^0.1.0",
     "dat.gui": "^0.7.6",
+    "firebase": "^5.11.1",
     "glslify-loader": "^2.0.0",
     "postprocessing": "^6.2.1",
     "raw-loader": "^1.0.0",

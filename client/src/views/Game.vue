@@ -3,16 +3,12 @@
     <scene @mounted="onWebGLInit"/>
 
     <transition name="fade">
-      <overlay v-if="showOverlay">
-        <transition name="fade">
+      <overlay v-if="isStarting">
+        <transition name="fade" mode="out-in">
           <loader v-if="status === 'loading'"/>
-        </transition>
-
-        <transition name="fade">
           <introduction v-if="status === 'pending'" @start="onPlayerReady"/>
+          <countdown v-if="status === 'initializing'"/>
         </transition>
-
-        <countdown v-if="status === 'initializing'"/>
       </overlay>
     </transition>
 
@@ -34,6 +30,20 @@
         <settings v-if="showSettings" @closeSettings="showSettings = false"/>
       </transition>
     </div>
+
+    <transition name="fade">
+      <overlay v-if="isEnded">
+        <transition name="fade" mode="out-in">
+          <explanations v-if="status === 'explanations'"
+                        @updateStatus="updateStatus"
+                        :tryAgain="tryAgain"/>
+
+          <saving v-if="status === 'saving'"
+                  @updateStatus="updateStatus"
+                  :tryAgain="tryAgain"/>
+        </transition>
+      </overlay>
+    </transition>
   </main>
 </template>
 
@@ -50,11 +60,15 @@ import Inventory from '../components/game/Inventory.vue';
 import Settings from '../components/game/Settings.vue';
 import YearsCounter from '../components/game/YearsCounter.vue';
 import Overlay from '../components/global/Overlay';
+import Explanations from '../components/game/Explanations';
+import Saving from '../components/game/Saving';
 import config from '../config';
 
 export default {
   name: 'Game',
   components: {
+    Saving,
+    Explanations,
     Overlay,
     YearsCounter,
     Settings,
@@ -69,8 +83,9 @@ export default {
 
   data() {
     return {
-      status: null, // null => loading => pending => initializing => playing
-      showOverlay: true,
+      status: null, // null => loading => pending => initializing => playing => explanations => saving => leaderboard
+      isStarting: true,
+      isEnded: false,
       showSettings: false,
       currentModel: null,
       currentCategory: null,
@@ -171,6 +186,14 @@ export default {
       this.$socket.emit('player:ready');
     },
 
+    updateStatus(status) {
+      this.status = status;
+    },
+
+    tryAgain() {
+      console.log('Try Again');
+    },
+    
     /**
      * socket
      */
