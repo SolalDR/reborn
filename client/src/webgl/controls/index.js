@@ -12,11 +12,11 @@ class Control {
   } = {}) {
     this.orbit = new OrbitControls({
       object: camera,
-      radius: 25,
       enabled: true,
       look: new THREE.Vector3(),
-      phi: 0.5,
-      theta: Math.PI / 4,
+      radius: config.camera.radius.startAt,
+      phi: config.camera.phi.startAt,
+      theta: config.camera.theta.startAt,
     });
 
     this.rails = new RailsControl({
@@ -50,7 +50,7 @@ class Control {
       );
     });
 
-    let wheel = 5;
+    let wheel = config.camera.radius.startAt;
     this.mouse.$on('wheel', ({ event }) => {
       wheel += event.deltaY / 100;
       wheel = Math.min(
