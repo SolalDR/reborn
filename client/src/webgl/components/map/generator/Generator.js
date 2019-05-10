@@ -11,11 +11,11 @@ export default (seed = Math.random()) => {
 
   // Define worker params
   worker.postMessage({
-    floorColor: new THREE.Color(0xb7c39b),
-    wallColor: new THREE.Color(0x9b989f),
     seed,
     stages: [
       {
+        floorColor: new THREE.Color(0xb7c39b),
+        wallColor: new THREE.Color(0x9b989f),
         shape: {
           definition: 200,
           radius: 16,
@@ -25,6 +25,8 @@ export default (seed = Math.random()) => {
         height: 0.5,
       },
       {
+        floorColor: new THREE.Color(0xb7c39b),
+        wallColor: new THREE.Color(0x9b989f),
         shape: {
           definition: 200,
           radius: 8,
@@ -37,6 +39,8 @@ export default (seed = Math.random()) => {
         height: 1,
       },
       {
+        floorColor: new THREE.Color(0xb7c39b),
+        wallColor: new THREE.Color(0x9b989f),
         shape: {
           definition: 200,
           radius: 8,
@@ -49,6 +53,8 @@ export default (seed = Math.random()) => {
         height: 2,
       },
       {
+        floorColor: new THREE.Color(0xb7c39b),
+        wallColor: new THREE.Color(0x9b989f),
         shape: {
           definition: 200,
           radius: 4,

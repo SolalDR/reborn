@@ -61,6 +61,8 @@ const generator = {
   generateStageGeometry({
     shape = null,
     height = 0.5,
+    wallColor = null,
+    floorColor = null,
   } = {}) {
     if (!shape) return;
 
@@ -75,6 +77,18 @@ const generator = {
 
     // Rotate la géométrie pour avoir la shape vers le haut
     geometry.rotateX(-Math.PI / 2);
+
+    geometry.faces.forEach((face) => {
+      // Si la normal ne pointe pas vers le haut, c'est le mur
+      if (Math.abs(face.normal.y) < 0.001) {
+        face.color = wallColor;
+      } else { // Sinon c'est le sol
+        face.color = floorColor;
+      }
+    });
+
+    geometry.colorsNeedUpdate = true;
+    geometry.elementsNeedsUpdate = true;
 
     // Merge la géométrie extrudé avec la géometrie globale
     this.geometry.merge(geometry);
@@ -197,11 +211,13 @@ const generator = {
       this.generateStageGeometry({
         height: stage.height,
         shape,
+        floorColor: stage.floorColor,
+        wallColor: stage.wallColor,
       });
     });
 
     this.removeExtraFaces();
-    this.generateColors();
+    // this.generateColors();
     const results = this.cast(this.mesh);
     this.validateGrid(results);
 
@@ -217,9 +233,6 @@ const generator = {
 
 onmessage = function (event) {
   if (event.data.seed) {
-    generator.init(event.data.seed, event.data.stages, {
-      floorColor: event.floorColor,
-      wallColor: event.wallColor,
-    });
+    generator.init(event.data.seed, event.data.stages);
   }
 };
