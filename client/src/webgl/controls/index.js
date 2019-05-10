@@ -31,9 +31,14 @@ class Control {
       theta: this.orbit.theta,
     };
 
+    this.initDragEvent();
+    this.initWheelEvent();
+    this.initGUI();
+  }
+
+  initDragEvent() {
     let phi = 0;
     let theta = 0;
-
     this.mouse.$on('dragstart', () => {
       phi = this.state.phi;
       theta = this.state.theta;
@@ -49,7 +54,9 @@ class Control {
         ),
       );
     });
+  }
 
+  initWheelEvent() {
     let wheel = config.camera.radius.startAt;
     this.mouse.$on('wheel', ({ event }) => {
       wheel += event.deltaY / 100;
@@ -62,8 +69,6 @@ class Control {
       );
       this.orbit.radius = wheel;
     });
-
-    this.initGUI();
   }
 
   loop() {
