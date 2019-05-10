@@ -44,6 +44,7 @@ export default class WebGL extends Emitter {
     this.initMap();
     this.initLights();
     this.initScene();
+    this.initGUI();
     this.loop();
   }
 
@@ -98,7 +99,6 @@ export default class WebGL extends Emitter {
       }
 
       // this.scene.add(this.clouds.mesh);
-
 
       const geometryWave = new THREE.Geometry();
       const wavePath = images.wave_line.paths[0];
@@ -169,13 +169,13 @@ export default class WebGL extends Emitter {
   }
 
   initLights() {
-    const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
-    this.scene.add(ambientLight);
+    this.ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
+    this.scene.add(this.ambientLight);
 
-    const light = new THREE.DirectionalLight(0xFFFFFF, 0.5);
-    this.scene.add(light);
+    this.directionalLight = new THREE.DirectionalLight(0xFFFFFF, 0.5);
+    this.scene.add(this.directionalLight);
 
-    light.position.set(100, 100, 100);
+    this.directionalLight.position.set(100, 100, 100);
   }
 
   loop() {
@@ -188,5 +188,10 @@ export default class WebGL extends Emitter {
       this.waves.mesh.material.uniforms.dashOffset.value += 0.01;
     }
     this.renderer.render();
+  }
+
+  initGUI() {
+    GUI.rendering.addLight('Ambient', this.ambientLight);
+    GUI.rendering.addLight('Directional', this.directionalLight);
   }
 }
