@@ -10,7 +10,7 @@ export default class Satisfaction extends Metric {
       name: "Satisfaction",
       min: 0,
       max: 100,
-      value: 0,
+      value: 100,
       recurentOperation: 0.1
     })
   }

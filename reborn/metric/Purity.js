@@ -11,7 +11,7 @@ export default class Purity extends Metric {
       slug: "purity",
       min: 0,
       max: 100,
-      value: 0,
+      value: 100,
       recurentOperation: 0.1
     })
   }

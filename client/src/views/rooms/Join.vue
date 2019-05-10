@@ -43,10 +43,10 @@ export default {
     /**
      * socket
      */
-    onRoomConnect({ playerId, roomId }) {
+    onRoomConnect({ playerId, verifiedRoomId }) {
       this.$store.commit('debug/log', { content: 'room:connect (receive)', label: 'socket' });
       this.$store.commit('setPlayer', playerId);
-      this.$store.commit('setRoom', roomId);
+      this.$store.commit('setRoom', verifiedRoomId);
     },
 
     onGameCreate(game) {

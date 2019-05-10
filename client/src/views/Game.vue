@@ -99,6 +99,7 @@ export default {
     'entity:add': function (item) { this.onEntityAdd(item); },
     'timeline:tick': function (args) { this.onTimelineTick(args); },
     'game:start': function (args) { this.onGameStart(args); },
+    'game:end': function (args) { this.onGameEnd(args); },
     'notification:send': function () { this.onNotificationSend(); },
   },
 
@@ -246,6 +247,12 @@ export default {
         this.isStarting = false;
         this.status = 'playing';
       }, Math.max(0, timeout + 1));
+    },
+
+    onGameEnd(args) {
+      console.log(args);
+      this.isEnded = true;
+      this.status = 'explanations';
     },
 
     onNotificationSend() {
