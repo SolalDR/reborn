@@ -6,9 +6,6 @@ import SimplexNoise from 'simplex-noise';
 
 
 const generator = {
-  floorColor: new Color(0xb7c39b),
-  wallColor: new Color(0x9b989f),
-
   /**
    * Etape 1:
    * Génèrer des formes sinusoidale (shape)
@@ -64,6 +61,8 @@ const generator = {
   generateStageGeometry({
     shape = null,
     height = 0.5,
+    wallColor = null,
+    floorColor = null,
   } = {}) {
     if (!shape) return;
 
@@ -71,13 +70,25 @@ const generator = {
       steps: 1,
       depth: height,
       bevelEnabled: true,
-      bevelThickness: 0.2,
-      bevelSize: 0.2,
-      bevelSegments: 5,
+      bevelThickness: 0.001,
+      bevelSize: 0.001,
+      bevelSegments: 1,
     });
 
     // Rotate la géométrie pour avoir la shape vers le haut
     geometry.rotateX(-Math.PI / 2);
+
+    geometry.faces.forEach((face) => {
+      // Si la normal ne pointe pas vers le haut, c'est le mur
+      if (Math.abs(face.normal.y) < 0.001) {
+        face.color = wallColor;
+      } else { // Sinon c'est le sol
+        face.color = floorColor;
+      }
+    });
+
+    geometry.colorsNeedUpdate = true;
+    geometry.elementsNeedsUpdate = true;
 
     // Merge la géométrie extrudé avec la géometrie globale
     this.geometry.merge(geometry);
@@ -184,7 +195,12 @@ const generator = {
   },
 
 
-  init(seed, stages) {
+  init(seed, stages, {
+    floorColor = new Color(0xb7c39b),
+    wallColor = new Color(0x9b989f),
+  } = {}) {
+    this.floorColor = floorColor;
+    this.wallColor = wallColor;
     this.seed = seed;
     this.stages = stages;
     this.simplex = new SimplexNoise(this.seed);
@@ -195,11 +211,13 @@ const generator = {
       this.generateStageGeometry({
         height: stage.height,
         shape,
+        floorColor: stage.floorColor,
+        wallColor: stage.wallColor,
       });
     });
 
     this.removeExtraFaces();
-    this.generateColors();
+    // this.generateColors();
     const results = this.cast(this.mesh);
     this.validateGrid(results);
 

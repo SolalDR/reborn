@@ -21,7 +21,9 @@ class OrbitControls {
     this.look = look || this.target;
     this.phi = phi;
     this.theta = theta;
-    this.radius = radius || object.position.distanceTo(this.target);
+    this.radius = radius;
+    this.computePosition();
+    this.object.lookAt(this.look);
   }
 
   computePosition() {

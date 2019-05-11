@@ -2,10 +2,10 @@
 import {
   EffectComposer, EffectPass, RenderPass, BloomEffect,
 } from 'postprocessing';
-import Dat from 'dat.gui';
 import Viewport from '../../plugins/Viewport';
 import SobelEffect from './effects/SobelEffect';
 import FilmEffect from './effects/FilmEffect';
+import GUI from '../../plugins/GUI';
 
 let swap = 1;
 
@@ -19,10 +19,14 @@ export default class Renderer {
     this.scene = scene;
     this.camera = camera;
     this.clock = new THREE.Clock();
-    this.gui = new Dat.GUI();
+
+    this.gui = GUI.rendering;
+
     this.initRenderer();
     this.initComposer();
     this.initEvents();
+
+    this.initGUI();
   }
 
   initRenderer() {
@@ -38,19 +42,17 @@ export default class Renderer {
   initComposer() {
     this.composer = new EffectComposer(this.renderer);
     this.sobelEffect = new SobelEffect({
-      step: 0.6,
+      step: 0.5,
       intensity: 10,
-      threshold: 0.3,
+      threshold: 0.05,
     });
 
     this.filmEffect = new FilmEffect();
-    this.bloomEffect = new BloomEffect();
-
-    this.gui.add(this.sobelEffect.uniforms.get('step'), 'value').name('Step');
-    this.gui.add(this.sobelEffect.uniforms.get('intensity'), 'value').name('Intensity');
-    this.gui.add(this.sobelEffect.uniforms.get('threshold'), 'value').name('threshold');
+    this.bloomEffect = new BloomEffect({
+      distinction: 1.0,
+      resolutionScale: 0.5,
+    });
     const effectPass = new EffectPass(this.camera, this.filmEffect, this.bloomEffect, this.sobelEffect);
-
 
     effectPass.dithering = true;
     effectPass.renderToScreen = true;
@@ -76,5 +78,15 @@ export default class Renderer {
     }
 
     this.composer.render(this.clock.getDelta());
+  }
+
+  initGUI() {
+    const sobelFolder = this.gui.addFolder('Sobel');
+    sobelFolder.add(this.sobelEffect.uniforms.get('step'), 'value', 0, 6).name('Step');
+    sobelFolder.add(this.sobelEffect.uniforms.get('intensity'), 'value', 0, 100).name('Intensity');
+    sobelFolder.add(this.sobelEffect.uniforms.get('threshold'), 'value', 0, 1).name('threshold');
+
+    const bloomFolder = this.gui.addFolder('Bloom');
+    bloomFolder.add(this.bloomEffect, 'distinction', 0, 5).name('Distinction');
   }
 }

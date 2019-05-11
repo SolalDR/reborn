@@ -9,6 +9,7 @@ import AssetsManager from '../services/assets/Manager';
 import Renderer from './renderer';
 import generateMap from './components/map/generator/Generator';
 import LineSystem from './components/line/LineSystem';
+import GUI from '@/plugins/GUI';
 
 export default class WebGL extends Emitter {
   constructor({
@@ -21,7 +22,7 @@ export default class WebGL extends Emitter {
 
     // Camera
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(45, Viewport.width / Viewport.height, 1, 100);
+    this.camera = new THREE.PerspectiveCamera(45, Viewport.width / Viewport.height, 1, 500);
     this.controls = new Controls({
       camera: this.camera,
     });
@@ -43,6 +44,7 @@ export default class WebGL extends Emitter {
     this.initMap();
     this.initLights();
     this.initScene();
+    this.initGUI();
     this.loop();
   }
 
@@ -84,7 +86,7 @@ export default class WebGL extends Emitter {
         this.clouds.addItem({
           position: new THREE.Vector3(
             (Math.random() - 0.5) * 10,
-            10,
+            0,
             (Math.random() - 0.5) * 10,
           ),
           rotation: new THREE.Euler(
@@ -96,7 +98,36 @@ export default class WebGL extends Emitter {
         });
       }
 
-      this.scene.add(this.clouds.mesh);
+      // this.scene.add(this.clouds.mesh);
+
+      const geometryWave = new THREE.Geometry();
+      const wavePath = images.wave_line.paths[0];
+      wavePath.currentPath.getPoints(40).forEach((point) => {
+        geometryWave.vertices.push(
+          new THREE.Vector3(point.x, 0, point.y)
+            .multiplyScalar(0.1),
+        );
+      });
+
+      this.waves = new LineSystem(geometryWave, {
+        map: images.cloud_brush,
+      });
+      this.waves.mesh.position.y = 0;
+
+      for (let i = 0; i < 100; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const radius = Math.random() * 50 + 32;
+        this.waves.addItem({
+          position: new THREE.Vector3(
+            Math.cos(angle) * radius,
+            0,
+            Math.sin(angle) * radius,
+          ),
+          dashOffset: Math.random() * 2,
+        });
+      }
+
+      this.scene.add(this.waves.mesh);
     });
   }
 
@@ -128,19 +159,18 @@ export default class WebGL extends Emitter {
   }
 
   initScene() {
-    this.scene.fog = new THREE.Fog(0xb7eeff, 60, 150);
-    this.camera.position.set(0, 20, 20);
+    this.camera.position.set(0, 30, 30);
     this.camera.lookAt(new THREE.Vector3());
   }
 
   initLights() {
-    const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
-    this.scene.add(ambientLight);
+    this.ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
+    this.scene.add(this.ambientLight);
 
-    const light = new THREE.DirectionalLight(0xFFFFFF, 0.5);
-    this.scene.add(light);
+    this.directionalLight = new THREE.DirectionalLight(0xFFFFFF, 0.5);
+    this.scene.add(this.directionalLight);
 
-    light.position.set(100, 100, 100);
+    this.directionalLight.position.set(100, 100, 100);
   }
 
   loop() {
@@ -149,6 +179,14 @@ export default class WebGL extends Emitter {
     if (this.clouds) {
       this.clouds.mesh.material.uniforms.dashOffset.value += 0.03;
     }
+    if (this.waves) {
+      this.waves.mesh.material.uniforms.dashOffset.value += 0.01;
+    }
     this.renderer.render();
+  }
+
+  initGUI() {
+    GUI.rendering.addLight('Ambient', this.ambientLight);
+    GUI.rendering.addLight('Directional', this.directionalLight);
   }
 }

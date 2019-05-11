@@ -41,8 +41,6 @@ export default class LineCluster extends Cluster {
         'c.a *= ceil(mod(vCounters + dashOffset, dashArray) - (dashArray * dashRatio));',
         'c.a *= ceil(mod(vCounters + dashOffset + vDashOffset, dashArray) - (dashArray * dashRatio));',
       );
-
-      console.log(program.fragmentShader);
     };
   }
 

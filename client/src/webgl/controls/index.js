@@ -3,6 +3,8 @@ import RailsControl from './RailsControl';
 import bus from '../../plugins/Bus';
 import mouse from '../../plugins/Mouse';
 import Viewport from '../../plugins/Viewport';
+import config from '@/config/controls';
+import GUI from '@/plugins/GUI';
 
 class Control {
   constructor({
@@ -10,11 +12,11 @@ class Control {
   } = {}) {
     this.orbit = new OrbitControls({
       object: camera,
-      radius: 25,
       enabled: true,
       look: new THREE.Vector3(),
-      phi: Math.PI / 8,
-      theta: Math.PI / 4,
+      radius: config.camera.radius.startAt,
+      phi: config.camera.phi.startAt,
+      theta: config.camera.theta.startAt,
     });
 
     this.rails = new RailsControl({
@@ -29,9 +31,14 @@ class Control {
       theta: this.orbit.theta,
     };
 
+    this.initDragEvent();
+    this.initWheelEvent();
+    this.initGUI();
+  }
+
+  initDragEvent() {
     let phi = 0;
     let theta = 0;
-
     this.mouse.$on('dragstart', () => {
       phi = this.state.phi;
       theta = this.state.theta;
@@ -39,13 +46,28 @@ class Control {
 
     this.mouse.$on('dragmove', (e) => {
       this.state.theta = theta - (e.delta.x / Viewport.height) * 5.0;
-      this.state.phi = Math.min(Math.PI / 3, Math.max(0.1, phi - (e.delta.y / Viewport.width) * 5.0));
+      this.state.phi = Math.min(
+        config.camera.phi.max,
+        Math.max(
+          phi - (e.delta.y / Viewport.width) * 5.0,
+          config.camera.phi.min,
+        ),
+      );
     });
+  }
 
-    let wheel = 5;
+  initWheelEvent() {
+    let wheel = config.camera.radius.startAt;
     this.mouse.$on('wheel', ({ event }) => {
       wheel += event.deltaY / 100;
-      this.orbit.radius = Math.max(5, wheel);
+      wheel = Math.min(
+        config.camera.radius.max,
+        Math.max(
+          wheel,
+          config.camera.radius.min,
+        ),
+      );
+      this.orbit.radius = wheel;
     });
   }
 
@@ -53,6 +75,18 @@ class Control {
     this.orbit.update();
     this.orbit.theta += (this.state.theta - this.orbit.theta) * 0.1;
     this.orbit.phi += (this.state.phi - this.orbit.phi) * 0.1;
+  }
+
+  initGUI() {
+    const phiFolder = GUI.controls.addFolder('phi');
+    phiFolder.add(config.camera.phi, 'max', 0, Math.PI / 2);
+    phiFolder.add(config.camera.phi, 'min', 0, Math.PI / 2);
+
+    const radiusFolder = GUI.controls.addFolder('radius');
+    radiusFolder.add(config.camera.radius, 'max', 1, 100);
+    radiusFolder.add(config.camera.radius, 'min', 1, 32);
+
+    GUI.scene.addCamera('Camera', this.camera);
   }
 }
 
