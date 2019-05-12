@@ -5,12 +5,16 @@
 html {
   height: 100%;
   font-size: 62.5%;
-  font-family: "Druk-WideMedium" !important;
 }
 
 body {
   height: 100%;
   overflow: hidden;
+  line-height: inherit !important;
+}
+
+p, a {
+  font-family: "DrukText-Medium" !important;
 }
 
 a {

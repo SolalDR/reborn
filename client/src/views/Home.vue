@@ -3,14 +3,14 @@
     <video class="trailer" src="@/assets/video/trailer.mp4" autoplay playsinline muted loop></video>
 
     <transition name="fade" mode="out-in">
-      <div v-if="status === 'introduction'">
-        <div class="home__content">
-          <p>Introduction texts</p>
-        </div>
+      <!-- INTRODUCTION -->
+      <overlay v-if="status === 'introduction'" :is-transparent="false">
+        <p class="introduction__texts">Il y a plus d’un an désormais, la montée des eaux et des cataclysmes climatiques à répétition ont pratiquement effacé toute trace de vie humaine de la surface de la terre.</p>
 
-        <button class="skip-intro cta--bordered" @click="skipIntro">Passer l'introduction</button>
-      </div>
+        <button class="introduction__skip cta--bordered" @click="skipIntro">Passer l'introduction</button>
+      </overlay>
 
+      <!-- LANDING -->
       <div v-if="status === 'landing'" class="home__content" key="landing">
         <img class="logo" src="@/assets/img/logo.svg" alt="Logo Reborn">
 
@@ -36,15 +36,19 @@
       </div>
     </transition>
 
-    <router-link :to="{name: 'about'}" class="about__cta cta">A Propos</router-link>
+    <transition name="fade">
+      <router-link v-if="status === 'landing'" :to="{name: 'about'}" class="about__cta cta">A Propos</router-link>
+    </transition>
   </div>
 </template>
 
 <script>
 import config from '../config';
+import Overlay from "../components/global/Overlay";
 
 export default {
   name: 'home',
+  components: {Overlay},
   data() {
     return {
       status: 'introduction', // introduction => landing,
@@ -153,6 +157,27 @@ export default {
       min-height: 100vh;
     }
 
+    .introduction {
+      &__texts {
+        margin: 0 auto;
+        max-width: 71.4rem;
+        text-align: center;
+        @include fontSize(30);
+        line-height: 3.5rem;
+      }
+
+      &__skip {
+        position: absolute;
+        bottom: 6rem;
+        left: 50%;
+        transform: translateX(-50%);
+
+        &:hover {
+          transform: translateX(calc(-50% - .3rem)) scale(1.05);
+        }
+      }
+    }
+
     &__content {
       z-index: 1;
       position: relative;
@@ -202,17 +227,6 @@ export default {
             border-radius: 50%;
           }
         }
-      }
-    }
-
-    .skip-intro {
-      position: absolute;
-      bottom: 6rem;
-      left: 50%;
-      transform: translateX(-50%);
-
-      &:hover {
-        transform: translateX(calc(-50% - .3rem)) scale(1.05);
       }
     }
 

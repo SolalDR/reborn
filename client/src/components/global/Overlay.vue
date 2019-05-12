@@ -1,5 +1,5 @@
 <template>
-  <div class="overlay">
+  <div class="overlay" :class="{'overlay--transparent': isTransparent}">
     <div class="overlay__content">
       <slot></slot>
     </div>
@@ -9,6 +9,12 @@
 <script>
 export default {
   name: 'overlay',
+  props: {
+    isTransparent: {
+      type: Boolean,
+      default: true,
+    },
+  },
 };
 </script>
 
@@ -20,7 +26,11 @@ export default {
     @include useFlex();
     width: 100vw;
     height: 100vh;
-    background-color: rgba(getColor(mains, primary), .75);
+    background-color: getColor(mains, primary);
+
+    &--transparent {
+      background-color: rgba(getColor(mains, primary), .75);
+    }
 
     &__content {
       text-align: center;
