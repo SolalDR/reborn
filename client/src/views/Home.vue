@@ -50,10 +50,18 @@
           </div>
         </div>
       </div>
+
+      <!-- ABOUT -->
+      <overlay v-if="status === 'about'">
+        <div class="home__about">
+          <p>Hello</p>
+          <p @click="status = 'landing'">Retour</p>
+        </div>
+      </overlay>
     </transition>
 
     <transition name="fade">
-      <router-link v-if="status === 'landing'" :to="{name: 'about'}" class="about__cta cta">A Propos</router-link>
+      <p v-if="status === 'landing'" class="about__cta cta" @click="status = 'about'">A Propos</p>
     </transition>
   </div>
 </template>
