@@ -13,11 +13,24 @@ body {
   line-height: inherit !important;
 }
 
+*::selection {
+  background-color: getColor(mains, primary) !important;
+}
+
 p, a {
-  font-family: "DrukText-Medium" !important;
+  @include fontSize(18);
+  font-family: "DrukText-Medium";
 }
 
 a {
   color: getColor(basics, black) !important;
   text-decoration: none !important;
+}
+
+.bold {
+  font-family: "DrukText-Bold";
+}
+
+.italic {
+  font-family: "DrukText-MediumItalic";
 }
