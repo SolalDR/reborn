@@ -44,6 +44,10 @@
         </transition>
       </overlay>
     </transition>
+
+    <webgl-component :position="position">
+      <p>Hello</p>
+    </webgl-component>
   </main>
 </template>
 
@@ -59,6 +63,7 @@ import IndicatorList from '../components/game/IndicatorList.vue';
 import Inventory from '../components/game/Inventory.vue';
 import Settings from '../components/game/Settings.vue';
 import YearsCounter from '../components/game/YearsCounter.vue';
+import WebglComponent from '../components/game/WebglComponent.vue';
 import Overlay from '../components/global/Overlay';
 import Explanations from '../components/game/Explanations';
 import Saving from '../components/game/Saving';
@@ -79,6 +84,7 @@ export default {
     Loader,
     Introduction,
     Countdown,
+    WebglComponent,
   },
 
   data() {
@@ -92,6 +98,7 @@ export default {
       gauges: null,
       indicators: null,
       year: 0,
+      position: new THREE.Vector3(0, 0.1, 8),
     };
   },
 

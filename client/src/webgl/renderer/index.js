@@ -95,7 +95,7 @@ export default class Renderer {
     effectPass.dithering = true;
     effectPass.renderToScreen = true;
 
-    this.composer.addPass(new RenderPass(this.pickingScene, this.camera));
+    this.composer.addPass(new RenderPass(this.scene, this.camera));
     this.composer.addPass(effectPass);
   }
 

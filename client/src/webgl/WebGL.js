@@ -11,6 +11,7 @@ import LineSystem from './components/line/LineSystem';
 import GUI from '@/plugins/GUI';
 import modelsConfig from '@/config/models';
 import EntityModelGroup from './components/game/EntityModelGroup';
+import WorldScreen from './components/WorldScreen.js';
 
 
 export default class WebGL extends Emitter {
@@ -26,7 +27,12 @@ export default class WebGL extends Emitter {
     this.scene = new THREE.Scene();
     this.scene.name = 'main';
     this.camera = new THREE.PerspectiveCamera(45, Viewport.width / Viewport.height, 1, 500);
+
     this.controls = new Controls({
+      camera: this.camera,
+    });
+
+    this.worldScreen = new WorldScreen({
       camera: this.camera,
     });
 
@@ -49,6 +55,13 @@ export default class WebGL extends Emitter {
     this.initScene();
     this.initGUI();
     this.loop();
+
+    var geometry = new THREE.CircleGeometry( 16, 32 );
+    var material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+    var circle = new THREE.Mesh( geometry, material );
+    circle.rotation.x = -Math.PI/2;
+    circle.y = 1;
+    this.scene.add( circle );
   }
 
   initModels() {
@@ -200,6 +213,7 @@ export default class WebGL extends Emitter {
     if (this.waves) {
       this.waves.mesh.material.uniforms.dashOffset.value += 0.01;
     }
+    this.worldScreen.render();
     this.renderer.render();
   }
 

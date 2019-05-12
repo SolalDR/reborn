@@ -44,7 +44,8 @@ export default class EntityModelGroup {
     });
   }
 
-  removeItem(id) {
-
+  removeItem(index) {
+    this.entityCluster.removeItem(index);
+    this.pickingCluster.removeItem(index);
   }
 }

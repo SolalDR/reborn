@@ -155,8 +155,10 @@ class Cluster {
   /**
    * @todo
    */
-  removeItem(uuid) {
-    this.meshes.delete(uuid);
+  removeItem(index) {
+    this.setPositionAt(index, this.hiddenLocation);
+    this.availables.unshift(index);
+    this.geometry.maxInstancedCount = this.limit - this.availables.length;
   }
 
   setPositionAt(index, position) {
