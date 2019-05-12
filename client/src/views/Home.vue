@@ -7,9 +7,13 @@
     <transition name="fade" mode="out-in">
       <!-- INTRODUCTION -->
       <overlay v-if="status === 'introduction'" :is-transparent="false">
-        <p class="introduction__texts">Il y a plus d’un an désormais, la montée des eaux et des cataclysmes climatiques à répétition ont pratiquement effacé toute trace de vie humaine de la surface de la terre.</p>
+        <template #default>
+          <p class="introduction__texts">Il y a plus d’un an désormais, la montée des eaux et des cataclysmes climatiques à répétition ont pratiquement effacé toute trace de vie humaine de la surface de la terre.</p>
+        </template>
 
-        <button class="introduction__skip cta--bordered" @click="skipIntro">Passer l'introduction</button>
+        <template #footer>
+          <button class="introduction__skip cta--bordered" @click="skipIntro">Passer l'introduction</button>
+        </template>
       </overlay>
 
       <!-- LANDING -->
@@ -55,10 +59,33 @@
 
       <!-- ABOUT -->
       <overlay v-if="status === 'about'">
-        <div class="home__about">
-          <p>Hello</p>
-          <p @click="status = 'landing'">Retour</p>
-        </div>
+        <template #header>
+          <h2 class="title--wide">À propos</h2>
+        </template>
+
+        <template #default>
+          <p>Ce site a été réalisé par une magic team.</p>
+
+          <div>
+            <p>Designers</p>
+
+            <p>Allan Michel</p>
+            <p>Matthieu Pajot</p>
+          </div>
+
+          <div>
+            <p>Développeurs</p>
+
+            <p>Solal Revel</p>
+            <p>Erwann Letue</p>
+          </div>
+
+          <p>Merci aux équipes pédagogiques de Gobelins  pour leur aide dans le développement du projet.</p>
+        </template>
+
+        <template #footer>
+          <p class="cta--bordered" @click="status = 'landing'">Retour</p>
+        </template>
       </overlay>
     </transition>
 
@@ -201,13 +228,8 @@ export default {
       }
 
       &__skip {
-        position: absolute;
-        bottom: 6rem;
-        left: 50%;
-        transform: translateX(-50%);
-
         &:hover {
-          transform: translateX(calc(-50% - .3rem)) scale(1.05);
+          transform: scale(1.05);
         }
       }
     }

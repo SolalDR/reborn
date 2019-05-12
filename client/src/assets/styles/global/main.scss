@@ -1,6 +1,7 @@
 @import "./components/cta";
 @import "./components/dat.gui";
 @import "./font-faces/druk";
+@import "./texts/titles";
 
 html {
   height: 100%;
@@ -32,6 +33,14 @@ body {
     background-color: getColor(basics, black);
     border-radius: 1.25rem;
   }
+}
+
+h1,
+h2,
+h3,
+p,
+a {
+  margin: 0;
 }
 
 p, a {

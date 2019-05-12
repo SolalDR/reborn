@@ -1,7 +1,15 @@
 <template>
   <div class="overlay" :class="{'overlay--transparent': isTransparent}">
     <div class="overlay__content">
+      <div class="header">
+        <slot name="header"></slot>
+      </div>
+
       <slot></slot>
+
+      <div class="footer">
+        <slot name="footer"></slot>
+      </div>
     </div>
   </div>
 </template>
@@ -34,6 +42,21 @@ export default {
 
     &__content {
       text-align: center;
+
+      .header,
+      .footer {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .header {
+        top: 4.5rem;
+      }
+
+      .footer {
+        bottom: 6rem;
+      }
     }
   }
 </style>
