@@ -1,6 +1,8 @@
 <template>
   <div class="home">
-    <video class="trailer" src="@/assets/video/trailer.mp4" autoplay playsinline muted loop></video>
+    <!-- TODO: Update Video src -->
+    <!-- <video class="trailer" src="@/assets/video/trailer.mp4" autoplay playsinline muted loop></video> -->
+    <img class="trailer" src="@/assets/img/TMP/background.jpg" alt="">
 
     <transition name="fade" mode="out-in">
       <!-- INTRODUCTION -->
