@@ -5,6 +5,7 @@
   color: getColor(basics, black);
   @include fontSize(20);
   font-weight: bold;
+  font-family: "DrukText-Medium";
   border: none;
 
   &--bordered {
@@ -17,7 +18,8 @@
     transition: all .3s ease;
   
     &:hover {
-      box-shadow: 3px 3px 0px 0px rgba(0,0,0,1);
+      box-shadow: .3rem .3rem 0 0 rgba(0, 0, 0, 1);
+      transform: translateX(-.3rem) scale(1.05);
     }
   }
 }

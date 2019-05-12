@@ -2,7 +2,15 @@
   <div class="home">
     <video class="trailer" src="@/assets/video/trailer.mp4" autoplay playsinline muted loop></video>
 
-    <transition name="fade">
+    <transition name="fade" mode="out-in">
+      <div v-if="status === 'introduction'">
+        <div class="home__content">
+          <p>Introduction texts</p>
+        </div>
+
+        <button class="skip-intro cta--bordered" @click="skipIntro">Passer l'introduction</button>
+      </div>
+
       <div v-if="status === 'landing'" class="home__content" key="landing">
         <img class="logo" src="@/assets/img/logo.svg" alt="Logo Reborn">
 
@@ -39,7 +47,7 @@ export default {
   name: 'home',
   data() {
     return {
-      status: 'intro',
+      status: 'introduction', // introduction => landing,
       roomId: null,
       inviteLink: null,
     };
@@ -54,10 +62,13 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      this.status = 'landing';
+      // this.status = 'landing';
     }, 1500);
   },
   methods: {
+    skipIntro() {
+      this.status = 'landing';
+    },
     joinRoom() {
       console.log('Join Room');
     },
@@ -172,6 +183,7 @@ export default {
 
             &:hover {
               box-shadow: none;
+              transform: inherit;
             }
           }
 
@@ -190,6 +202,17 @@ export default {
             border-radius: 50%;
           }
         }
+      }
+    }
+
+    .skip-intro {
+      position: absolute;
+      bottom: 6rem;
+      left: 50%;
+      transform: translateX(-50%);
+
+      &:hover {
+        transform: translateX(calc(-50% - .3rem)) scale(1.05);
       }
     }
 
