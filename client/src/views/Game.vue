@@ -201,9 +201,9 @@ export default {
      */
     onEntityAdd(item) {
       this.$store.commit('debug/log', { content: 'entity:add (receive)', label: 'socket' });
-      const cluster = this.$webgl.clusters[item.model];
-      if (cluster) {
-        cluster.addItem({
+      const model = this.$webgl.models[item.model];
+      if (model) {
+        model.addItem({
           position: new THREE.Vector3(item.position.x, item.position.y, item.position.z),
           rotation: new THREE.Euler(item.rotation._x, item.rotation._y, item.rotation._z),
         });

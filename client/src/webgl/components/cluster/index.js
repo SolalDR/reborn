@@ -8,10 +8,12 @@ class Cluster {
     limit = 100,
     hiddenLocation = new THREE.Vector3(1, 1, 1),
     dynamic = true,
+    picking = false,
   } = {}) {
     this.offset = 0;
     this.limit = limit;
     this.dynamic = dynamic;
+    this.picking = picking;
     this.hiddenLocation = hiddenLocation;
     this.availables = new Array(limit);
     this.entities = new Array(limit).fill(false);
@@ -54,22 +56,63 @@ class Cluster {
 
     this.geometry.attributes.instancePosition.setDynamic(this.dynamic);
     this.geometry.attributes.instanceQuaternion.setDynamic(this.dynamic);
-    this.geometry.attributes.instanceScale.setDynamic(this.dynamic);
+
+    if (this.picking) {
+      const pickingColorBuffer = new Float32Array(this.limit * 3);
+      for (let i = 0; i < this.limit; i += 1) {
+        pickingColorBuffer[i * 3] = 1;
+        pickingColorBuffer[i * 3 + 1] = 1;
+        pickingColorBuffer[i * 3 + 2] = 1;
+      }
+
+      this.geometry.addAttribute('instancePickingColor', new THREE.InstancedBufferAttribute(pickingColorBuffer, 3, false));
+      this.geometry.attributes.instanceScale.setDynamic(this.dynamic);
+    }
   }
 
   setupMaterial() {
+    if (this.picking) {
+      this.material.defines.PICKING = '';
+    }
+
     this.material.onBeforeCompile = (program) => {
       program.vertexShader = `${beforeVertexChunk}\n\r${program.vertexShader}`;
 
       program.vertexShader = program.vertexShader.replace(
         '#include <begin_vertex>',
-        'vec3 transformed = ( _instanceMatrix * vec4( position , 1. )).xyz;',
+        [
+          'vec3 transformed = ( _instanceMatrix * vec4( position , 1. )).xyz;',
+          '#ifdef PICKING',
+          'v_instancePickingColor = instancePickingColor;',
+          '#endif',
+        ].join('\n\r'),
       );
 
       program.vertexShader = program.vertexShader.replace(
         '#include <defaultnormal_vertex>',
         `mat4 _instanceMatrix = getInstanceMatrix();
          vec3 transformedNormal =  transposeMat3( inverse( mat3( modelViewMatrix * _instanceMatrix ) ) ) * objectNormal ;`,
+      );
+
+      program.fragmentShader = program.fragmentShader.replace(
+        '#include <common>',
+        [
+          '#include <common>',
+          '#ifdef PICKING',
+          'varying vec3 v_instancePickingColor;',
+          '#endif',
+        ].join('\n\r'),
+      );
+
+      program.fragmentShader = program.fragmentShader.replace(
+        'gl_FragColor = vec4( outgoingLight, diffuseColor.a );',
+        [
+          '#ifdef PICKING',
+          'gl_FragColor = vec4( v_instancePickingColor, 1 );',
+          '#else',
+          'gl_FragColor = vec4( outgoingLight, diffuseColor.a );',
+          '#endif',
+        ].join('\n\r'),
       );
     };
   }
@@ -78,6 +121,7 @@ class Cluster {
     position = new THREE.Vector3(),
     scale = null,
     rotation = null,
+    pickingColor = null,
   } = {}) {
     if (Number.isNaN(this.availables[0])) return null;
 
@@ -98,6 +142,11 @@ class Cluster {
     if (rotation) {
       this.setRotationAt(index, rotation);
       this.geometry.attributes.instanceQuaternion.needsUpdate = true;
+    }
+
+    if (pickingColor) {
+      this.setPickingColorAt(index, pickingColor);
+      this.geometry.attributes.instancePickingColor.needsUpdate = true;
     }
 
     return index;
@@ -121,6 +170,10 @@ class Cluster {
   setRotationAt(index, rotate) {
     const r = rotate instanceof THREE.Euler ? q.setFromEuler(rotate) : rotate;
     this.geometry.attributes.instanceQuaternion.setXYZW(index, r.x, r.y, r.z, r.w);
+  }
+
+  setPickingColorAt(index, pickingColor) {
+    this.geometry.attributes.instancePickingColor.setXYZ(index, pickingColor.x, pickingColor.y, pickingColor.z);
   }
 }
 
