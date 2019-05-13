@@ -129,7 +129,7 @@ export default class GameMap extends THREE.Group {
     );
 
     const material = new THREE.MeshToonMaterial({
-      color: 0xA7E3BD,
+      color: 0x7AE2B6,
       specular: 0x000000,
       shininess: 0,
     });

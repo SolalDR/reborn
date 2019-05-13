@@ -6,6 +6,8 @@ import garbage from "./garbage";
 import house from "./house";
 import rock from "./rock";
 import tree from "./tree";
+import windturbine from "./windturbine";
+import intensivelivestock from "./intensivelivestock";
 
 export default [
   factory,
@@ -16,4 +18,6 @@ export default [
   house,
   rock,
   tree,
+  windturbine,
+  intensivelivestock,
 ]
