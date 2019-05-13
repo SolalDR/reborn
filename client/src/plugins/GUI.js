@@ -20,7 +20,7 @@ export const initGui = () => {
   GUI.scene = GUI.gui.addFolder('Scene');
 
   // Oiseaux, poissons, vent
-  GUI.environnement = GUI.gui.addFolder('Environnement');
+  GUI.world = GUI.gui.addFolder('World');
 
   // Map
   GUI.map = GUI.gui.addFolder('Map');

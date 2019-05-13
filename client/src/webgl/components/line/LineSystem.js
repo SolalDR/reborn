@@ -20,6 +20,7 @@ export default class LineSystem {
     transparent = true,
     opacity = 1,
     side = THREE.DoubleSide,
+    limit = 100,
   } = {}) {
     const line = new MeshLine();
     line.setGeometry(geometry);
@@ -28,7 +29,9 @@ export default class LineSystem {
       color, map, useMap, resolution, sizeAttenuation, lineWidth, near, far, depthWrite, depthTest, alphaTest, dashArray, dashOffset, dashRatio, transparent, opacity, side
     });
 
-    return new LineCluster(line.geometry, this.material);
+    return new LineCluster(line.geometry, this.material, {
+      limit,
+    });
   }
 
   loop() {

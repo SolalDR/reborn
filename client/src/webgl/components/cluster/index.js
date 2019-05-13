@@ -196,17 +196,19 @@ class Cluster {
     );
   }
 
-  /**
-   * @TODO
-   */
-  getRotationAt(index) {
-    return null;
+  getScaleAt(index) {
+    const a = this.geometry.attributes.instanceScale;
+    return new THREE.Vector3(
+      a.array[index * a.itemSize + 0],
+      a.array[index * a.itemSize + 1],
+      a.array[index * a.itemSize + 2]
+    );
   }
 
   /**
    * @TODO
    */
-  getScaleAt(index) {
+  getRotationAt(index) {
     return null;
   }
 

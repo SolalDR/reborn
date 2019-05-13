@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueMaterial from 'vue-material';
+import animate from '@solaldr/animate';
 import App from './App.vue';
 import router from './router';
 import store from './services/store';
@@ -20,6 +21,7 @@ import 'vue-material/dist/vue-material.min.css';
 import './admin/styles/admin.scss';
 import './assets/styles/global/main.scss';
 
+animate.start();
 Vue.config.productionTip = false;
 
 // Components

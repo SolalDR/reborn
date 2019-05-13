@@ -7,11 +7,11 @@ import mouse from '../plugins/Mouse';
 import AssetsManager from '../services/assets/Manager';
 import Renderer from './renderer';
 import generateMap from './components/map/generator/Generator';
-import LineSystem from './components/line/LineSystem';
 import GUI from '@/plugins/GUI';
 import modelsConfig from '@/config/models';
 import EntityModelGroup from './components/game/EntityModelGroup';
 import WorldScreen from './components/WorldScreen.js';
+import { Clouds, Waves } from './components/world'
 
 export default class WebGL extends Emitter {
   constructor({
@@ -69,6 +69,7 @@ export default class WebGL extends Emitter {
           material,
           slot: index,
         });
+
         if (modelsConfig.picking) {
           this.scene.add(this.models[modelName].pickingCluster.mesh);
           this.renderer.pickingScene.add(this.models[modelName].entityCluster.mesh);
@@ -86,64 +87,15 @@ export default class WebGL extends Emitter {
     });
 
     AssetsManager.get('images').then((images) => {
-      const geometry = new THREE.Geometry();
-      const cloudPath = images.cloud_line.paths[0];
-      cloudPath.currentPath.getPoints(100).forEach((point, i) => {
-        geometry.vertices.push(
-          new THREE.Vector3(point.x, -point.y, Math.cos(i / 200) * 3)
-            .multiplyScalar(0.5),
-        );
+      var clouds = new Clouds({
+        path: images.cloud_line.paths[0],
+        brush: images.cloud_brush
       });
 
-      this.clouds = new LineSystem(geometry, {
-        map: images.cloud_brush,
+      this.waves = new Waves({
+        path: images.wave_line.paths[0],
+        brush: images.cloud_brush,
       });
-      this.clouds.mesh.position.y = 20;
-
-      for (let i = 0; i < 100; i++) {
-        this.clouds.addItem({
-          position: new THREE.Vector3(
-            (Math.random() - 0.5) * 10,
-            0,
-            (Math.random() - 0.5) * 10,
-          ),
-          rotation: new THREE.Euler(
-            Math.random() * 2 * Math.PI,
-            Math.random() * 2 * Math.PI,
-            Math.random() * 2 * Math.PI,
-          ),
-          dashOffset: Math.random() * 2,
-        });
-      }
-
-      // this.scene.add(this.clouds.mesh);
-
-      const geometryWave = new THREE.Geometry();
-      const wavePath = images.wave_line.paths[0];
-      wavePath.currentPath.getPoints(40).forEach((point) => {
-        geometryWave.vertices.push(
-          new THREE.Vector3(point.x, 0, point.y)
-            .multiplyScalar(0.1),
-        );
-      });
-
-      this.waves = new LineSystem(geometryWave, {
-        map: images.cloud_brush,
-      });
-      this.waves.mesh.position.y = 0;
-
-      for (let i = 0; i < 100; i++) {
-        const angle = Math.random() * Math.PI * 2;
-        const radius = Math.random() * 50 + 32;
-        this.waves.addItem({
-          position: new THREE.Vector3(
-            Math.cos(angle) * radius,
-            0,
-            Math.sin(angle) * radius,
-          ),
-          dashOffset: Math.random() * 2,
-        });
-      }
 
       this.scene.add(this.waves.mesh);
     });
@@ -213,12 +165,7 @@ export default class WebGL extends Emitter {
   loop() {
     requestAnimationFrame(this.loop.bind(this));
     this.controls.loop();
-    if (this.clouds) {
-      this.clouds.mesh.material.uniforms.dashOffset.value += 0.03;
-    }
-    if (this.waves) {
-      this.waves.mesh.material.uniforms.dashOffset.value += 0.01;
-    }
+    if (this.waves) this.waves.render();
     this.worldScreen.render();
     this.renderer.render();
   }
