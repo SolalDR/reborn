@@ -1,6 +1,8 @@
 <template>
   <div class="webgl-component" style="--x: 0px; --y: 0px;">
-    <slot />
+    <div class="webgl-component__body">
+      <slot />
+    </div>
   </div>
 </template>
 
@@ -40,5 +42,9 @@ export default {
   top: 0;
   left: 0;
   transform: translateX(var(--x)) translateY(var(--y)) translateZ(0);
+
+  &__body {
+    transform: translateX(-50%) translateY(-50%) translateZ(0);
+  }
 }
 </style>

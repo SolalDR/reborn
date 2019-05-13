@@ -16,9 +16,11 @@ class Cluster {
     this.picking = picking;
     this.hiddenLocation = hiddenLocation;
     this.availables = new Array(limit);
-    this.entities = new Array(limit).fill(false);
+    this.entities = new Array(limit).fill(null);
+    this.indexMap = new Map();
 
     this.geometry = new THREE.InstancedBufferGeometry().copy(geometry);
+    this.geometry.maxInstancedCount = 0;
     this.material = material.clone();
 
     this.setupInstanceGeometry();
@@ -122,12 +124,18 @@ class Cluster {
     scale = null,
     rotation = null,
     pickingColor = null,
+    uuid = null,
   } = {}) {
     if (Number.isNaN(this.availables[0])) return null;
-
     const index = this.availables[0];
+
+    this.entities[index] = uuid;
     this.availables.shift();
-    this.geometry.maxInstancedCount = this.limit - this.availables.length;
+    this.indexMap.set(uuid, index);
+
+    if(index + 1 > this.geometry.maxInstancedCount) {
+      this.geometry.maxInstancedCount = index + 1;
+    }
 
     if (position) {
       this.setPositionAt(index, position);
@@ -152,13 +160,61 @@ class Cluster {
     return index;
   }
 
-  /**
-   * @todo
-   */
   removeItem(index) {
+    if(index + 1 === this.geometry.maxInstancedCount) {
+      this.geometry.maxInstancedCount = index;
+    }
+
     this.setPositionAt(index, this.hiddenLocation);
+    this.geometry.attributes.instancePosition.needsUpdate = true;
+    this.indexMap.delete(this.entities[index]);
     this.availables.unshift(index);
-    this.geometry.maxInstancedCount = this.limit - this.availables.length;
+    this.entities[index] = null;
+  }
+
+  getItem(index) {
+    return {
+      position: this.getPositionAt(index),
+      rotation: this.getRotationAt(index),
+      scale: this.getScaleAt(index),
+      pickingColor: this.getPickingColorAt(index),
+      uuid: this.entities[index],
+      index,
+    }
+  }
+
+  getIndex(uuid) {
+    return this.indexMap.get(uuid);
+  }
+
+  getPositionAt(index) {
+    const a = this.geometry.attributes.instancePosition;
+    return new THREE.Vector3(
+      a.array[index * a.itemSize + 0],
+      a.array[index * a.itemSize + 1],
+      a.array[index * a.itemSize + 2]
+    );
+  }
+
+  /**
+   * @TODO
+   */
+  getRotationAt(index) {
+    return null;
+  }
+
+  /**
+   * @TODO
+   */
+  getScaleAt(index) {
+    return null;
+  }
+
+  /**
+   * @TODO
+   */
+  getPickingColorAt(index) {
+    return null;
   }
 
   setPositionAt(index, position) {

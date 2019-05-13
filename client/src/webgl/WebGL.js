@@ -13,7 +13,6 @@ import modelsConfig from '@/config/models';
 import EntityModelGroup from './components/game/EntityModelGroup';
 import WorldScreen from './components/WorldScreen.js';
 
-
 export default class WebGL extends Emitter {
   constructor({
     canvas = null,
@@ -55,13 +54,6 @@ export default class WebGL extends Emitter {
     this.initScene();
     this.initGUI();
     this.loop();
-
-    var geometry = new THREE.CircleGeometry( 16, 32 );
-    var material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
-    var circle = new THREE.Mesh( geometry, material );
-    circle.rotation.x = -Math.PI/2;
-    circle.y = 1;
-    this.scene.add( circle );
   }
 
   initModels() {
@@ -172,14 +164,21 @@ export default class WebGL extends Emitter {
 
       mouse.$on('click', ({ event }) => {
         if (!mouse.dragDelta && this.raycaster.intersection && event.target === this.canvas) {
-
           const {id, slot} = this.renderer.pick(event.clientX, event.clientY);
-          console.log(id, slot);
-          if (id === 0 && slot === 0) {
+
+          if (id === 255 && slot === 255) {
+            // Todo replace addItem with addEntity
             this.emit('addItem', {
               position: this.map.gridHelper.position,
               rotation: new THREE.Euler(0, Math.floor(Math.random() * 4) * Math.PI / 2, 0),
             });
+          } else {
+            const model = this.findModelWithSlot(slot);
+            const entity = model.getItem(id);
+            if (entity) {
+              // Todo replace selectItem with selectEntity
+              this.emit('selectItem', entity);
+            }
           }
         }
       });
@@ -202,6 +201,16 @@ export default class WebGL extends Emitter {
     this.scene.add(this.directionalLight);
 
     this.directionalLight.position.set(100, 100, 100);
+  }
+
+  findModelWithSlot(slot) {
+    var model = null;
+    Object.keys(this.models).forEach(slug => {
+      if (this.models[slug].slot === slot) {
+        model = this.models[slug];
+      }
+    })
+    return model;
   }
 
   loop() {

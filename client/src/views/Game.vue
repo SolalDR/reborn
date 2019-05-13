@@ -45,14 +45,15 @@
       </overlay>
     </transition>
 
-    <webgl-component :position="position">
-      <p>Hello</p>
+    <webgl-component :position="selectedEntity.position" v-if="selectedEntity">
+      <p class="cta--bordered" @click="onRemoveItem">Delete</p>
     </webgl-component>
   </main>
 </template>
 
 <script>
 import Vue from 'vue';
+import uuid from '@/utils/uuid';
 import Reborn from '../game';
 import Loader from '../components/global/Loader.vue';
 import Scene from '../components/game/Scene.vue';
@@ -99,6 +100,7 @@ export default {
       indicators: null,
       year: 0,
       position: new THREE.Vector3(0, 0.1, 8),
+      selectedEntity: null,
     };
   },
 
@@ -176,14 +178,8 @@ export default {
       this.$store.commit('debug/log', { content: 'game: onWebGLInit', label: 'webgl' });
       this.$store.commit('debug/log', { content: 'game: pending', label: 'socket' });
       this.status = 'pending';
-      this.$webgl.on('addItem', (item) => {
-        const params = { ...item, model: this.currentModel.slug };
-        if (!config.server.enabled) {
-          this.onEntityAdd({ ...params, uuid: Math.floor(Math.random() * 1000), states: ['mounted', 'living'] });
-          return;
-        }
-        this.$socket.emit('entity:add', params);
-      });
+      this.$webgl.on('addItem', (item) => this.onAddItem(item));
+      this.$webgl.on('selectItem', (item) => this.selectedEntity = item)
 
       if (!config.server.enabled) {
         this.simulateGameStart();
@@ -203,6 +199,32 @@ export default {
       console.log('Try Again');
     },
 
+    onAddItem(item) {
+      const params = { ...item, model: this.currentModel.slug };
+      if (!config.server.enabled) {
+        this.onEntityAdd({ ...params, uuid: uuid(), states: ['mounted', 'living'] });
+        return;
+      }
+      this.$socket.emit('entity:add', params);
+    },
+
+    onRemoveItem() {
+      const params = {
+        model: this.selectedEntity.model,
+        uuid: this.selectedEntity.uuid
+      };
+
+      console.log(params);
+
+      this.selectedEntity = null;
+      if (!config.server.enabled) {
+        this.onEntityRemove(params);
+        return;
+      }
+
+      this.$socket.emit('entity:remove', params);
+    },
+
     /**
      * socket
      */
@@ -211,10 +233,15 @@ export default {
       const model = this.$webgl.models[item.model];
       if (model) {
         model.addItem({
+          ...item,
           position: new THREE.Vector3(item.position.x, item.position.y, item.position.z),
           rotation: new THREE.Euler(item.rotation._x, item.rotation._y, item.rotation._z),
         });
       }
+    },
+
+    onEntityRemove({ model, uuid }) {
+      this.$webgl.models[model].removeEntity(uuid);
     },
 
     onTimelineTick({ metrics, elapsed }) {

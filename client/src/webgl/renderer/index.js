@@ -6,8 +6,6 @@ import Viewport from '../../plugins/Viewport';
 import SobelEffect from './effects/SobelEffect';
 import FilmEffect from './effects/FilmEffect';
 import GUI from '../../plugins/GUI';
-import mouse from '@/plugins/Mouse';
-
 let swap = 1;
 
 export default class Renderer {
@@ -52,7 +50,7 @@ export default class Renderer {
       this.pickingTexture.height - y,
       1,
       1,
-      pixelBuffer
+      pixelBuffer,
     );
 
     return {
@@ -74,6 +72,7 @@ export default class Renderer {
   initPickingScene() {
     this.pickingScene = new THREE.Scene();
     this.pickingScene.name = 'picking';
+    this.pickingScene.background = new THREE.Color(0xFFFFFF);
     this.pickingTexture = new THREE.WebGLRenderTarget(Viewport.width, Viewport.height);
   }
 

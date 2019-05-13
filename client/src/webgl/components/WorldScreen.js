@@ -26,8 +26,8 @@ export default class WorldScreen extends Emitter {
     this.elements.forEach(element => {
       vector.copy(element.position).project(this.camera);
       element.callback(
-        Math.floor((vector.x + 0.5) * Viewport.width),
-        Math.floor((1 - (vector.y + 0.5)) * Viewport.height)
+        Math.floor((vector.x + 1) * Viewport.width * 0.5),
+        Math.floor((2 - (vector.y + 1)) * Viewport.height * 0.5)
       );
     })
   }

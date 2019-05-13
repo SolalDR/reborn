@@ -6,6 +6,7 @@ export default class EntityModelGroup {
     material = null,
     slot = null,
   } = {}) {
+    this.name = name;
     this.geometry = geometry;
     this.material = material;
     this.slot = slot;
@@ -25,10 +26,11 @@ export default class EntityModelGroup {
   addItem({
     position = null,
     rotation = null,
+    uuid = null,
   } = {}) {
     if (!position || !rotation) return;
 
-    const index = this.entityCluster.addItem({ position, rotation });
+    const index = this.entityCluster.addItem({ position, rotation, uuid });
 
     const pickingColor = new THREE.Vector3(
       this.slot / 256,
@@ -36,16 +38,26 @@ export default class EntityModelGroup {
       (index % 256) / 256,
     );
 
-    this.pickingCluster.addItem({
-      position,
-      rotation,
-      pickingColor,
-      index,
-    });
+    this.pickingCluster.addItem({ position, rotation, pickingColor, index, uuid });
+  }
+
+  getItem(index) {
+    return {
+      model: this.name,
+      ...this.entityCluster.getItem(index)
+    }
+  }
+
+  getEntity(uuid) {
+    return this.entityCluster.getItem(this.entityCluster.getIndex(uuid))
   }
 
   removeItem(index) {
     this.entityCluster.removeItem(index);
     this.pickingCluster.removeItem(index);
+  }
+
+  removeEntity(uuid) {
+    return this.removeItem(this.entityCluster.getIndex(uuid));
   }
 }
