@@ -10,8 +10,8 @@ export default class Biodiversity extends Metric {
       name: "Biodiversity",
       min: 0,
       max: 100,
-      value: 100,
-      recurentOperation: 0.1,
+      value: 50,
+      recurentOperation: 0.5,
     })
   }
 }

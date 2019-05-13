@@ -10,7 +10,7 @@ export default class Food extends Metric {
       name: "Food",
       min: 0,
       max: 100,
-      value: 100,
+      value: 30,
       recurentOperation: 0.1,
     })
   }

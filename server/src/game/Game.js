@@ -42,6 +42,8 @@ export default class Game extends Reborn.Game {
         metric.value += metric.recurentOperation * timeRatio;
       });
 
+      this.metrics.forEach(metric => metric.applyRecurentLogic(this));
+
       this.emit('tick', {
         metrics: metricsMap.map(m => m.infos),
         elapsed: Date.now() - this.startedAt

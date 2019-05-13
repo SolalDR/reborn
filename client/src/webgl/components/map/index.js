@@ -25,7 +25,6 @@ export default class GameMap extends THREE.Group {
       position: new THREE.Vector3(0, 1, 0),
     };
 
-
     this.grid = new Grid(gridParams);
     for (let i = 0; i < gridDatas.length; i++) {
       this.grid.register(i, gridDatas[i]);

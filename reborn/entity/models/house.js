@@ -14,16 +14,20 @@ export default {
         },
         {
           name: 'money',
-          value: -1000,
+          value: -200,
           checkConstraint: true
-        }
+        },
+        {
+          name: 'satisfaction',
+          value: 5,
+        },
       ]
     },
     mounted: {
       recurModifiers: [
         {
           name: 'purity',
-          value: -1
+          value: -0.5
         }
       ]
     },
@@ -31,7 +35,7 @@ export default {
       leaveModifiers: [
         {
           name: 'money',
-          value: 100
+          value: -15
         }
       ]
     }

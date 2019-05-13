@@ -9,9 +9,18 @@ export default class Population extends Metric {
     super({
       name: "Population",
       min: 0,
-      max: 100,
+      max: Infinity,
       value: 100,
-      recurentOperation: 0.1
+      recurentOperation: 0
     })
+  }
+
+  applyRecurentLogic(game) {
+    var intensity = game.metrics.get('satisfaction').value/100;
+    var maxRatio = 1.05;
+    var minRatio = 1;
+
+    this.value *= (minRatio + (maxRatio - minRatio)*intensity);
+    this.value = Math.floor(this.value);
   }
 }

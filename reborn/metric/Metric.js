@@ -19,7 +19,7 @@ class Metric extends Emitter {
     max = null,
     recurentOperation = 0,
     inclusiveSet = true
-  }){
+  } = {}){
     super();
     this.name = name;
     this.slug = slug === null ? snakeCase(name) : slug;
@@ -59,6 +59,11 @@ class Metric extends Emitter {
     this.value = infos.value;
     this.recurentOperation = infos.recurentOperation;
   }
+
+  /**
+   * @abstract
+   */
+  applyRecurentLogic() {}
 
   /**
    * Check if a limit is reached and fire an event if it does

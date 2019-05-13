@@ -17,7 +17,7 @@ export default {
       recurModifiers: [
         {
           name: 'energy',
-          value: 4
+          value: 10
         },
         {
           name: 'purity',

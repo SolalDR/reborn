@@ -44,8 +44,11 @@ export default class World extends Emitter {
       model: entityModel,
     });
 
+    if (!newEntity.valid) return;
+
     this.entities.set(newEntity.uuid, newEntity);
     this.emit('entity:add', newEntity.infos);
+    entityModel.count++;
     newEntity.on('update', (infos) => {
       this.emit('entity:update', infos);
     })
@@ -66,7 +69,9 @@ export default class World extends Emitter {
     if (!entity) {
       console.error(`World: Cannot remove entity "null"`); return;
     }
+
     entity.destruct();
+    entity.model.count--;
     this.entities.delete(entity.uuid);
     this.emit('entity:remove', entity.infos);
   }

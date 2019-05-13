@@ -165,9 +165,7 @@ export default class WebGL extends Emitter {
       mouse.$on('click', ({ event }) => {
         if (!mouse.dragDelta && this.raycaster.intersection && event.target === this.canvas) {
           const {id, slot} = this.renderer.pick(event.clientX, event.clientY);
-
           if (id === 255 && slot === 255) {
-            // Todo replace addItem with addEntity
             this.emit('addItem', {
               position: this.map.gridHelper.position,
               rotation: new THREE.Euler(0, Math.floor(Math.random() * 4) * Math.PI / 2, 0),
@@ -176,7 +174,6 @@ export default class WebGL extends Emitter {
             const model = this.findModelWithSlot(slot);
             const entity = model.getItem(id);
             if (entity) {
-              // Todo replace selectItem with selectEntity
               this.emit('selectItem', entity);
             }
           }

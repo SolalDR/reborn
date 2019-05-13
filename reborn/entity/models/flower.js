@@ -6,7 +6,7 @@ export default {
   role: "nature",
   states: {
     creation: {
-      duration: 1000,
+      duration: 200,
       enterModifiers: [
         {
           name: 'purity',
@@ -19,9 +19,17 @@ export default {
         {
           name: 'purity',
           value: 1
-        }
+        },
       ]
     },
+    destruction: {
+      leaveModifiers: [
+        {
+          name: 'money',
+          value: 50
+        }
+      ]
+    }
   }
 }
 

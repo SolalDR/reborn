@@ -85,7 +85,10 @@ export default class Room extends Emitter {
 
       player.socket.on('entity:remove', (entity) => {
         const entityModel = this.game.entityModels.get(entity.model);
-        if (entityModel && (entityModel.role === null || entityModel.role === player.role.name)) {
+        if (entityModel && (
+          entityModel.role === null && player.role.name === 'nature' ||
+          player.role.name === 'city'
+        )) {
           this.game.world.removeEntity(this.game.world.entities.get(entity.uuid));
         }
       });

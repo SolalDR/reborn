@@ -15,9 +15,10 @@ export default class EntityModel {
     slug = null,
     category = null,
     role = null,
-    size = {x: 1, y: 1},
+    size = [1, 1],
     states = {},
     game = null,
+    count = 0,
   }){
     this.name = name;
     this.slug = slug === null ? snakeCase(name) : slug;
@@ -26,6 +27,7 @@ export default class EntityModel {
     this.category = category;
     this.role = role;
     this.cluster = null;
+    this.count = count;
 
     // TODO Convert to Map
     this.states = {};

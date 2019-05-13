@@ -10,8 +10,8 @@ export default class Money extends Metric {
       name: "Money",
       min: 0,
       max: Infinity,
-      value: 10000,
-      recurentOperation: -200,
+      value: 0,
+      recurentOperation: 0,
       inclusiveSet: false,
     })
   }

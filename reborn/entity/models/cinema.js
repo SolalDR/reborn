@@ -10,15 +10,11 @@ export default {
           name: 'money',
           value: -2000,
           checkConstraint: true
-        }
-      ]
-    },
-    mounted: {
-      recurModifiers: [
+        },
         {
           name: 'satisfaction',
-          value: 1
-        },
+          value: 15,
+        }
       ]
     },
   }

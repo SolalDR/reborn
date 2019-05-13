@@ -21,6 +21,7 @@ export default class Entity extends Emitter {
     this.position = position;
     this.rotation = rotation;
     this.model = model;
+    this.valid = true;
     if (this.model === null) return null;
     if (this.position === null) return null;
     this.states = states;
@@ -49,6 +50,7 @@ export default class Entity extends Emitter {
    */
   create(){
     if (this.checkConstraint(this.model.states.creation.enterModifiers)) {
+      this.valid = false;
       return null;
     }
 
