@@ -64,25 +64,31 @@ export default class Room extends Emitter {
    * Register all the events in the game which will be dispatched to players
    */
   initSocketListeners() {
-    this.on('create', (args) => this.dispatchToPlayers('game:create', args));
 
+    // EMITTING
+    this.on('create', (args) => this.dispatchToPlayers('game:create', args));
     this.game.on('start', (args) => this.dispatchToPlayers('game:start', args));
     this.game.on('tick', (args) => this.dispatchToPlayers('timeline:tick', args));
     this.game.world.on('entity:add', (args) => this.dispatchToPlayers('entity:add', args));
-    this.game.world.on('entity:remove', (args) => this.dispatchToPlayers('entity:add', args));
+    this.game.world.on('entity:remove', (args) => this.dispatchToPlayers('entity:remove', args));
     this.game.world.on('entity:update', (args) => this.dispatchToPlayers('entity:update', args));
+    this.game.notificationManager.on('notification:send', (args) => this.dispatchToPlayers('notification:send', args));
 
+    // RECEIVE
     this.players.forEach(player => {
       player.socket.on('player:ready',  () => {
         player.ready = true;
         if(this.checkPlayersReady()) this.game.start();
       })
-      player.socket.on('entity:add',    (entity) => this.game.world.addEntity(entity));
-      player.socket.on('entity:remove', (entity) => this.game.world.removeEntity(entity));
-    });
 
-    this.game.notificationManager.on('notification:send', (args) => {
-      this.dispatchToPlayers('notification:send', args);
+      player.socket.on('entity:add',    (entity) => this.game.world.addEntity(entity));
+
+      player.socket.on('entity:remove', (entity) => {
+        const entityModel = this.game.entityModels.get(entity.model);
+        if (entityModel && (entityModel.role === null || entityModel.role === player.role.name)) {
+          this.game.world.removeEntity(this.game.world.entities.get(entity.uuid));
+        }
+      });
     });
   }
 

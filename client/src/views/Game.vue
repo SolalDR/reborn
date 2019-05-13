@@ -106,6 +106,7 @@ export default {
 
   sockets: {
     'entity:add': function (item) { this.onEntityAdd(item); },
+    'entity:remove': function(item) { this.onEntityRemove(item); },
     'timeline:tick': function (args) { this.onTimelineTick(args); },
     'game:start': function (args) { this.onGameStart(args); },
     'notification:send': function () { this.onNotificationSend(); },
@@ -205,6 +206,7 @@ export default {
         this.onEntityAdd({ ...params, uuid: uuid(), states: ['mounted', 'living'] });
         return;
       }
+      this.$store.commit('debug/log', { content: 'entity:add (emit)', label: 'socket' });
       this.$socket.emit('entity:add', params);
     },
 
@@ -214,14 +216,13 @@ export default {
         uuid: this.selectedEntity.uuid
       };
 
-      console.log(params);
-
       this.selectedEntity = null;
       if (!config.server.enabled) {
         this.onEntityRemove(params);
         return;
       }
 
+      this.$store.commit('debug/log', { content: 'entity:remove (emit) with uuid: ' + params.uuid, label: 'socket' });
       this.$socket.emit('entity:remove', params);
     },
 
@@ -229,7 +230,7 @@ export default {
      * socket
      */
     onEntityAdd(item) {
-      this.$store.commit('debug/log', { content: 'entity:add (receive)', label: 'socket' });
+      this.$store.commit('debug/log', { content: 'entity:add (receive) with uuid: ' + item.uuid, label: 'socket' });
       const model = this.$webgl.models[item.model];
       if (model) {
         model.addItem({
@@ -241,11 +242,12 @@ export default {
     },
 
     onEntityRemove({ model, uuid }) {
+      this.$store.commit('debug/log', { content: 'entity:remove (receive) with uuid: ' + uuid, label: 'socket' });
       this.$webgl.models[model].removeEntity(uuid);
     },
 
     onTimelineTick({ metrics, elapsed }) {
-      this.$store.commit('debug/log', { content: 'timeline:tick (receive)', label: 'socket' });
+      this.$store.commit('debug/log', { content: 'timeline:tick (receive)', label: 'socket', importance: 3 });
 
       this.gauges = metrics.filter((metric) => {
         return this.$game.player.role.gauges.indexOf(metric.slug) >= 0;

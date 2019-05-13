@@ -19,6 +19,8 @@
       class="logger__filter" >
         {{ filter }}
       </div>
+
+      <input type="number" v-model="importance" value="1">
     </div>
 
     <div v-if="$store.state.debug.messages" class="logger__messageList">
@@ -38,6 +40,7 @@ export default {
     return {
       visible: false,
       labels: [],
+      importance: 1,
     };
   },
 
@@ -48,7 +51,8 @@ export default {
       }
 
       return this.$store.state.debug.messages
-        .filter(message => this.labels.indexOf(message.label) >= 0);
+        .filter(message => this.labels.indexOf(message.label) >= 0
+          && message.importance <= this.importance);
     },
   },
 
