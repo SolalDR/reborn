@@ -70,9 +70,9 @@ const generator = {
       steps: 1,
       depth: height,
       bevelEnabled: true,
-      bevelThickness: 0.2,
-      bevelSize: 0,
-      bevelSegments: 2,
+      bevelThickness: 0.001,
+      bevelSize: 0.001,
+      bevelSegments: 1,
     });
 
     // Rotate la géométrie pour avoir la shape vers le haut

@@ -12,11 +12,11 @@ class Control {
   } = {}) {
     this.orbit = new OrbitControls({
       object: camera,
-      radius: 25,
       enabled: true,
       look: new THREE.Vector3(),
-      phi: 0.5,
-      theta: Math.PI / 4,
+      radius: config.camera.radius.startAt,
+      phi: config.camera.phi.startAt,
+      theta: config.camera.theta.startAt,
     });
 
     this.rails = new RailsControl({
@@ -31,9 +31,14 @@ class Control {
       theta: this.orbit.theta,
     };
 
+    this.initDragEvent();
+    this.initWheelEvent();
+    this.initGUI();
+  }
+
+  initDragEvent() {
     let phi = 0;
     let theta = 0;
-
     this.mouse.$on('dragstart', () => {
       phi = this.state.phi;
       theta = this.state.theta;
@@ -49,8 +54,10 @@ class Control {
         ),
       );
     });
+  }
 
-    let wheel = 5;
+  initWheelEvent() {
+    let wheel = config.camera.radius.startAt;
     this.mouse.$on('wheel', ({ event }) => {
       wheel += event.deltaY / 100;
       wheel = Math.min(
@@ -62,8 +69,6 @@ class Control {
       );
       this.orbit.radius = wheel;
     });
-
-    this.initGUI();
   }
 
   loop() {

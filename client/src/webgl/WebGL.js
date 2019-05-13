@@ -127,10 +127,6 @@ export default class WebGL extends Emitter {
         });
       }
 
-      // GUI.gui.add(this.waves.mesh.material.uniforms.dashOffset, 'value').name('Dashoffset');
-      // GUI.gui.add(this.waves.mesh.material.uniforms.dashArray, 'value').name('Dasharray');
-      // GUI.gui.add(this.waves.mesh.material.uniforms.dashRatio, 'value', 0, 1).name('Dashratio');
-
       this.scene.add(this.waves.mesh);
     });
   }
@@ -163,8 +159,7 @@ export default class WebGL extends Emitter {
   }
 
   initScene() {
-    // this.scene.fog = new THREE.Fog(0xb7eeff, 60, 200);
-    this.camera.position.set(0, 20, 20);
+    this.camera.position.set(0, 30, 30);
     this.camera.lookAt(new THREE.Vector3());
   }
 
