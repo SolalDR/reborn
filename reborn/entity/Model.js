@@ -13,6 +13,8 @@ export default class EntityModel {
   constructor({
     name = null,
     slug = null,
+    category = null,
+    role = null,
     size = {x: 1, y: 1},
     states = {},
     game = null,
@@ -21,6 +23,8 @@ export default class EntityModel {
     this.slug = slug === null ? snakeCase(name) : slug;
     this.game = game;
     this.size = size;
+    this.category = category;
+    this.role = role;
     this.cluster = null;
 
     // TODO Convert to Map

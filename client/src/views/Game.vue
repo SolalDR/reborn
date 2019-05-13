@@ -44,11 +44,16 @@
         </transition>
       </overlay>
     </transition>
+
+    <webgl-component :position="selectedEntity.position" v-if="selectedEntity">
+      <p class="cta--bordered" @click="onRemoveItem">Delete</p>
+    </webgl-component>
   </main>
 </template>
 
 <script>
 import Vue from 'vue';
+import uuid from '@/utils/uuid';
 import Reborn from '../game';
 import Loader from '../components/global/Loader.vue';
 import Scene from '../components/game/Scene.vue';
@@ -59,6 +64,7 @@ import IndicatorList from '../components/game/IndicatorList.vue';
 import Inventory from '../components/game/Inventory.vue';
 import Settings from '../components/game/Settings.vue';
 import YearsCounter from '../components/game/YearsCounter.vue';
+import WebglComponent from '../components/game/WebglComponent.vue';
 import Overlay from '../components/global/Overlay';
 import Explanations from '../components/game/Explanations';
 import Saving from '../components/game/Saving';
@@ -79,6 +85,7 @@ export default {
     Loader,
     Introduction,
     Countdown,
+    WebglComponent,
   },
 
   data() {
@@ -92,11 +99,14 @@ export default {
       gauges: null,
       indicators: null,
       year: 0,
+      position: new THREE.Vector3(0, 0.1, 8),
+      selectedEntity: null,
     };
   },
 
   sockets: {
     'entity:add': function (item) { this.onEntityAdd(item); },
+    'entity:remove': function(item) { this.onEntityRemove(item); },
     'timeline:tick': function (args) { this.onTimelineTick(args); },
     'game:start': function (args) { this.onGameStart(args); },
     'notification:send': function () { this.onNotificationSend(); },
@@ -169,14 +179,8 @@ export default {
       this.$store.commit('debug/log', { content: 'game: onWebGLInit', label: 'webgl' });
       this.$store.commit('debug/log', { content: 'game: pending', label: 'socket' });
       this.status = 'pending';
-      this.$webgl.on('addItem', (item) => {
-        const params = { ...item, model: this.currentModel.slug };
-        if (!config.server.enabled) {
-          this.onEntityAdd({ ...params, uuid: Math.floor(Math.random() * 1000), states: ['mounted', 'living'] });
-          return;
-        }
-        this.$socket.emit('entity:add', params);
-      });
+      this.$webgl.on('addItem', (item) => this.onAddItem(item));
+      this.$webgl.on('selectItem', (item) => this.selectedEntity = item)
 
       if (!config.server.enabled) {
         this.simulateGameStart();
@@ -196,22 +200,54 @@ export default {
       console.log('Try Again');
     },
 
+    onAddItem(item) {
+      const params = { ...item, model: this.currentModel.slug };
+      if (!config.server.enabled) {
+        this.onEntityAdd({ ...params, uuid: uuid(), states: ['mounted', 'living'] });
+        return;
+      }
+      this.$store.commit('debug/log', { content: 'entity:add (emit)', label: 'socket' });
+      this.$socket.emit('entity:add', params);
+    },
+
+    onRemoveItem() {
+      const params = {
+        model: this.selectedEntity.model,
+        uuid: this.selectedEntity.uuid
+      };
+
+      this.selectedEntity = null;
+      if (!config.server.enabled) {
+        this.onEntityRemove(params);
+        return;
+      }
+
+      this.$store.commit('debug/log', { content: 'entity:remove (emit) with uuid: ' + params.uuid, label: 'socket' });
+      this.$socket.emit('entity:remove', params);
+    },
+
     /**
      * socket
      */
     onEntityAdd(item) {
-      this.$store.commit('debug/log', { content: 'entity:add (receive)', label: 'socket' });
-      const cluster = this.$webgl.clusters[item.model];
-      if (cluster) {
-        cluster.addItem({
+      this.$store.commit('debug/log', { content: 'entity:add (receive) with uuid: ' + item.uuid, label: 'socket' });
+      const model = this.$webgl.models[item.model];
+      if (model) {
+        model.addItem({
+          ...item,
           position: new THREE.Vector3(item.position.x, item.position.y, item.position.z),
           rotation: new THREE.Euler(item.rotation._x, item.rotation._y, item.rotation._z),
         });
       }
     },
 
+    onEntityRemove({ model, uuid }) {
+      this.$store.commit('debug/log', { content: 'entity:remove (receive) with uuid: ' + uuid, label: 'socket' });
+      this.$webgl.models[model].removeEntity(uuid);
+    },
+
     onTimelineTick({ metrics, elapsed }) {
-      this.$store.commit('debug/log', { content: 'timeline:tick (receive)', label: 'socket' });
+      this.$store.commit('debug/log', { content: 'timeline:tick (receive)', label: 'socket', importance: 3 });
 
       this.gauges = metrics.filter((metric) => {
         return this.$game.player.role.gauges.indexOf(metric.slug) >= 0;

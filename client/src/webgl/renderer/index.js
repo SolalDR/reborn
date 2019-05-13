@@ -6,7 +6,6 @@ import Viewport from '../../plugins/Viewport';
 import SobelEffect from './effects/SobelEffect';
 import FilmEffect from './effects/FilmEffect';
 import GUI from '../../plugins/GUI';
-
 let swap = 1;
 
 export default class Renderer {
@@ -22,11 +21,42 @@ export default class Renderer {
 
     this.gui = GUI.rendering;
 
+    this.initPickingScene();
     this.initRenderer();
     this.initComposer();
     this.initEvents();
 
     this.initGUI();
+  }
+
+  pick(x, y) {
+    // const pixelRatio = this.renderer.getPixelRatio();
+    // this.camera.setViewOffset(
+    //   this.renderer.context.drawingBufferWidth,   // full width
+    //   this.renderer.context.drawingBufferHeight,  // full top
+    //   event.clientX * pixelRatio | 0,        // rect x
+    //   event.clientY * pixelRatio | 0,        // rect y
+    //   1,                                     // rect width
+    //   1,                                     // rect height
+    // );
+    this.renderer.render(this.pickingScene, this.camera, this.pickingTexture);
+    // this.camera.clearViewOffset();
+
+    // this.renderer.readRenderTargetPixels(this.pickingTexture, 0, 0, 1, 1, pixelBuffer);
+    const pixelBuffer = new Uint8Array(4);
+    this.renderer.readRenderTargetPixels(
+      this.pickingTexture,
+      x,
+      this.pickingTexture.height - y,
+      1,
+      1,
+      pixelBuffer,
+    );
+
+    return {
+      id: pixelBuffer[2],
+      slot: pixelBuffer[0],
+    };
   }
 
   initRenderer() {
@@ -37,6 +67,13 @@ export default class Renderer {
     this.renderer.setClearColor(0xb7eeff);
     this.renderer.setPixelRatio(1.5);
     this.renderer.setSize(Viewport.width, Viewport.height);
+  }
+
+  initPickingScene() {
+    this.pickingScene = new THREE.Scene();
+    this.pickingScene.name = 'picking';
+    this.pickingScene.background = new THREE.Color(0xFFFFFF);
+    this.pickingTexture = new THREE.WebGLRenderTarget(Viewport.width, Viewport.height);
   }
 
   initComposer() {
