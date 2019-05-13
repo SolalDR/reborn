@@ -64,23 +64,25 @@
         </template>
 
         <template #default>
-          <p>Ce site a été réalisé par une magic team.</p>
+          <div class="about">
+            <p class="about__title">Ce site a été réalisé par une magic team.</p>
 
-          <div>
-            <p>Designers</p>
+            <div class="about__item">
+              <p>Designers</p>
 
-            <p>Allan Michel</p>
-            <p>Matthieu Pajot</p>
+              <p>Allan Michel</p>
+              <p>Matthieu Pajot</p>
+            </div>
+
+            <div class="about__item">
+              <p>Développeurs</p>
+
+              <p>Solal Revel</p>
+              <p>Erwann Letue</p>
+            </div>
+
+            <p>Merci aux équipes pédagogiques de Gobelins  pour leur aide dans le développement du projet.</p>
           </div>
-
-          <div>
-            <p>Développeurs</p>
-
-            <p>Solal Revel</p>
-            <p>Erwann Letue</p>
-          </div>
-
-          <p>Merci aux équipes pédagogiques de Gobelins  pour leur aide dans le développement du projet.</p>
         </template>
 
         <template #footer>
@@ -310,13 +312,32 @@ export default {
       }
     }
 
-    .about__cta {
-      z-index: 1;
-      position: fixed;
-      bottom: 3rem;
-      right: 3rem;
-      text-transform: uppercase;
-      @include fontSize(24);
+    .about {
+      max-width: 33rem;
+
+      &__title,
+      &__item {
+        margin-bottom: $space-xl;
+      }
+
+      &__item {
+        p {
+          line-height: 2.2rem;
+        }
+
+        p:first-of-type {
+          margin-bottom: $space-l;
+        }
+      }
+
+      &__cta {
+        z-index: 1;
+        position: fixed;
+        bottom: 3rem;
+        right: 3rem;
+        text-transform: uppercase;
+        @include fontSize(24);
+      }
     }
   }
 </style>
