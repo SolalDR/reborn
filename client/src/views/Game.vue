@@ -16,15 +16,12 @@
     <!-- IsPlaying -->
     <div class="game__interface" v-if="interfaceVisible">
       <gauge-list :list="this.gauges"/>
-      <indicator-list :list="this.indicators"/>
+      <indicator-list :list="this.indicators" @showSettings="showSettings = true"/>
 
       <years-counter :currentYear="year"/>
 
       <inventory @selectModel="onSelectModel"/>
 
-      <div @click="showSettings = true" class="settings-cta">
-        Settings
-      </div>
       <transition name="settings">
         <settings v-if="showSettings" @closeSettings="showSettings = false"/>
       </transition>
@@ -276,14 +273,16 @@ export default {
       position: absolute;
     }
 
+    $padding: 3rem;
+
     .gauge-list {
-      top: 0;
-      left: 0;
+      top: $padding;
+      left: $padding;
     }
 
     .indicator-list {
-      top: 0;
-      right: 0;
+      top: $padding;
+      right: $padding;
     }
 
     .years-counter {
@@ -293,19 +292,8 @@ export default {
     }
 
     .inventory {
-      bottom: 0;
-      left: 0;
-    }
-
-    .settings-cta {
-      $size: 80px;
-      bottom: 0;
-      right: 0;
-      @include useFlex();
-      width: $size;
-      height: $size;
-      background-color: getColor(basics, white);
-      border-radius: 50%;
+      bottom: $padding;
+      left: $padding;
     }
   }
 }

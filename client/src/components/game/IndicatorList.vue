@@ -6,6 +6,8 @@
       <label>{{ indicator.name }}</label>
       <span>{{ indicator.value }}</span>
     </div>
+
+    <div @click="$emit('showSettings', true)" class="settings-cta">Settings</div>
   </div>
 </template>
 
