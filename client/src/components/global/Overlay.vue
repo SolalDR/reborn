@@ -28,6 +28,7 @@ export default {
 
 <style lang="scss" scoped>
   .overlay {
+    z-index: 1;
     position: fixed;
     top: 0;
     left: 0;

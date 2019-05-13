@@ -22,7 +22,7 @@
       <model-infos :model="currentModel"/>
       <flash-news/>
 
-      <transition name="settings">
+      <transition name="fade">
         <settings v-if="showSettings" @closeSettings="showSettings = false"/>
       </transition>
     </div>
