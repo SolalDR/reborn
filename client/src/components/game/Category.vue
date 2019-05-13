@@ -1,17 +1,27 @@
 <template>
-  <div class="category" @click="$emit('setCurrentCategory', category.index)">
-    {{ category.name }}
+  <div @click="$emit('setCurrentCategory', category.index)"
+       @mouseover="isHovered = true"
+       @mouseleave="isHovered = false"
+       class="category"
+       :class="{'category--current': isCurrent, 'category--hovered': isHovered}">
+    <img src="" alt="">
   </div>
 </template>
 
 <script>
 export default {
   name: 'category',
+  data() {
+    return {
+      isHovered: false,
+    };
+  },
   props: {
     category: {
       type: Object,
       required: true,
     },
+    isCurrent: Boolean,
   },
 };
 </script>
@@ -26,10 +36,23 @@ export default {
     height: $size;
     background-color: rgba(getColor(basics, white), .7);
     border: 2px solid transparent;
-    transition: all .3s ease;
 
-    &--current{
+    img {
+      cursor: pointer;
+      opacity: .3;
+      width: 2rem;
+      height: 2rem;
       border: 2px solid getColor(basics, black);
+      transition: all .3s ease;
+    }
+
+    &--current,
+    &--hovered {
+      img {
+        opacity: 1;
+        border: none;
+        background-color: getColor(basics, black);
+      }
     }
   }
 </style>

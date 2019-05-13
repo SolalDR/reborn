@@ -18,7 +18,7 @@
       <gauge-list :list="this.gauges"/>
       <years-counter :currentYear="year"/>
       <indicator-list :list="this.indicators" @showSettings="showSettings = true"/>
-      <inventory @selectModel="onSelectModel"/>
+      <inventory :money="money" @selectModel="onSelectModel"/>
       <!-- TODO: Add model-info component -->
 
       <transition name="settings">
@@ -88,6 +88,7 @@ export default {
       gauges: null,
       indicators: null,
       year: 0,
+      money: null,
     };
   },
 
@@ -218,6 +219,7 @@ export default {
       });
 
       this.year = Math.floor(elapsed / 1000); // One year per second
+      this.money = this.indicators.length > 0 ? this.indicators.find(indicator => indicator.name === 'Money').value : 0
     },
 
     onGameStart({ startedAt }) {
