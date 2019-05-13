@@ -2,6 +2,7 @@
   <main class="game">
     <scene @mounted="onWebGLInit"/>
 
+    <!-- IsStarting -->
     <transition name="fade">
       <overlay v-if="isStarting">
         <transition name="fade" mode="out-in">
@@ -12,14 +13,12 @@
       </overlay>
     </transition>
 
+    <!-- IsPlaying -->
     <div class="game__interface" v-if="interfaceVisible">
       <gauge-list :list="this.gauges"/>
       <indicator-list :list="this.indicators"/>
 
-      <!-- TODO: Bind currentYear value -->
-      <div class="years-counter">
-        <years-counter :currentYear="year"/>
-      </div>
+      <years-counter :currentYear="year"/>
 
       <inventory @selectModel="onSelectModel"/>
 
@@ -31,6 +30,7 @@
       </transition>
     </div>
 
+    <!-- IsEnded -->
     <transition name="fade">
       <overlay v-if="isEnded">
         <transition name="fade" mode="out-in">

@@ -82,8 +82,10 @@ export default {
     }
 
     &__text {
-      margin-bottom: $space-l;
+      margin: 0 auto $space-l;
+      max-width: 60rem;
       @include fontSize(18);
+
     }
 
     &__footer {

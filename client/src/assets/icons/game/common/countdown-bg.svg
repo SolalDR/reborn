@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="324px" height="110px" viewBox="0 0 324 110" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.4 (67378) - http://www.bohemiancoding.com/sketch -->
+    <title>Combined Shape</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Interfaces" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" fill-opacity="0.699999988">
+        <g id="Interface_civilisation" transform="translate(-523.000000, 0.000000)" fill="#FFFFFF" stroke="#000000" stroke-width="2">
+            <path d="M643.740133,-21.1672667 L643.488562,-21 L643.186459,-21 L548,-21 C534.745166,-21 524,-10.254834 524,3 L524,50 C524,63.254834 534.745166,74 548,74 L621.787711,74.0000271 L622.079036,74.4854022 C634.828959,95.7280322 657.765465,109 683,109 C708.234539,109 731.171043,95.7280287 743.92098,74.4853753 L744.212305,74 L822,74 C835.254834,74 846,63.254834 846,50 L846,3 C846,-10.254834 835.254834,-21 822,-21 L722.511438,-21 L722.259867,-21.1672667 C710.715656,-28.8428748 697.168385,-33 683,-33 C668.831615,-33 655.284344,-28.8428748 643.740133,-21.1672667 Z" id="Combined-Shape"></path>
+        </g>
+    </g>
+</svg>

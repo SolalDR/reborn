@@ -1,3 +1,4 @@
+// DrukText
 @font-face {
   font-family: "DrukText-Medium";
   src: url("~@/assets/fonts/Druk/DrukText-Medium.otf");
@@ -15,6 +16,16 @@
 @font-face {
   font-family: "DrukText-Bold";
   src: url("~@/assets/fonts/Druk/DrukText-Bold.otf");
+  font-style:   normal;
+  font-weight:  normal;
+}
+
+
+
+// DrukWide
+@font-face {
+  font-family: "DrukWide-Medium";
+  src: url("~@/assets/fonts/Druk/DrukWide-Medium.otf");
   font-style:   normal;
   font-weight:  normal;
 }
