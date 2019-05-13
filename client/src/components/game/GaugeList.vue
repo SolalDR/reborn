@@ -1,10 +1,16 @@
 <template>
   <div class="gauge-list">
     <div v-for="(gauge, index) in list"
-      :key="index"
-      class="gauge">
+        :key="index"
+        class="gauge"
+        @mouseover="indexHovered = index"
+        @mouseleave="indexHovered = null">
       <img :src="gaugesIcons[gauge.slug]" alt="">
       <div class="gauge-fill" :style="{'height': `${gauge.value}%`}"></div>
+
+      <transition name="fade">
+        <hover-infos v-if="indexHovered === index" :text="gauge.displayName"/>
+      </transition>
     </div>
   </div>
 </template>
@@ -20,12 +26,20 @@ import biodiversity from '../../assets/icons/game/nature/biodiversity.svg';
 import civilisation from '../../assets/icons/game/nature/civilisation.svg';
 import purity from '../../assets/icons/game/nature/purity.svg';
 
+import HoverInfos from './HoverInfos';
+
 export default {
+  components: {HoverInfos},
   props: {
     list: {
       type: Array,
       required: true,
     },
+  },
+  data() {
+    return {
+      indexHovered: false,
+    };
   },
   computed: {
     gaugesIcons() {

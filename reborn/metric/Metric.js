@@ -13,6 +13,7 @@ import snakeCase from "../utils/snakeCase";
 class Metric extends Emitter {
   constructor({
     name = null,
+    displayName = null,
     slug = null,
     value = null,
     min = null,
@@ -22,6 +23,7 @@ class Metric extends Emitter {
   }){
     super();
     this.name = name;
+    this.displayName = displayName;
     this.slug = slug === null ? snakeCase(name) : slug;
     this.recurentOperation = recurentOperation;
     this.min = min;
@@ -50,6 +52,7 @@ class Metric extends Emitter {
     return {
       value: this.value,
       name: this.name,
+      displayName: this.displayName,
       slug: this.slug,
       recurentOperation: this.recurentOperation,
     }

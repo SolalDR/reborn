@@ -8,6 +8,7 @@ export default class Energy extends Metric {
   constructor(){
     super({
       name: "Energy",
+      displayName: "Énergie",
       min: 0,
       max: 100,
       value: 100,

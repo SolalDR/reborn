@@ -16,11 +16,10 @@
     <!-- IsPlaying -->
     <div class="game__interface" v-if="interfaceVisible">
       <gauge-list :list="this.gauges"/>
-      <indicator-list :list="this.indicators" @showSettings="showSettings = true"/>
-
       <years-counter :currentYear="year"/>
-
+      <indicator-list :list="this.indicators" @showSettings="showSettings = true"/>
       <inventory @selectModel="onSelectModel"/>
+      <!-- TODO: Add model-info component -->
 
       <transition name="settings">
         <settings v-if="showSettings" @closeSettings="showSettings = false"/>

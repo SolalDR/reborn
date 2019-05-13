@@ -7,8 +7,9 @@ import Metric from "./Metric";
 export default class Purity extends Metric {
   constructor(){
     super({
-      name: "Pureté",
+      name: "Purity",
       slug: "purity",
+      displayName: "Pureté",
       min: 0,
       max: 100,
       value: 0,
