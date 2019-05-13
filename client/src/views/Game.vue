@@ -20,6 +20,7 @@
       <indicator-list :list="this.indicators" @showSettings="showSettings = true"/>
       <inventory :money="money" @selectModel="onSelectModel"/>
       <model-infos :model="currentModel"/>
+      <flash-news/>
 
       <transition name="settings">
         <settings v-if="showSettings" @closeSettings="showSettings = false"/>
@@ -60,10 +61,12 @@ import Explanations from '../components/game/Explanations';
 import Saving from '../components/game/Saving';
 import config from '../config';
 import ModelInfos from "../components/game/ModelInfos";
+import FlashNews from "../components/game/FlashNews";
 
 export default {
   name: 'Game',
   components: {
+    FlashNews,
     ModelInfos,
     Saving,
     Explanations,
@@ -302,6 +305,11 @@ export default {
     .model-infos {
       bottom: $padding;
       left: $padding;
+    }
+
+    .flash-news {
+      bottom: $padding;
+      right: $padding;
     }
   }
 }
