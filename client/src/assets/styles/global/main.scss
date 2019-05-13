@@ -60,3 +60,18 @@ a {
 .italic {
   font-family: "DrukText-MediumItalic";
 }
+
+.header,
+.footer {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.header {
+  top: 4.5rem;
+}
+
+.footer {
+  bottom: 6rem;
+}

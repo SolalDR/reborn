@@ -41,23 +41,14 @@ export default {
 
 <style lang="scss">
 .countdown {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-
   &__title {
+    text-transform: uppercase;
     font-size: 3.6rem;
   }
 
   &__count {
     font-size: 9.6rem;
+    font-family: "DrukWide-Super";
   }
 }
 </style>
