@@ -27,7 +27,7 @@ export default {
       room.addPlayer(new Player(client, this));
       this.emit('room:connect', {
         playerId: client.id,
-        roomId: room.id
+        verifiedRoomId: room.id
       });
       Bus.emit('room:add', this);
 
@@ -41,7 +41,7 @@ export default {
       room.addPlayer(player);
       this.emit('room:connect', {
         playerId: player.id,
-        roomId: room.id
+        verifiedRoomId: room.id
       });
       Bus.emit('rooms:update');
       if( room.players.size === 2 ){

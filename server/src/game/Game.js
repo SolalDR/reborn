@@ -49,6 +49,8 @@ export default class Game extends Reborn.Game {
         elapsed: Date.now() - this.startedAt
       });
     })
+
+    this.initEvents();
   }
 
   /**
@@ -58,6 +60,13 @@ export default class Game extends Reborn.Game {
     this.world = new World({
       game: this,
     });
+  }
+
+  initEvents() {
+    this.constraintManager.get('end-game').on('change', () => {
+      this.finish();
+      this.timeline.stop();
+    })
   }
 
   start() {

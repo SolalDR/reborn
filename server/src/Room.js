@@ -69,6 +69,7 @@ export default class Room extends Emitter {
     this.on('create', (args) => this.dispatchToPlayers('game:create', args));
     this.game.on('start', (args) => this.dispatchToPlayers('game:start', args));
     this.game.on('tick', (args) => this.dispatchToPlayers('timeline:tick', args));
+    this.game.on('end', (args) => this.dispatchToPlayers('game:end', args));
     this.game.world.on('entity:add', (args) => this.dispatchToPlayers('entity:add', args));
     this.game.world.on('entity:remove', (args) => this.dispatchToPlayers('entity:remove', args));
     this.game.world.on('entity:update', (args) => this.dispatchToPlayers('entity:update', args));
