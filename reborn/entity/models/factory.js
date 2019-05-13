@@ -1,7 +1,8 @@
 export default {
   slug: "factory",
   category: "energy",
-  name: "Usine",
+  name: "Factory",
+  displayName: "Usine",
   role: 'city',
   states: {
     creation: {

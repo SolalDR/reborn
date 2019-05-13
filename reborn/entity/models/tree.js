@@ -2,7 +2,8 @@ export default {
   slug: "tree",
   category: "tree",
   color: "#00FF00",
-  name: "Arbre",
+  name: "Tree",
+  displayName: "Arbre",
   role: "nature",
   states: {
     creation: {

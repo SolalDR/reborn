@@ -19,7 +19,7 @@
       <years-counter :currentYear="year"/>
       <indicator-list :list="this.indicators" @showSettings="showSettings = true"/>
       <inventory :money="money" @selectModel="onSelectModel"/>
-      <!-- TODO: Add model-info component -->
+      <model-infos :model="currentModel"/>
 
       <transition name="settings">
         <settings v-if="showSettings" @closeSettings="showSettings = false"/>
@@ -59,10 +59,12 @@ import Overlay from '../components/global/Overlay';
 import Explanations from '../components/game/Explanations';
 import Saving from '../components/game/Saving';
 import config from '../config';
+import ModelInfos from "../components/game/ModelInfos";
 
 export default {
   name: 'Game',
   components: {
+    ModelInfos,
     Saving,
     Explanations,
     Overlay,
@@ -293,6 +295,11 @@ export default {
     }
 
     .inventory {
+      bottom: calc(#{$padding} + 3.6rem);
+      left: $padding;
+    }
+
+    .model-infos {
       bottom: $padding;
       left: $padding;
     }

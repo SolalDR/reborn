@@ -2,7 +2,8 @@ export default {
   slug: "flower",
   category: "plant",
   color: "#00FF00",
-  name: "Fleur",
+  name: "Flower",
+  displayName: "Fleur",
   role: "nature",
   states: {
     creation: {

@@ -81,8 +81,9 @@ export default {
       &-fill {
         position: absolute;
         bottom: 0;
-        left: 0;
-        width: 100%;
+        left: 50%;
+        width: 50%;
+        transform: translateX(-50%);
         background-color: getColor(mains, secondary);
       }
     }

@@ -1,7 +1,8 @@
 export default {
   slug: "cinema",
   category: "satisfaction",
-  name: "Cinéma",
+  name: "Cinema",
+  displayName: "Cinéma",
   role: 'city',
   states: {
     creation: {
