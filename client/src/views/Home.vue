@@ -1,8 +1,6 @@
 <template>
   <div class="home">
-    <!-- TODO: Update Video src -->
-    <!-- <video class="trailer" src="@/assets/video/trailer.mp4" autoplay playsinline muted loop></video> -->
-    <img class="trailer" src="@/assets/img/TMP/background.jpg" alt="">
+    <video class="trailer" src="@/assets/video/trailer.mp4" autoplay playsinline muted loop></video>
 
     <transition name="fade" mode="out-in">
       <!-- INTRODUCTION -->
@@ -99,7 +97,9 @@ import Overlay from "../components/global/Overlay";
 
 export default {
   name: 'home',
-  components: {Overlay},
+  components: {
+    Overlay
+  },
   data() {
     return {
       status: 'introduction', // introduction => landing,

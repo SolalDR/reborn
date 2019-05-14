@@ -5,7 +5,7 @@
         class="gauge"
         @mouseover="indexHovered = index"
         @mouseleave="indexHovered = null">
-      <img :src="gaugesIcons[gauge.slug]" alt="">
+      <component :is="`${gauge.slug}-icon`"/>
       <div class="gauge-fill" :style="{'height': `${gauge.value}%`}"></div>
 
       <transition name="fade">
@@ -16,20 +16,24 @@
 </template>
 
 <script>
-// CITY
-import energy from '../../assets/icons/game/city/energy.svg';
-import food from '../../assets/icons/game/city/food.svg';
-import satisfaction from '../../assets/icons/game/city/satisfaction.svg';
-
-// NATURE
-import biodiversity from '../../assets/icons/game/nature/biodiversity.svg';
-import civilisation from '../../assets/icons/game/nature/civilisation.svg';
-import purity from '../../assets/icons/game/nature/purity.svg';
-
 import HoverInfos from './HoverInfos';
+import EnergyIcon from '../icons/city/EnergyIcon';
+import FoodIcon from '../icons/city/FoodIcon';
+import SatisfactionIcon from '../icons/city/SatisfactionIcon';
+import BiodiversityIcon from '../icons/nature/BiodiversityIcon';
+import CivilisationIcon from '../icons/nature/CivilisationIcon';
+import PurityIcon from '../icons/nature/PurityIcon';
 
 export default {
-  components: {HoverInfos},
+  components: {
+    PurityIcon,
+    CivilisationIcon,
+    BiodiversityIcon,
+    SatisfactionIcon,
+    FoodIcon,
+    EnergyIcon,
+    HoverInfos,
+  },
   props: {
     list: {
       type: Array,
@@ -41,27 +45,10 @@ export default {
       indexHovered: false,
     };
   },
-  computed: {
-    gaugesIcons() {
-      const cityGauges = {
-        energy,
-        food,
-        satisfaction
-      };
-
-      const natureGauges = {
-        biodiversity,
-        civilisation,
-        purity
-      };
-
-      return this.$game.player.role.name === 'city' ? cityGauges : natureGauges;
-    }
-  }
 };
 </script>
 
-<style lang="scss">
+<style lang='scss'>
   .gauge-list {
     @include useFlex();
 
@@ -73,12 +60,8 @@ export default {
         margin-right: 0;
       }
 
-      img {
-        z-index: 1;
-        position: relative;
-      }
-
       &-fill {
+        z-index: -1;
         position: absolute;
         bottom: 0;
         left: 50%;
