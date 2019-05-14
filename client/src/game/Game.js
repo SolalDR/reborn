@@ -1,4 +1,4 @@
-import * as Reborn from '../../../reborn';
+import * as Reborn from '../../../server/reborn';
 import store from '../services/store';
 import AssetsManager from '../services/assets/Manager';
 

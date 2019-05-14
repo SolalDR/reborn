@@ -1,4 +1,4 @@
-import * as RebornCore from '../../../reborn';
+import * as RebornCore from '../../../server/reborn';
 import Game from './Game';
 
 const Reborn = Object.assign({}, RebornCore);

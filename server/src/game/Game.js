@@ -1,4 +1,4 @@
-import * as Reborn from "../../../reborn";
+import * as Reborn from "../../reborn";
 
 import ConstraintManager from './constraint/Manager';
 import NotificationManager from './notification/Manager';

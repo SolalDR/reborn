@@ -1,4 +1,4 @@
-import * as Reborn from "./../../../reborn"
+import * as Reborn from "../../reborn"
 
 class Player extends Reborn.Player {
   /**

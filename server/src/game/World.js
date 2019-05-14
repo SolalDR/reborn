@@ -1,4 +1,4 @@
-import * as Reborn from "../../../reborn"
+import * as Reborn from "../../reborn"
 
 export default class World extends Reborn.World {
   constructor({
