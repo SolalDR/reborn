@@ -1,23 +1,23 @@
 <template>
-  <div>
-    <div class="leaderboard__header">
-      <p>Survivants</p>
+  <div class="saving">
+    <div class="saving__header header">
+      <h2 class="title--wide">Les survivants</h2>
     </div>
 
-    <div class="leaderboard__body">
+    <div class="saving__body">
       <leaderboard :collection="collection"/>
     </div>
 
-    <div class="leaderboard__footer">
+    <div class="saving__footer footer">
       <transition name="fade">
-        <div v-if="canSave">
-          <p class="leaderboard__title">Votre nom de survivant :</p>
+        <div v-if="canSave" class="saving__save-form">
+          <p class="saving__title">Vous avez survécu 999 ans</p>
           <input ref="inputName" type="text">
           <p @click="saveScore" class="cta--bordered">Valider</p>
         </div>
       </transition>
 
-      <p @click="tryAgain" class="cta--bordered">Rejouer</p>
+      <p @click="tryAgain" class="replay cta--bordered">Rejouer</p>
     </div>
   </div>
 </template>
@@ -90,13 +90,15 @@ export default {
       this.getCollection();
     },
     createDocument() {
+      const defaultName = 'Anonyme';
+
       const cityOpts = {
         cityName: this.name,
-        natureName: '',
+        natureName: defaultName,
       };
 
       const natureOpts = {
-        cityName: '',
+        cityName: defaultName,
         natureName: this.name,
       };
 
@@ -109,7 +111,6 @@ export default {
         .then(() => {
           this.canSave = false;
           this.getCollection();
-          console.log('Added document');
         })
         .catch((error) => {
           console.error('Error while adding document to database:', error);
@@ -118,3 +119,46 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+  .saving {
+    &__header {
+      width: 100%;
+    }
+
+    &__footer {
+      width: 87rem;
+
+      p,
+      input {
+        font-family: "DrukText-Bold";
+      }
+
+      p {
+        text-transform: uppercase;
+        @include fontSize(24);
+      }
+
+      input {
+        outline: none;
+        padding: 0 1.5rem;
+        width: 27rem;
+        height: 5.2rem;
+        border: none;
+        border-radius: 1rem;
+        text-align: center;
+        @include fontSize(18);
+      }
+
+      .replay {
+        margin: 0 auto;
+      }
+    }
+
+    &__save-form {
+      width: 100%;
+      @include useFlex(space-between);
+      margin-bottom: 2rem;
+    }
+  }
+</style>
