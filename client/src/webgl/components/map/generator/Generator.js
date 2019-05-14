@@ -14,21 +14,21 @@ export default (seed = Math.random()) => {
     seed,
     stages: [
       {
-        floorColor: new THREE.Color(0xb7c39b),
-        wallColor: new THREE.Color(0x9b989f),
+        floorColor: new THREE.Color(0xf7c0a4),
+        wallColor: new THREE.Color(0xf9e78f),
         shape: {
           definition: 200,
           radius: 16,
           position: [0, 0],
-          noiseIntensity: 0.2,
+          noiseIntensity: 0.2 + 0.3*random(),
         },
         height: 0.5,
       },
       {
-        floorColor: new THREE.Color(0xb7c39b),
-        wallColor: new THREE.Color(0x9b989f),
+        floorColor: new THREE.Color(0xf4b295),
+        wallColor: new THREE.Color(0xf9e78f),
         shape: {
-          definition: 200,
+          definition: 64,
           radius: 8,
           position: [
             random() * 8 - 4,
@@ -39,10 +39,10 @@ export default (seed = Math.random()) => {
         height: 1,
       },
       {
-        floorColor: new THREE.Color(0xb7c39b),
-        wallColor: new THREE.Color(0x9b989f),
+        floorColor: new THREE.Color(0xf8dbca),
+        wallColor: new THREE.Color(0xf9e78f),
         shape: {
-          definition: 200,
+          definition: 64,
           radius: 8,
           position: [
             random() * 8 - 4,
@@ -53,10 +53,10 @@ export default (seed = Math.random()) => {
         height: 2,
       },
       {
-        floorColor: new THREE.Color(0xb7c39b),
-        wallColor: new THREE.Color(0x9b989f),
+        floorColor: new THREE.Color(0xf4b69d),
+        wallColor: new THREE.Color(0xf9e78f),
         shape: {
-          definition: 200,
+          definition: 48,
           radius: 4,
           position: [
             random() * 4 - 2,
@@ -65,6 +65,20 @@ export default (seed = Math.random()) => {
           noiseIntensity: 0.1,
         },
         height: 4,
+      },
+      {
+        floorColor: new THREE.Color(0xf7ab9a),
+        wallColor: new THREE.Color(0xf9e78f),
+        shape: {
+          definition: 32,
+          radius: 2,
+          position: [
+            random() * 16 - 8,
+            random() * 16 - 8,
+          ],
+          noiseIntensity: 0.1,
+        },
+        height: random()*5 + 6,
       },
     ],
   });
