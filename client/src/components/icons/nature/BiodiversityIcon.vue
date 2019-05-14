@@ -1,0 +1,18 @@
+<template>
+  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+    <path :fill="isFilled ? 'black' : 'none'" fill-rule="evenodd" stroke="#000" stroke-width="2" d="M46.524 1.591c-.06-.06-17.88-3.354-28.244 7.002-8.05 8.044-5.99 18.155-4.507 22.58L2.074 42.864l3.186 3.183 11.717-11.708c4.46 1.48 14.525 3.485 22.54-4.524 10.365-10.357 7.068-28.162 7.007-28.223"/>
+  </svg>
+
+</template>
+
+<script>
+export default {
+  name: 'biodiversity-icon',
+  props: {
+    isFilled: {
+      type: Boolean,
+      default: false,
+    },
+  },
+};
+</script>

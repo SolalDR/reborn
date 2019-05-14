@@ -1,0 +1,37 @@
+.cta {
+  @extend .bold;
+
+  outline: none;
+  cursor: pointer;
+  padding: 0;
+  color: getColor(basics, black);
+  @include fontSize(20);
+  font-weight: bold;
+  border: none;
+
+  &--bordered {
+    @extend .cta;
+
+    padding: 1.2rem;
+    width: 27rem;
+    background-color: getColor(basics, white);
+    border: .2rem solid getColor(basics, black);
+    border-radius: 1rem;
+    transition: all .3s ease;
+  
+    &:hover {
+      box-shadow: .3rem .3rem 0 0 rgba(0, 0, 0, 1);
+      transform: translateX(-.3rem) scale(1.05);
+    }
+  }
+
+  &--disabled {
+    cursor: default;
+    opacity: .5;
+
+    &:hover {
+      box-shadow: none;
+      transform: inherit;
+    }
+  }
+}

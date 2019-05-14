@@ -1,0 +1,28 @@
+[
+  {
+    "constraint": "money-low",
+    "regularOrder": true,
+    "role": "city",
+    "stacks": [],
+    "messages": [
+      {
+        "name": "Notification 1",
+        "content": "Texte de la notification 1",
+        "count": 0,
+        "repeat": null
+      },
+      {
+        "name": "Notification 2",
+        "content": "Texte de la notification 2",
+        "count": 0,
+        "repeat": null
+      },
+      {
+        "name": "Notification 3",
+        "content": "Texte de la notification 3",
+        "count": 0,
+        "repeat": null
+      }
+    ]
+  }
+]

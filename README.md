@@ -1,26 +1,30 @@
-# reborn
+# Reborn
 
-## Project setup
-```
-yarn install
-```
+A simulation game in WebGL 
 
-### Compiles and hot-reloads for development
-```
-yarn run serve
-```
+# Install
 
-### Compiles and minifies for production
+Install concurrently
 ```
-yarn run build
+npm install -g concurrently
 ```
 
-### Run your tests
+Install dependencies on server and client
 ```
-yarn run test
+npm run install
 ```
 
-### Lints and fixes files
+Run server
 ```
-yarn run lint
+npm run dev
 ```
+
+Build
+```
+npm run build
+```
+
+
+
+
+

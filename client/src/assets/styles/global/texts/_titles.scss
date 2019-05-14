@@ -1,0 +1,10 @@
+.title {
+  text-transform: uppercase;
+
+  &--wide {
+    @extend .title;
+
+    font-family: "DrukWide-Super";
+    @include fontSize(48);
+  }
+}
