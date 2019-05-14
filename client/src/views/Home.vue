@@ -99,7 +99,9 @@ import Overlay from "../components/global/Overlay";
 
 export default {
   name: 'home',
-  components: {Overlay},
+  components: {
+    Overlay
+  },
   data() {
     return {
       status: 'introduction', // introduction => landing,
