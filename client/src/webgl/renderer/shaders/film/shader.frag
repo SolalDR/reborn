@@ -6,5 +6,5 @@ float rand(vec2 co){
 }
 
 void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
-  outputColor = inputColor - rand(uv+offset)*intensity;
+  outputColor = inputColor - (rand(uv+offset) - 0.5)*intensity;
 }

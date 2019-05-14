@@ -26,7 +26,7 @@ export default class Waves {
       const angle = Math.random() * Math.PI * 2;
       const radius = Math.random() * 130 + 20;
       this.cluster.addItem({
-        position: new THREE.Vector3(Math.cos(angle) * radius, 0, Math.sin(angle) * radius),
+        position: new THREE.Vector3(Math.cos(angle) * radius, 0.5, Math.sin(angle) * radius),
         rotation: new THREE.Euler(0, - angle + Math.PI / 2, 0),
         dashOffset: Math.random() * 2,
       });
