@@ -4,13 +4,34 @@
        @mouseleave="isHovered = false"
        class="category"
        :class="{'category--current': isCurrent, 'category--hovered': isHovered}">
-    <img src="" alt="">
+    <component :is="`${category.slug}-icon`" :is-filled="isCurrent || isHovered"/>
   </div>
 </template>
 
 <script>
+import AlimentationIcon from '../icons/city/AlimentationIcon';
+import FoodIcon from '../icons/city/FoodIcon';
+import EnergyIcon from '../icons/city/EnergyIcon';
+import RecyclingIcon from '../icons/city/RecyclingIcon';
+import SatisfactionIcon from '../icons/city/SatisfactionIcon';
+import PlantIcon from '../icons/nature/PlantIcon';
+import RockIcon from '../icons/nature/RockIcon';
+import SkillIcon from '../icons/nature/SkillIcon';
+import TreeIcon from '../icons/nature/TreeIcon';
+
 export default {
   name: 'category',
+  components: {
+    TreeIcon,
+    SkillIcon,
+    RockIcon,
+    PlantIcon,
+    SatisfactionIcon,
+    RecyclingIcon,
+    EnergyIcon,
+    FoodIcon,
+    AlimentationIcon,
+  },
   data() {
     return {
       isHovered: false,
@@ -28,30 +49,23 @@ export default {
 
 <style lang="scss" scoped>
   .category {
-    $size: 38px;
-
     overflow: hidden;
     @include useFlex();
-    width: $size;
-    height: $size;
-    background-color: rgba(getColor(basics, white), .7);
+    padding: .5rem .2rem;
     border: 2px solid transparent;
 
-    img {
+    svg {
       cursor: pointer;
       opacity: .3;
       width: 2rem;
       height: 2rem;
-      border: 2px solid getColor(basics, black);
       transition: all .3s ease;
     }
 
     &--current,
     &--hovered {
-      img {
+      svg {
         opacity: 1;
-        border: none;
-        background-color: getColor(basics, black);
       }
     }
   }

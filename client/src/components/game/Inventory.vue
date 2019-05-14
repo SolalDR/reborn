@@ -113,8 +113,10 @@ export default {
     @include useFlex(space-between);
     position: absolute;
     top: 0;
-    left: 35px;
+    left: 2.2rem;
     transform: translateY(-100%);
+    padding: 0 .5rem;
+    background-color: rgba(getColor(basics, white), .7);
     border: 2px solid getColor(basics, black);
     border-top-left-radius: 2.5rem;
     border-top-right-radius: 2.5rem;
