@@ -7,7 +7,6 @@
   "main": "index.js",
   "scripts": {
     "dev": "node ./index.js",
-    "build": "node ./index.js"
   },
   "dependencies": {
     "@solaldr/emitter": "^0.1.0",
