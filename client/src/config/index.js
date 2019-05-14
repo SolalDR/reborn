@@ -1,5 +1,5 @@
 export default {
   server: {
-    enabled: false,
+    enabled: true,
   },
 };

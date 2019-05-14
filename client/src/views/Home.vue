@@ -84,10 +84,6 @@
             <p>Merci aux équipes pédagogiques de Gobelins  pour leur aide dans le développement du projet.</p>
           </div>
         </template>
-
-        <template #footer>
-          <p class="cta--bordered" @click="status = 'landing'">Retour</p>
-        </template>
       </overlay>
     </transition>
 

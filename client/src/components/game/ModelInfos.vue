@@ -6,7 +6,7 @@
             :key="`model-infos-modifier-${index}`">
         {{ modifier.value > 0 ? '+' : '-' }} {{ modifier.name }} {{ modifier.value }}/an
       </span>
-      <span>X {{ -model.states.creation.enterModifiers.find(modifier => modifier.name === 'money').value }}$</span>
+      <span v-if="this.$game.player.role.name === 'city'">X {{ -model.states.creation.enterModifiers.find(modifier => modifier.name === 'money').value }}</span>
     </template>
   </div>
 </template>
