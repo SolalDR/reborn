@@ -23,10 +23,6 @@ export default {
           name: 'energy',
           value: 0.5
         },
-        {
-          name: 'purity',
-          value: 0
-        }
       ]
     },
   }

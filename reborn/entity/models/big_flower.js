@@ -19,7 +19,7 @@ export default {
       recurModifiers: [
         {
           name: 'purity',
-          value: 1
+          value: 0.7
         },
       ]
     },

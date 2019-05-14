@@ -1,8 +1,8 @@
 export default {
-  slug: "factory",
+  slug: "charcoal_factory",
   category: "energy",
-  name: "Factory",
-  displayName: "Usine",
+  name: "Charcoal Factory",
+  displayName: "Usine à charbon",
   role: 'city',
   states: {
     creation: {
@@ -30,7 +30,7 @@ export default {
       leaveModifiers: [
         {
           name: 'money',
-          value: 3000
+          value: -3000
         }
       ]
     }

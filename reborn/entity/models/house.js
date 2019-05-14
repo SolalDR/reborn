@@ -7,7 +7,6 @@ export default {
   role: 'city',
   states: {
     creation: {
-      duration: 1000,
       enterModifiers: [
         {
           name: 'purity',

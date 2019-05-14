@@ -1,4 +1,4 @@
-import factory from "./factory";
+import charcoal_factory from "./charcoal_factory";
 import cinema from "./cinema";
 import farm from "./farm";
 import flower from "./flower";
@@ -12,7 +12,7 @@ import big_flower from './big_flower';
 import centenary_tree from './centenary_tree';
 
 export default [
-  factory,
+  charcoal_factory,
   cinema,
   farm,
   flower,

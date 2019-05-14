@@ -11,7 +11,8 @@
     "build": "concurrently \"npm run server:build\" \"npm run client:build\"",
     "server:dev": "cd server && npm run dev",
     "client:dev": "cd client && npm run dev",
-    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\""
+    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
+    "publish:server": "git subtree push --prefix server heroku master",
   },
   "repository": {
     "type": "git",
