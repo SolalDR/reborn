@@ -2,18 +2,19 @@
   <div class="inventory">
     <div class="categories">
       <category v-for="(category, index) in categories"
-        :key="`category-${index}`"
-        :category="{index: index, ...category}"
-        @setCurrentCategory="setCurrentCategory(category)"
-        :class="{'category--current': category.slug === currentCategory.slug}"/>
+                :key="`category-${index}`"
+                :category="{index: index, ...category}"
+                :is-current="category.slug === currentCategory.slug"
+                @setCurrentCategory="setCurrentCategory(category)"/>
     </div>
 
     <div class="models">
       <model v-for="(model, index) in models"
-        :key="`model-${index}`"
-        :model="{index: index, ...model}"
-        @setCurrentModel="setCurrentModel(model)"
-        :class="{'model--current': model.name === currentModel.name}"/>
+             :key="`model-${index}`"
+             :model="{index: index, ...model}"
+             :money="money"
+             :is-current="model.name === currentModel.name"
+             @setCurrentModel="setCurrentModel(model)"/>
     </div>
   </div>
 </template>
@@ -24,6 +25,12 @@ import Category from './Category.vue';
 import Reborn from '../../game';
 
 export default {
+  name: 'inventory',
+
+  props: {
+    money: Number
+  },
+
   data() {
     return {
       currentCategory: 0,
@@ -95,16 +102,22 @@ export default {
 <style lang="scss">
 .inventory {
   padding: 10px;
-  width: 400px;
-  border-radius: 50px;
+  width: 26.5rem;
+  height: 7.5rem;
+  border-radius: 2.5rem;
+  border: 2px solid getColor(basics, black);
   background-color: rgba(getColor(basics, white), .5);
 
   .categories {
+    overflow: hidden;
     @include useFlex(space-between);
     position: absolute;
     top: 0;
     left: 35px;
     transform: translateY(-100%);
+    border: 2px solid getColor(basics, black);
+    border-top-left-radius: 2.5rem;
+    border-top-right-radius: 2.5rem;
   }
 
   .models {

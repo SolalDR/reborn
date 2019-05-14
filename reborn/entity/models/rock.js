@@ -2,7 +2,8 @@ export default {
   slug: "rock",
   category: "rock",
   color: "#00FF00",
-  name: "Roche",
+  name: "Rock",
+  displayName: "Roche",
   role: "nature",
   states: {
     creation: {

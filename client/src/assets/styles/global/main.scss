@@ -1,18 +1,77 @@
 @import "./components/cta";
 @import "./components/dat.gui";
+@import "./font-faces/druk";
+@import "./texts/titles";
 
 html {
   height: 100%;
   font-size: 62.5%;
-  font-family: "Druk-WideMedium" !important;
 }
 
 body {
   height: 100%;
   overflow: hidden;
+  line-height: inherit !important;
+}
+
+* {
+  &::selection {
+    background-color: getColor(mains, primary) !important;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: getColor(basics, white);
+    border: 1px solid getColor(basics, black);
+    border-radius: 1.25rem;
+  }
+
+  &::-webkit-scrollbar {
+    width: 2.5rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: getColor(basics, black);
+    border-radius: 1.25rem;
+  }
+}
+
+h1,
+h2,
+h3,
+p,
+a {
+  margin: 0;
+}
+
+p, a {
+  @include fontSize(18);
+  font-family: "DrukText-Medium";
 }
 
 a {
   color: getColor(basics, black) !important;
   text-decoration: none !important;
+}
+
+.bold {
+  font-family: "DrukText-Bold";
+}
+
+.italic {
+  font-family: "DrukText-MediumItalic";
+}
+
+.header,
+.footer {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.header {
+  top: 4.5rem;
+}
+
+.footer {
+  bottom: 6rem;
 }

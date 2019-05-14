@@ -8,6 +8,7 @@ export default class Population extends Metric {
   constructor(){
     super({
       name: "Population",
+      displayName: "Population",
       min: 0,
       max: Infinity,
       value: 100,

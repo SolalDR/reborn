@@ -1,7 +1,8 @@
 export default {
   slug: "farm",
   category: "alimentation",
-  name: "Ferme",
+  name: "Farm",
+  displayName: "Ferme",
   role: 'city',
   states: {
     creation: {

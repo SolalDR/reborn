@@ -1,7 +1,7 @@
 <template>
   <overlay>
     <div class="join">
-      <loader :text="`Joining ${$router.history.current.params.id}...`"/>
+      <loader/>
     </div>
   </overlay>
 </template>

@@ -2,7 +2,8 @@ export default {
   slug: "house",
   category: "satisfaction",
   color: "#FF0000",
-  name: "Logement",
+  name: "House",
+  displayName: "Logement",
   role: 'city',
   states: {
     creation: {

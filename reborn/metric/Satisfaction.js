@@ -8,6 +8,7 @@ export default class Satisfaction extends Metric {
   constructor() {
     super({
       name: "Satisfaction",
+      displayName: "Satisfaction",
       min: 0,
       max: 100,
       value: 50,

@@ -1,26 +1,23 @@
 <template>
   <div class="loader">
     <p>
+      <span>C</span>
+      <span>H</span>
+      <span>A</span>
       <span>R</span>
+      <span>G</span>
       <span>E</span>
-      <span>B</span>
-      <span>O</span>
-      <span>R</span>
+      <span>M</span>
+      <span>E</span>
       <span>N</span>
+      <span>T</span>
     </p>
-    <span>{{ text }}</span>
   </div>
 </template>
 
 <script>
 export default {
   name: 'loader',
-  props: {
-    text: {
-      type: String,
-      default: 'is loading...',
-    },
-  },
 };
 </script>
 
@@ -44,7 +41,7 @@ export default {
         duration: 2s;
         timing-function: cubic-bezier(0.82, 0.04, 0, 1.04);
       }
-      @for $i from 1 to 7 {
+      @for $i from 1 to 11 {
         &:nth-child(#{$i}) {
           animation-delay: $i*0.05s;
         }

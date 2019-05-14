@@ -2,18 +2,21 @@
   <div class="intro">
     <p class="intro__incarnate">Vous incarnez</p>
 
-    <p class="intro__title">{{ title }}</p>
+    <p class="intro__title title--wide">{{ title }}</p>
     <p v-for="(text, index) in texts"
        :key="`intro-text-${index}`"
        v-html="text"
        class="intro__text"></p>
 
-    <button v-if="!pending" @click="start" class="cta--bordered">Démarrer la partie</button>
+    <div class="intro__footer footer">
+      <div class="status">
+        <button v-if="!pending" @click="start" class="cta--bordered">Démarrer la partie</button>
+        <p v-if="pending">En attente de votre adversaire...</p>
+      </div>
 
-    <p v-if="pending">En attente de votre adversaire...</p>
-
-    <div class="intro__tips">
-      <p v-html="currentTip" class="intro__tip"></p>
+      <div class="tips">
+        <p v-html="currentTip" class="tip"></p>
+      </div>
     </div>
   </div>
 </template>
@@ -65,20 +68,39 @@ export default {
 
 <style lang="scss">
   .intro {
+    margin-top: -20vh;
+
     &__incarnate {
+      margin-bottom: $space-m;
       @include fontSize(36);
+      text-transform: uppercase;
     }
 
     &__title {
+      margin-bottom: $space-xl;
       @include fontSize(48);
     }
 
     &__text {
+      margin: 0 auto $space-l;
+      max-width: 60rem;
       @include fontSize(18);
+
     }
 
-    &__tips {
-      .intro__tip {}
+    &__footer {
+      .status {
+        margin-bottom: $space-xxl;
+
+        p {
+          padding: 1.2rem 0;
+          @include fontSize(20);
+        }
+      }
+
+      .tips {
+        .tip {}
+      }
     }
   }
 </style>

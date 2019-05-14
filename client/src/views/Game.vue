@@ -2,6 +2,7 @@
   <main class="game">
     <scene @mounted="onWebGLInit"/>
 
+    <!-- IsStarting -->
     <transition name="fade">
       <overlay v-if="isStarting">
         <transition name="fade" mode="out-in">
@@ -12,25 +13,21 @@
       </overlay>
     </transition>
 
+    <!-- IsPlaying -->
     <div class="game__interface" v-if="interfaceVisible">
       <gauge-list :list="this.gauges"/>
-      <indicator-list :list="this.indicators"/>
+      <years-counter :currentYear="year"/>
+      <indicator-list :list="this.indicators" @showSettings="showSettings = true"/>
+      <inventory :money="money" @selectModel="onSelectModel"/>
+      <model-infos :model="currentModel"/>
+      <flash-news/>
 
-      <!-- TODO: Bind currentYear value -->
-      <div class="years-counter">
-        <years-counter :currentYear="year"/>
-      </div>
-
-      <inventory @selectModel="onSelectModel"/>
-
-      <div @click="showSettings = true" class="settings-cta">
-        Settings
-      </div>
-      <transition name="settings">
+      <transition name="fade">
         <settings v-if="showSettings" @closeSettings="showSettings = false"/>
       </transition>
     </div>
 
+    <!-- IsEnded -->
     <transition name="fade">
       <overlay v-if="isEnded">
         <transition name="fade" mode="out-in">
@@ -69,10 +66,14 @@ import Overlay from '../components/global/Overlay';
 import Explanations from '../components/game/Explanations';
 import Saving from '../components/game/Saving';
 import config from '../config';
+import ModelInfos from "../components/game/ModelInfos";
+import FlashNews from "../components/game/FlashNews";
 
 export default {
   name: 'Game',
   components: {
+    FlashNews,
+    ModelInfos,
     Saving,
     Explanations,
     Overlay,
@@ -99,6 +100,7 @@ export default {
       gauges: null,
       indicators: null,
       year: 0,
+      money: null,
       position: new THREE.Vector3(0, 0.1, 8),
       selectedEntity: null,
     };
@@ -264,6 +266,7 @@ export default {
       });
 
       this.year = Math.floor(elapsed / 1000); // One year per second
+      this.money = this.indicators.length > 0 ? this.indicators.find(indicator => indicator.name === 'Money').value : 0
     },
 
     onGameStart({ startedAt }) {
@@ -324,14 +327,16 @@ export default {
       position: absolute;
     }
 
+    $padding: 3rem;
+
     .gauge-list {
-      top: 0;
-      left: 0;
+      top: $padding;
+      left: $padding;
     }
 
     .indicator-list {
-      top: 0;
-      right: 0;
+      top: $padding;
+      right: $padding;
     }
 
     .years-counter {
@@ -341,19 +346,18 @@ export default {
     }
 
     .inventory {
-      bottom: 0;
-      left: 0;
+      bottom: calc(#{$padding} + 3.6rem);
+      left: $padding;
     }
 
-    .settings-cta {
-      $size: 80px;
-      bottom: 0;
-      right: 0;
-      @include useFlex();
-      width: $size;
-      height: $size;
-      background-color: getColor(basics, white);
-      border-radius: 50%;
+    .model-infos {
+      bottom: $padding;
+      left: $padding;
+    }
+
+    .flash-news {
+      bottom: $padding;
+      right: $padding;
     }
   }
 }

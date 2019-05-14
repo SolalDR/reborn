@@ -8,6 +8,7 @@ export default class Money extends Metric {
   constructor(){
     super({
       name: "Money",
+      displayName: "Ressources",
       min: 0,
       max: Infinity,
       value: 0,
