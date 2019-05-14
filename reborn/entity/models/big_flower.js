@@ -1,13 +1,13 @@
 export default {
-  slug: "tree",
-  category: "tree",
+  slug: "big_flower",
+  category: "plant",
   color: "#00FF00",
-  name: "Tree",
-  displayName: "Arbre",
+  name: "Big Flower",
+  displayName: "Grande Fleur",
   role: "nature",
   states: {
     creation: {
-      duration: 1000,
+      duration: 500,
       enterModifiers: [
         {
           name: 'purity',
@@ -20,14 +20,14 @@ export default {
         {
           name: 'purity',
           value: 1
-        }
+        },
       ]
     },
     destruction: {
       leaveModifiers: [
         {
           name: 'money',
-          value: 500
+          value: 100
         }
       ]
     }

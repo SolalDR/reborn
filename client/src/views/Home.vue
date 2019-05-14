@@ -81,7 +81,7 @@
               <p>Erwann Letue</p>
             </div>
 
-            <p>Merci aux équipes pédagogiques de Gobelins  pour leur aide dans le développement du projet.</p>
+            <p>Merci aux équipes pédagogiques de Gobelins pour leur aide dans le développement du projet.</p>
           </div>
         </template>
       </overlay>
@@ -193,8 +193,8 @@ export default {
         startedAt: Date.now() + 5000,
         createdAt: Date.now(),
         players: [
-          { id: 1, role: 'city', status: 1 },
-          { id: 2, role: 'nature', status: 1 },
+          { id: 1, role: 'nature', status: 1 },
+          { id: 2, role: 'city', status: 1 },
         ],
       }), 200);
     },

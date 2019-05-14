@@ -8,6 +8,8 @@ import rock from "./rock";
 import tree from "./tree";
 import windturbine from "./windturbine";
 import intensivelivestock from "./intensivelivestock";
+import big_flower from './big_flower';
+import centenary_tree from './centenary_tree';
 
 export default [
   factory,
@@ -20,4 +22,6 @@ export default [
   tree,
   windturbine,
   intensivelivestock,
+  big_flower,
+  centenary_tree,
 ]

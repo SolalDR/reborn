@@ -79,7 +79,7 @@ export default class Renderer {
   initComposer() {
     this.composer = new EffectComposer(this.renderer);
     this.sobelEffect = new SobelEffect({
-      step: 0.5,
+      step: 0.15,
       intensity: 10,
       threshold: 0.05,
     });

@@ -1,13 +1,13 @@
 export default {
-  slug: "tree",
+  slug: "centenary_tree",
   category: "tree",
   color: "#00FF00",
-  name: "Tree",
-  displayName: "Arbre",
+  name: "Centenary Tree",
+  displayName: "Arbre centenaire",
   role: "nature",
   states: {
     creation: {
-      duration: 1000,
+      duration: 2000,
       enterModifiers: [
         {
           name: 'purity',
@@ -19,7 +19,7 @@ export default {
       recurModifiers: [
         {
           name: 'purity',
-          value: 1
+          value: 2
         }
       ]
     },
@@ -27,7 +27,7 @@ export default {
       leaveModifiers: [
         {
           name: 'money',
-          value: 500
+          value: 1000
         }
       ]
     }
