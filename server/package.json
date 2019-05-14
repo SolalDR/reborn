@@ -2,7 +2,7 @@
   "name": "reborn-server",
   "version": "0.0.1",
   "engines": {
-    "node": ">=10.0.0"
+    "node": "10.0.0"
   },
   "main": "index.js",
   "scripts": {
