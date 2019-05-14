@@ -10,16 +10,16 @@ export default {
       enterModifiers: [
         {
           name: 'purity',
-          value: -1
+          value: -0.5
         },
         {
           name: 'money',
-          value: -200,
+          value: -500,
           checkConstraint: true
         },
         {
           name: 'satisfaction',
-          value: 5,
+          value: 10,
         },
       ]
     },
@@ -35,7 +35,21 @@ export default {
       leaveModifiers: [
         {
           name: 'money',
-          value: -15
+          value: -100
+        }
+      ]
+    },
+    living: {
+      enterModifiers: [
+        {
+          name: 'waste',
+          value: 0.01
+        }
+      ],
+      leaveModifiers: [
+        {
+          name: 'waste',
+          value: -0.01
         }
       ]
     }

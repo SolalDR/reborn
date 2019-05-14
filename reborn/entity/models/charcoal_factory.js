@@ -11,6 +11,10 @@ export default {
           name: 'money',
           value: -10000,
           checkConstraint: true
+        },
+        {
+          name: 'purity',
+          value: -10,
         }
       ]
     },
@@ -22,7 +26,7 @@ export default {
         },
         {
           name: 'purity',
-          value: -2
+          value: -15,
         }
       ]
     },
@@ -31,6 +35,20 @@ export default {
         {
           name: 'money',
           value: -3000
+        }
+      ]
+    },
+    living: {
+      enterModifiers: [
+        {
+          name: 'waste',
+          value: 0.05
+        }
+      ],
+      leaveModifiers: [
+        {
+          name: 'waste',
+          value: -0.05
         }
       ]
     }

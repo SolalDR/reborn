@@ -9,7 +9,7 @@ export default {
       enterModifiers: [
         {
           name: 'money',
-          value: -2000,
+          value: -1500,
           checkConstraint: true
         },
         {
@@ -18,6 +18,20 @@ export default {
         }
       ]
     },
+    living: {
+      enterModifiers: [
+        {
+          name: 'waste',
+          value: 0.0025
+        }
+      ],
+      leaveModifiers: [
+        {
+          name: 'waste',
+          value: -0.0025
+        }
+      ]
+    }
   }
 }
 

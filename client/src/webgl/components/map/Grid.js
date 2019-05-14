@@ -29,6 +29,15 @@ class Grid extends Reborn.Grid {
     return destination;
   }
 
+  getCoord(index, destination = new THREE.Vector2()) {
+    if (this[index] !== null) {
+      destination.x = this[index].x - this.size[0] / 2 + 0.5;
+      destination.y = this[index].y - this.size[1] / 2 + 0.5;
+      return destination;
+    }
+    return null;
+  }
+
   /**
    * @param {THREE.Vector3} point The intersection point
    * @param {THREE.Vector2} scale The size to check

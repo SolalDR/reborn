@@ -22,6 +22,7 @@ export default class WebGL extends Emitter {
     super();
     this.canvas = canvas;
     this.game = game;
+    console.log(this.game);
 
     // Camera
     this.scene = new THREE.Scene();
@@ -155,6 +156,30 @@ export default class WebGL extends Emitter {
       }
     })
     return model;
+  }
+
+  /**
+   * Run once when initializing
+   * @param  {[string]} models
+   * @param {} [varname] [description]
+   */
+  fillRandom(models) {
+    let model = null;
+    let entities = [];
+
+    while(entities.length < 50) {
+      const i = Math.floor(Math.random()*this.map.grid.length);
+      if (this.map.grid[i] !== null) {
+        model = models[Math.floor(Math.random()*models.length)];
+        const coords = this.map.grid.getCoord(i);
+        entities.push({
+          model,
+          position: new THREE.Vector3(coords.x, this.map.grid[i].altitude, coords.y),
+          rotation: new THREE.Euler(0, Math.floor(Math.random() * 4) * Math.PI / 2, 0),
+        })
+      }
+    }
+    return entities;
   }
 
   loop() {

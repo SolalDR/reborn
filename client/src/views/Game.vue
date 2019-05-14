@@ -183,7 +183,12 @@ export default {
       this.$store.commit('debug/log', { content: 'game: pending', label: 'socket' });
       this.status = 'pending';
       this.$webgl.on('addItem', (item) => this.onAddItem(item));
-      this.$webgl.on('selectItem', (item) => this.selectedEntity = item)
+      this.$webgl.on('selectItem', (item) => {
+        this.selectedEntity = item
+        if (this.$game.entityModels.get(item.model).role === 'nature' && this.$game.player.role.name === 'city') {
+          this.onRemoveItem();
+        }
+      })
 
       if (!config.server.enabled) {
         this.simulateGameStart();
@@ -286,6 +291,15 @@ export default {
       setTimeout(() => {
         this.$store.commit('debug/log', { content: 'game: initializing', label: 'socket' });
         this.status = 'initializing';
+        if (this.$game.player.role.name === 'nature') {
+          let entities = this.$webgl.fillRandom(['tree', 'rock', 'centenary_tree']);
+          var interval = 5000/entities.length;
+          entities.forEach((entity, i) => {
+            setTimeout(()=>{
+              this.$socket.emit('entity:add', entity);
+            }, i*interval);
+          })
+        }
       }, Math.max(0, timeout - 5000));
 
       setTimeout(() => {

@@ -8,12 +8,12 @@ export default {
       enterModifiers: [
         {
           name: 'money',
-          value: -1000,
+          value: -2500,
           checkConstraint: true
         },
         {
           name: 'purity',
-          value: -0.5
+          value: -3
         }
       ]
     },
@@ -21,10 +21,22 @@ export default {
       recurModifiers: [
         {
           name: 'energy',
-          value: 0.5
+          value: 1.5,
+        },
+        {
+          name: 'satisfaction',
+          value: -0.2,
         },
       ]
     },
+    destruction: {
+      enterModifiers: [
+        {
+          name: 'money',
+          value: -500,
+        },
+      ]
+    }
   }
 }
 
