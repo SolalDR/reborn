@@ -12,6 +12,7 @@ import modelsConfig from '@/config/models';
 import EntityModelGroup from './components/game/EntityModelGroup';
 import WorldScreen from './components/WorldScreen.js';
 import { Clouds, Waves } from './components/world'
+import ExplosionEffect from './components/game/effects/Explosion';
 
 export default class WebGL extends Emitter {
   constructor({
@@ -87,17 +88,11 @@ export default class WebGL extends Emitter {
     });
 
     AssetsManager.get('images').then((images) => {
-      var clouds = new Clouds({
-        path: images.cloud_line.paths[0],
-        brush: images.cloud_brush
-      });
-
-      this.waves = new Waves({
-        path: images.wave_line.paths[0],
-        brush: images.cloud_brush,
-      });
-
+      this.waves = new Waves({ path: images.wave_line.paths[0] });
       this.scene.add(this.waves.mesh);
+
+      this.explosionEffect = new ExplosionEffect();
+      this.scene.add(this.explosionEffect.mesh);
     });
   }
 
@@ -166,6 +161,7 @@ export default class WebGL extends Emitter {
     requestAnimationFrame(this.loop.bind(this));
     this.controls.loop();
     if (this.waves) this.waves.render();
+    if (this.explosionEffect) this.explosionEffect.render();
     this.worldScreen.render();
     this.renderer.render();
   }

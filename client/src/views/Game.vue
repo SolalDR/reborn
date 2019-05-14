@@ -234,6 +234,11 @@ export default {
       this.$store.commit('debug/log', { content: 'entity:add (receive) with uuid: ' + item.uuid, label: 'socket' });
       const model = this.$webgl.models[item.model];
       if (model) {
+        this.$webgl.explosionEffect.mesh.position.set(item.position.x, item.position.y, item.position.z);
+        this.$webgl.explosionEffect.explode({
+          delay: 200,
+          duration: 600,
+        });
         model.addItem({
           ...item,
           position: new THREE.Vector3(item.position.x, item.position.y, item.position.z),

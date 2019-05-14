@@ -5,27 +5,26 @@ import config from '@/config/worlds';
 export default class Waves {
   constructor({
     path = null,
-    brush = null,
   } = {}) {
     this.geometry = new THREE.Geometry();
     path.currentPath.getPoints(30).forEach((point) => {
       this.geometry.vertices.push(
-        new THREE.Vector3(point.x, 0, point.y)
-          .multiplyScalar(0.1),
+        new THREE.Vector3(point.x, -point.y, 0).multiplyScalar(0.07),
       );
     });
 
     this.cluster = new LineSystem(this.geometry, {
-      map: brush,
       limit: 1000,
       lineWidth: 2,
+      // depthTest: true,
+      // depthWrite: true,
     });
 
     this.cluster.mesh.position.y = 0;
 
     for (let i = 0; i < 1000; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const radius = Math.random() * 130 + 16;
+      const radius = Math.random() * 130 + 20;
       this.cluster.addItem({
         position: new THREE.Vector3(Math.cos(angle) * radius, 0, Math.sin(angle) * radius),
         rotation: new THREE.Euler(0, - angle + Math.PI / 2, 0),

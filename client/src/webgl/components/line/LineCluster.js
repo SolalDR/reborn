@@ -60,4 +60,20 @@ export default class LineCluster extends Cluster {
   setDashOffsetAt(index, value) {
     this.geometry.attributes.instanceDashOffset.setX(index, value);
   }
+
+  get dashOffset() {
+    return this.material.uniforms.dashOffset.value;
+  }
+
+  set dashOffset(value) {
+    this.material.uniforms.dashOffset.value = value;
+  }
+
+  initGUI(folder) {
+    console.log(this.material.uniforms);
+    folder.add(this.material.uniforms.dashOffset, 'value').name('dashOffset');
+    folder.add(this.material.uniforms.dashArray, 'value').name('dashArray');
+    folder.add(this.material.uniforms.dashRatio, 'value').name('dashRatio');
+    folder.add(this.material.uniforms.lineWidth, 'value').name('lineWidth');
+  }
 }
