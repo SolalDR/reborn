@@ -27,7 +27,7 @@ export default {
       leaveModifiers: [
         {
           name: 'money',
-          value: 1000
+          value: 2000
         }
       ]
     }
