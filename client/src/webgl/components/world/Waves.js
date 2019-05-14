@@ -16,11 +16,11 @@ export default class Waves {
     this.cluster = new LineSystem(this.geometry, {
       limit: 1000,
       lineWidth: 2,
-      // depthTest: true,
-      // depthWrite: true,
+      depthTest: true,
+      depthWrite: true,
     });
 
-    this.cluster.mesh.position.y = 0;
+    this.cluster.mesh.frustumCulled = false;
 
     for (let i = 0; i < 1000; i++) {
       const angle = Math.random() * Math.PI * 2;
@@ -39,6 +39,7 @@ export default class Waves {
 
   initGUI() {
     var folder = GUI.world.addFolder('Waves');
+    folder.addVector('Position', this.cluster.mesh.position);
     folder.add(config.waves, 'speed', 0, 0.2).step(0.0001);
     folder.add(config.waves, 'count', 0, 1000).step(1).onChange(value => {
       this.mesh.geometry.maxInstancedCount = value;

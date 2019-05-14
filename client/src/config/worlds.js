@@ -1,6 +1,6 @@
 export default {
   waves: {
-    speed: 0.005,
-    count: 300,
+    speed: 0.02,
+    count: 200,
   }
 }

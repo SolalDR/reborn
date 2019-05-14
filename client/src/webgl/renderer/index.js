@@ -89,7 +89,7 @@ export default class Renderer {
       distinction: 1.0,
       resolutionScale: 0.5,
     });
-    const effectPass = new EffectPass(this.camera, this.filmEffect, this.bloomEffect, this.sobelEffect);
+    const effectPass = new EffectPass(this.camera, this.filmEffect, this.sobelEffect);
 
     effectPass.dithering = true;
     effectPass.renderToScreen = true;
