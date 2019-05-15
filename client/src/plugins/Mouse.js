@@ -5,6 +5,7 @@ const mouse = new Vue({
     return {
       position: new THREE.Vector2(),
       normalized: new THREE.Vector2(),
+      start: null,
     };
   },
 
@@ -22,6 +23,7 @@ const mouse = new Vue({
     },
 
     onMouseDown(event) {
+      this.startAt = Date.now();
       this.$emit('dragstart', {
         mouse: this,
         event,
@@ -32,6 +34,7 @@ const mouse = new Vue({
       this.$emit('click', {
         mouse: this,
         event,
+        duration: Date.now() - this.startAt,
       });
       this.$emit('dragend');
     },

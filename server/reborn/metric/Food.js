@@ -15,4 +15,8 @@ export default class Food extends Metric {
       recurentOperation: 0.1,
     })
   }
+
+  applyRecurentLogic(game) {
+    this.value -= game.metrics.get('population').value * 0.0005;
+  }
 }

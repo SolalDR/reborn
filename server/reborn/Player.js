@@ -34,7 +34,7 @@ class Player {
 
   /**
    * Returns infos
-   * @returns {id: string, role: Role, status: Integer}
+   * @returns {{id: string, role: Role, status: Number}}
    */
   get infos(){
     return {
