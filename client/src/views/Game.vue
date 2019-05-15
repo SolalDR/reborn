@@ -43,7 +43,7 @@
     </transition>
 
     <webgl-component :position="selectedEntity.position" v-if="selectedEntity">
-      <p class="cta--bordered" @click="onRemoveItem">Delete</p>
+      <p class="cta--bordered" @click="onRemoveItem">Delete <button @click.stop="selectedEntity = null">X</button></p>
     </webgl-component>
   </main>
 </template>

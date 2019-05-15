@@ -110,8 +110,9 @@ export default class WebGL extends Emitter {
 
       this.scene.add(this.map);
 
-      mouse.$on('click', ({ event }) => {
-        if (!mouse.dragDelta && this.raycaster.intersection && event.target === this.canvas) {
+      mouse.$on('click', ({ event, duration }) => {
+        var delta = mouse.dragDelta ? Math.sqrt(Math.pow(mouse.dragDelta.x, 2), Math.pow(mouse.dragDelta.x, 2)) : 0;
+        if ((delta < 10 || duration < 70) && this.raycaster.intersection && event.target === this.canvas) {
           const {id, slot} = this.renderer.pick(event.clientX, event.clientY);
           if (id === 255 && slot === 255) {
             this.emit('addItem', {
