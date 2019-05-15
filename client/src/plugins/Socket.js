@@ -3,7 +3,7 @@ import store from '../services/store';
 
 export default new VueSocketIO({
   debug: false,
-  connection: 'localhost:3001',
+  connection: 'https://reborn-game.herokuapp.com',
   vuex: {
     store,
     actionPrefix: 'SOCKET_',
