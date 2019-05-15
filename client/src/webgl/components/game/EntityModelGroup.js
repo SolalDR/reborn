@@ -9,6 +9,7 @@ export default class EntityModelGroup {
   } = {}) {
     this.name = name;
     this.geometry = geometry;
+    this.geometry.computeBoundingBox();
     this.material = material;
     this.slot = slot;
 
@@ -18,11 +19,18 @@ export default class EntityModelGroup {
       hiddenLocation,
     });
 
-    this.pickingCluster = new Cluster(geometry, material, {
+    const boxSize = new THREE.Vector3()
+      .copy(this.geometry.boundingBox.max)
+      .sub(this.geometry.boundingBox.min)
+
+    this.pickingGeometry = new THREE.BoxBufferGeometry( boxSize.x, boxSize.y, boxSize.z );
+
+    this.pickingCluster = new Cluster(this.pickingGeometry, material, {
       hiddenLocation,
       picking: true,
     });
   }
+
 
   addItem({
     position = null,
