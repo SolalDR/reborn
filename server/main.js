@@ -3,7 +3,7 @@ import socketRoom from "./src/sockets/room";
 
 const express = require('express');
 const app = express();
-process.server = app.listen(3001, function() {
+process.server = app.listen(process.env.PORT || 3001, function() {
   console.log('server running on port 3001');
 });
 process.io = require('socket.io')(process.server);
