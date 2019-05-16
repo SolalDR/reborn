@@ -1,5 +1,7 @@
 import Emitter from '@solaldr/emitter';
-import Viewport from '../plugins/Viewport';
+import Viewport from '@/plugins/Viewport';
+import GUI from '@/plugins/GUI';
+import modelsConfig from '@/config/models';
 import GameMap from './components/map';
 import Controls from './controls';
 import Raycaster from './core/Raycaster';
@@ -7,11 +9,9 @@ import mouse from '../plugins/Mouse';
 import AssetsManager from '../services/assets/Manager';
 import Renderer from './renderer';
 import generateMap from './components/map/generator/Generator';
-import GUI from '@/plugins/GUI';
-import modelsConfig from '@/config/models';
 import EntityModelGroup from './components/game/EntityModelGroup';
 import WorldScreen from './components/WorldScreen.js';
-import { Clouds, Waves } from './components/world'
+import { Waves } from './components/world';
 import ExplosionEffect from './components/game/effects/Explosion';
 
 export default class WebGL extends Emitter {
@@ -22,7 +22,6 @@ export default class WebGL extends Emitter {
     super();
     this.canvas = canvas;
     this.game = game;
-    console.log(this.game);
 
     // Camera
     this.scene = new THREE.Scene();
@@ -111,9 +110,9 @@ export default class WebGL extends Emitter {
       this.scene.add(this.map);
 
       mouse.$on('click', ({ event, duration }) => {
-        var delta = mouse.dragDelta ? Math.sqrt(Math.pow(mouse.dragDelta.x, 2), Math.pow(mouse.dragDelta.x, 2)) : 0;
+        const delta = mouse.dragDelta ? Math.sqrt(mouse.dragDelta.x ** 2, mouse.dragDelta.x ** 2) : 0;
         if ((delta < 10 || duration < 70) && this.raycaster.intersection && event.target === this.canvas) {
-          const {id, slot} = this.renderer.pick(event.clientX, event.clientY);
+          const { id, slot } = this.renderer.pick(event.clientX, event.clientY);
           if (id === 255 && slot === 255) {
             this.emit('addItem', {
               position: this.map.gridHelper.position,
@@ -150,12 +149,12 @@ export default class WebGL extends Emitter {
   }
 
   findModelWithSlot(slot) {
-    var model = null;
-    Object.keys(this.models).forEach(slug => {
+    let model = null;
+    Object.keys(this.models).forEach((slug) => {
       if (this.models[slug].slot === slot) {
         model = this.models[slug];
       }
-    })
+    });
     return model;
   }
 
@@ -166,18 +165,18 @@ export default class WebGL extends Emitter {
    */
   fillRandom(models) {
     let model = null;
-    let entities = [];
+    const entities = [];
 
-    while(entities.length < 50) {
-      const i = Math.floor(Math.random()*this.map.grid.length);
+    while (entities.length < 50) {
+      const i = Math.floor(Math.random() * this.map.grid.length);
       if (this.map.grid[i] !== null) {
-        model = models[Math.floor(Math.random()*models.length)];
+        model = models[Math.floor(Math.random() * models.length)];
         const coords = this.map.grid.getCoord(i);
         entities.push({
           model,
           position: new THREE.Vector3(coords.x, this.map.grid[i].altitude, coords.y),
           rotation: new THREE.Euler(0, Math.floor(Math.random() * 4) * Math.PI / 2, 0),
-        })
+        });
       }
     }
     return entities;

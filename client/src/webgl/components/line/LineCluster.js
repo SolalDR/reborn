@@ -2,7 +2,6 @@ import Cluster from '../cluster';
 import beforeVertexChunk from '../cluster/include_vertex.glsl';
 
 export default class LineCluster extends Cluster {
-
   setupInstanceGeometry() {
     super.setupInstanceGeometry();
     const dashOffsetBuffer = new Float32Array(this.limit);

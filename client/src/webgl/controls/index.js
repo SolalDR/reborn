@@ -1,10 +1,10 @@
+import config from '@/config/controls';
+import GUI from '@/plugins/GUI';
 import OrbitControls from './OrbitControls';
 import RailsControl from './RailsControl';
 import bus from '../../plugins/Bus';
 import mouse from '../../plugins/Mouse';
 import Viewport from '../../plugins/Viewport';
-import config from '@/config/controls';
-import GUI from '@/plugins/GUI';
 
 class Control {
   constructor({

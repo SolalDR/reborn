@@ -1,11 +1,10 @@
-import { MeshLine, MeshLineMaterial } from '../meshline';
+import { MeshLine,
+  MeshLineMaterial } from '../meshline';
 import LineCluster from './LineCluster';
 
 export default class LineSystem {
   constructor(geometry, {
     color = new THREE.Color(0x000000),
-    // map = null,
-    // useMap = true,
     resolution = new THREE.Vector2(window.innerWidth, window.innerHeight),
     sizeAttenuation = false,
     lineWidth = 2,
@@ -26,7 +25,21 @@ export default class LineSystem {
     line.setGeometry(geometry);
 
     this.material = new MeshLineMaterial({
-      color, resolution, sizeAttenuation, lineWidth, near, far, depthWrite, depthTest, alphaTest, dashArray, dashOffset, dashRatio, transparent, opacity, side
+      color,
+      resolution,
+      sizeAttenuation,
+      lineWidth,
+      near,
+      far,
+      depthWrite,
+      depthTest,
+      alphaTest,
+      dashArray,
+      dashOffset,
+      dashRatio,
+      transparent,
+      opacity,
+      side,
     });
 
     return new LineCluster(line.geometry, this.material, {
@@ -35,6 +48,6 @@ export default class LineSystem {
   }
 
   loop() {
-    // Need override
+    console.log(this);
   }
 }

@@ -1,5 +1,5 @@
-import Cluster from '../cluster';
 import animate from '@solaldr/animate';
+import Cluster from '../cluster';
 
 export default class EntityModelGroup {
   constructor(name, {
@@ -21,9 +21,9 @@ export default class EntityModelGroup {
 
     const boxSize = new THREE.Vector3()
       .copy(this.geometry.boundingBox.max)
-      .sub(this.geometry.boundingBox.min)
+      .sub(this.geometry.boundingBox.min);
 
-    this.pickingGeometry = new THREE.BoxBufferGeometry( boxSize.x, boxSize.y, boxSize.z );
+    this.pickingGeometry = new THREE.BoxBufferGeometry(boxSize.x, boxSize.y, boxSize.z);
 
     this.pickingCluster = new Cluster(this.pickingGeometry, material, {
       hiddenLocation,
@@ -39,7 +39,7 @@ export default class EntityModelGroup {
   } = {}) {
     if (!position || !rotation) return;
 
-    var scale = new THREE.Vector3();
+    const scale = new THREE.Vector3();
     const index = this.entityCluster.addItem({
       position,
       rotation,
@@ -53,53 +53,54 @@ export default class EntityModelGroup {
       (index % 256) / 256,
     );
 
-    var baseHeight = position.y;
+    const baseHeight = position.y;
     animate.add({
       duration: 400,
-      timingFunction: "easeInOutBack",
+      timingFunction: 'easeInOutBack',
     }).on('progress', ({ value, advancement }) => {
-      var h = baseHeight + 2 - advancement * 2;
+      const h = baseHeight + 2 - advancement * 2;
       this.entityCluster.setPositionAt(index, new THREE.Vector3(position.x, h, position.z));
       this.entityCluster.geometry.attributes.instancePosition.needsUpdate = true;
 
-      this.entityCluster.setScaleAt(index, scale.set(value, value, value))
+      this.entityCluster.setScaleAt(index, scale.set(value, value, value));
       this.entityCluster.geometry.attributes.instanceScale.needsUpdate = true;
-    })
+    });
 
-    this.pickingCluster.addItem({ position, rotation, pickingColor, index, uuid });
+    this.pickingCluster.addItem({
+      position, rotation, pickingColor, index, uuid,
+    });
   }
 
   getItem(index) {
     return {
       model: this.name,
-      ...this.entityCluster.getItem(index)
-    }
+      ...this.entityCluster.getItem(index),
+    };
   }
 
   getEntity(uuid) {
-    return this.entityCluster.getItem(this.entityCluster.getIndex(uuid))
+    return this.entityCluster.getItem(this.entityCluster.getIndex(uuid));
   }
 
   removeItem(index) {
-    var scaleFrom = this.entityCluster.getScaleAt(index);
-    var scale = new THREE.Vector3();
+    const scaleFrom = this.entityCluster.getScaleAt(index);
+    const scale = new THREE.Vector3();
 
     animate.add({
       duration: 400,
-      timingFunction: "easeInOutBack",
-    }).on('progress', ({ value, advancement }) => {
+      timingFunction: 'easeInOutBack',
+    }).on('progress', ({ value }) => {
       this.entityCluster.setScaleAt(index, scale.set(
         scaleFrom.x - scaleFrom.x * value,
         scaleFrom.y - scaleFrom.y * value,
-        scaleFrom.z - scaleFrom.z * value
+        scaleFrom.z - scaleFrom.z * value,
       ));
       this.entityCluster.geometry.attributes.instanceScale.needsUpdate = true;
     }).on('end', () => {
       this.entityCluster.removeItem(index);
-    })
+    });
 
     this.pickingCluster.removeItem(index);
-
   }
 
   removeEntity(uuid) {

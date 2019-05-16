@@ -6,6 +6,7 @@ import Viewport from '../../plugins/Viewport';
 import SobelEffect from './effects/SobelEffect';
 import FilmEffect from './effects/FilmEffect';
 import GUI from '../../plugins/GUI';
+
 let swap = 1;
 
 export default class Renderer {
@@ -64,6 +65,7 @@ export default class Renderer {
       canvas: this.canvas,
       antialias: false,
     });
+    this.renderer.shadowMapEnabled = true;
     this.renderer.setClearColor(0xb7eeff);
     this.renderer.setPixelRatio(1.5);
     this.renderer.setSize(Viewport.width, Viewport.height);
@@ -79,9 +81,9 @@ export default class Renderer {
   initComposer() {
     this.composer = new EffectComposer(this.renderer);
     this.sobelEffect = new SobelEffect({
-      step: 0.15,
+      step: 0.01,
       intensity: 10,
-      threshold: 0.05,
+      threshold: 0.001,
     });
 
     this.filmEffect = new FilmEffect();

@@ -133,7 +133,7 @@ class Cluster {
     this.availables.shift();
     this.indexMap.set(uuid, index);
 
-    if(index + 1 > this.geometry.maxInstancedCount) {
+    if (index + 1 > this.geometry.maxInstancedCount) {
       this.geometry.maxInstancedCount = index + 1;
     }
 
@@ -161,7 +161,7 @@ class Cluster {
   }
 
   removeItem(index) {
-    if(index + 1 === this.geometry.maxInstancedCount) {
+    if (index + 1 === this.geometry.maxInstancedCount) {
       this.geometry.maxInstancedCount = index;
     }
 
@@ -180,7 +180,7 @@ class Cluster {
       pickingColor: this.getPickingColorAt(index),
       uuid: this.entities[index],
       index,
-    }
+    };
   }
 
   getIndex(uuid) {
@@ -192,7 +192,7 @@ class Cluster {
     return new THREE.Vector3(
       a.array[index * a.itemSize + 0],
       a.array[index * a.itemSize + 1],
-      a.array[index * a.itemSize + 2]
+      a.array[index * a.itemSize + 2],
     );
   }
 
@@ -201,7 +201,7 @@ class Cluster {
     return new THREE.Vector3(
       a.array[index * a.itemSize + 0],
       a.array[index * a.itemSize + 1],
-      a.array[index * a.itemSize + 2]
+      a.array[index * a.itemSize + 2],
     );
   }
 
@@ -209,14 +209,25 @@ class Cluster {
    * @TODO
    */
   getRotationAt(index) {
-    return null;
+    const a = this.geometry.attributes.instanceQuaternion;
+    return new THREE.Quaternion(
+      a.array[index * a.itemSize + 0],
+      a.array[index * a.itemSize + 1],
+      a.array[index * a.itemSize + 2],
+      a.array[index * a.itemSize + 3],
+    );
   }
 
   /**
    * @TODO
    */
   getPickingColorAt(index) {
-    return null;
+    const a = this.geometry.attributes.instancePickingColor;
+    return new THREE.Vector3(
+      a.array[index * a.itemSize + 0],
+      a.array[index * a.itemSize + 1],
+      a.array[index * a.itemSize + 2],
+    );
   }
 
   setPositionAt(index, position) {
