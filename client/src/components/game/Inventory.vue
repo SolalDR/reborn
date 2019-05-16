@@ -28,7 +28,7 @@ export default {
   name: 'inventory',
 
   props: {
-    money: Number
+    money: Number,
   },
 
   data() {

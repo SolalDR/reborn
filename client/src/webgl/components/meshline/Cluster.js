@@ -20,7 +20,7 @@ export default class LineCluster extends Cluster {
          vec3 transformedNormal =  transposeMat3( inverse( mat3( modelViewMatrix * _instanceMatrix ) ) ) * objectNormal ;`,
       );
 
-      console.log(program.vertexShader)
+      console.log(program.vertexShader);
     };
   }
 }

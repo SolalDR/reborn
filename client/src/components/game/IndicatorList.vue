@@ -26,7 +26,7 @@ import HoverInfos from './HoverInfos';
 export default {
   name: 'indicator-list',
   components: {
-    HoverInfos
+    HoverInfos,
   },
   props: {
     list: {

@@ -4,5 +4,5 @@ export default {
   },
   gui: {
     visible: false,
-  }
+  },
 };

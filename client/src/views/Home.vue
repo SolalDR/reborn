@@ -79,7 +79,7 @@
               <p>Erwann Letue</p>
             </div>
 
-            <p>Merci aux équipes pédagogiques de Gobelins pour leur aide dans le développement du projet.</p>
+            <p>Merci aux équipes pédagogiques de Gobelins pour leur aide dans le développement du projet.</p>
           </div>
         </template>
       </overlay>
@@ -93,12 +93,12 @@
 
 <script>
 import config from '../config';
-import Overlay from "../components/global/Overlay";
+import Overlay from '../components/global/Overlay';
 
 export default {
   name: 'home',
   components: {
-    Overlay
+    Overlay,
   },
   data() {
     return {
@@ -155,8 +155,8 @@ export default {
 
       this.linkCopied = true;
       setTimeout(() => {
-        this.linkCopied = false
-      }, 3000)
+        this.linkCopied = false;
+      }, 3000);
     },
 
 

@@ -19,20 +19,20 @@ export default {
   props: {
     position: {
       type: THREE.Vector3,
-      default: () => new THREE.Vector3()
-    }
+      default: () => new THREE.Vector3(),
+    },
   },
 
   mounted() {
     this.$webgl.worldScreen.add(this.uuid, this.position, (x, y) => {
-      this.$el.style.setProperty('--x', x + 'px');
-      this.$el.style.setProperty('--y', y + 'px');
+      this.$el.style.setProperty('--x', `${x}px`);
+      this.$el.style.setProperty('--y', `${y}px`);
     });
   },
 
   beforeDestroy() {
     this.$webgl.worldScreen.remove(this.uuid);
-  }
+  },
 };
 </script>
 

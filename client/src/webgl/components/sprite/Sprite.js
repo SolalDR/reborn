@@ -1,4 +1,4 @@
-import * as THREE from "three";
+import * as THREE from 'three';
 
 class TileTextureAnimator {
   constructor(
@@ -7,7 +7,7 @@ class TileTextureAnimator {
     vTiles,
     durationTile,
     tileStart = 0,
-    tileEnd = hTiles * vTiles
+    tileEnd = hTiles * vTiles,
   ) {
     this.texture = texture;
     this.tileStart = tileStart;
@@ -30,8 +30,8 @@ class TileTextureAnimator {
   }
 
   setOffset() {
-    let indexColumn = this.currentTile % this.hTiles;
-    let indexRow = Math.floor(this.currentTile / this.hTiles) + 1;
+    const indexColumn = this.currentTile % this.hTiles;
+    const indexRow = Math.floor(this.currentTile / this.hTiles) + 1;
     this.texture.offset.x = indexColumn / this.hTiles;
     this.texture.offset.y = indexRow / this.vTiles;
   }
@@ -50,23 +50,23 @@ class TileTextureAnimator {
   }
 }
 
-export default class Sprite extends THREE.Object3D{
+export default class Sprite extends THREE.Object3D {
   constructor(opts = {}) {
-      super()
+    super();
     this.options = opts;
     this.spriteMaps = [];
     this.texture = new THREE.TextureLoader().load(opts.texture);
-    this.options.sprites.forEach(sprite => {
+    this.options.sprites.forEach((sprite) => {
       // let texture = new THREE.TextureLoader().load(sprite.texture);
-      let animator = new TileTextureAnimator(
+      const animator = new TileTextureAnimator(
         this.texture,
         opts.w,
         opts.h,
         sprite.durationTile,
         sprite.start,
-        sprite.end
+        sprite.end,
       );
-      let material = new THREE.SpriteMaterial({
+      const material = new THREE.SpriteMaterial({
         // map: sprite.texture,
         // color: 0xffffff,
         // useScreenCoordinates: false,
@@ -76,8 +76,8 @@ export default class Sprite extends THREE.Object3D{
 
       this.spriteMaps.push({
         id: sprite.id,
-        animator: animator,
-        material: material,
+        animator,
+        material,
         // texture: texture,
       });
     });
@@ -94,7 +94,7 @@ export default class Sprite extends THREE.Object3D{
     });
 
     this.add(new THREE.Sprite(this.spriteMaterial));
-    this.changeState("default");
+    this.changeState('default');
   }
 
   update(t) {
@@ -102,7 +102,7 @@ export default class Sprite extends THREE.Object3D{
   }
 
   changeState(id) {
-    let sprite = this.spriteMaps.find(sprite => {
+    const sprite = this.spriteMaps.find((sprite) => {
       return sprite.id == id;
     });
 
@@ -110,7 +110,7 @@ export default class Sprite extends THREE.Object3D{
     this.animation.currentTile = this.animation.tileStart;
     this.animation.currentTime = 0;
     this.animation.setOffset();
-    //init le offset de la texture
+    // init le offset de la texture
 
     // if (!this.sprite.material) {
     //   this.spriteMaterial = new THREE.SpriteMaterial({

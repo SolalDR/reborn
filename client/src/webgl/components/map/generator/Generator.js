@@ -20,7 +20,7 @@ export default (seed = Math.random()) => {
           definition: 200,
           radius: 16,
           position: [0, 0],
-          noiseIntensity: 0.2 + 0.3*random(),
+          noiseIntensity: 0.2 + 0.3 * random(),
         },
         height: 0.5,
       },
@@ -78,7 +78,7 @@ export default (seed = Math.random()) => {
           ],
           noiseIntensity: 0.1,
         },
-        height: random()*5 + 6,
+        height: random() * 5 + 6,
       },
     ],
   });

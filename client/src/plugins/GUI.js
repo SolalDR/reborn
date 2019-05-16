@@ -1,6 +1,6 @@
 import Dat from 'dat.gui';
 import 'three-dat.gui';
-import config from '../config'
+import config from '../config';
 
 const GUI = {
   gui: {},

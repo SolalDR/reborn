@@ -27,7 +27,7 @@ export default class Waves {
       const radius = Math.random() * 130 + 20;
       this.cluster.addItem({
         position: new THREE.Vector3(Math.cos(angle) * radius, 0.5, Math.sin(angle) * radius),
-        rotation: new THREE.Euler(0, - angle + Math.PI / 2, 0),
+        rotation: new THREE.Euler(0, -angle + Math.PI / 2, 0),
         dashOffset: Math.random() * 2,
       });
     }
@@ -38,12 +38,12 @@ export default class Waves {
   }
 
   initGUI() {
-    var folder = GUI.world.addFolder('Waves');
+    const folder = GUI.world.addFolder('Waves');
     folder.addVector('Position', this.cluster.mesh.position);
     folder.add(config.waves, 'speed', 0, 0.2).step(0.0001);
-    folder.add(config.waves, 'count', 0, 1000).step(1).onChange(value => {
+    folder.add(config.waves, 'count', 0, 1000).step(1).onChange((value) => {
       this.mesh.geometry.maxInstancedCount = value;
-    })
+    });
   }
 
   render() {

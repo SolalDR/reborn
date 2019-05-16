@@ -1,5 +1,7 @@
-import { MeshLine,
-  MeshLineMaterial } from '../meshline';
+import {
+  MeshLine,
+  MeshLineMaterial,
+} from '../meshline';
 import LineCluster from './LineCluster';
 
 export default class LineSystem {

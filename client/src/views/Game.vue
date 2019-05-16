@@ -66,8 +66,8 @@ import Overlay from '../components/global/Overlay';
 import Explanations from '../components/game/Explanations';
 import Saving from '../components/game/Saving';
 import config from '../config';
-import ModelInfos from "../components/game/ModelInfos";
-import FlashNews from "../components/game/FlashNews";
+import ModelInfos from '../components/game/ModelInfos';
+import FlashNews from '../components/game/FlashNews';
 
 export default {
   name: 'Game',
@@ -108,7 +108,7 @@ export default {
 
   sockets: {
     'entity:add': function (item) { this.onEntityAdd(item); },
-    'entity:remove': function(item) { this.onEntityRemove(item); },
+    'entity:remove': function (item) { this.onEntityRemove(item); },
     'timeline:tick': function (args) { this.onTimelineTick(args); },
     'game:start': function (args) { this.onGameStart(args); },
     'game:end': function (args) { this.onGameEnd(args); },
@@ -182,13 +182,13 @@ export default {
       this.$store.commit('debug/log', { content: 'game: onWebGLInit', label: 'webgl' });
       this.$store.commit('debug/log', { content: 'game: pending', label: 'socket' });
       this.status = 'pending';
-      this.$webgl.on('addItem', (item) => this.onAddItem(item));
+      this.$webgl.on('addItem', item => this.onAddItem(item));
       this.$webgl.on('selectItem', (item) => {
-        this.selectedEntity = item
+        this.selectedEntity = item;
         if (this.$game.entityModels.get(item.model).role === 'nature' && this.$game.player.role.name === 'city') {
           this.onRemoveItem();
         }
-      })
+      });
 
       if (!config.server.enabled) {
         this.simulateGameStart();
@@ -221,7 +221,7 @@ export default {
     onRemoveItem() {
       const params = {
         model: this.selectedEntity.model,
-        uuid: this.selectedEntity.uuid
+        uuid: this.selectedEntity.uuid,
       };
 
       this.selectedEntity = null;
@@ -230,7 +230,7 @@ export default {
         return;
       }
 
-      this.$store.commit('debug/log', { content: 'entity:remove (emit) with uuid: ' + params.uuid, label: 'socket' });
+      this.$store.commit('debug/log', { content: `entity:remove (emit) with uuid: ${params.uuid}`, label: 'socket' });
       this.$socket.emit('entity:remove', params);
     },
 
@@ -238,7 +238,7 @@ export default {
      * socket
      */
     onEntityAdd(item) {
-      this.$store.commit('debug/log', { content: 'entity:add (receive) with uuid: ' + item.uuid, label: 'socket' });
+      this.$store.commit('debug/log', { content: `entity:add (receive) with uuid: ${item.uuid}`, label: 'socket' });
       const model = this.$webgl.models[item.model];
       if (model) {
         this.$webgl.explosionEffect.mesh.position.set(item.position.x, item.position.y, item.position.z);
@@ -255,7 +255,7 @@ export default {
     },
 
     onEntityRemove({ model, uuid }) {
-      this.$store.commit('debug/log', { content: 'entity:remove (receive) with uuid: ' + uuid, label: 'socket' });
+      this.$store.commit('debug/log', { content: `entity:remove (receive) with uuid: ${uuid}`, label: 'socket' });
       this.$webgl.models[model].removeEntity(uuid);
     },
 
@@ -271,7 +271,7 @@ export default {
       });
 
       this.year = Math.floor(elapsed / 1000); // One year per second
-      this.money = this.indicators.length > 0 ? this.indicators.find(indicator => indicator.name === 'Money').value : 0
+      this.money = this.indicators.length > 0 ? this.indicators.find(indicator => indicator.name === 'Money').value : 0;
     },
 
     onGameStart({ startedAt }) {
@@ -292,13 +292,13 @@ export default {
         this.$store.commit('debug/log', { content: 'game: initializing', label: 'socket' });
         this.status = 'initializing';
         if (this.$game.player.role.name === 'nature') {
-          let entities = this.$webgl.fillRandom(['tree', 'rock', 'centenary_tree']);
-          var interval = 5000/entities.length;
+          const entities = this.$webgl.fillRandom(['tree', 'rock', 'centenary_tree']);
+          const interval = 5000 / entities.length;
           entities.forEach((entity, i) => {
-            setTimeout(()=>{
+            setTimeout(() => {
               this.$socket.emit('entity:add', entity);
-            }, i*interval);
-          })
+            }, i * interval);
+          });
         }
       }, Math.max(0, timeout - 5000));
 

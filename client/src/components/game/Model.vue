@@ -37,8 +37,6 @@ export default {
       if (this.$game.player.role.name === 'city') {
         const modelCost = this.model.states.creation.enterModifiers.find(modifier => modifier.name === 'money').value;
         return Math.floor(this.money / -modelCost);
-      } else {
-        return;
       }
     },
   },

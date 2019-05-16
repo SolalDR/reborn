@@ -26,19 +26,18 @@ export default {
   props: {
     room: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
 
-  data () {
+  data() {
     return {
-      currentTime: Math.floor((Date.now() - this.room.game.startedAt)*0.001)
-    }
+      currentTime: Math.floor((Date.now() - this.room.game.startedAt) * 0.001),
+    };
   },
 
-  mounted () {
-    setInterval(() => {this.currentTime++}, 1000);
-  }
-}
+  mounted() {
+    setInterval(() => { this.currentTime++; }, 1000);
+  },
+};
 </script>
-

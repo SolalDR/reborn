@@ -47,7 +47,7 @@ export default class Explosion {
     folder.addVector('position', this.mesh.position);
     folder.add(this, 'scale', 0, 5).step(0.1).onChange((value) => {
       this.mesh.scale.set(value, value, value);
-    })
+    });
 
     this.cluster.initGUI(folder);
     folder.add(this, 'speed', 0, 0.1).step(0.001);
@@ -66,7 +66,7 @@ export default class Explosion {
       timingFunction: 'easeOutQuad',
     }).on('progress', ({ value }) => {
       this.cluster.dashOffset = value;
-    })
+    });
   }
 
   render() {
