@@ -27,7 +27,6 @@ export default class WebGL extends Emitter {
     this.scene = new THREE.Scene();
     this.scene.name = 'main';
     this.camera = new THREE.PerspectiveCamera(45, Viewport.width / Viewport.height, 1, 500);
-
     this.controls = new Controls({
       camera: this.camera,
     });
@@ -50,16 +49,21 @@ export default class WebGL extends Emitter {
 
   init() {
     this.initModels();
+    this.initEnvironnment();
     this.initMap();
-    this.initLights();
     this.initScene();
     this.initGUI();
     this.loop();
   }
 
+  /**
+   * Init models group
+   * @return {void}
+   */
   initModels() {
     const initModels = (models) => {
       this.models = {};
+
       const material = new THREE.MeshToonMaterial({
         vertexColors: THREE.VertexColors,
       });
@@ -80,13 +84,20 @@ export default class WebGL extends Emitter {
         }
       });
 
+      // TODO: rename in models:created
       this.emit('clusters:created');
     };
 
     AssetsManager.get('models').then((models) => {
       initModels(models);
     });
+  }
 
+  /**
+   * Init map surroundings (birds, explosions, waves)
+   * @return {void}
+   */
+  initEnvironnment() {
     AssetsManager.get('images').then((images) => {
       this.waves = new Waves({ path: images.wave_line.paths[0] });
       this.scene.add(this.waves.mesh);
@@ -96,8 +107,13 @@ export default class WebGL extends Emitter {
     });
   }
 
+  /**
+   * Init map and grid system
+   * @return {void}
+   */
   initMap() {
     const mapPromise = generateMap(this.game.seed);
+
     mapPromise.then(({ gridDatas, geometry }) => {
       this.map = new GameMap({
         gridDatas: Array.from(gridDatas),
@@ -106,39 +122,22 @@ export default class WebGL extends Emitter {
         size: new THREE.Vector2(32, 32),
         raycaster: this.raycaster,
       });
-
       this.scene.add(this.map);
-
-      mouse.$on('click', ({ event, duration }) => {
-        const delta = mouse.dragDelta ? Math.sqrt(mouse.dragDelta.x ** 2, mouse.dragDelta.x ** 2) : 0;
-        if ((delta < 10 || duration < 70) && this.raycaster.intersection && event.target === this.canvas) {
-          const { id, slot } = this.renderer.pick(event.clientX, event.clientY);
-          if (id === 255 && slot === 255) {
-            this.emit('addItem', {
-              position: this.map.gridHelper.position,
-              rotation: new THREE.Euler(0, Math.floor(Math.random() * 4) * Math.PI / 2, 0),
-            });
-          } else {
-            const model = this.findModelWithSlot(slot);
-            const entity = model.getItem(id);
-            if (entity) {
-              this.emit('selectItem', entity);
-            }
-          }
-        }
-      });
-
+      mouse.$on('click', this.onMouseClick.bind(this));
       this.emit('map:created');
     });
+
     return mapPromise;
   }
 
+  /**
+   * Init camera and lights
+   * @return {void}
+   */
   initScene() {
     this.camera.position.set(0, 30, 30);
     this.camera.lookAt(new THREE.Vector3());
-  }
 
-  initLights() {
     this.ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
     this.scene.add(this.ambientLight);
 
@@ -148,6 +147,41 @@ export default class WebGL extends Emitter {
     this.directionalLight.position.set(100, 100, 100);
   }
 
+  /**
+   * On mouse click
+   * @param {Object} params.event The mouse click event
+   * @param {int} params.duration The delta time between mousedown and mouseup
+   */
+  onMouseClick({ event, duration }) {
+    // Compute distance dragged
+    const delta = mouse.dragDelta ? Math.sqrt(mouse.dragDelta.x ** 2, mouse.dragDelta.x ** 2) : 0;
+
+    // If dragged distance less than 10 & click duration less than 70ms
+    if ((delta < 10 || duration < 70) && this.raycaster.intersection && event.target === this.canvas) {
+      // Read in pickingScene
+      const { id, slot } = this.renderer.pick(event.clientX, event.clientY);
+      // This place is free
+      if (id === 255 && slot === 255) {
+        this.emit('addItem', {
+          position: this.map.gridHelper.position,
+          rotation: new THREE.Euler(0, Math.floor(Math.random() * 4) * Math.PI / 2, 0),
+        });
+      // There is already an entity
+      } else {
+        const model = this.findModelWithSlot(slot);
+        const entity = model.getItem(id);
+        if (entity) {
+          this.emit('selectItem', entity);
+        }
+      }
+    }
+  }
+
+  /**
+   * A slot is an id set between 0 & 255. It represent the channel RED in the picking scene
+   * @param  {int} slot The slot of the model
+   * @return {EntityModel}
+   */
   findModelWithSlot(slot) {
     let model = null;
     Object.keys(this.models).forEach((slug) => {
@@ -166,7 +200,6 @@ export default class WebGL extends Emitter {
   fillRandom(models) {
     let model = null;
     const entities = [];
-
     while (entities.length < 50) {
       const i = Math.floor(Math.random() * this.map.grid.length);
       if (this.map.grid[i] !== null) {
@@ -182,11 +215,17 @@ export default class WebGL extends Emitter {
     return entities;
   }
 
+  /**
+   * RAF method
+   * @return {void}
+   */
   loop() {
     requestAnimationFrame(this.loop.bind(this));
     this.controls.loop();
+
     if (this.waves) this.waves.render();
     if (this.explosionEffect) this.explosionEffect.render();
+
     this.worldScreen.render();
     this.renderer.render();
   }
