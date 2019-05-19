@@ -182,6 +182,8 @@ export default {
       this.$store.commit('debug/log', { content: 'game: onWebGLInit', label: 'webgl' });
       this.$store.commit('debug/log', { content: 'game: pending', label: 'socket' });
       this.status = 'pending';
+
+      this.$socket.emit('grid:ready', this.$webgl.map.grid.infos);
       this.$webgl.on('addItem', item => this.onAddItem(item));
       this.$webgl.on('selectItem', (item) => {
         this.selectedEntity = item;
@@ -260,8 +262,6 @@ export default {
     },
 
     onTimelineTick({ metrics, elapsed }) {
-      this.$store.commit('debug/log', { content: 'timeline:tick (receive)', label: 'socket', importance: 3 });
-
       this.gauges = metrics.filter((metric) => {
         return this.$game.player.role.gauges.indexOf(metric.slug) >= 0;
       });

@@ -60,4 +60,20 @@ export default class Grid extends Array {
   set(x, y, entity) {
     this._grid[x*this.size[0] + y] = entity;
   }
+
+  /**
+   * Rerturn the content of all the grid formated for socket transmission
+   * @return {Array}
+   */
+  get infos() {
+    var grid = [];
+    this.forEach(item => {
+      if (item instanceof GridCase) {
+        grid.push(item.infos);
+      } else if(item === null) {
+        grid.push(null);
+      }
+    })
+    return grid;
+  }
 }

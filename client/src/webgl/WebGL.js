@@ -1,12 +1,13 @@
 import Emitter from '@solaldr/emitter';
 import Viewport from '@/plugins/Viewport';
+import mouse from '@/plugins/Mouse';
 import GUI from '@/plugins/GUI';
 import modelsConfig from '@/config/models';
+import AssetsManager from '@/services/assets/Manager';
+import store from '@/services/store';
 import GameMap from './components/map';
 import Controls from './controls';
 import Raycaster from './core/Raycaster';
-import mouse from '../plugins/Mouse';
-import AssetsManager from '../services/assets/Manager';
 import Renderer from './renderer';
 import generateMap from './components/map/generator/Generator';
 import EntityModelGroup from './components/game/EntityModelGroup';
@@ -84,6 +85,8 @@ export default class WebGL extends Emitter {
         }
       });
 
+      store.commit('debug/log', { content: 'webgl: initModels', label: 'webgl' });
+
       // TODO: rename in models:created
       this.emit('clusters:created');
     };
@@ -104,6 +107,8 @@ export default class WebGL extends Emitter {
 
       this.explosionEffect = new ExplosionEffect();
       this.scene.add(this.explosionEffect.mesh);
+
+      store.commit('debug/log', { content: 'webgl: initEnvironnment', label: 'webgl' });
     });
   }
 
@@ -124,6 +129,8 @@ export default class WebGL extends Emitter {
       });
       this.scene.add(this.map);
       mouse.$on('click', this.onMouseClick.bind(this));
+
+      store.commit('debug/log', { content: 'webgl: initMap', label: 'webgl' });
       this.emit('map:created');
     });
 

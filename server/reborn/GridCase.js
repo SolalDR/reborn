@@ -8,4 +8,13 @@ export default class GridCase {
     this.altitude = altitude;
     this.reference = null;
   }
+
+  get infos() {
+    return {
+      x: this.x,
+      y: this.y,
+      altitude: this.altitude,
+      reference: this.reference ? this.reference.uuid : null,
+    }
+  }
 }
