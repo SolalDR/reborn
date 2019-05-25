@@ -29,16 +29,29 @@ export default class Grid extends Array {
    * @param {Integer[]} size An vec2 defining the size of the element
    * @returns {Boolean} Return true if there is space
    */
-  checkSpace(position, size = {x: 1, y: 1}){
-    for (var i=0; i<size.x; i++) {
-      for (var j=0; j<size.y; j++) {
-        if (this.get(position)) {
+  checkSpace(){
+    return true;
+  }
 
-        }
+
+  checkCells(cells) {
+    for(let i = 0; i < cells.length; i++) {
+      const cell = this.get(cells[i]);
+      if (cell === null || cell.reference !== null) {
+        return false;
       }
     }
-
     return true;
+  }
+
+  registerCells(cells, reference) {
+    var gridCases = [];
+    cells.forEach(cell => {
+      var gridCase = this.get(cell);
+      gridCase.reference = reference;
+      gridCases.push(gridCase);
+    })
+    return gridCases;
   }
 
   /**

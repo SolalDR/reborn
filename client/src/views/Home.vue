@@ -193,8 +193,8 @@ export default {
         startedAt: Date.now() + 5000,
         createdAt: Date.now(),
         players: [
-          { id: 1, role: 'nature', status: 1 },
-          { id: 2, role: 'city', status: 1 },
+          { id: 1, role: 'city', status: 1 },
+          { id: 2, role: 'nature', status: 1 },
         ],
       }), 200);
     },

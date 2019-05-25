@@ -3,6 +3,7 @@ export default {
   category: "alimentation",
   name: "Élevage intensif",
   role: 'city',
+  size: [3, 2],
   states: {
     creation: {
       enterModifiers: [

@@ -14,7 +14,7 @@ export default class GridCase {
       x: this.x,
       y: this.y,
       altitude: this.altitude,
-      reference: this.reference ? this.reference.uuid : null,
+      reference: this.reference,
     }
   }
 }

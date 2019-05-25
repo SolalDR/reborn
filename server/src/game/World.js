@@ -11,7 +11,5 @@ export default class World extends Reborn.World {
     grid.forEach((item, index) => {
       this.grid.register(index, item);
     })
-
-    console.log(grid);
   }
 }

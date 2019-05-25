@@ -4,6 +4,7 @@ export default {
   name: "Farm",
   displayName: "Ferme",
   role: 'city',
+  size: [2, 2],
   states: {
     creation: {
       enterModifiers: [

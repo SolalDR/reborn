@@ -22,6 +22,7 @@ export default class Entity extends Emitter {
     this.rotation = rotation;
     this.model = model;
     this.valid = true;
+    this.gridCases = [];
     if (this.model === null) return null;
     if (this.position === null) return null;
     this.states = states;
@@ -144,7 +145,8 @@ export default class Entity extends Emitter {
     this.removeState('destruction', true);
     this.removeState('mounted', true);
     this.removeState('creation', true);
-    this.emit('destroy');
+
+    this.destroy();
   }
 
   /**
@@ -185,6 +187,11 @@ export default class Entity extends Emitter {
     }
   }
 
+  destroy() {
+    this.gridCases.forEach(gridCase => gridCase.reference = null);
+    this.emit('destroy');
+  }
+
   /**
    * Return infos on entity to log it or add a message to the history
    * @return {string} The description of the entity
@@ -203,7 +210,8 @@ export default class Entity extends Emitter {
       position: this.position,
       rotation: this.rotation,
       model: this.model.slug,
-      states: Array.from(this.states.keys())
+      states: Array.from(this.states.keys()),
+      gridCases: this.gridCases.map(g => g.infos),
     }
   }
 }

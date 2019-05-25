@@ -166,17 +166,20 @@ export default class WebGL extends Emitter {
     // If dragged distance less than 10 & click duration less than 70ms
     if ((delta < 10 || duration < 70) && this.raycaster.intersection && event.target === this.canvas) {
       // Read in pickingScene
-      const { id, slot } = this.renderer.pick(event.clientX, event.clientY);
+      const { id, slot } = this.pickingInfos;
       // This place is free
       if (id === 255 && slot === 255) {
         this.emit('addItem', {
+          gridCases: this.map.grid.getCellsFromBox().map(cell => cell.infos),
           position: this.map.gridHelper.position,
           rotation: new THREE.Euler(0, Math.floor(Math.random() * 4) * Math.PI / 2, 0),
         });
       // There is already an entity
       } else {
+        console.log(slot, id);
         const model = this.findModelWithSlot(slot);
         const entity = model.getItem(id);
+
         if (entity) {
           this.emit('selectItem', entity);
         }
@@ -212,14 +215,28 @@ export default class WebGL extends Emitter {
       if (this.map.grid[i] !== null) {
         model = models[Math.floor(Math.random() * models.length)];
         const coords = this.map.grid.getCoord(i);
+        const size = this.game.entityModels.get(model).size;
+        const hasSpace = this.map.grid.checkSpace(
+          new THREE.Vector3(coords.x, this.map.grid[i].altitude, coords.y),
+          new THREE.Vector2(size[0], size[1]),
+        );
+
+        // if (hasSpace) {
         entities.push({
           model,
+          gridCases: this.map.grid.getCellsFromBox().map(cell => cell.infos),
           position: new THREE.Vector3(coords.x, this.map.grid[i].altitude, coords.y),
-          rotation: new THREE.Euler(0, Math.floor(Math.random() * 4) * Math.PI / 2, 0),
+          rotation: 0,
+          // rotation: new THREE.Euler(0, Math.floor(Math.random() * 4) * Math.PI / 2, 0),
         });
+        // }
       }
     }
     return entities;
+  }
+
+  renderPickScene() {
+    this.pickingInfos = this.renderer.pick(mouse.position.x, mouse.position.y);
   }
 
   /**
@@ -229,6 +246,7 @@ export default class WebGL extends Emitter {
   loop() {
     requestAnimationFrame(this.loop.bind(this));
     this.controls.loop();
+    this.renderPickScene();
 
     if (this.waves) this.waves.render();
     if (this.explosionEffect) this.explosionEffect.render();

@@ -21,7 +21,6 @@
       <inventory :money="money" @selectModel="onSelectModel"/>
       <model-infos :model="currentModel"/>
       <flash-news/>
-
       <transition name="fade">
         <settings v-if="showSettings" @closeSettings="showSettings = false"/>
       </transition>
@@ -174,6 +173,7 @@ export default {
 
     onSelectModel(model) {
       if (model) {
+        // TODO: change to selectedModel
         this.currentModel = model;
       }
     },
@@ -248,6 +248,11 @@ export default {
           delay: 200,
           duration: 600,
         });
+
+        item.gridCases.forEach(gridCaseInfos => {
+          this.$webgl.map.grid.get(gridCaseInfos).reference = gridCaseInfos.reference;
+        });
+
         model.addItem({
           ...item,
           position: new THREE.Vector3(item.position.x, item.position.y, item.position.z),
@@ -256,9 +261,14 @@ export default {
       }
     },
 
-    onEntityRemove({ model, uuid }) {
+    onEntityRemove({ model, uuid, gridCases }) {
       this.$store.commit('debug/log', { content: `entity:remove (receive) with uuid: ${uuid}`, label: 'socket' });
       this.$webgl.models[model].removeEntity(uuid);
+
+      gridCases.forEach(gridCaseInfos => {
+        console.log(gridCaseInfos, this.$webgl.map.grid.get(gridCaseInfos));
+        this.$webgl.map.grid.get(gridCaseInfos).reference = null;
+      });
     },
 
     onTimelineTick({ metrics, elapsed }) {

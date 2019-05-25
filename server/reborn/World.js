@@ -25,6 +25,7 @@ export default class World extends Emitter {
    * @returns {Entity}
    */
   addEntity({
+    gridCases = [],
     model = null,
     position = null,
     rotation = null,
@@ -34,7 +35,7 @@ export default class World extends Emitter {
       console.error(`World: Cannot add entity with model "${model}"`); return;
     }
 
-    if (!this.grid.checkSpace(position, entityModel)){
+    if (!this.grid.checkCells(gridCases)) {
       console.error(`World: Cannot add entity at this place`); return;
     }
 
@@ -45,6 +46,9 @@ export default class World extends Emitter {
     });
 
     if (!newEntity.valid) return;
+    var gridCasesCertified = this.grid.registerCells(gridCases, newEntity.uuid);
+    newEntity.gridCases = gridCasesCertified;
+
 
     this.entities.set(newEntity.uuid, newEntity);
     this.emit('entity:add', newEntity.infos);
