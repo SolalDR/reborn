@@ -14,6 +14,7 @@ import EntityModelGroup from './components/game/EntityModelGroup';
 import WorldScreen from './components/WorldScreen.js';
 import { Waves } from './components/world';
 import ExplosionEffect from './components/game/effects/Explosion';
+import animate from "@solaldr/animate";
 
 export default class WebGL extends Emitter {
   constructor({
@@ -46,6 +47,8 @@ export default class WebGL extends Emitter {
       scene: this.scene,
       camera: this.camera,
     });
+
+    this.hoveredEntity = null;
   }
 
   init() {
@@ -170,9 +173,10 @@ export default class WebGL extends Emitter {
       // This place is free
       if (id === 255 && slot === 255) {
         this.emit('addItem', {
-          gridCases: this.map.grid.getCellsFromBox().map(cell => cell.infos),
+          gridCases: this.map.grid.getCellsFromBox().map(cell => cell ? cell.infos : null),
           position: this.map.gridHelper.position,
-          rotation: new THREE.Euler(0, Math.floor(Math.random() * 4) * Math.PI / 2, 0),
+          rotation: 0,
+          // rotation: new THREE.Euler(0, Math.floor(Math.random() * 4) * Math.PI / 2, 0),
         });
       // There is already an entity
       } else {
@@ -237,6 +241,39 @@ export default class WebGL extends Emitter {
 
   renderPickScene() {
     this.pickingInfos = this.renderer.pick(mouse.position.x, mouse.position.y);
+
+    const {slot, id} = this.pickingInfos;
+
+    // Different hovered love focus
+    if (this.hoveredEntity && (this.hoveredEntity[0] !== slot && this.hoveredEntity[1] !== id)) {
+      console.log('leave', this.hoveredEntity[0], this.hoveredEntity[1]);
+      const currentEntity = this.hoveredEntity;
+      const currentModel = this.findModelWithSlot(currentEntity[0]);
+      const currentItem = currentModel.getItem(currentEntity[1]);
+      const tmpScale = new THREE.Vector3();
+      animate.add({ from: currentItem.scale.x, to: 1, duration: 200 }).on('progress', ({value}) => {
+        currentModel.entityCluster.setScaleAt(currentEntity[1], tmpScale.set(value, value, value))
+        currentModel.entityCluster.geometry.attributes.instanceScale.needsUpdate = true;
+      })
+      this.hoveredEntity = null;
+    }
+
+    if (slot !== 255 && id !== 255) {
+      if(!this.hoveredEntity || this.hoveredEntity[0] !== slot && this.hoveredEntity[1] !== id) {
+        console.log('hover', slot, id);
+        const hoveredEntity = [slot, id];
+        const hoveredModel = this.findModelWithSlot(hoveredEntity[0]);
+        const hoveredItem = hoveredModel.getItem(hoveredEntity[1]);
+        const tmpScale = new THREE.Vector3();
+        if(hoveredItem) {
+          animate.add({ from: hoveredItem.scale.x, to: 1.2, duration: 200 }).on('progress', ({value}) => {
+            hoveredModel.entityCluster.setScaleAt(hoveredEntity[1], tmpScale.set(value, value, value))
+            hoveredModel.entityCluster.geometry.attributes.instanceScale.needsUpdate = true;
+          })
+        }
+        this.hoveredEntity = hoveredEntity;
+      }
+    }
   }
 
   /**

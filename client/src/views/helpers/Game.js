@@ -6,12 +6,12 @@ export default {
       players: [
         {
           id: 1,
-          role: 'nature',
+          role: 'city',
           status: Reborn.Player.ACTIVE,
         },
         {
           id: 1,
-          role: 'nature',
+          role: 'city',
           status: Reborn.Player.ACTIVE,
         },
       ],

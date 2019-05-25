@@ -1,7 +1,9 @@
+import animate from '@solaldr/animate';
 import Grid from './Grid';
 import GridHelper from './GridHelper';
 import Bus from '@/plugins/Bus';
 import GUI from '@/plugins/GUI';
+
 
 
 export default class GameMap extends THREE.Group {
@@ -78,9 +80,13 @@ export default class GameMap extends THREE.Group {
         this.gridHelper.updatePosition(cell, intersection.point);
 
         if (!a) {
-          this.gridHelper.material.color.set(0xFF0000);
+          animate.add({ from: this.gridHelper.material.opacity, to: 0.4, duration: 200 }).on('progress', ({ value })=>{
+            this.gridHelper.material.opacity = value;
+          });
         } else {
-          this.gridHelper.material.color.set(0x00FF00);
+          animate.add({ from: this.gridHelper.material.opacity, to: 1, duration: 200 }).on('progress', ({ value })=>{
+            this.gridHelper.material.opacity = value;
+          });
         }
       } else {
         this.gridHelper.visible = false;
