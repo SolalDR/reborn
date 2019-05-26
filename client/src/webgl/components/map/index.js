@@ -72,24 +72,34 @@ export default class GameMap extends THREE.Group {
   initCastEvent() {
     Bus.$on('cast', (intersection) => {
       if (intersection && intersection.face.normal.y > 0.99) {
-        this.gridHelper.visible = true;
+        if(this.gridHelper.status === 'out') {
+          // this.gridHelper.visible = true;
+        }
 
         // Récupère les coordonnée de cellule courante
         const cell = this.grid.getCell(intersection.point);
         const a = this.grid.checkSpace(intersection.point, this.gridHelper.scale);
         this.gridHelper.updatePosition(cell, intersection.point);
 
-        if (!a) {
+
+        if (!a && this.gridHelper.status !== 'transparent') {
+          this.gridHelper.status = 'transparent';
           animate.add({ from: this.gridHelper.material.opacity, to: 0.4, duration: 200 }).on('progress', ({ value })=>{
             this.gridHelper.material.opacity = value;
           });
-        } else {
+        } else if(this.gridHelper.status !== 'plain') {
+          this.gridHelper.status = 'plain';
           animate.add({ from: this.gridHelper.material.opacity, to: 1, duration: 200 }).on('progress', ({ value })=>{
             this.gridHelper.material.opacity = value;
           });
         }
       } else {
-        this.gridHelper.visible = false;
+        this.gridHelper.status = 'out';
+        animate.add({ from: this.gridHelper.material.opacity, to: 0, duration: 200 }).on('progress', ({ value })=>{
+          this.gridHelper.material.opacity = value;
+        });
+        // this.gridHelper.visible = false;
+
       }
     });
   }

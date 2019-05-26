@@ -180,7 +180,6 @@ export default class WebGL extends Emitter {
         });
       // There is already an entity
       } else {
-        console.log(slot, id);
         const model = this.findModelWithSlot(slot);
         const entity = model.getItem(id);
 
@@ -246,7 +245,6 @@ export default class WebGL extends Emitter {
 
     // Different hovered love focus
     if (this.hoveredEntity && (this.hoveredEntity[0] !== slot && this.hoveredEntity[1] !== id)) {
-      console.log('leave', this.hoveredEntity[0], this.hoveredEntity[1]);
       const currentEntity = this.hoveredEntity;
       const currentModel = this.findModelWithSlot(currentEntity[0]);
       const currentItem = currentModel.getItem(currentEntity[1]);
@@ -256,11 +254,11 @@ export default class WebGL extends Emitter {
         currentModel.entityCluster.geometry.attributes.instanceScale.needsUpdate = true;
       })
       this.hoveredEntity = null;
+      this.map.gridHelper.visible = true;
     }
 
     if (slot !== 255 && id !== 255) {
       if(!this.hoveredEntity || this.hoveredEntity[0] !== slot && this.hoveredEntity[1] !== id) {
-        console.log('hover', slot, id);
         const hoveredEntity = [slot, id];
         const hoveredModel = this.findModelWithSlot(hoveredEntity[0]);
         const hoveredItem = hoveredModel.getItem(hoveredEntity[1]);
@@ -272,6 +270,7 @@ export default class WebGL extends Emitter {
           })
         }
         this.hoveredEntity = hoveredEntity;
+        this.map.gridHelper.visible = false;
       }
     }
   }
@@ -285,6 +284,7 @@ export default class WebGL extends Emitter {
     this.controls.loop();
     this.renderPickScene();
 
+    if (this.map) this.map.gridHelper.render();
     if (this.waves) this.waves.render();
     if (this.explosionEffect) this.explosionEffect.render();
 

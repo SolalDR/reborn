@@ -40,7 +40,9 @@ export default class Renderer {
     //   1,                                     // rect width
     //   1,                                     // rect height
     // );
-    this.renderer.render(this.pickingScene, this.camera, this.pickingTexture);
+    this.renderer.setRenderTarget(this.pickingTexture);
+    this.renderer.render(this.pickingScene, this.camera);
+    this.renderer.setRenderTarget(null);
     // this.camera.clearViewOffset();
 
     // this.renderer.readRenderTargetPixels(this.pickingTexture, 0, 0, 1, 1, pixelBuffer);

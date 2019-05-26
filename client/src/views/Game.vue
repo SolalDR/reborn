@@ -250,7 +250,9 @@ export default {
         });
 
         item.gridCases.forEach(gridCaseInfos => {
-          this.$webgl.map.grid.get(gridCaseInfos).reference = gridCaseInfos.reference;
+          if (gridCaseInfos) {
+            this.$webgl.map.grid.get(gridCaseInfos).reference = gridCaseInfos.reference;
+          }
         });
 
         model.addItem({

@@ -69,7 +69,6 @@ export default class LineCluster extends Cluster {
   }
 
   initGUI(folder) {
-    console.log(this.material.uniforms);
     folder.add(this.material.uniforms.dashOffset, 'value').name('dashOffset');
     folder.add(this.material.uniforms.dashArray, 'value').name('dashArray');
     folder.add(this.material.uniforms.dashRatio, 'value').name('dashRatio');
