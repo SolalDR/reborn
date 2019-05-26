@@ -4,6 +4,7 @@ export default {
   name: "Cinema",
   displayName: "Cinéma",
   role: 'city',
+  size: [2, 2],
   states: {
     creation: {
       enterModifiers: [

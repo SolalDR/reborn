@@ -177,7 +177,7 @@ class Cluster {
       position: this.getPositionAt(index),
       rotation: this.getRotationAt(index),
       scale: this.getScaleAt(index),
-      pickingColor: this.getPickingColorAt(index),
+      pickingColor: this.picking ? this.getPickingColorAt(index) : null,
       uuid: this.entities[index],
       index,
     };

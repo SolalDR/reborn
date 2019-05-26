@@ -7,13 +7,16 @@ class GridHelper extends THREE.Mesh {
     super(
       new THREE.PlaneGeometry(cellSize, cellSize),
       new THREE.MeshBasicMaterial({
-        color: 0x00FF00,
+        color: 0xFFFFFF,
+        transparent: true,
+        opacity: 1,
       }),
     );
     this.size = size;
     this.box = new THREE.Box2();
 
     this.position.copy(position);
+    this.targetPosition = position.clone();
     this.rotation.x = -Math.PI / 2;
   }
 
@@ -23,7 +26,7 @@ class GridHelper extends THREE.Mesh {
    * @param {THREE.Vector2} point The coordinates you need to compute
    * @param {THREE.Vector2} position Target position
    */
-  updatePosition(cell, point, position = this.position) {
+  updatePosition(cell, point, position = this.targetPosition) {
     const x = !this.xPeer
       ? cell.x - this.size.x / 2 + 0.5
       : cell.x - this.size.x / 2 + (
@@ -37,6 +40,7 @@ class GridHelper extends THREE.Mesh {
       );
 
     position.set(x, point.y + 0.11, y);
+    this.position.y = point.y + 0.11;
   }
 
 
@@ -45,6 +49,13 @@ class GridHelper extends THREE.Mesh {
     this.scale.y = y;
     this.xPeer = this.scale.x % 2 === 0;
     this.yPeer = this.scale.y % 2 === 0;
+  }
+
+  render() {
+    this.position.copy(this.position.clone()
+      .add(this.targetPosition.clone()
+        .sub(this.position)
+        .multiplyScalar(0.3)))
   }
 }
 

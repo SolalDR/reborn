@@ -1,20 +1,22 @@
 <template>
   <div class="inventory">
     <div class="categories">
-      <category v-for="(category, index) in categories"
-                :key="`category-${index}`"
-                :category="{index: index, ...category}"
-                :is-current="category.slug === currentCategory.slug"
-                @setCurrentCategory="setCurrentCategory(category)"/>
+      <category
+        v-for="(category, index) in categories"
+        :key="`category-${index}`"
+        :category="{index: index, ...category}"
+        :is-current="category.slug === currentCategory.slug"
+        @setCurrentCategory="setCurrentCategory(category)"/>
     </div>
 
     <div class="models">
-      <model v-for="(model, index) in models"
-             :key="`model-${index}`"
-             :model="{index: index, ...model}"
-             :money="money"
-             :is-current="model.name === currentModel.name"
-             @setCurrentModel="setCurrentModel(model)"/>
+      <model
+        v-for="(model, index) in models"
+       :key="`model-${index}`"
+       :model="{index: index, ...model}"
+       :money="money"
+       :is-current="model.name === currentModel.name"
+       @setCurrentModel="setCurrentModel(model)"/>
     </div>
   </div>
 </template>
@@ -83,8 +85,7 @@ export default {
 
     setCurrentCategory(category) {
       this.currentCategory = category;
-      this.models = [];
-      this.models = Reborn.models.filter((model) => {
+      this.models = Array.from(this.$game.entityModels.values()).filter((model) => {
         return model.role === this.$game.player.role.name
           && model.category === this.currentCategory.slug;
       });
@@ -93,6 +94,7 @@ export default {
 
     setCurrentModel(model) {
       this.currentModel = model;
+      this.$webgl.map.gridHelper.setSize(this.currentModel.size[0], this.currentModel.size[1]);
       this.$emit('selectModel', this.currentModel);
     },
   },

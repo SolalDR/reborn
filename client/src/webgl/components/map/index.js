@@ -1,7 +1,9 @@
+import animate from '@solaldr/animate';
 import Grid from './Grid';
 import GridHelper from './GridHelper';
 import Bus from '@/plugins/Bus';
 import GUI from '@/plugins/GUI';
+
 
 
 export default class GameMap extends THREE.Group {
@@ -70,20 +72,34 @@ export default class GameMap extends THREE.Group {
   initCastEvent() {
     Bus.$on('cast', (intersection) => {
       if (intersection && intersection.face.normal.y > 0.99) {
-        this.gridHelper.visible = true;
+        if(this.gridHelper.status === 'out') {
+          // this.gridHelper.visible = true;
+        }
 
         // Récupère les coordonnée de cellule courante
         const cell = this.grid.getCell(intersection.point);
         const a = this.grid.checkSpace(intersection.point, this.gridHelper.scale);
         this.gridHelper.updatePosition(cell, intersection.point);
 
-        if (!a) {
-          this.gridHelper.material.color.set(0xFF0000);
-        } else {
-          this.gridHelper.material.color.set(0x00FF00);
+
+        if (!a && this.gridHelper.status !== 'transparent') {
+          this.gridHelper.status = 'transparent';
+          animate.add({ from: this.gridHelper.material.opacity, to: 0.4, duration: 200 }).on('progress', ({ value })=>{
+            this.gridHelper.material.opacity = value;
+          });
+        } else if(this.gridHelper.status !== 'plain') {
+          this.gridHelper.status = 'plain';
+          animate.add({ from: this.gridHelper.material.opacity, to: 1, duration: 200 }).on('progress', ({ value })=>{
+            this.gridHelper.material.opacity = value;
+          });
         }
       } else {
-        this.gridHelper.visible = false;
+        this.gridHelper.status = 'out';
+        animate.add({ from: this.gridHelper.material.opacity, to: 0, duration: 200 }).on('progress', ({ value })=>{
+          this.gridHelper.material.opacity = value;
+        });
+        // this.gridHelper.visible = false;
+
       }
     });
   }

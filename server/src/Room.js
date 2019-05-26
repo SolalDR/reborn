@@ -74,7 +74,6 @@ export default class Room extends Emitter {
     this.game.world.on('entity:remove', (args) => this.dispatchToPlayers('entity:remove', args));
     this.game.world.on('entity:update', (args) => this.dispatchToPlayers('entity:update', args));
     this.game.notificationManager.on('notification:send', (args) => this.dispatchToPlayers('notification:send', args));
-
     // RECEIVE
     this.players.forEach(player => {
       player.socket.on('player:ready',  () => {
@@ -82,8 +81,8 @@ export default class Room extends Emitter {
         if(this.checkPlayersReady()) this.game.start();
       })
 
+      player.socket.on('grid:ready',    (grid) => this.game.world.updateGrid(grid));
       player.socket.on('entity:add',    (entity) => this.game.world.addEntity(entity));
-
       player.socket.on('entity:remove', (entity) => {
         const entityModel = this.game.entityModels.get(entity.model);
         if (entityModel && (
