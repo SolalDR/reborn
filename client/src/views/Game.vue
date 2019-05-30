@@ -18,7 +18,7 @@
       <gauge-list :list="this.gauges"/>
       <years-counter :currentYear="year"/>
       <indicator-list :list="this.indicators" @showSettings="showSettings = true"/>
-      <inventory :money="money" @selectModel="onSelectModel"/>
+      <inventory :money="money" @selectModel="onSelectModel" @selectSkill="onSelectSkill"/>
       <model-infos :model="currentModel"/>
       <flash-news/>
       <transition name="fade">
@@ -95,6 +95,7 @@ export default {
       isEnded: false,
       showSettings: false,
       currentModel: null,
+      currentSkill: null,
       currentCategory: null,
       gauges: null,
       indicators: null,
@@ -119,9 +120,9 @@ export default {
       this.$router.push('/');
       return;
     }
-
     this.status = 'loading';
 
+    // Create game
     Vue.prototype.$game = new Reborn.Game({
       players: this.$store.state.game.players.map(p => new Reborn.Player(p)),
       seed: this.$store.state.game.seed,
@@ -171,10 +172,21 @@ export default {
       }
     },
 
+    // Quand un utilisateur click sur un model du rack
     onSelectModel(model) {
       if (model) {
         // TODO: change to selectedModel
+        this.currentSkill = null;
         this.currentModel = model;
+      }
+    },
+
+    // Quand un utilisateur click sur un skill du rack
+    onSelectSkill(skill) {
+      if (skill) {
+        // TODO: change to selectedModel
+        this.currentModel = null;
+        this.currentSkill = skill;
       }
     },
 
@@ -184,7 +196,14 @@ export default {
       this.status = 'pending';
 
       this.$socket.emit('grid:ready', this.$webgl.map.grid.infos);
-      this.$webgl.on('addItem', item => this.onAddItem(item));
+
+      // When clicking an empty cell
+      this.$webgl.on('selectCell', item => this.onAddItem(item));
+
+      // When clicking on clickMap
+      this.$webgl.on('clickMap', item => this.onLaunchSkill(item));
+
+      // When user click on an object in the scene
       this.$webgl.on('selectItem', (item) => {
         this.selectedEntity = item;
         if (this.$game.entityModels.get(item.model).role === 'nature' && this.$game.player.role.name === 'city') {
@@ -210,7 +229,23 @@ export default {
       console.log('Try Again');
     },
 
+    onLaunchSkill(item) {
+      console.log('onLaunchSkill: skill', this.currentSkill);
+      if (!this.currentSkill) return;
+      const params = { ...item, skill: this.currentSkill.slug, position: this.$webgl.map.grid.getCell(item.position)};
+      const zone = this.$webgl.map.grid.captureZone(params.position, this.currentSkill.zoneRadius);
+
+      console.log(zone);
+      if (!config.server.enabled) {
+        this.onSkillStart({ ...params });
+        return;
+      }
+      this.$store.commit('debug/log', { content: 'skill:start (emit)', label: 'socket' });
+      this.$socket.emit('skill:start', params);
+    },
+
     onAddItem(item) {
+      if (!this.currentModel) return;
       const params = { ...item, model: this.currentModel.slug };
       if (!config.server.enabled) {
         this.onEntityAdd({ ...params, uuid: uuid(), states: ['mounted', 'living'] });
@@ -261,6 +296,12 @@ export default {
           rotation: new THREE.Euler(item.rotation._x, item.rotation._y, item.rotation._z),
         });
       }
+    },
+
+    onSkillStart(item) {
+      const skillEffect = this.$webgl.skills.get(item.skill);
+      if (!skillEffect) return;
+      skillEffect.launch(item, this.$webgl);
     },
 
     onEntityRemove({ model, uuid, gridCases }) {

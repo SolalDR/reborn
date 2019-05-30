@@ -57,7 +57,7 @@ export default class Explosion {
   explode({
     duration = 500,
     delay = 0,
-  }) {
+  } = {}) {
     animate.add({
       duration,
       delay,

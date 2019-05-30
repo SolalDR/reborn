@@ -5,6 +5,7 @@ import RailsControl from './RailsControl';
 import bus from '../../plugins/Bus';
 import mouse from '../../plugins/Mouse';
 import Viewport from '../../plugins/Viewport';
+import animate from "@solaldr/animate";
 
 class Control {
   constructor({
@@ -30,6 +31,8 @@ class Control {
       phi: this.orbit.phi,
       theta: this.orbit.theta,
     };
+
+    console.log(this);
 
     this.initDragEvent();
     this.initWheelEvent();
@@ -68,12 +71,28 @@ class Control {
         ),
       );
       this.orbit.radius = wheel;
+      console.log(this.orbit);
     });
+  }
+
+  woobleAction({
+    count = 50,
+    speed = 100,
+    intensity = 0.05,
+    timingFunction = "easeInOutQuad"
+  } = {}) {
+    const duration = speed * count;
+    animate.add({duration, timingFunction}).on('progress', (event) => {
+      var rotation = Math.sin((event.value * Math.PI * 2)*count)*intensity;
+      this.orbit.axeRotation = rotation;
+    })
   }
 
   loop() {
     this.orbit.update();
-    this.orbit.theta += (this.state.theta - this.orbit.theta) * 0.1;
+    var thetaDelta = (this.state.theta - this.orbit.theta) * 0.1;
+    this.orbit.axeRotation = Math.max(Math.min(0.15, thetaDelta * 0.5), -0.15);
+    this.orbit.theta += thetaDelta;
     this.orbit.phi += (this.state.phi - this.orbit.phi) * 0.1;
   }
 

@@ -5,16 +5,21 @@ import GUI from '@/plugins/GUI';
 import modelsConfig from '@/config/models';
 import AssetsManager from '@/services/assets/Manager';
 import store from '@/services/store';
-import GameMap from './components/map';
-import Controls from './controls';
+import animate from "@solaldr/animate";
+
+// Core
 import Raycaster from './core/Raycaster';
 import Renderer from './renderer';
+
+// Components
+import GameMap from './components/map';
+import Controls from './controls';
 import generateMap from './components/map/generator/Generator';
-import EntityModelGroup from './components/game/EntityModelGroup';
 import WorldScreen from './components/WorldScreen.js';
 import { Waves } from './components/world';
 import ExplosionEffect from './components/game/effects/Explosion';
-import animate from "@solaldr/animate";
+import EntityModelGroup from './components/game/EntityModelGroup';
+import skills from './components/game/skills';
 
 export default class WebGL extends Emitter {
   constructor({
@@ -53,11 +58,21 @@ export default class WebGL extends Emitter {
 
   init() {
     this.initModels();
+    this.initSkills();
     this.initEnvironnment();
     this.initMap();
     this.initScene();
     this.initGUI();
     this.loop();
+  }
+
+  initSkills() {
+    this.skills = new Map();
+    Object.keys(skills).forEach(key => {
+      console.log(skills, key);
+      const skillConstructor = skills[key];
+      this.skills.set(key, new skillConstructor());
+    });
   }
 
   /**
@@ -166,27 +181,25 @@ export default class WebGL extends Emitter {
     // Compute distance dragged
     const delta = mouse.dragDelta ? Math.sqrt(mouse.dragDelta.x ** 2, mouse.dragDelta.x ** 2) : 0;
 
-    // If dragged distance less than 10 & click duration less than 70ms
+    // If can click on map (dragged distance less than 10 & click duration less than 70ms)
     if ((delta < 10 || duration < 70) && this.raycaster.intersection && event.target === this.canvas) {
-      // Read in pickingScene
-      const { id, slot } = this.pickingInfos;
-      // This place is free
-      if (id === 255 && slot === 255) {
-        this.emit('addItem', {
-          gridCases: this.map.grid.getCellsFromBox().map(cell => cell ? cell.infos : null),
-          position: this.map.gridHelper.position,
-          rotation: 0,
-          // rotation: new THREE.Euler(0, Math.floor(Math.random() * 4) * Math.PI / 2, 0),
-        });
-      // There is already an entity
-      } else {
+      const { id, slot } = this.pickingInfos;       // Read in pickingScene
+      const mapInfos = {
+        gridCases: this.map.grid.getCellsFromBox().map(cell => cell ? cell.infos : null),
+        position: this.map.gridHelper.position,
+        rotation: 0,
+      };
+      if (id === 255 && slot === 255) {             // This place is free
+        this.emit('selectCell', mapInfos);
+      } else {                                      // There is already an entity
         const model = this.findModelWithSlot(slot);
         const entity = model.getItem(id);
-
         if (entity) {
-          this.emit('selectItem', entity);
+          this.emit('selectItem', {...mapInfos, ...entity});
         }
       }
+
+      this.emit('clickMap', mapInfos);
     }
   }
 
