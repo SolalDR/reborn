@@ -84,7 +84,6 @@ export default class Room extends Emitter {
       this.dispatchToPlayers('skill:unavailable', args)
     });
     this.game.skillsManager.on('skill:start', (args) => {
-      console.log('skill:start', args);
       this.dispatchToPlayers('skill:start', args)
     });
 
@@ -95,10 +94,9 @@ export default class Room extends Emitter {
         if(this.checkPlayersReady()) this.game.start();
       })
 
-      player.socket.on('skill:start', ({ slug }) => {
-        const skill = this.game.skillsManager.skills.get(slug);
-        console.log('receive skill start');
-        if (skill && player.role.name === skill.role) skill.start();
+      player.socket.on('skill:start', (event) => {
+        const skill = this.game.skillsManager.skills.get(event.skill);
+        if (skill && player.role.name === skill.role) skill.start(event, this.game);
       });
 
       player.socket.on('grid:ready',    (grid) => this.game.world.updateGrid(grid));

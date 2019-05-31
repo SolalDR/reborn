@@ -32,7 +32,7 @@ export default class SkillsManager extends Emitter {
 
         skill.on('available', () => this.emit('skill:available', skill.slug));
         skill.on('unavailable', () => this.emit('skill:unavailable', skill.slug));
-        skill.on('start', () => this.emit('skill:start', skill.slug));
+        skill.on('start', (args) => this.emit('skill:start', {...args, skill: skill.slug}));
 
         this.skills.set(skill.slug, skill);
       }

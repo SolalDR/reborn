@@ -34,6 +34,7 @@ class Skill extends Emitter {
     this.duration = duration;
     this.durationInterval = durationInterval;
     this.constraint = constraint;
+    this.zoneRadius = zoneRadius;
     this.regularConstraintOrder = !!regularConstraintOrder;
 
     this.startedAt = 0;
@@ -42,7 +43,7 @@ class Skill extends Emitter {
   }
 
   start() {
-    if (!this.isAvailable) return;
+    if (!(this.refill && this.allowedConstraint)) return false;
     this.startedAt = Date.now();
     this.refill = false;
     this.emit('start', {
@@ -53,7 +54,8 @@ class Skill extends Emitter {
     setTimeout(()=>{
       this.refill = true;
       this.checkAvailable();
-    }, this.durationInterval)
+    }, this.durationInterval);
+    return true;
   }
 
   get isRefill() {

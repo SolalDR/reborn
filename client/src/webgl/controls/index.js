@@ -77,9 +77,9 @@ class Control {
 
   woobleAction({
     count = 50,
-    speed = 100,
-    intensity = 0.05,
-    timingFunction = "easeInOutQuad"
+    speed = 60,
+    intensity = 0.03,
+    timingFunction = "linear",
   } = {}) {
     const duration = speed * count;
     animate.add({duration, timingFunction}).on('progress', (event) => {

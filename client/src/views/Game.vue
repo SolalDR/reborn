@@ -113,6 +113,9 @@ export default {
     'game:start': function (args) { this.onGameStart(args); },
     'game:end': function (args) { this.onGameEnd(args); },
     'notification:send': function () { this.onNotificationSend(); },
+    'skill:start': function(args) { this.onSkillStart(args) },
+    'skill:available': function(args) { this.onSkillAvailable(args) },
+    'skill:unavailable': function(args) { this.onSkillUnavailable(args) },
   },
 
   created() {
@@ -233,11 +236,10 @@ export default {
       console.log('onLaunchSkill: skill', this.currentSkill);
       if (!this.currentSkill) return;
       const params = { ...item, skill: this.currentSkill.slug, position: this.$webgl.map.grid.getCell(item.position)};
-      const zone = this.$webgl.map.grid.captureZone(params.position, this.currentSkill.zoneRadius);
 
-      console.log(zone);
       if (!config.server.enabled) {
-        this.onSkillStart({ ...params });
+        const zone = this.$webgl.map.grid.captureZone(params.position, this.currentSkill.zoneRadius);
+        this.onSkillStart({ ...params, gridCases: zone });
         return;
       }
       this.$store.commit('debug/log', { content: 'skill:start (emit)', label: 'socket' });
@@ -298,20 +300,30 @@ export default {
       }
     },
 
+    onEntityRemove({ model, uuid, gridCases }) {
+      this.$store.commit('debug/log', { content: `entity:remove (receive) with uuid: ${uuid}`, label: 'socket' });
+      this.$webgl.models[model].removeEntity(uuid);
+
+      gridCases.forEach(gridCaseInfos => {
+        this.$webgl.map.grid.get(gridCaseInfos).reference = null;
+      });
+    },
+
+
     onSkillStart(item) {
       const skillEffect = this.$webgl.skills.get(item.skill);
       if (!skillEffect) return;
       skillEffect.launch(item, this.$webgl);
     },
 
-    onEntityRemove({ model, uuid, gridCases }) {
-      this.$store.commit('debug/log', { content: `entity:remove (receive) with uuid: ${uuid}`, label: 'socket' });
-      this.$webgl.models[model].removeEntity(uuid);
+    onSkillAvailable(args) {
+      console.log(args);
+      // TODO
+    },
 
-      gridCases.forEach(gridCaseInfos => {
-        console.log(gridCaseInfos, this.$webgl.map.grid.get(gridCaseInfos));
-        this.$webgl.map.grid.get(gridCaseInfos).reference = null;
-      });
+    onSkillUnavailable(args) {
+      console.log(args);
+      // TODO
     },
 
     onTimelineTick({ metrics, elapsed }) {
@@ -363,7 +375,6 @@ export default {
     },
 
     onGameEnd(args) {
-      console.log(args);
       this.isEnded = true;
       this.status = 'explanations';
     },
