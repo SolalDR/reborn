@@ -33,7 +33,7 @@ export default class GameMap extends THREE.Group {
     }
 
     this.gridHelper = new GridHelper(gridParams);
-    this.gridHelper.setSize(2, 2);
+    this.gridHelper.setSize(1, 1);
 
     this.add(this.gridHelper);
 

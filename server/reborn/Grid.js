@@ -36,6 +36,7 @@ export default class Grid extends Array {
 
   checkCells(cells) {
     for(let i = 0; i < cells.length; i++) {
+      if (!cells[i]) return false;
       const cell = this.get(cells[i]);
       if (cell === null || cell.reference !== null) {
         return false;
@@ -55,6 +56,34 @@ export default class Grid extends Array {
   }
 
   /**
+   * [capture description]
+   * @return {[type]} [description]
+   */
+  captureZone(point, radius) {
+    const cellCoord = [point.x, point.y];
+    const minCoord = [cellCoord[0] - radius, cellCoord[1] - radius];
+    const maxCoord = [cellCoord[0] + radius, cellCoord[1] + radius];
+    const distanceCoord = [maxCoord[0] - minCoord[0], maxCoord[1] - minCoord[1]];
+    const cells = [];
+
+    for (let i = 0; i < distanceCoord[0]; i++) {
+      for (let j = 0; j < distanceCoord[1]; j++) {
+        const coord = [minCoord[0] + i, minCoord[1] + j];
+        var distanceFromCenter = Math.sqrt(
+          (coord[0] - cellCoord[0])**2
+           + (coord[1] - cellCoord[1])**2
+        );
+
+        if(distanceFromCenter < radius) {
+          cells.push(this.get({ x: coord[0], y: coord[1] }))
+        }
+      }
+    }
+
+    return cells;
+  }
+
+  /**
    * A getter method
    * @param {Integer} x
    * @param {Integer} y
@@ -63,6 +92,7 @@ export default class Grid extends Array {
   get(coord) {
     return this[coord.x*this.size[0] + coord.y];
   }
+
 
   /**
    * Set a value of a case

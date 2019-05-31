@@ -74,12 +74,30 @@ export default class Room extends Emitter {
     this.game.world.on('entity:remove', (args) => this.dispatchToPlayers('entity:remove', args));
     this.game.world.on('entity:update', (args) => this.dispatchToPlayers('entity:update', args));
     this.game.notificationManager.on('notification:send', (args) => this.dispatchToPlayers('notification:send', args));
+
+    this.game.skillsManager.on('skill:available', (args) => {
+      console.log('skill:available', args);
+      this.dispatchToPlayers('skill:available', args)
+    });
+    this.game.skillsManager.on('skill:unavailable', (args) => {
+      console.log('skill:unavailable', args);
+      this.dispatchToPlayers('skill:unavailable', args)
+    });
+    this.game.skillsManager.on('skill:start', (args) => {
+      this.dispatchToPlayers('skill:start', args)
+    });
+
     // RECEIVE
     this.players.forEach(player => {
       player.socket.on('player:ready',  () => {
         player.ready = true;
         if(this.checkPlayersReady()) this.game.start();
       })
+
+      player.socket.on('skill:start', (event) => {
+        const skill = this.game.skillsManager.skills.get(event.skill);
+        if (skill && player.role.name === skill.role) skill.start(event, this.game);
+      });
 
       player.socket.on('grid:ready',    (grid) => this.game.world.updateGrid(grid));
       player.socket.on('entity:add',    (entity) => this.game.world.addEntity(entity));

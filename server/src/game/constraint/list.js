@@ -19,4 +19,14 @@ export default [
       || game.metrics.get('population').value === game.metrics.get('population').min
       || game.metrics.get('satisfaction').value === game.metrics.get('satisfaction').min
   },
+  {
+    slug: "satisfaction-low",
+    test: (game) =>
+      game.metrics.get('satisfaction').value < 25
+  },
+  {
+    slug: "energy-low",
+    test: (game) =>
+      game.metrics.get('energy').value < 25
+  }
 ];

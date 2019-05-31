@@ -18,7 +18,7 @@
       <gauge-list :list="this.gauges"/>
       <years-counter :currentYear="year"/>
       <indicator-list :list="this.indicators" @showSettings="showSettings = true"/>
-      <inventory :money="money" @selectModel="onSelectModel"/>
+      <inventory :money="money" @selectModel="onSelectModel" @selectSkill="onSelectSkill"/>
       <model-infos :model="currentModel"/>
       <flash-news/>
       <transition name="fade">
@@ -95,6 +95,7 @@ export default {
       isEnded: false,
       showSettings: false,
       currentModel: null,
+      currentSkill: null,
       currentCategory: null,
       gauges: null,
       indicators: null,
@@ -112,6 +113,9 @@ export default {
     'game:start': function (args) { this.onGameStart(args); },
     'game:end': function (args) { this.onGameEnd(args); },
     'notification:send': function () { this.onNotificationSend(); },
+    'skill:start': function(args) { this.onSkillStart(args) },
+    'skill:available': function(args) { this.onSkillAvailable(args) },
+    'skill:unavailable': function(args) { this.onSkillUnavailable(args) },
   },
 
   created() {
@@ -119,9 +123,9 @@ export default {
       this.$router.push('/');
       return;
     }
-
     this.status = 'loading';
 
+    // Create game
     Vue.prototype.$game = new Reborn.Game({
       players: this.$store.state.game.players.map(p => new Reborn.Player(p)),
       seed: this.$store.state.game.seed,
@@ -171,10 +175,21 @@ export default {
       }
     },
 
+    // Quand un utilisateur click sur un model du rack
     onSelectModel(model) {
       if (model) {
         // TODO: change to selectedModel
+        this.currentSkill = null;
         this.currentModel = model;
+      }
+    },
+
+    // Quand un utilisateur click sur un skill du rack
+    onSelectSkill(skill) {
+      if (skill) {
+        // TODO: change to selectedModel
+        this.currentModel = null;
+        this.currentSkill = skill;
       }
     },
 
@@ -184,7 +199,14 @@ export default {
       this.status = 'pending';
 
       this.$socket.emit('grid:ready', this.$webgl.map.grid.infos);
-      this.$webgl.on('addItem', item => this.onAddItem(item));
+
+      // When clicking an empty cell
+      this.$webgl.on('selectCell', item => this.onAddItem(item));
+
+      // When clicking on clickMap
+      this.$webgl.on('clickMap', item => this.onLaunchSkill(item));
+
+      // When user click on an object in the scene
       this.$webgl.on('selectItem', (item) => {
         this.selectedEntity = item;
         if (this.$game.entityModels.get(item.model).role === 'nature' && this.$game.player.role.name === 'city') {
@@ -210,7 +232,22 @@ export default {
       console.log('Try Again');
     },
 
+    onLaunchSkill(item) {
+      console.log('onLaunchSkill: skill', this.currentSkill);
+      if (!this.currentSkill) return;
+      const params = { ...item, skill: this.currentSkill.slug, position: this.$webgl.map.grid.getCell(item.position)};
+
+      if (!config.server.enabled) {
+        const zone = this.$webgl.map.grid.captureZone(params.position, this.currentSkill.zoneRadius);
+        this.onSkillStart({ ...params, gridCases: zone });
+        return;
+      }
+      this.$store.commit('debug/log', { content: 'skill:start (emit)', label: 'socket' });
+      this.$socket.emit('skill:start', params);
+    },
+
     onAddItem(item) {
+      if (!this.currentModel) return;
       const params = { ...item, model: this.currentModel.slug };
       if (!config.server.enabled) {
         this.onEntityAdd({ ...params, uuid: uuid(), states: ['mounted', 'living'] });
@@ -268,9 +305,25 @@ export default {
       this.$webgl.models[model].removeEntity(uuid);
 
       gridCases.forEach(gridCaseInfos => {
-        console.log(gridCaseInfos, this.$webgl.map.grid.get(gridCaseInfos));
         this.$webgl.map.grid.get(gridCaseInfos).reference = null;
       });
+    },
+
+
+    onSkillStart(item) {
+      const skillEffect = this.$webgl.skills.get(item.skill);
+      if (!skillEffect) return;
+      skillEffect.launch(item, this.$webgl);
+    },
+
+    onSkillAvailable(args) {
+      console.log(args);
+      // TODO
+    },
+
+    onSkillUnavailable(args) {
+      console.log(args);
+      // TODO
     },
 
     onTimelineTick({ metrics, elapsed }) {
@@ -322,7 +375,6 @@ export default {
     },
 
     onGameEnd(args) {
-      console.log(args);
       this.isEnded = true;
       this.status = 'explanations';
     },

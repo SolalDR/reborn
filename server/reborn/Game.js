@@ -3,6 +3,7 @@ import Emitter from "./utils/Emitter";
 import entityModels from "./entity/models";
 import metrics from "./metric"
 import World from "./World";
+
 /**
  * @param {Player[]} players A list of players
  * @extends Emitter

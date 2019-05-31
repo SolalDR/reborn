@@ -1,6 +1,6 @@
 <template>
   <div class="inventory">
-    <div class="categories">
+    <div class="inventory__categories">
       <category
         v-for="(category, index) in categories"
         :key="`category-${index}`"
@@ -9,7 +9,7 @@
         @setCurrentCategory="setCurrentCategory(category)"/>
     </div>
 
-    <div class="models">
+    <div class="inventory__list">
       <model
         v-for="(model, index) in models"
        :key="`model-${index}`"
@@ -17,12 +17,19 @@
        :money="money"
        :is-current="model.name === currentModel.name"
        @setCurrentModel="setCurrentModel(model)"/>
+      <skill
+        v-for="(skill, index) in skills"
+       :key="`skill-${index}`"
+       :skill="{index: index, ...skill}"
+       :is-current="skill.slug === currentSkill.slug"
+       @setCurrentSkill="setCurrentSkill(skill)"/>
     </div>
   </div>
 </template>
 
 <script>
 import Model from './Model.vue';
+import Skill from './Skill.vue';
 import Category from './Category.vue';
 import Reborn from '../../game';
 
@@ -39,12 +46,15 @@ export default {
       categories: [],
       currentModel: 0,
       models: [],
+      currentSkill: 0,
+      skills: [],
     };
   },
 
   components: {
     Category,
     Model,
+    Skill,
   },
 
   mounted() {
@@ -62,7 +72,12 @@ export default {
     });
 
     this.setCurrentCategory(this.categories[0]);
-    this.setCurrentModel(this.models[0]);
+
+    if (this.models[0]) {
+      this.setCurrentModel(this.models[0]);
+    } else if(this.skills[0]) {
+      this.setCurrentSkill(this.skills[0]);
+    }
   },
 
   methods: {
@@ -89,6 +104,12 @@ export default {
         return model.role === this.$game.player.role.name
           && model.category === this.currentCategory.slug;
       });
+
+      this.skills = Reborn.skills.filter((skill) => {
+        return skill.role === this.$game.player.role.name
+          && skill.category === this.currentCategory.slug;
+      });
+
       this.$emit('selectCategory', this.currentCategory);
     },
 
@@ -96,6 +117,13 @@ export default {
       this.currentModel = model;
       this.$webgl.map.gridHelper.setSize(this.currentModel.size[0], this.currentModel.size[1]);
       this.$emit('selectModel', this.currentModel);
+    },
+
+    setCurrentSkill(skill) {
+      this.currentSkill = skill;
+      console.log(this.currentSkill);
+      this.$webgl.map.gridHelper.setSize(1, 1);
+      this.$emit('selectSkill', this.currentSkill);
     },
   },
 };
@@ -110,7 +138,7 @@ export default {
   border: 2px solid getColor(basics, black);
   background-color: rgba(getColor(basics, white), .5);
 
-  .categories {
+  &__categories {
     overflow: hidden;
     @include useFlex(space-between);
     position: absolute;
@@ -124,7 +152,7 @@ export default {
     border-top-right-radius: 2.5rem;
   }
 
-  .models {
+  &__list {
     @include useFlex(space-between);
   }
 }
