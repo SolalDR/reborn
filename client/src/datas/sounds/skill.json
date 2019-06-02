@@ -1,0 +1,37 @@
+[
+  {
+    "name": "sound_skill_earthquake",
+    "path": "skill/earthquake.mp3",
+    "datas": {
+      "volume": 0.2
+    }
+  },
+  {
+    "name": "sound_skill_epidemic",
+    "path": "skill/epidemic.mp3",
+    "datas": {
+      "volume": 0.2
+    }
+  },
+  {
+    "name": "sound_skill_fertil",
+    "path": "skill/fertil.mp3",
+    "datas": {
+      "volume": 0.2
+    }
+  },
+  {
+    "name": "sound_skill_launch",
+    "path": "skill/launch.mp3",
+    "datas": {
+      "volume": 0.2
+    }
+  },
+  {
+    "name": "sound_skill_night",
+    "path": "skill/night.mp3",
+    "datas": {
+      "volume": 0.2
+    }
+  }
+]
