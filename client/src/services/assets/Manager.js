@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+import SoundLoader from './loaders/SoundLoader';
 import SVGLoader from 'three-svg-loader';
 import Loader from './Loader';
 import DRACOLoader from './loaders/DRACOLoader';
@@ -38,10 +39,10 @@ class Manager {
           test: /\.(?:svg)/,
           loader: new SVGLoader(),
         },
-        // {
-        //   test: /\.(?:mp3|wav)/,
-        //   loader: new SoundLoader(),
-        // },
+        {
+          test: /\.(?:mp3|wav|m4a)/,
+          loader: new SoundLoader(),
+        },
         {
           test: /\..*?/,
           loader: new THREE.FileLoader(),

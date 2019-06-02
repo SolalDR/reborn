@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/SolalDR/reborn/issues"
   },
-  "homepage": "https://github.com/SolalDR/reborn#readme"
+  "homepage": "https://github.com/SolalDR/reborn#readme",
+  "dependencies": {
+    "howler": "^2.1.2"
+  }
 }

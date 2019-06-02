@@ -371,6 +371,25 @@ export default {
         this.$store.commit('debug/log', { content: 'game: playing', label: 'socket' });
         this.isStarting = false;
         this.status = 'playing';
+
+        this.$sound.addSample('drum_slow', 2000, [
+          { name: 'drum_slow_1', delay: 0 },
+          { name: 'drum_slow_2', delay: 1500 },
+        ]);
+
+        this.$sound.addSample('drum_medium', 1500, [
+          { name: 'drum_medium_1', delay: 0 },
+          { name: 'drum_medium_2', delay: 1000 },
+        ]);
+
+        this.$sound.addSample('drum_fast', 1000, [
+          { name: 'drum_fast_1', delay: 0 },
+          { name: 'drum_fast_2', delay: 750 },
+        ]);
+
+        this.$sound.playSample('drum_slow');
+
+        console.log(this.$sound);
       }, Math.max(0, timeout + 1));
     },
 

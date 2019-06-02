@@ -77,6 +77,7 @@ class Loader extends Emitter {
       name: file.name,
       path: file.path,
       groups: file.groups,
+      datas: file.datas ? file.datas : null,
     });
 
     this.pendingFiles.splice(this.pendingFiles.indexOf(file), 1);
@@ -120,7 +121,7 @@ class Loader extends Emitter {
    * @param {[string]} inheritanceGroup The list of group which scope the current group
    */
   addFile(file, inheritanceGroup = []) {
-    const finalFile = file.name ? file : { name: file, path: file };
+    const finalFile = file.name ? file : { name: file, path: file, datas: file.datas };
 
     let finalPath = '';
     inheritanceGroup.forEach((group) => {
@@ -134,6 +135,7 @@ class Loader extends Emitter {
     this.pendingFiles.push({
       name: finalFile.name,
       path: finalPath,
+      datas: finalFile.datas,
       groups,
       status: Loader.PENDING,
       loading: {
@@ -223,6 +225,7 @@ class Loader extends Emitter {
         this.onLoad(file, e);
         if (this.verbose) console.error(`Loader: Cannot load file "${file.name}" with path "${file.path}"`);
       },
+      file.datas ? file.datas : {},
     );
 
     return this;

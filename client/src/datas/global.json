@@ -4,14 +4,96 @@
     {
       "name": "sounds",
       "base": "/sounds/",
-      "files": []
+      "files": [
+        {
+          "name": "sound_ambiance",
+          "path": "reborn_ambiance.mp3",
+          "datas": {
+            "loop": true,
+            "volume": 0.2,
+            "autoplay": true
+          }
+        },
+        {
+          "name": "sound_drum_slow",
+          "path": "reborn_drum_slow.mp3",
+          "datas": {
+            "loop": true,
+            "volume": 0.5
+          }
+        },
+        {
+          "name": "sound_drum_normal",
+          "path": "reborn_drum_normal.mp3",
+          "datas": {
+            "loop": true,
+            "volume": 0.5
+          }
+        },
+        {
+          "name": "sound_drum_fast",
+          "path": "reborn_drum_fast.mp3",
+          "datas": {
+            "loop": true,
+            "volume": 0.5
+          }
+        },
+        {
+          "name": "sound_drum_fast_1",
+          "path": "reborn_drum_fast_1.mp3",
+          "datas": {
+            "loop": true,
+            "volume": 0.5
+          }
+        },
+        {
+          "name": "sound_drum_fast_2",
+          "path": "reborn_drum_fast_2.mp3",
+          "datas": {
+            "loop": true,
+            "volume": 0.5
+          }
+        },
+        {
+          "name": "sound_drum_medium_1",
+          "path": "reborn_drum_medium_1.mp3",
+          "datas": {
+            "loop": true,
+            "volume": 0.5
+          }
+        },
+        {
+          "name": "sound_drum_medium_2",
+          "path": "reborn_drum_medium_2.mp3",
+          "datas": {
+            "loop": true,
+            "volume": 0.3
+          }
+        },
+        {
+          "name": "sound_drum_slow_1",
+          "path": "reborn_drum_slow_1.mp3",
+          "datas": {
+            "loop": true,
+            "volume": 0.5
+          }
+        },
+        {
+          "name": "sound_drum_slow_2",
+          "path": "reborn_drum_slow_2.mp3",
+          "datas": {
+            "loop": true,
+            "volume": 0.3
+          }
+        }
+      ]
     },
     {
       "name": "images",
       "files": [
         {
           "name": "wave_line",
-          "path": "svg/wave_line.svg"
+          "path": "/svg/wave_line.svg"
         },
         {
           "name": "cloud_line",   

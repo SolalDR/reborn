@@ -8,6 +8,7 @@ import store from './services/store';
 // Plugins
 import Viewport from './plugins/Viewport';
 import Socket from './plugins/Socket';
+import SoundPlugin from './plugins/Sound';
 import { VueBus } from './plugins/Bus';
 import { MousePlugin } from './plugins/Mouse';
 
@@ -33,6 +34,7 @@ Vue.component('admin-default-layout', AdminDefaultLayout);
 Vue.use(VueBus);
 Vue.use(VueMaterial);
 Vue.use(MousePlugin);
+Vue.use(SoundPlugin);
 Vue.use(Viewport);
 Vue.use(Socket);
 
