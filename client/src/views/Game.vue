@@ -38,6 +38,7 @@
           <saving v-if="status === 'saving'"
                   @updateStatus="updateStatus"
                   :score="year"
+                  :endGameDatas="endGameDatas"
                   :tryAgain="tryAgain"/>
         </transition>
       </overlay>
@@ -104,6 +105,7 @@ export default {
       money: null,
       position: new THREE.Vector3(0, 0.1, 8),
       selectedEntity: null,
+      endGameDatas: {},
     };
   },
 
@@ -324,7 +326,7 @@ export default {
     },
 
     onGameEnd(args) {
-      console.log(args);
+      this.endGameDatas = args
       this.isEnded = true;
       this.status = 'explanations';
     },

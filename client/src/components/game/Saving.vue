@@ -35,6 +35,7 @@ export default {
   },
   props: {
     score: Number,
+    endGameDatas: Object,
     tryAgain: Function,
   },
   data() {
@@ -105,6 +106,7 @@ export default {
 
       const documentOpts = {
         score: this.score,
+        ...this.endGameDatas,
         ...this.$game.player.role.name === 'city' ? cityOpts : natureOpts,
       };
 
