@@ -5,7 +5,7 @@ class GridHelper extends THREE.Mesh {
     size = new THREE.Vector2(32, 32),
   } = {}) {
     super(
-      new THREE.PlaneGeometry(cellSize, cellSize),
+      new THREE.CircleGeometry( 0.5, 16 ),
       new THREE.MeshBasicMaterial({
         color: 0xFFFFFF,
         transparent: true,

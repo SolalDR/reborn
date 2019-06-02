@@ -2,6 +2,7 @@ import * as Reborn from "../../reborn";
 
 import ConstraintManager from './constraint/Manager';
 import NotificationManager from './notification/Manager';
+import SkillsManager from "./skills/Manager";
 import World from "./World";
 import Timeline from "./timeline/Timeline"
 
@@ -30,6 +31,10 @@ export default class Game extends Reborn.Game {
 
     // NotificationManager
     this.notificationManager = new NotificationManager({
+      game: this,
+    });
+
+    this.skillsManager = new SkillsManager({
       game: this,
     });
 

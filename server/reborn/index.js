@@ -19,3 +19,8 @@ export {default as World} from "./World";
 export {default as Player} from "./Player";
 export {default as Grid} from "./Grid";
 export {default as GridCase} from "./GridCase";
+
+
+// Skills
+export {default as skills} from "./skills";
+export {default as Skill} from "./skills/Skill";
