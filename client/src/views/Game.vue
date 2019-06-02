@@ -116,6 +116,7 @@ export default {
     'skill:start': function(args) { this.onSkillStart(args) },
     'skill:available': function(args) { this.onSkillAvailable(args) },
     'skill:unavailable': function(args) { this.onSkillUnavailable(args) },
+    'rythm:change': function(args) { this.onRythmChange(args) },
   },
 
   created() {
@@ -326,6 +327,10 @@ export default {
       // TODO
     },
 
+    onRythmChange(speed) {
+      this.$sound.playSample('drum_' + speed);
+    },
+
     onTimelineTick({ metrics, elapsed }) {
       this.gauges = metrics.filter((metric) => {
         return this.$game.player.role.gauges.indexOf(metric.slug) >= 0;
@@ -388,8 +393,6 @@ export default {
         ]);
 
         this.$sound.playSample('drum_slow');
-
-        console.log(this.$sound);
       }, Math.max(0, timeout + 1));
     },
 

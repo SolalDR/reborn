@@ -68,6 +68,14 @@ export default class Game extends Reborn.Game {
   }
 
   initEvents() {
+    this.constraintManager.get('rythm-fast').on('change', ({ regularOrder }) => {
+      this.emit('rythm:change', regularOrder ? 'fast' : 'medium');
+    });
+
+    this.constraintManager.get('rythm-medium').on('change', ({ regularOrder }) => {
+      this.emit('rythm:change', regularOrder ? 'medium' : 'slow');
+    });
+
     this.constraintManager.get('end-game').on('change', () => {
       this.finish();
       this.timeline.stop();

@@ -30,25 +30,43 @@ class SoundManager extends Emitter {
 
   addSample(name, duration, sounds) {
     this.samples[name] = {
+      name,
       sounds,
       duration
     };
-    sounds.forEach((sound) => {
-      // console.log(this.sounds, sound)
-      console.log(this.sounds[this.prefix + sound.name]);
-      this.sounds[this.prefix + sound.name].onend = (event) => {
-        console.log('onEnd', event);
-      }
-    })
   }
+
+
 
   playSample(name) {
     const sounds = this.samples[name].sounds;
+    if (this.currentSample) {
+      const duration = this.currentSample.duration;
+      this.currentSample.sounds.forEach((sound, index) => {
+        const howl = this.sounds[this.prefix + sound.name];
+        howl.once('end', () => {
+          if ( index !== 0 ) {
+            setTimeout(() => howl.stop(), duration);
+          } else {
+            howl.stop();
+          }
+          if (index === 0) {
+            this.playSample(name);
+          }
+        })
+      });
+      this.currentSample = null;
+      return;
+    }
+
+
     sounds.forEach(sound => {
       setTimeout(() => {
+        // console.log('-----playSound', sound.name);
         this.play(sound.name);
       }, sound.delay ? sound.delay : 0);
     })
+    this.currentSample = this.samples[name];
   }
 }
 
