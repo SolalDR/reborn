@@ -34,6 +34,7 @@ export default {
     Leaderboard,
   },
   props: {
+    score: Number,
     tryAgain: Function,
   },
   data() {
@@ -103,7 +104,7 @@ export default {
       };
 
       const documentOpts = {
-        score: 'score',
+        score: this.score,
         ...this.$game.player.role.name === 'city' ? cityOpts : natureOpts,
       };
 

@@ -32,10 +32,12 @@
         <transition name="fade" mode="out-in">
           <explanations v-if="status === 'explanations'"
                         @updateStatus="updateStatus"
+                        :score="year"
                         :tryAgain="tryAgain"/>
 
           <saving v-if="status === 'saving'"
                   @updateStatus="updateStatus"
+                  :score="year"
                   :tryAgain="tryAgain"/>
         </transition>
       </overlay>

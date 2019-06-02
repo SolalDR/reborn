@@ -3,7 +3,7 @@
     <!-- TODO: Add clan name condition -->
     <div class="explanations__header header">
       <p class="explanations__title bold">La civilisation a survécu</p>
-      <span class="explanations__score">999</span>
+      <span class="explanations__score">{{ score }}</span>
       <span class="explanations__suffix">ans</span>
 
       <p v-for="(text, index) in 2" :key="`explanations-text-${index}`" class="explanations__text">
@@ -35,6 +35,7 @@
 export default {
   name: 'explanations',
   props: {
+    score: Number,
     tryAgain: Function,
   },
 };
