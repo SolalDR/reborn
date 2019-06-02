@@ -76,7 +76,7 @@ class Control {
   }
 
   woobleAction({
-    count = 50,
+    count = 110,
     speed = 60,
     intensity = 0.03,
     timingFunction = "linear",

@@ -31,7 +31,7 @@
     "name": "sound_gauge_purity",
     "path": "gauge/purity.mp3",
     "datas": {
-      "volume": 1
+      "volume": 1.5
     }
   },
   {
