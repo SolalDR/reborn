@@ -28,6 +28,11 @@ class SoundManager extends Emitter {
     player();
   }
 
+  has(name) {
+    if (!this.sounds[this.prefix + name]) return false;
+    return true;
+  }
+
   addSample(name, duration, sounds) {
     this.samples[name] = {
       name,

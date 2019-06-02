@@ -3,7 +3,7 @@
     "name": "sound_skill_earthquake",
     "path": "skill/earthquake.mp3",
     "datas": {
-      "volume": 0.2
+      "volume": 0.5
     }
   },
   {

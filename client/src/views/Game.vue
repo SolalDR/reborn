@@ -293,6 +293,14 @@ export default {
           }
         });
 
+        const prefix = this.$game.player.role.name + '_add_';
+        const entityModel = this.$game.entityModels.get(item.model);
+        if (this.$sound.has(prefix + entityModel.category)) {
+          this.$sound.play(prefix + entityModel.category);
+        } else {
+          this.$sound.play(prefix + entityModel.role);
+        }
+
         model.addItem({
           ...item,
           position: new THREE.Vector3(item.position.x, item.position.y, item.position.z),
@@ -303,6 +311,11 @@ export default {
 
     onEntityRemove({ model, uuid, gridCases }) {
       this.$store.commit('debug/log', { content: `entity:remove (receive) with uuid: ${uuid}`, label: 'socket' });
+
+      const prefix = this.$game.player.role.name + '_remove';
+      const entityModel = this.$game.entityModels.get(model);
+      this.$sound.play(prefix);
+
       this.$webgl.models[model].removeEntity(uuid);
 
       gridCases.forEach(gridCaseInfos => {
@@ -315,6 +328,7 @@ export default {
       const skillEffect = this.$webgl.skills.get(item.skill);
       if (!skillEffect) return;
       skillEffect.launch(item, this.$webgl);
+      this.$sound.play('skill_earthquake');
     },
 
     onSkillAvailable(args) {
