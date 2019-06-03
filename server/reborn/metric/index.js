@@ -5,6 +5,9 @@ import MoneyMetric from "./Money";
 import PurityMetric from "./Purity";
 import PopulationMetric from "./Population";
 import SatisfactionMetric from "./Satisfaction";
+import HumanMetric from "./Human";
+import TreeMetric from "./Tree";
+import RockMetric from "./Rock";
 
 export default [
   BiodiversityMetric,
@@ -14,4 +17,7 @@ export default [
   PurityMetric,
   PopulationMetric,
   SatisfactionMetric,
+  HumanMetric,
+  TreeMetric,
+  RockMetric,
 ]
