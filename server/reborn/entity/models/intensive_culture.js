@@ -1,7 +1,7 @@
 export default {
-  slug: "intensivelivestock",
+  slug: "intensive_culture",
   category: "alimentation",
-  name: "Élevage intensif",
+  name: "Culture intensive",
   role: 'city',
   size: [3, 2],
   states: {

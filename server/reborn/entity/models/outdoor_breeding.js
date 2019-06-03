@@ -1,54 +1,47 @@
 export default {
-  slug: "charcoal_factory",
-  category: "energy",
-  name: "Charcoal Factory",
-  displayName: "Usine à charbon",
+  slug: "outdoor_breeding",
+  category: "alimentation",
+  name: "Outdoor Breeding",
+  displayName: "Elevage extérieur",
   role: 'city',
+  size: [3, 2],
   states: {
     creation: {
       enterModifiers: [
         {
           name: 'money',
-          value: -10000,
+          value: -8000,
           checkConstraint: true
         },
-        {
-          name: 'purity',
-          value: -10,
-        }
       ]
     },
     mounted: {
       recurModifiers: [
         {
-          name: 'energy',
-          value: 10
+          name: 'alimentation',
+          value: 5
         },
-        {
-          name: 'purity',
-          value: -15,
-        }
       ]
     },
     destruction: {
       leaveModifiers: [
         {
           name: 'money',
-          value: -3000
-        }
+          value: -2000
+        },
       ]
     },
     living: {
       enterModifiers: [
         {
           name: 'waste',
-          value: 0.05
+          value: 0.01
         }
       ],
       leaveModifiers: [
         {
           name: 'waste',
-          value: -0.05
+          value: -0.01
         }
       ]
     }

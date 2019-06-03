@@ -1,5 +1,6 @@
 import animate from '@solaldr/animate';
 import Cluster from '../cluster';
+import GUI from "@/plugins/GUI";
 
 export default class EntityModelGroup {
   constructor(name, {
@@ -14,10 +15,14 @@ export default class EntityModelGroup {
     this.slot = slot;
 
     const hiddenLocation = new THREE.Vector3(0, 200, 0);
+    this.geometry.computeFaceNormals();
+    this.geometry.computeVertexNormals();
 
-    this.entityCluster = new Cluster(geometry, material, {
+    this.entityCluster = new Cluster(this.geometry, material, {
       hiddenLocation,
     });
+
+    GUI.world.addMaterial(this.name, this.entityCluster.material);
 
     const boxSize = new THREE.Vector3()
       .copy(this.geometry.boundingBox.max)

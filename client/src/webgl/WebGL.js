@@ -85,6 +85,8 @@ export default class WebGL extends Emitter {
 
       const material = new THREE.MeshToonMaterial({
         vertexColors: THREE.VertexColors,
+        specular: 0xFFFFFF,
+        shininess: 1,
       });
 
       Object.keys(models).forEach((modelName, index) => {

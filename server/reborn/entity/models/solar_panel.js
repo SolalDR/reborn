@@ -1,7 +1,8 @@
 export default {
-  slug: "windturbine",
+  slug: "solar_panel",
   category: "energy",
-  name: "Éolienne",
+  name: "Solar Panel",
+  displayName: "Panneau solaire",
   role: 'city',
   states: {
     creation: {
