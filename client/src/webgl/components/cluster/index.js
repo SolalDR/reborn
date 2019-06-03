@@ -3,32 +3,6 @@ import beforeVertexChunk from './include_vertex.glsl';
 
 const q = new THREE.Quaternion();
 
-
-
-
-var DEPTH_MATERIAL = new THREE.MeshDepthMaterial();
-DEPTH_MATERIAL.depthPacking = THREE.RGBADepthPacking;
-DEPTH_MATERIAL.clipping = true;
-
-const DISTANCE_SHADER = THREE.ShaderLib[ "distanceRGBA" ];
-const DISTANCE_UNIFORMS = THREE.UniformsUtils.clone( DISTANCE_SHADER.uniforms );
-const DISTANCE_DEFINES = { 'USE_SHADOWMAP': '' }
-
-
-var vertexDistanceShader = DISTANCE_SHADER.vertexShader;
-vertexDistanceShader = `${beforeVertexChunk}\n\r${vertexDistanceShader}`;
-vertexDistanceShader = vertexDistanceShader.replace(
-  '#include <begin_vertex>',
-  [
-    `mat4 _instanceMatrix = getInstanceMatrix();`,
-    `vec3 transformedNormal =  transposeMat3( inverse( mat3( modelViewMatrix * _instanceMatrix ) ) ) * objectNormal ;`,
-    'vec3 transformed = ( _instanceMatrix * vec4( position , 1. )).xyz;',
-    '#ifdef PICKING',
-    'v_instancePickingColor = instancePickingColor;',
-    '#endif',
-  ].join('\n\r'),
-);
-
 class Cluster {
   constructor(geometry, material, {
     limit = 100,
@@ -59,7 +33,7 @@ class Cluster {
     console.log(this.material);
     this.mesh.customDepthMaterial = this.material.clone();
     this.mesh.customDepthMaterial.depthPacking = THREE.RGBADepthPacking;
-    // this.mesh.customDepthMaterial.depthPacking = THREE.RGBADepthPacking;
+    this.mesh.customDepthMaterial.clipping = true;
     this.mesh.customDepthMaterial.onBeforeCompile = (program) => {
       program.vertexShader = `${beforeVertexChunk}\n\r${program.vertexShader}`;
       program.vertexShader = program.vertexShader.replace(
