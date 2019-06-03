@@ -1,18 +1,18 @@
 <template>
   <overlay :is-transparent="false">
     <template #default>
-      <p class="introduction__text" v-html="formatText(introText)"></p>
+      <p v-for="text in introTexts[currentIndex]" v-html="formatText(text)" class="introduction__text"></p>
     </template>
 
     <template #footer>
-      <button class="introduction__skip cta--bordered" @click="skipIntro">Passer l'introduction</button>
+      <button class="introduction__skip cta--bordered" @click="skipIntro">Je sais, je sais</button>
     </template>
   </overlay>
 </template>
 
 <script>
+import introTexts from '@/contents/introduction-texts'
 import Overlay from '../global/Overlay';
-import texts from '@/contents/introduction-texts'
 
 export default {
   name: 'introduction',
@@ -22,16 +22,31 @@ export default {
   props: {
     skipIntro: Function,
   },
-  methods: {
-    formatText(text) {
-      const regex = /([^\x00-\x80]|\w|\.|\,)/g;
-      return text.replace(regex, '<span>$&</span>');
-    },
+  data() {
+    return {
+      currentIndex: 0,
+      introTexts: introTexts,
+    };
   },
-  computed: {
-    introText() {
-      let index = 0;
-      return texts[index];
+  mounted() {
+    const updateInterval = 8000;
+
+    this.interval = setInterval(() => {
+      this.updateCurrentIndex();
+    }, updateInterval)
+  },
+  methods: {
+    updateCurrentIndex() {
+      if (this.currentIndex < this.introTexts.length - 1) {
+        this.currentIndex++;
+      } else {
+        this.skipIntro();
+        clearInterval(this.interval);
+      }
+    },
+    formatText(text) {
+      const regex = /([^\x00-\x80]|\w|\.|\,|\-|\?)/g;
+      return text.replace(regex, '<span class="letter">$&</span>');
     },
   },
 };
@@ -40,28 +55,14 @@ export default {
 <style lang="scss">
   .introduction {
     &__text {
+      $animation-duration: 8s;
+
       margin: 0 auto;
-      max-width: 71.4rem;
       text-align: center;
       @include fontSize(30);
-      line-height: 3.5rem;
-
-      span {
-        opacity: 0;
-        display: inline-block;
-        animation: {
-          name: letterBounce;
-          iteration-count: 1;
-          duration: 2s;
-          timing-function: cubic-bezier(0.82, 0.04, 0, 1.04);
-        }
-        animation-fill-mode: forwards;
-        @for $i from 1 to 400 {
-          &:nth-child(#{$i}) {
-            animation-delay: $i*0.007s;
-          }
-        }
-      }
+      line-height: 4.5rem;
+      animation: scaleContent $animation-duration ease-in infinite;
+      @include letterBounce($animation-duration);
     }
 
     &__skip {
@@ -71,14 +72,9 @@ export default {
     }
   }
 
-  @keyframes letterBounce {
-    0% {
-      opacity: 0;
-      transform: translateY(200%);
-    }
+  @keyframes scaleContent {
     100% {
-      opacity: 1;
-      transform: translateY(0);
+      transform: scale(1.3);
     }
   }
 </style>

@@ -1,0 +1,39 @@
+@mixin letterBounce($duration: 5s) {
+  & > span {
+    display: inline-block;
+    opacity: 0;
+    display: inline-block;
+    animation: {
+      name: letterBounce;
+      iteration-count: 1;
+      duration: $duration;
+      timing-function: cubic-bezier(0.82, 0.04, 0, 1.04);
+    }
+    animation-fill-mode: forwards;
+
+    @for $i from 1 to 400 {
+      &:nth-child(#{$i}) {
+        animation-delay: $i*0.007s;
+      }
+    }
+
+    @keyframes letterBounce {
+      0% {
+        opacity: 0;
+        transform: translateY(200%);
+      }
+      25% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      75% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-200%);
+      }
+    }
+  }
+}

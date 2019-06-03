@@ -1,5 +1,5 @@
 <template>
-  <overlay>
+  <overlay :has-cross="true" @closeOverlay="closeOverlay">
     <template #header>
       <h2 class="title--wide">À propos</h2>
     </template>
@@ -36,6 +36,7 @@ export default {
   components: {
     Overlay,
   },
+  props: ['closeOverlay'],
 };
 </script>
 

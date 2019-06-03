@@ -1,27 +1,42 @@
 <template>
-  <div class="overlay" :class="{'overlay--transparent': isTransparent}">
-    <div class="overlay-content">
-      <div class="header">
-        <slot name="header"></slot>
-      </div>
+  <transition name="overlay" :leave-to-class="fadeOut ? 'fade-leave-to' : 'overlay-leave-to'">
+    <div class="overlay" :class="{'overlay--transparent': isTransparent}">
+      <div class="overlay__content">
+        <div class="cross" v-if="hasCross" @click="$emit('closeOverlay')">
+          <span class="line"></span>
+          <span class="line"></span>
+        </div>
 
-      <slot></slot>
+        <div class="header">
+          <slot name="header"></slot>
+        </div>
 
-      <div class="overlay-content__footer footer">
-        <slot name="footer"></slot>
+        <slot></slot>
+
+        <div class="footer">
+          <slot name="footer"></slot>
+        </div>
       </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>
 export default {
   name: 'overlay',
   props: {
+    fadeOut: {
+      type: Boolean,
+      default: false,
+    },
     isTransparent: {
       type: Boolean,
       default: true,
     },
+    hasCross: {
+      type: Boolean,
+      default: false,
+    }
   },
 };
 </script>
@@ -41,12 +56,39 @@ export default {
       background-color: rgba(getColor(mains, primary), .75);
     }
 
-    &-content {
+    &__content {
       text-align: center;
 
-      &__footer {
+      .cross {
+        cursor: pointer;
+        position: fixed;
+        top: 10%;
+        right: 10%;
+        width: 4.3rem;
+        height: 4.3rem;
+
+        .line {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          display: block;
+          width: .35rem;
+          height: 100%;
+          background-color: getColor(basics, black);
+
+          &:first-of-type {
+            transform: translateY(-50%) rotate(45deg);
+          }
+
+          &:last-of-type {
+            transform: translateY(-50%) rotate(-45deg);
+          }
+        }
+      }
+
+      .footer {
         opacity: 0;
-        animation: fadeInUp 2s cubic-bezier(0.82, 0.04, 0, 1.04) 1 2s;
+        animation: fadeInUp 2s cubic-bezier(0.82, 0.04, 0, 1.04) 1 1.2s;
         animation-fill-mode: forwards;
 
         @keyframes fadeInUp {

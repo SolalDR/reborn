@@ -2,13 +2,14 @@
   <div class="home">
     <video class="trailer" src="@/assets/video/trailer.mp4" autoplay playsinline muted loop></video>
 
+    <introduction v-if="status === 'introduction'" :skip-intro="goToLanding"/>
+
     <transition name="fade" mode="out-in">
-      <introduction v-if="status === 'introduction'" :skip-intro="skipIntro"/>
       <landing v-if="status === 'landing'"/>
-      <about v-if="status === 'about'"/>
+      <about v-if="status === 'about'" :closeOverlay="goToLanding"/>
     </transition>
 
-    <transition name="fade">
+    <transition name="fade-up">
       <p v-if="status === 'landing'" class="about__cta cta" @click="status = 'about'">A Propos</p>
     </transition>
   </div>
@@ -32,7 +33,7 @@ export default {
     };
   },
   methods: {
-    skipIntro() {
+    goToLanding() {
       this.status = 'landing';
     },
   },
