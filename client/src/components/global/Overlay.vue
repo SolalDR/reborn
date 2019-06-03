@@ -1,13 +1,13 @@
 <template>
   <div class="overlay" :class="{'overlay--transparent': isTransparent}">
-    <div class="overlay__content">
+    <div class="overlay-content">
       <div class="header">
         <slot name="header"></slot>
       </div>
 
       <slot></slot>
 
-      <div class="footer">
+      <div class="overlay-content__footer footer">
         <slot name="footer"></slot>
       </div>
     </div>
@@ -41,8 +41,26 @@ export default {
       background-color: rgba(getColor(mains, primary), .75);
     }
 
-    &__content {
+    &-content {
       text-align: center;
+
+      &__footer {
+        opacity: 0;
+        animation: fadeInUp 2s cubic-bezier(0.82, 0.04, 0, 1.04) 1 2s;
+        animation-fill-mode: forwards;
+
+        @keyframes fadeInUp {
+          0% {
+            opacity: 0;
+            bottom: 0;
+            transform: translate(-50%, 100%);
+          }
+
+          100% {
+            opacity: 1;
+          }
+        }
+      }
     }
   }
 </style>
