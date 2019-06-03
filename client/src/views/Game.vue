@@ -198,6 +198,7 @@ export default {
       this.$store.commit('debug/log', { content: 'game: onWebGLInit', label: 'webgl' });
       this.$store.commit('debug/log', { content: 'game: pending', label: 'socket' });
       this.status = 'pending';
+      this.$sound.play('ambiance_sea');
 
       this.$socket.emit('grid:ready', this.$webgl.map.grid.infos);
 
