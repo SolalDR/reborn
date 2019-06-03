@@ -15,5 +15,7 @@ export default class Rock extends Metric {
     })
   }
 
-  applyRecurentLogic(game) {}
+  applyRecurentLogic(game) {
+    this.value = game.entityModels.get('rock').count
+  }
 }

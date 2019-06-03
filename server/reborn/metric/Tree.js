@@ -15,5 +15,7 @@ export default class Tree extends Metric {
     })
   }
 
-  applyRecurentLogic(game) {}
+  applyRecurentLogic(game) {
+    this.value = game.entityModels.get('tree').count
+  }
 }

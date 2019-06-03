@@ -77,11 +77,11 @@ export default class Room extends Emitter {
     this.game.notificationManager.on('notification:send', (args) => this.dispatchToPlayers('notification:send', args));
 
     this.game.skillsManager.on('skill:available', (args) => {
-      console.log('skill:available', args);
+      // console.log('skill:available', args);
       this.dispatchToPlayers('skill:available', args)
     });
     this.game.skillsManager.on('skill:unavailable', (args) => {
-      console.log('skill:unavailable', args);
+      // console.log('skill:unavailable', args);
       this.dispatchToPlayers('skill:unavailable', args)
     });
     this.game.skillsManager.on('skill:start', (args) => {
