@@ -2,15 +2,16 @@
   <div class="home">
     <video class="trailer" src="@/assets/video/trailer.mp4" autoplay playsinline muted loop></video>
 
-    <introduction v-if="status === 'introduction'" :skip-intro="goToLanding"/>
-
-    <transition name="fade" mode="out-in">
-      <landing v-if="status === 'landing'"/>
-      <about v-if="status === 'about'" :closeOverlay="goToLanding"/>
+    <transition name="fade-down">
+      <p class="mute__cta" :class="{'mute__cta--muted': isMuted}" @click="muteAll">Mute</p>
     </transition>
 
+    <introduction v-if="status === 'introduction'" :skip-intro="goToLanding"/>
+    <landing v-if="status === 'landing'"/>
+    <about v-if="status === 'about'" :closeOverlay="goToLanding"/>
+
     <transition name="fade-up">
-      <p v-if="status === 'landing'" class="about__cta cta" @click="status = 'about'">A Propos</p>
+      <p v-if="status === 'landing'" class="about__cta cta--absolute" @click="status = 'about'">A Propos</p>
     </transition>
   </div>
 </template>
@@ -29,12 +30,17 @@ export default {
   },
   data() {
     return {
+      isMuted: false,
       status: 'introduction', // introduction => landing || about
     };
   },
   methods: {
     goToLanding() {
       this.status = 'landing';
+    },
+    // TODO: Create common method
+    muteAll() {
+      this.isMuted = !this.isMuted;
     },
   },
 };
@@ -55,12 +61,7 @@ export default {
     }
 
     .about__cta {
-      z-index: 1;
-      position: fixed;
-      bottom: 3rem;
-      right: 3rem;
-      text-transform: uppercase;
-      @include fontSize(24);
+      bottom: $border-of-screen;
     }
   }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <overlay :has-cross="true" @closeOverlay="closeOverlay">
+  <overlay :has-cross="true" :fade-out="true" @closeOverlay="closeOverlay">
     <template #header>
       <h2 class="title--wide">À propos</h2>
     </template>

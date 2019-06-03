@@ -67,6 +67,18 @@ export default {
         width: 4.3rem;
         height: 4.3rem;
 
+        &:hover {
+          .line {
+            &:first-of-type {
+              transform: translateY(-50%) rotate(225deg);
+            }
+
+            &:last-of-type {
+              transform: translateY(-50%) rotate(-225deg);
+            }
+          }
+        }
+
         .line {
           position: absolute;
           top: 50%;
@@ -75,6 +87,7 @@ export default {
           width: .35rem;
           height: 100%;
           background-color: getColor(basics, black);
+          transition: all .5s ease;
 
           &:first-of-type {
             transform: translateY(-50%) rotate(45deg);

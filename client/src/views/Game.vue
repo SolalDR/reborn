@@ -2,6 +2,10 @@
   <main class="game">
     <scene @mounted="onWebGLInit"/>
 
+    <transition name="fade-down">
+      <p class="mute__cta cta" :class="{'mute__cta--muted': isMuted}" @click="muteAll">Mute</p>
+    </transition>
+
     <!-- IsStarting -->
     <transition name="fade">
       <overlay v-if="isStarting">
@@ -93,6 +97,7 @@ export default {
       status: null, // null => loading => pending => initializing => playing => explanations => saving => leaderboard
       isStarting: true,
       isEnded: false,
+      isMuted: false,
       showSettings: false,
       currentModel: null,
       currentSkill: null,
@@ -154,6 +159,11 @@ export default {
   },
 
   methods: {
+    // TODO: Create common method
+    muteAll() {
+      this.isMuted = !this.isMuted;
+    },
+
     onKeyDown(event) {
       this.$bus.$emit('shortcut', event.which);
     },
@@ -405,16 +415,14 @@ export default {
       position: absolute;
     }
 
-    $padding: 3rem;
-
     .gauge-list {
-      top: $padding;
-      left: $padding;
+      top: $border-of-screen;
+      left: $border-of-screen;
     }
 
     .indicator-list {
-      top: $padding;
-      right: $padding;
+      top: $border-of-screen;
+      right: $border-of-screen;
     }
 
     .years-counter {
@@ -424,18 +432,18 @@ export default {
     }
 
     .inventory {
-      bottom: calc(#{$padding} + 3.6rem);
-      left: $padding;
+      bottom: calc(#{$border-of-screen} + 3.6rem);
+      left: $border-of-screen;
     }
 
     .model-infos {
-      bottom: $padding;
-      left: $padding;
+      bottom: $border-of-screen;
+      left: $border-of-screen;
     }
 
     .flash-news {
-      bottom: $padding;
-      right: $padding;
+      bottom: $border-of-screen;
+      right: $border-of-screen;
     }
   }
 }

@@ -29,7 +29,7 @@ export default {
     };
   },
   mounted() {
-    const updateInterval = 8000;
+    const updateInterval = 1000;
 
     this.interval = setInterval(() => {
       this.updateCurrentIndex();
@@ -55,7 +55,7 @@ export default {
 <style lang="scss">
   .introduction {
     &__text {
-      $animation-duration: 8s;
+      $animation-duration: 1s;
 
       margin: 0 auto;
       text-align: center;

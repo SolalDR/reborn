@@ -9,6 +9,16 @@
   font-weight: bold;
   border: none;
 
+  &--absolute {
+    @extend .cta;
+
+    z-index: 2;
+    position: fixed;
+    right: $border-of-screen;
+    text-transform: uppercase;
+    @include fontSize(24);
+  }
+
   &--bordered {
     @extend .cta;
 
@@ -33,5 +43,20 @@
       box-shadow: none;
       transform: inherit;
     }
+  }
+}
+
+.mute__cta {
+  @extend .cta--absolute;
+  top: $border-of-screen;
+  @include fontSize(24);
+  transition: opacity .3s ease;
+
+  &--muted {
+    opacity: .3;
+  }
+
+  &:hover {
+    opacity: 1;
   }
 }

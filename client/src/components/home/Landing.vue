@@ -143,15 +143,35 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  $animation-duration: .8s;
+  $delayed-value: .5s;
+
+  @keyframes fade-up {
+    0% {
+      transform: translateY(200%);
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
   .landing {
     z-index: 1;
     position: relative;
     width: 80vw;
 
+    .logo,
+    .actions {
+      opacity: 0;
+    }
+
     .logo {
       display: block;
       margin: 0 auto;
       width: 80%;
+      animation: fade-up $animation-duration ease $delayed-value;
+      animation-fill-mode: forwards;
     }
 
     .actions {
@@ -159,6 +179,8 @@ export default {
       @include useFlex(space-between, flex-start);
       margin: 7rem auto 0;
       width: 61rem;
+      animation: fade-up $animation-duration ease $delayed-value + .2s;
+      animation-fill-mode: forwards;
 
       &__item {
         position: relative;
