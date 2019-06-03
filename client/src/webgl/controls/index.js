@@ -32,8 +32,6 @@ class Control {
       theta: this.orbit.theta,
     };
 
-    console.log(this);
-
     this.initDragEvent();
     this.initWheelEvent();
     this.initGUI();
@@ -71,7 +69,6 @@ class Control {
         ),
       );
       this.orbit.radius = wheel;
-      console.log(this.orbit);
     });
   }
 

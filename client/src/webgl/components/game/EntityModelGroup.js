@@ -22,6 +22,8 @@ export default class EntityModelGroup {
       hiddenLocation,
     });
 
+
+
     GUI.world.addMaterial(this.name, this.entityCluster.material);
 
     const boxSize = new THREE.Vector3()

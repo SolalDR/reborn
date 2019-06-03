@@ -68,6 +68,7 @@ export default class Renderer {
       antialias: false,
     });
     this.renderer.shadowMapEnabled = true;
+    this.renderer.shadowMap.type = THREE.BasicShadowMap;
     this.renderer.setClearColor(0xb7eeff);
     this.renderer.setPixelRatio(1.5);
     this.renderer.setSize(Viewport.width, Viewport.height);

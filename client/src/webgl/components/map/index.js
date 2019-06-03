@@ -54,13 +54,18 @@ export default class GameMap extends THREE.Group {
       bumpScale: 0.1,
       specular: 0x798133,
       reflectivity: 0,
-      shininess: 0,
+      shininess: 0.5,
       flatShading: false,
     });
 
     GUI.map.addMaterial('Ground', material);
 
     this.floor = new THREE.Mesh(geometry, material);
+    this.floor.castShadow = true;
+    this.floor.receiveShadow = true;
+    this.floor.geometry.computeFaceNormals();
+    this.floor.geometry.computeVertexNormals();
+
     this.floor.position.y = -0.1;
     this.add(this.floor);
     this.raycaster.object = this.floor;

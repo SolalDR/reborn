@@ -169,9 +169,31 @@ export default class WebGL extends Emitter {
     this.scene.add(this.ambientLight);
 
     this.directionalLight = new THREE.DirectionalLight(0xFFFFFF, 0.5);
+    this.directionalLight.castShadow = true;
+    this.directionalLight.shadow.camera.near = 1;
+    this.directionalLight.shadow.camera.far = 50;
+    this.directionalLight.shadow.camera.right = 16;
+    this.directionalLight.shadow.camera.left = - 16;
+    this.directionalLight.shadow.camera.top  = 16;
+    this.directionalLight.shadow.camera.bottom = - 16;
+    this.directionalLight.shadow.mapSize.width = 2048;
+    this.directionalLight.shadow.mapSize.height = 2048;
+    this.directionalLight.shadow.bias = 0.005;
+
     this.scene.add(this.directionalLight);
 
-    this.directionalLight.position.set(100, 100, 100);
+    this.directionalLight.position.set(0, 20, 10);
+
+    var sphereGeometry = new THREE.SphereBufferGeometry( 1, 32, 32 );
+    var sphereMaterial = new THREE.MeshStandardMaterial( { color: 0xff0000 } );
+    var sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+    sphere.position.y = 5;
+    sphere.castShadow = true; //default is false
+    sphere.receiveShadow = false; //default
+    this.scene.add( sphere );
+
+    GUI.scene.addMesh('Sphere test', sphere);
+
   }
 
   /**
