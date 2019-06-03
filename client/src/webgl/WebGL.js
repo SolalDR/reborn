@@ -6,6 +6,7 @@ import modelsConfig from '@/config/models';
 import AssetsManager from '@/services/assets/Manager';
 import store from '@/services/store';
 import animate from "@solaldr/animate";
+import theme from "@/config/theme";
 
 // Core
 import Raycaster from './core/Raycaster';
@@ -20,6 +21,7 @@ import { Waves } from './components/world';
 import ExplosionEffect from './components/game/effects/Explosion';
 import EntityModelGroup from './components/game/EntityModelGroup';
 import skills from './components/game/skills';
+
 
 export default class WebGL extends Emitter {
   constructor({
@@ -165,10 +167,18 @@ export default class WebGL extends Emitter {
     this.camera.position.set(0, 30, 30);
     this.camera.lookAt(new THREE.Vector3());
 
-    this.ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
+    this.ambientLight = new THREE.AmbientLight(
+      theme.light.ambient.color,
+      theme.light.ambient.intensity
+    );
+
     this.scene.add(this.ambientLight);
 
-    this.directionalLight = new THREE.DirectionalLight(0xFFFFFF, 0.5);
+    this.directionalLight = new THREE.DirectionalLight(
+      theme.light.directional.color,
+      theme.light.directional.intensity
+    );
+
     this.directionalLight.castShadow = true;
     this.directionalLight.shadow.camera.near = 1;
     this.directionalLight.shadow.camera.far = 50;
@@ -182,7 +192,7 @@ export default class WebGL extends Emitter {
 
     this.scene.add(this.directionalLight);
 
-    this.directionalLight.position.set(0, 20, 10);
+    this.directionalLight.position.copy(theme.light.directional.position);
   }
 
   /**

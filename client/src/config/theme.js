@@ -1,6 +1,10 @@
 import themes from "./themes";
+import Config from "@/utils/Config";
 
-export default {
+const themeConfig = {
   themes,
-  currentTheme: null,
+  currentTheme: new Config(),
 };
+
+export { themeConfig };
+export default themeConfig.currentTheme;

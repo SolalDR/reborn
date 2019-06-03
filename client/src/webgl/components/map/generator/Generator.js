@@ -1,5 +1,5 @@
 import MyWorker from './map.worker.js';
-import themeConfig from "@/config/theme";
+import theme from "@/config/theme";
 
 const worker = new MyWorker();
 
@@ -20,7 +20,6 @@ export default (seed = Math.random()) => {
       : randBetween(value[0], value[1]);
   }
 
-  const theme = themeConfig.currentTheme;
   // Define worker params
   worker.postMessage({
     seed,

@@ -30,7 +30,6 @@ class Cluster {
     this.mesh.castShadow = true;
     this.mesh.receiveShadow = true;
 
-    console.log(this.material);
     this.mesh.customDepthMaterial = this.material.clone();
     this.mesh.customDepthMaterial.depthPacking = THREE.RGBADepthPacking;
     this.mesh.customDepthMaterial.clipping = true;

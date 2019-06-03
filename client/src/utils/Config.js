@@ -7,7 +7,7 @@ class Config {
    * @param {Object} config A simple object with your configuration.
    * @return {Config}
    */
-  constructor(config, {
+  constructor(config = {}, {
     env = null,
   } = {}) {
     this._env = env;

@@ -3,6 +3,7 @@ import Grid from './Grid';
 import GridHelper from './GridHelper';
 import Bus from '@/plugins/Bus';
 import GUI from '@/plugins/GUI';
+import theme from "@/config/theme";
 
 
 
@@ -51,10 +52,9 @@ export default class GameMap extends THREE.Group {
   initFloor(geometry) {
     const material = new THREE.MeshToonMaterial({
       vertexColors: THREE.FaceColors,
-      bumpScale: 0.1,
-      specular: 0x798133,
-      reflectivity: 0,
-      shininess: 0.5,
+      specular: theme.map.specular,
+      reflectivity: theme.map.reflectivity,
+      shininess: theme.map.shininess,
       flatShading: false,
     });
 
@@ -65,8 +65,8 @@ export default class GameMap extends THREE.Group {
     this.floor.receiveShadow = true;
     this.floor.geometry.computeFaceNormals();
     this.floor.geometry.computeVertexNormals();
-
     this.floor.position.y = -0.1;
+
     this.add(this.floor);
     this.raycaster.object = this.floor;
   }
@@ -149,8 +149,8 @@ export default class GameMap extends THREE.Group {
     );
 
     const material = new THREE.MeshToonMaterial({
-      color: 0x7AE2B6,
-      specular: 0x000000,
+      color: theme.water.color,
+      specular: theme.water.specular,
       shininess: 0,
     });
 

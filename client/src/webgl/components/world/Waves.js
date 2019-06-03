@@ -1,6 +1,7 @@
 import LineSystem from '../line/LineSystem';
 import GUI from '@/plugins/GUI';
 import config from '@/config/worlds';
+import theme from "@/config/theme";
 
 export default class Waves {
   constructor({
@@ -32,7 +33,7 @@ export default class Waves {
       });
     }
     this.mesh = this.cluster.mesh;
-    this.mesh.geometry.maxInstancedCount = config.waves.count;
+    this.mesh.geometry.maxInstancedCount = theme.water.waves;
 
     this.initGUI();
   }
