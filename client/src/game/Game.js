@@ -1,6 +1,7 @@
 import * as Reborn from '../../../server/reborn';
 import store from '../services/store';
 import AssetsManager from '../services/assets/Manager';
+import themeConfig from '../config/theme';
 
 /**
  * @extends Reborn.Game
@@ -14,6 +15,11 @@ export default class Game extends Reborn.Game {
     super({ players, seed });
     this.currentModel = null;
     this.clusters = null;
+
+    const themeRank = Math.floor((0.32152425412 * 10000) % 10);
+    themeConfig.currentTheme = themeConfig.themes[themeRank]
+      ? themeConfig.themes[themeRank]
+      : themeConfig.themes[0]
 
     AssetsManager.loader.addGroup({
       name: 'models',

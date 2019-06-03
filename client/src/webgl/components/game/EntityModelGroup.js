@@ -1,6 +1,7 @@
 import animate from '@solaldr/animate';
 import Cluster from '../cluster';
 import GUI from "@/plugins/GUI";
+import modelsConfig from "@/config/models";
 
 export default class EntityModelGroup {
   constructor(name, {
@@ -22,9 +23,12 @@ export default class EntityModelGroup {
       hiddenLocation,
     });
 
-
-
     GUI.world.addMaterial(this.name, this.entityCluster.material);
+    if (modelsConfig.materials[this.name]) {
+      Object.keys(modelsConfig.materials[this.name]).forEach(key => {
+        this.entityCluster.material[key] = modelsConfig.materials[this.name][key];
+      })
+    }
 
     const boxSize = new THREE.Vector3()
       .copy(this.geometry.boundingBox.max)
