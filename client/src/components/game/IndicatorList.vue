@@ -21,6 +21,8 @@
 import money from '../../assets/icons/game/common/money.svg';
 import population from '../../assets/icons/game/common/population.svg';
 import settings from '../../assets/icons/game/common/settings.svg';
+import tree from '../../assets/icons/game/nature/tree.svg';
+import rock from '../../assets/icons/game/nature/rock.svg';
 import HoverInfos from './HoverInfos';
 
 export default {
@@ -40,6 +42,8 @@ export default {
         money,
         population,
         settings,
+        tree,
+        rock,
       },
       indexHovered: false,
     };

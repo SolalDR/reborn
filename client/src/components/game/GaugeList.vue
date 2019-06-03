@@ -23,9 +23,11 @@ import SatisfactionIcon from '../icons/city/SatisfactionIcon';
 import BiodiversityIcon from '../icons/nature/BiodiversityIcon';
 import CivilisationIcon from '../icons/nature/CivilisationIcon';
 import PurityIcon from '../icons/nature/PurityIcon';
+import HumanIcon from '../icons/nature/HumanIcon';
 
 export default {
   components: {
+    HumanIcon,
     PurityIcon,
     CivilisationIcon,
     BiodiversityIcon,

@@ -7,7 +7,7 @@ import Role from "./Role";
 export default new class NatureRole extends Role {
   constructor(){
     super('nature');
-    this.gauges = ['biodiversity', 'purity'];
-    this.indicators = [];
+    this.gauges = ['biodiversity', 'purity', 'human'];
+    this.indicators = ['tree', 'rock'];
   }
 }
