@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "vue-cli-service serve",
+    "webgl": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
@@ -25,7 +26,8 @@
     "vue-material": "latest",
     "vue-router": "^3.0.1",
     "vue-socket.io": "^3.0.7",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "howler": "^2.1.2"
   },
   "devDependencies": {
     "@babel/preset-es2017": "^7.0.0-beta.53",
