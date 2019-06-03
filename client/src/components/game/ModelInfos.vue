@@ -15,9 +15,6 @@
 export default {
   name: 'model-infos',
   props: ['model'],
-  mounted() {
-    console.log(this.model);
-  },
 };
 </script>
 

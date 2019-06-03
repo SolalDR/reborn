@@ -121,7 +121,6 @@ export default {
 
     setCurrentSkill(skill) {
       this.currentSkill = skill;
-      console.log(this.currentSkill);
       this.$webgl.map.gridHelper.setSize(1, 1);
       this.$emit('selectSkill', this.currentSkill);
     },

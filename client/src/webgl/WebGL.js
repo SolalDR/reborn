@@ -71,7 +71,6 @@ export default class WebGL extends Emitter {
   initSkills() {
     this.skills = new Map();
     Object.keys(skills).forEach(key => {
-      console.log(skills, key);
       const skillConstructor = skills[key];
       this.skills.set(key, new skillConstructor());
     });

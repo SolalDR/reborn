@@ -235,7 +235,6 @@ export default {
     },
 
     onLaunchSkill(item) {
-      console.log('onLaunchSkill: skill', this.currentSkill);
       if (!this.currentSkill) return;
       const params = { ...item, skill: this.currentSkill.slug, position: this.$webgl.map.grid.getCell(item.position)};
 
@@ -319,9 +318,13 @@ export default {
 
       this.$webgl.models[model].removeEntity(uuid);
 
-      gridCases.forEach(gridCaseInfos => {
-        this.$webgl.map.grid.get(gridCaseInfos).reference = null;
-      });
+      if (gridCases) {
+        gridCases.forEach(gridCaseInfos => {
+          this.$webgl.map.grid.get(gridCaseInfos).reference = null;
+        });
+      } else {
+        console.warn("Game:onEntityRemove: No gridcases");
+      }
     },
 
 
@@ -376,11 +379,15 @@ export default {
       setTimeout(() => {
         this.$store.commit('debug/log', { content: 'game: initializing', label: 'socket' });
         this.status = 'initializing';
-        if (this.$game.player.role.name === 'nature') {
-          const entities = this.$webgl.fillRandom(['tree', 'rock', 'centenary_tree']);
+        if (this.$game.player.role.name === 'nature' || !config.server.enabled) {
+          const entities = this.$webgl.fillRandom(['millenial_tree', 'common_flower', 'rock', 'centenary_tree']);
           const interval = 5000 / entities.length;
           entities.forEach((entity, i) => {
             setTimeout(() => {
+              if (!config.server.enabled) {
+                this.onEntityAdd({ ...entity, uuid: uuid(), states: ['mounted', 'living'] });
+                return;
+              }
               this.$socket.emit('entity:add', entity);
             }, i * interval);
           });

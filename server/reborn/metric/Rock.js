@@ -1,4 +1,5 @@
 import Metric from "./Metric";
+import models from "../entity/models";
 
 /**
  * Energy metric
@@ -13,9 +14,18 @@ export default class Rock extends Metric {
       value: 0,
       recurentOperation: 0,
     })
+
+    this.list = models.reduce((acc, model) => {
+      if (model.category == 'rock') {
+        acc.push(model.slug);
+      }
+      return acc;
+    }, [])
   }
 
   applyRecurentLogic(game) {
-    this.value = game.entityModels.get('rock').count
+    this.value = this.list.reduce((value, model) => {
+      return value + game.entityModels.get(model).count
+    }, 0)
   }
 }
