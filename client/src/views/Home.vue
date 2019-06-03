@@ -111,6 +111,11 @@ export default {
       linkCopied: false,
     };
   },
+
+  mounted() {
+    // this.$sound.play('ambiance')
+  },
+
   sockets: {
     'room:connect': function (args) {
       this.onRoomConnect(args);

@@ -28,5 +28,23 @@ export default [
     slug: "energy-low",
     test: (game) =>
       game.metrics.get('energy').value < 25
+  },
+  {
+    slug: "rythm-fast",
+    test: (game) =>
+      game.metrics.get('satisfaction').value < 10
+      || game.metrics.get('purity').value < 10
+      || game.metrics.get('biodiversity').value < 10
+      || game.metrics.get('food').value < 10
+      || game.metrics.get('energy').value < 10
+  },
+  {
+    slug: "rythm-medium",
+    test: (game) =>
+      game.metrics.get('satisfaction').value < 25
+      || game.metrics.get('purity').value < 25
+      || game.metrics.get('biodiversity').value < 25
+      || game.metrics.get('food').value < 25
+      || game.metrics.get('energy').value < 25
   }
 ];

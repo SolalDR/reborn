@@ -6,9 +6,10 @@ import { Howl, Howler } from 'howler';
 
 
 class SoundLoader {
-  load(url, onLoad, onProgress, onError) {
+  load(url, onLoad, onProgress, onError, datas = {}) {
     const sound = new Howl({
       src: url,
+      ...datas,
       // preload: true
     });
 

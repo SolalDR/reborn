@@ -1,0 +1,51 @@
+[
+  {
+    "name": "sound_gauge_biodiversity",
+    "path": "gauge/biodiversity.mp3",
+    "datas": {
+      "volume": 0.2
+    }
+  },
+  {
+    "name": "sound_gauge_energy",
+    "path": "gauge/energy.mp3",
+    "datas": {
+      "volume": 0.4
+    }
+  },
+  {
+    "name": "sound_gauge_food",
+    "path": "gauge/food.mp3",
+    "datas": {
+      "volume": 0.8
+    }
+  },
+  {
+    "name": "sound_gauge_human",
+    "path": "gauge/human.mp3",
+    "datas": {
+      "volume": 0.2
+    }
+  },
+  {
+    "name": "sound_gauge_purity",
+    "path": "gauge/purity.mp3",
+    "datas": {
+      "volume": 1.5
+    }
+  },
+  {
+    "name": "sound_gauge_satisfaction",
+    "path": "gauge/satisfaction.mp3",
+    "datas": {
+      "volume": 0.2
+    }
+  },
+  {
+    "name": "sound_gauge_low",
+    "path": "gauge/low.mp3",
+    "datas": {
+      "volume": 0.2
+    }
+  }
+]

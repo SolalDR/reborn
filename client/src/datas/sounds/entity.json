@@ -1,0 +1,51 @@
+[
+  {
+    "name": "sound_city_add_city",
+    "path": "entity/city_add_city.mp3",
+    "datas": {
+      "volume": 0.1
+    }
+  },
+  {
+    "name": "sound_city_add_nature",
+    "path": "entity/city_add_nature.mp3",
+    "datas": {
+      "volume": 0.1
+    }
+  },
+  {
+    "name": "sound_city_remove",
+    "path": "entity/city_remove.mp3",
+    "datas": {
+      "volume": 0.1
+    }
+  },
+  {
+    "name": "sound_nature_add_city",
+    "path": "entity/nature_add_city.mp3",
+    "datas": {
+      "volume": 0.1
+    }
+  },
+  {
+    "name": "sound_nature_add_rock",
+    "path": "entity/nature_add_rock.mp3",
+    "datas": {
+      "volume": 0.4
+    }
+  },
+  {
+    "name": "sound_nature_add_nature",
+    "path": "entity/nature_add_tree.mp3",
+    "datas": {
+      "volume": 0.1
+    }
+  },
+  {
+    "name": "sound_nature_remove",
+    "path": "entity/nature_remove.mp3",
+    "datas": {
+      "volume": 0.1
+    }
+  }
+]

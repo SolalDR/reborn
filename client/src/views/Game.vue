@@ -116,6 +116,7 @@ export default {
     'skill:start': function(args) { this.onSkillStart(args) },
     'skill:available': function(args) { this.onSkillAvailable(args) },
     'skill:unavailable': function(args) { this.onSkillUnavailable(args) },
+    'rythm:change': function(args) { this.onRythmChange(args) },
   },
 
   created() {
@@ -197,6 +198,7 @@ export default {
       this.$store.commit('debug/log', { content: 'game: onWebGLInit', label: 'webgl' });
       this.$store.commit('debug/log', { content: 'game: pending', label: 'socket' });
       this.status = 'pending';
+      this.$sound.play('ambiance_sea');
 
       this.$socket.emit('grid:ready', this.$webgl.map.grid.infos);
 
@@ -292,6 +294,14 @@ export default {
           }
         });
 
+        const prefix = this.$game.player.role.name + '_add_';
+        const entityModel = this.$game.entityModels.get(item.model);
+        if (this.$sound.has(prefix + entityModel.category)) {
+          this.$sound.play(prefix + entityModel.category);
+        } else {
+          this.$sound.play(prefix + entityModel.role);
+        }
+
         model.addItem({
           ...item,
           position: new THREE.Vector3(item.position.x, item.position.y, item.position.z),
@@ -302,6 +312,11 @@ export default {
 
     onEntityRemove({ model, uuid, gridCases }) {
       this.$store.commit('debug/log', { content: `entity:remove (receive) with uuid: ${uuid}`, label: 'socket' });
+
+      const prefix = this.$game.player.role.name + '_remove';
+      const entityModel = this.$game.entityModels.get(model);
+      this.$sound.play(prefix);
+
       this.$webgl.models[model].removeEntity(uuid);
 
       gridCases.forEach(gridCaseInfos => {
@@ -314,6 +329,7 @@ export default {
       const skillEffect = this.$webgl.skills.get(item.skill);
       if (!skillEffect) return;
       skillEffect.launch(item, this.$webgl);
+      this.$sound.play('skill_earthquake');
     },
 
     onSkillAvailable(args) {
@@ -324,6 +340,10 @@ export default {
     onSkillUnavailable(args) {
       console.log(args);
       // TODO
+    },
+
+    onRythmChange(speed) {
+      this.$sound.playSample('drum_' + speed);
     },
 
     onTimelineTick({ metrics, elapsed }) {
@@ -371,6 +391,23 @@ export default {
         this.$store.commit('debug/log', { content: 'game: playing', label: 'socket' });
         this.isStarting = false;
         this.status = 'playing';
+
+        this.$sound.addSample('drum_slow', 2000, [
+          { name: 'drum_slow_1', delay: 0 },
+          { name: 'drum_slow_2', delay: 1500 },
+        ]);
+
+        this.$sound.addSample('drum_medium', 1500, [
+          { name: 'drum_medium_1', delay: 0 },
+          { name: 'drum_medium_2', delay: 1000 },
+        ]);
+
+        this.$sound.addSample('drum_fast', 1000, [
+          { name: 'drum_fast_1', delay: 0 },
+          { name: 'drum_fast_2', delay: 750 },
+        ]);
+
+        this.$sound.playSample('drum_slow');
       }, Math.max(0, timeout + 1));
     },
 

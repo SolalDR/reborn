@@ -5,7 +5,7 @@
         class="gauge"
         @mouseover="indexHovered = index"
         @mouseleave="indexHovered = null">
-      <component :is="`${gauge.slug}-icon`"/>
+      <component :is="`${gauge.slug}-icon`" @mouseover.native="onMouseEnter(gauge, index)"/>
       <div class="gauge-fill" :style="{'height': `${gauge.value}%`}"></div>
 
       <transition name="fade">
@@ -45,6 +45,12 @@ export default {
       indexHovered: false,
     };
   },
+  methods: {
+    onMouseEnter(gauge, index) {
+      if (index === this.indexHovered) return;
+      this.$sound.play('gauge_' + gauge.slug);
+    }
+  }
 };
 </script>
 
