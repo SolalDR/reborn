@@ -1,21 +1,24 @@
 <template>
   <main class="game">
     <scene @mounted="onWebGLInit"/>
+    <div v-if="isLoading" class="game__loading-overlay"></div>
 
     <transition name="fade-down">
-      <p class="mute__cta cta" :class="{'mute__cta--muted': isMuted}" @click="muteAll">Chuuut</p>
+      <p v-if="status !== 'playing' && status !== 'initializing'"
+         @click="muteAll"
+         class="mute__cta cta"
+         :class="{'mute__cta--muted': isMuted}">
+        Chuuut
+      </p>
     </transition>
 
     <!-- IsStarting -->
-    <transition name="fade">
-      <overlay v-if="isStarting">
-        <transition name="fade" mode="out-in">
-          <loader v-if="status === 'loading'"/>
-          <introduction v-if="status === 'pending'" @start="onPlayerReady"/>
-          <countdown v-if="status === 'initializing'"/>
-        </transition>
-      </overlay>
-    </transition>
+    <overlay v-if="isStarting" :is-transparent="!isLoading">
+      <transition name="fade" mode="out-in">
+        <introduction v-if="status === 'pending'" @start="onPlayerReady"/>
+        <countdown v-if="status === 'initializing'"/>
+      </transition>
+    </overlay>
 
     <!-- IsPlaying -->
     <div class="game__interface" v-if="interfaceVisible">
@@ -31,22 +34,23 @@
     </div>
 
     <!-- IsEnded -->
-    <transition name="fade">
-      <overlay v-if="isEnded">
-        <transition name="fade" mode="out-in">
-          <explanations v-if="status === 'explanations'"
-                        @updateStatus="updateStatus"
-                        :tryAgain="tryAgain"/>
+    <overlay v-if="isEnded">
+      <transition name="fade" mode="out-in">
+        <explanations v-if="status === 'explanations'"
+                      @updateStatus="updateStatus"
+                      :tryAgain="tryAgain"/>
 
-          <saving v-if="status === 'saving'"
-                  @updateStatus="updateStatus"
-                  :tryAgain="tryAgain"/>
-        </transition>
-      </overlay>
-    </transition>
+        <saving v-if="status === 'saving'"
+                @updateStatus="updateStatus"
+                :tryAgain="tryAgain"/>
+      </transition>
+    </overlay>
 
     <webgl-component :position="selectedEntity.position" v-if="selectedEntity">
-      <p class="cta--bordered" @click="onRemoveItem">Delete <button @click.stop="selectedEntity = null">X</button></p>
+      <p class="cta--bordered"
+         @click="onRemoveItem">
+        Delete <button @click.stop="selectedEntity = null">X</button>
+      </p>
     </webgl-component>
   </main>
 </template>
@@ -55,7 +59,6 @@
 import Vue from 'vue';
 import uuid from '@/utils/uuid';
 import Reborn from '../game';
-import Loader from '../components/global/Loader.vue';
 import Scene from '../components/game/Scene.vue';
 import Introduction from '../components/game/Introduction.vue';
 import Countdown from '../components/game/Countdown.vue';
@@ -86,7 +89,6 @@ export default {
     IndicatorList,
     Scene,
     Inventory,
-    Loader,
     Introduction,
     Countdown,
     WebglComponent,
@@ -94,9 +96,10 @@ export default {
 
   data() {
     return {
-      status: null, // null => loading => pending => initializing => playing => explanations => saving => leaderboard
+      status: null, // null => pending => initializing => playing => explanations => saving => leaderboard
       isStarting: true,
       isEnded: false,
+      isLoading: true,
       isMuted: false,
       showSettings: false,
       currentModel: null,
@@ -128,7 +131,7 @@ export default {
       this.$router.push('/');
       return;
     }
-    this.status = 'loading';
+    this.status = 'pending';
 
     // Create game
     Vue.prototype.$game = new Reborn.Game({
@@ -206,7 +209,9 @@ export default {
     onWebGLInit() {
       this.$store.commit('debug/log', { content: 'game: onWebGLInit', label: 'webgl' });
       this.$store.commit('debug/log', { content: 'game: pending', label: 'socket' });
-      this.status = 'pending';
+      setTimeout(() => {
+        this.isLoading = false;
+      }, 2000);
 
       this.$socket.emit('grid:ready', this.$webgl.map.grid.infos);
 
@@ -407,6 +412,15 @@ export default {
   width: 100%;
   height: 100vh;
   overflow: hidden;
+
+  &__loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: getColor(mains, primary);
+  }
 
   &__interface {
     position: static;

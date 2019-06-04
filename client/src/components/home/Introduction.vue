@@ -1,7 +1,9 @@
 <template>
   <overlay :appear="false" :is-transparent="false" :bottom-waves="true">
     <template #default>
-      <p v-for="text in introTexts[currentIndex]" v-html="formatText(text)" class="introduction__text"></p>
+      <div class="introduction__texts">
+        <p v-for="text in introTexts[currentIndex]" v-html="formatText(text)" class="text"></p>
+      </div>
     </template>
 
     <template #footer>
@@ -29,11 +31,11 @@ export default {
     };
   },
   mounted() {
-    const updateInterval = 1000;
+    const updateInterval = 8000;
 
     this.interval = setInterval(() => {
       this.updateCurrentIndex();
-    }, updateInterval)
+    }, updateInterval);
   },
   methods: {
     updateCurrentIndex() {
@@ -53,21 +55,18 @@ export default {
 </script>
 
 <style lang="scss">
+  $animation-duration: 8s;
+
   .introduction {
-    &__text {
-      $animation-duration: 1s;
+    &__texts {
+      animation: scaleContent $animation-duration linear infinite;
 
-      margin: 0 auto;
-      text-align: center;
-      @include fontSize(30);
-      line-height: 4.5rem;
-      animation: scaleContent $animation-duration ease-in infinite;
-      @include letterBounce($animation-duration);
-    }
-
-    &__skip {
-      &:hover {
-        transform: scale(1.05);
+      .text {
+        margin: 0 auto;
+        text-align: center;
+        @include fontSize(30);
+        line-height: 4.2rem;
+        @include letterBounce($animation-duration, true);
       }
     }
   }

@@ -1,22 +1,10 @@
 <template>
-  <overlay>
-    <div class="join">
-      <loader/>
-    </div>
-  </overlay>
+  <div class="join"></div>
 </template>
 
 <script>
-import Loader from '../../components/global/Loader';
-import Overlay from '../../components/global/Overlay';
-
 export default {
   name: 'RoomJoin',
-
-  components: {
-    Overlay,
-    Loader,
-  },
 
   sockets: {
     'room:connect': function (args) {
@@ -66,7 +54,8 @@ export default {
 
 <style lang="scss">
   .join {
-    @include useFlex();
+    width: 100vw;
     height: 100vh;
+    background-color: getColor(mains, primary);
   }
 </style>

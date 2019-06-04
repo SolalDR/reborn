@@ -144,7 +144,7 @@ export default {
 
 <style lang="scss" scoped>
   $animation-duration: .8s;
-  $delayed-value: .5s;
+  $delayed-value: .7s;
 
   @keyframes logo-fade-up {
     0% {
