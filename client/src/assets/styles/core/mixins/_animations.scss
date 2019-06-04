@@ -1,13 +1,19 @@
-@mixin letterBounce($duration: 5s) {
+@mixin letterBounce($duration: 5s, $bounce-out: false) {
+  $animation-name: "";
+  @if($bounce-out) {
+    $animation-name: letterBounceInOut;
+  } @else {
+    $animation-name: letterBounceIn;
+  }
+
   & > span {
     display: inline-block;
     opacity: 0;
-    display: inline-block;
     animation: {
-      name: letterBounce;
+      name: $animation-name;
       iteration-count: 1;
       duration: $duration;
-      timing-function: cubic-bezier(0.82, 0.04, 0, 1.04);
+      timing-function: cubic-bezier(0, .01, 0, 1);
     }
     animation-fill-mode: forwards;
 
@@ -17,16 +23,27 @@
       }
     }
 
-    @keyframes letterBounce {
+    @keyframes letterBounceIn {
       0% {
         opacity: 0;
         transform: translateY(200%);
       }
-      25% {
+      100% {
         opacity: 1;
         transform: translateY(0);
       }
-      75% {
+    }
+
+    @keyframes letterBounceInOut {
+      0% {
+        opacity: 0;
+        transform: translateY(200%);
+      }
+      15% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      85% {
         opacity: 1;
         transform: translateY(0);
       }

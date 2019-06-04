@@ -74,13 +74,11 @@ export default {
   .overlay {
     z-index: 1;
     position: fixed;
-    //
-    top: 20%;
+    top: 0;
     left: 0;
     @include useFlex();
     width: 100vw;
-    //
-    height: 60vh;
+    height: 100vh;
     background-color: getColor(mains, primary);
     transition: background-color .65s ease;
 
