@@ -8,6 +8,12 @@ html {
   font-size: 62.5%;
 }
 
+@media (min-width: 2080px) {
+  html {
+    font-size: 80%;
+  }
+}
+
 body {
   height: 100%;
   overflow: hidden;

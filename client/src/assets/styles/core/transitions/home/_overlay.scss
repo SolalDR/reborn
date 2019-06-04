@@ -1,8 +1,8 @@
 .overlay-enter-active {
-  transition: all 1.2s cubic-bezier(0.82, 0.04, 0, 1.04);
+  transition: transform 1.7s cubic-bezier(0.82, 0.04, 0, 1.04);
 }
 .overlay-leave-active {
-  transition: all 1.8s cubic-bezier(0.82, 0.04, 0, 1.04);
+  transition: transform 2s cubic-bezier(0.82, 0.04, 0, 1.04);
 }
 
 $size: 110vh;
