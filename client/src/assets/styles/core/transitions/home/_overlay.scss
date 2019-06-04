@@ -1,13 +1,14 @@
 .overlay-enter-active {
-  transition: all .5s ease;
-}
-.overlay-leave-active {
   transition: all 1.2s cubic-bezier(0.82, 0.04, 0, 1.04);
 }
+.overlay-leave-active {
+  transition: all 1.8s cubic-bezier(0.82, 0.04, 0, 1.04);
+}
 
+$size: 110vh;
 .overlay-enter {
-  transform: translateY(100%);
+  transform: translateY($size);
 }
 .overlay-leave-to {
-  transform: translateY(-100%);
+  transform: translateY(-$size);
 }

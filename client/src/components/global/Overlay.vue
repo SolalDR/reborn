@@ -3,6 +3,10 @@
               :appear="appear ? true : false"
               :leave-to-class="fadeOut ? 'fade-leave-to' : 'overlay-leave-to'">
     <div class="overlay" :class="{'overlay--transparent': isTransparent}">
+      <div class="overlay__waves" :class="{'overlay__waves--bottom': bottomWaves}">
+        <div class="wave" :style="{'background-image': `url('${waveSrc}')`}"></div>
+      </div>
+
       <div class="overlay__content">
         <div class="cross" v-if="hasCross" @click="$emit('closeOverlay')">
           <span class="line"></span>
@@ -24,8 +28,15 @@
 </template>
 
 <script>
+import waveSrc from '@/assets/img/home/wave.png';
+
 export default {
   name: 'overlay',
+  data() {
+    return {
+      waveSrc: waveSrc,
+    };
+  },
   props: {
     appear: {
       type: Boolean,
@@ -43,14 +54,16 @@ export default {
       type: Boolean,
       default: false,
     },
+    bottomWaves: {
+      type: Boolean,
+      default: false,
+    },
   },
 };
 </script>
 
 <style lang="scss">
-  .test {
-    opacity: 0;
-  }
+  $opacity: .75;
 
   .overlay {
     z-index: 1;
@@ -63,7 +76,52 @@ export default {
     background-color: getColor(mains, primary);
 
     &--transparent {
-      background-color: rgba(getColor(mains, primary), .75);
+      background-color: rgba(getColor(mains, primary), $opacity);
+
+      .overlay__waves {
+        opacity: $opacity;
+      }
+    }
+
+    &__waves {
+      overflow: hidden;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 10vh;
+      transform: translateY(-100%);
+
+      @keyframes move_wave {
+        0% {
+          transform: translateX(0) scaleY(1)
+        }
+        50% {
+          transform: translateX(-25%) scaleY(0.55)
+        }
+        100% {
+          transform: translateX(-50%) scaleY(1)
+        }
+      }
+
+      .wave {
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 200%;
+        height: 100%;
+        background-repeat: repeat no-repeat;
+        background-position: 0 bottom;
+        transform-origin: center bottom;
+        background-size: 50% 100px;
+        animation: move_wave 5s linear infinite;
+      }
+
+      &--bottom {
+        top: initial;
+        bottom: 0;
+        transform: translateY(100%) rotate(180deg);
+      }
     }
 
     &__content {
