@@ -18,7 +18,7 @@
       <gauge-list :list="this.gauges"/>
       <years-counter :currentYear="year"/>
       <indicator-list :list="this.indicators" @showSettings="showSettings = true"/>
-      <inventory :money="money" @selectModel="onSelectModel" @selectSkill="onSelectSkill"/>
+      <inventory :money="money" @selectModel="onSelectModel" @selectSkill="onLaunchSkill"/>
       <model-infos :model="currentModel"/>
       <flash-news/>
       <transition name="fade">
@@ -179,18 +179,7 @@ export default {
     // Quand un utilisateur click sur un model du rack
     onSelectModel(model) {
       if (model) {
-        // TODO: change to selectedModel
-        this.currentSkill = null;
         this.currentModel = model;
-      }
-    },
-
-    // Quand un utilisateur click sur un skill du rack
-    onSelectSkill(skill) {
-      if (skill) {
-        // TODO: change to selectedModel
-        this.currentModel = null;
-        this.currentSkill = skill;
       }
     },
 
@@ -204,9 +193,6 @@ export default {
 
       // When clicking an empty cell
       this.$webgl.on('selectCell', item => this.onAddItem(item));
-
-      // When clicking on clickMap
-      this.$webgl.on('clickMap', item => this.onLaunchSkill(item));
 
       // When user click on an object in the scene
       this.$webgl.on('selectItem', (item) => {
@@ -234,17 +220,14 @@ export default {
       console.log('Try Again');
     },
 
-    onLaunchSkill(item) {
-      if (!this.currentSkill) return;
-      const params = { ...item, skill: this.currentSkill.slug, position: this.$webgl.map.grid.getCell(item.position)};
-
+    onLaunchSkill(skill) {
+      const requestParams = {...skill, skill: skill.slug};
       if (!config.server.enabled) {
-        const zone = this.$webgl.map.grid.captureZone(params.position, this.currentSkill.zoneRadius);
-        this.onSkillStart({ ...params, gridCases: zone });
+        this.onSkillStart(requestParams);
         return;
       }
       this.$store.commit('debug/log', { content: 'skill:start (emit)', label: 'socket' });
-      this.$socket.emit('skill:start', params);
+      this.$socket.emit('skill:start', requestParams);
     },
 
     onAddItem(item) {

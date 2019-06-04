@@ -4,8 +4,7 @@ export default [
     slug: "earthquake",
     role: "nature",
     duration: 7000,
-    constraint: "energy-low",
-    category: "skill",
-    zoneRadius: 8,
+    constraint: "purity-low",
+    category: "skill"
   },
 ];

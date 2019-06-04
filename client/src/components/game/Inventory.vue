@@ -75,8 +75,6 @@ export default {
 
     if (this.models[0]) {
       this.setCurrentModel(this.models[0]);
-    } else if(this.skills[0]) {
-      this.setCurrentSkill(this.skills[0]);
     }
   },
 
@@ -121,7 +119,6 @@ export default {
 
     setCurrentSkill(skill) {
       this.currentSkill = skill;
-      this.$webgl.map.gridHelper.setSize(1, 1);
       this.$emit('selectSkill', this.currentSkill);
     },
   },
