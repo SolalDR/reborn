@@ -3,7 +3,7 @@
     <scene @mounted="onWebGLInit"/>
 
     <transition name="fade-down">
-      <p class="mute__cta cta" :class="{'mute__cta--muted': isMuted}" @click="muteAll">Mute</p>
+      <p class="mute__cta cta" :class="{'mute__cta--muted': isMuted}" @click="muteAll">Chuuut</p>
     </transition>
 
     <!-- IsStarting -->

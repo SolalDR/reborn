@@ -3,12 +3,12 @@
     <video class="trailer" src="@/assets/video/trailer.mp4" autoplay playsinline muted loop></video>
 
     <transition name="fade-down">
-      <p class="mute__cta" :class="{'mute__cta--muted': isMuted}" @click="muteAll">Mute</p>
+      <p class="mute__cta" :class="{'mute__cta--muted': isMuted}" @click="muteAll">Chuuut</p>
     </transition>
 
     <introduction v-if="status === 'introduction'" :skip-intro="goToLanding"/>
     <landing v-if="status === 'landing'"/>
-    <about v-if="status === 'about'" :closeOverlay="goToLanding"/>
+    <about v-if="status === 'about'" :close-overlay="goToLanding"/>
 
     <transition name="fade-up">
       <p v-if="status === 'landing'" class="about__cta cta--absolute" @click="status = 'about'">A Propos</p>

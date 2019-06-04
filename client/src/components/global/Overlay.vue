@@ -1,5 +1,7 @@
 <template>
-  <transition name="overlay" :leave-to-class="fadeOut ? 'fade-leave-to' : 'overlay-leave-to'">
+  <transition name="overlay"
+              :appear="appear ? true : false"
+              :leave-to-class="fadeOut ? 'fade-leave-to' : 'overlay-leave-to'">
     <div class="overlay" :class="{'overlay--transparent': isTransparent}">
       <div class="overlay__content">
         <div class="cross" v-if="hasCross" @click="$emit('closeOverlay')">
@@ -13,7 +15,7 @@
 
         <slot></slot>
 
-        <div class="footer">
+        <div class="footer" ref="footer">
           <slot name="footer"></slot>
         </div>
       </div>
@@ -25,6 +27,10 @@
 export default {
   name: 'overlay',
   props: {
+    appear: {
+      type: Boolean,
+      default: true,
+    },
     fadeOut: {
       type: Boolean,
       default: false,
@@ -36,12 +42,16 @@ export default {
     hasCross: {
       type: Boolean,
       default: false,
-    }
+    },
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+  .test {
+    opacity: 0;
+  }
+
   .overlay {
     z-index: 1;
     position: fixed;

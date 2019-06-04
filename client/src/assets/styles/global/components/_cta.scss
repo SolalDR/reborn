@@ -28,7 +28,7 @@
     border: .2rem solid getColor(basics, black);
     border-radius: 1rem;
     transition: all .3s ease;
-  
+
     &:hover {
       box-shadow: .3rem .3rem 0 0 rgba(0, 0, 0, 1);
       transform: translateX(-.3rem) scale(1.05);
@@ -52,11 +52,29 @@
   @include fontSize(24);
   transition: opacity .3s ease;
 
-  &--muted {
-    opacity: .3;
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    width: 0;
+    height: .3rem;
+    background-color: getColor(basics, black);
+    transition: width .3s ease;
   }
 
-  &:hover {
-    opacity: 1;
+  &--muted {
+    opacity: .3;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    &::after {
+      left: 0;
+      right: inherit;
+      width: 100%;
+    }
   }
 }

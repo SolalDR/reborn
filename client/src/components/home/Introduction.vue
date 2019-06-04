@@ -1,5 +1,5 @@
 <template>
-  <overlay :is-transparent="false">
+  <overlay :appear="false" :is-transparent="false">
     <template #default>
       <p v-for="text in introTexts[currentIndex]" v-html="formatText(text)" class="introduction__text"></p>
     </template>

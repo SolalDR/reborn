@@ -6,7 +6,7 @@
 }
 
 .overlay-enter {
-  opacity: 0;
+  transform: translateY(100%);
 }
 .overlay-leave-to {
   transform: translateY(-100%);

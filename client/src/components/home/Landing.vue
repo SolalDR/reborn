@@ -146,9 +146,19 @@ export default {
   $animation-duration: .8s;
   $delayed-value: .5s;
 
-  @keyframes fade-up {
+  @keyframes logo-fade-up {
     0% {
-      transform: translateY(200%);
+      transform: translateY(140px);
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes actions-fade-up {
+    0% {
+      transform: translateY(100px);
     }
 
     100% {
@@ -170,7 +180,7 @@ export default {
       display: block;
       margin: 0 auto;
       width: 80%;
-      animation: fade-up $animation-duration ease $delayed-value;
+      animation: logo-fade-up $animation-duration ease $delayed-value;
       animation-fill-mode: forwards;
     }
 
@@ -179,7 +189,7 @@ export default {
       @include useFlex(space-between, flex-start);
       margin: 7rem auto 0;
       width: 61rem;
-      animation: fade-up $animation-duration ease $delayed-value + .2s;
+      animation: actions-fade-up $animation-duration ease $delayed-value + .2s;
       animation-fill-mode: forwards;
 
       &__item {
