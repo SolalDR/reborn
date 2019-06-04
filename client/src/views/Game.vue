@@ -315,7 +315,7 @@ export default {
       const skillEffect = this.$webgl.skills.get(item.skill);
       if (!skillEffect) return;
       skillEffect.launch(item, this.$webgl);
-      this.$sound.play('skill_earthquake');
+      this.$sound.play('skill_' + item.skill);
     },
 
     onSkillAvailable(args) {
