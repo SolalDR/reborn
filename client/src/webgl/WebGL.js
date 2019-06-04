@@ -72,7 +72,7 @@ export default class WebGL extends Emitter {
     this.skills = new Map();
     Object.keys(skills).forEach(key => {
       const skillConstructor = skills[key];
-      this.skills.set(key, new skillConstructor());
+      this.skills.set(key, new skillConstructor(this));
     });
   }
 
@@ -324,7 +324,7 @@ export default class WebGL extends Emitter {
     if (this.map) this.map.gridHelper.render();
     if (this.waves) this.waves.render();
     if (this.explosionEffect) this.explosionEffect.render();
-
+    if (this.smokes) this.smokes.render();
     this.worldScreen.render();
     this.renderer.render();
   }

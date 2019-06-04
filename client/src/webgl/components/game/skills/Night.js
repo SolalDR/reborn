@@ -22,7 +22,7 @@ export default class Night {
         THREE.Math.lerp(fromAmbientColor.g, toAmbientColor.g, value),
         THREE.Math.lerp(fromAmbientColor.b, toAmbientColor.b, value)
       );
-    })
+    });
 
     setTimeout(() => {
       animate.add({
@@ -35,7 +35,7 @@ export default class Night {
           THREE.Math.lerp(toAmbientColor.g, fromAmbientColor.g, value),
           THREE.Math.lerp(toAmbientColor.b, fromAmbientColor.b, value)
         );
-      })
+      });
     }, duration );
   }
 }
