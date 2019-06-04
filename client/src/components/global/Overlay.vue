@@ -18,9 +18,11 @@
           <slot name="header"></slot>
         </div>
 
-        <slot></slot>
+        <div class="body">
+          <slot></slot>
+        </div>
 
-        <div class="footer" ref="footer">
+        <div class="footer">
           <slot name="footer"></slot>
         </div>
       </div>
@@ -62,9 +64,6 @@ export default {
       default: false,
     },
   },
-  beforeDestroy() {
-    this.$refs.footer.classList.add('footer--leave');
-  },
 };
 </script>
 
@@ -96,7 +95,7 @@ export default {
       top: 1px;
       left: 0;
       width: 100%;
-      height: 10vh;
+      height: 20vh;
       transform: translateY(-100%);
 
       @keyframes move-wave {
@@ -120,7 +119,7 @@ export default {
         background-repeat: repeat no-repeat;
         background-position: 0 bottom;
         transform-origin: center bottom;
-        background-size: 50% 100px;
+        background-size: 50% 50%;
 
         &:first-of-type {
           bottom: 25px;
@@ -182,6 +181,12 @@ export default {
         }
       }
 
+      .header,
+      .body,
+      .footer {
+        @include letterBounce(1.8s);
+      }
+
       .footer {
         opacity: 0;
         animation: fadeInUp 2s cubic-bezier(0.82, 0.04, 0, 1.04) 1 1.2s;
@@ -197,10 +202,6 @@ export default {
           100% {
             opacity: 1;
           }
-        }
-
-        &--leave {
-          background-color: red;
         }
       }
     }

@@ -5,7 +5,7 @@
   transition: transform 2s cubic-bezier(0.82, 0.04, 0, 1.04);
 }
 
-$size: 110vh;
+$size: 120vh;
 .overlay-enter {
   transform: translateY($size);
 }

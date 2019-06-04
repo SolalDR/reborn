@@ -4,6 +4,7 @@ import animate from '@solaldr/animate';
 import App from './App.vue';
 import router from './router';
 import store from './services/store';
+import splitWithSpan from './utils/split-with-span'
 
 // Plugins
 import Viewport from './plugins/Viewport';
@@ -38,6 +39,8 @@ Vue.use(Socket);
 
 Vue.component('router-link', Vue.options.components.RouterLink);
 Vue.component('router-view', Vue.options.components.RouterView);
+
+Vue.prototype.$splitWithSpan = splitWithSpan;
 
 new Vue({
   router,

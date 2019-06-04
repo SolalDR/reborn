@@ -1,34 +1,37 @@
 <template>
   <overlay :has-cross="true" :fade-out="true" @closeOverlay="closeOverlay">
     <template #header>
-      <h2 class="title--wide">À propos</h2>
+      <h2 class="title--wide" v-html="$splitWithSpan(texts.title)"></h2>
     </template>
 
     <template #default>
       <div class="about">
-        <p class="about__title">Ce site a été réalisé par une magic team.</p>
+        <p class="about__title" v-html="$splitWithSpan(texts.content.title)"></p>
 
         <div class="about__item">
-          <p>Designers</p>
+          <p v-html="$splitWithSpan(texts.content.designers.title)"></p>
 
-          <p>Allan Michel</p>
-          <p>Matthieu Pajot</p>
+          <p v-for="(member , index) in texts.content.designers.members"
+             :key="`designer-member-${index}`"
+             v-html="$splitWithSpan(member)"></p>
         </div>
 
         <div class="about__item">
-          <p>Développeurs</p>
+          <p v-html="$splitWithSpan(texts.content.developers.title)"></p>
 
-          <p>Solal Revel</p>
-          <p>Erwann Letue</p>
+          <p v-for="(member , index) in texts.content.developers.members"
+             :key="`developer-member-${index}`"
+             v-html="$splitWithSpan(member)"></p>
         </div>
 
-        <p>Merci aux équipes pédagogiques de Gobelins pour leur aide dans le développement du projet.</p>
+        <p v-html="$splitWithSpan(texts.content.thanks)"></p>
       </div>
     </template>
   </overlay>
 </template>
 
 <script>
+import texts from '@/contents/home/about';
 import Overlay from '../global/Overlay';
 
 export default {
@@ -37,13 +40,16 @@ export default {
     Overlay,
   },
   props: ['closeOverlay'],
+  data() {
+    return {
+      texts: texts,
+    };
+  },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .about {
-    max-width: 33rem;
-
     &__title,
     &__item {
       margin-bottom: $space-xl;

@@ -6,7 +6,7 @@
     $animation-name: letterBounceIn;
   }
 
-  & > span {
+  span {
     display: inline-block;
     opacity: 0;
     animation: {
@@ -26,7 +26,7 @@
     @keyframes letterBounceIn {
       0% {
         opacity: 0;
-        transform: translateY(200%);
+        transform: translateY(40rem);
       }
       100% {
         opacity: 1;

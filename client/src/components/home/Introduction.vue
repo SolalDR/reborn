@@ -2,7 +2,7 @@
   <overlay :appear="false" :is-transparent="false" :bottom-waves="true">
     <template #default>
       <div class="introduction__texts">
-        <p v-for="text in introTexts[currentIndex]" v-html="formatText(text)" class="text"></p>
+        <p v-for="text in texts[currentIndex]" v-html="$splitWithSpan(text)" class="text"></p>
       </div>
     </template>
 
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import introTexts from '@/contents/introduction-texts'
+import texts from '@/contents/home/introduction'
 import Overlay from '../global/Overlay';
 
 export default {
@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       currentIndex: 0,
-      introTexts: introTexts,
+      texts: texts,
     };
   },
   mounted() {
@@ -39,16 +39,12 @@ export default {
   },
   methods: {
     updateCurrentIndex() {
-      if (this.currentIndex < this.introTexts.length - 1) {
+      if (this.currentIndex < this.texts.length - 1) {
         this.currentIndex++;
       } else {
         this.skipIntro();
         clearInterval(this.interval);
       }
-    },
-    formatText(text) {
-      const regex = /([^\x00-\x80]|\w|\.|\,|\-|\?)/g;
-      return text.replace(regex, '<span class="letter">$&</span>');
     },
   },
 };
