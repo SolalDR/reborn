@@ -189,6 +189,8 @@ export default class WebGL extends Emitter {
     this.directionalLight.shadow.mapSize.height = 2048;
     this.directionalLight.shadow.bias = 0.005;
 
+    GUI.rendering.add(this.directionalLight.shadow, 'bias').step(0.0001)
+
     this.scene.add(this.directionalLight);
 
     this.directionalLight.position.copy(theme.light.directional.position);

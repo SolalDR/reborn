@@ -65,7 +65,7 @@ export default class GameMap extends THREE.Group {
     this.floor.receiveShadow = true;
     this.floor.geometry.computeFaceNormals();
     this.floor.geometry.computeVertexNormals();
-    this.floor.position.y = -0.1;
+    this.floor.position.y = 0.1;
 
     this.add(this.floor);
     this.raycaster.object = this.floor;

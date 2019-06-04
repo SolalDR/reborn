@@ -28,7 +28,7 @@ class Cluster {
 
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.mesh.castShadow = true;
-    this.mesh.receiveShadow = true;
+    this.mesh.receiveShadow = false;
 
     this.mesh.customDepthMaterial = this.material.clone();
     this.mesh.customDepthMaterial.depthPacking = THREE.RGBADepthPacking;
