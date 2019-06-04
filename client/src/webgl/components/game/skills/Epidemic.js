@@ -27,7 +27,6 @@ export default class Epidemic {
     var toDirectionalColor = new THREE.Color(1, 0, 0);
     this.smoke.mesh.material.uniforms.dashOffset.value = 2;
     this.scene.add(this.smoke.mesh);
-    console.log(this.smoke);
 
     animate.add({
       duration: 2000
