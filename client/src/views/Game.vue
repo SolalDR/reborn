@@ -34,7 +34,7 @@
     </div>
 
     <!-- IsEnded -->
-    <overlay v-if="isEnded">
+    <overlay v-if="isEnded" :fade-in="true">
       <transition name="fade" mode="out-in">
         <explanations v-if="status === 'explanations'"
                       @updateStatus="updateStatus"

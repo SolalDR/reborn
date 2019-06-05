@@ -1,6 +1,7 @@
 <template>
   <transition name="overlay"
               :appear="appear ? true : false"
+              :enter-class="fadeIn ? 'fade-enter' : 'overlay-enter'"
               :leave-active-class="fadeOut ? 'fade-leave-active' : 'overlay-leave-active'"
               :leave-to-class="fadeOut ? 'fade-leave-to' : 'overlay-leave-to'">
     <div class="overlay">
@@ -49,6 +50,10 @@ export default {
     appear: {
       type: Boolean,
       default: true,
+    },
+    fadeIn: {
+      type: Boolean,
+      default: false,
     },
     fadeOut: {
       type: Boolean,
@@ -156,6 +161,7 @@ export default {
     }
 
     &__content {
+      z-index: 1;
       text-align: center;
       @include letterBounce(1.8s, $animations-delay);
 
@@ -167,29 +173,22 @@ export default {
         right: 10%;
         width: 4.3rem;
         height: 4.3rem;
-        animation: cross-enter 1.8s cubic-bezier(0, .01, 0, 1) $animations-delay * 1.6;
+        animation: cross-enter 1.8s cubic-bezier(0, .01, 0, 1) $animations-delay;
         animation-fill-mode: forwards;
+        transition: transform .5s ease;
 
         @keyframes cross-enter {
           0% {
-            transform: translateX(2.5rem);
+            top: 20rem;
           }
           100% {
             opacity: 1;
-            transform: translateX(-2.5rem);
+            top: 7rem;
           }
         }
 
         &:hover {
-          .line {
-            &:first-of-type {
-              transform: translateY(-50%) rotate(225deg);
-            }
-
-            &:last-of-type {
-              transform: translateY(-50%) rotate(-225deg);
-            }
-          }
+          transform: scale(1.2);
         }
 
         .line {
@@ -200,7 +199,6 @@ export default {
           width: .35rem;
           height: 100%;
           background-color: getColor(basics, black);
-          transition: all .5s ease;
 
           &:first-of-type {
             transform: translateY(-50%) rotate(45deg);
