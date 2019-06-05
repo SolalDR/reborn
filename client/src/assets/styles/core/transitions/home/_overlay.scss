@@ -1,0 +1,53 @@
+$enter-duration: 1.7s;
+$leave-duration: 2s;
+
+.overlay-enter-active {
+  transition-duration: $enter-duration;
+
+  .overlay__background,
+  .overlay__footer {
+    transition: transform $enter-duration cubic-bezier(0.82, 0.04, 0, 1.04);
+  }
+}
+.overlay-leave-active {
+  transition-duration: $leave-duration;
+
+  .overlay__background {
+    transition: transform $leave-duration cubic-bezier(0.82, 0.04, 0, 1.04);
+  }
+
+  .overlay__body,
+  .overlay__footer {
+    transition: all .3s linear;
+    transition-delay: .15s;
+  }
+}
+
+$size: 120vh;
+.overlay-enter {
+  .overlay__background {
+    transform: translateY($size);
+  }
+
+  .overlay__footer {
+    transform: translate(-50%, -10vh);
+  }
+}
+.overlay-leave-to {
+  .overlay__background {
+    transform: translateY(-$size);
+  }
+
+  .overlay__body,
+  .overlay__footer {
+    opacity: 0;
+  }
+
+  .overlay__body {
+    transform: translate3D(0, -12vh, 0);
+  }
+
+  .overlay__footer {
+    transform: translate3D(-50%, -12vh, 0);
+  }
+}

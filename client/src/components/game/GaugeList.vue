@@ -1,18 +1,20 @@
 <template>
-  <div class="gauge-list">
-    <div v-for="(gauge, index) in list"
-        :key="index"
-        class="gauge"
-        @mouseover="indexHovered = index"
-        @mouseleave="indexHovered = null">
-      <component :is="`${gauge.slug}-icon`" @mouseover.native="onMouseEnter(gauge, index)"/>
-      <div class="gauge-fill" :style="{'height': `${gauge.value}%`}"></div>
+  <transition name="fade-scale" appear>
+    <div class="gauge-list">
+      <div v-for="(gauge, index) in list"
+           :key="index"
+           class="gauge"
+           @mouseover="indexHovered = index"
+           @mouseleave="indexHovered = null">
+        <component :is="`${gauge.slug}-icon`" @mouseover.native="onMouseEnter(gauge, index)"/>
+        <div class="gauge-fill" :style="{'height': `${gauge.value}%`}"></div>
 
-      <transition name="fade">
-        <hover-infos v-if="indexHovered === index" :text="gauge.displayName"/>
-      </transition>
+        <transition name="fade">
+          <hover-infos v-if="indexHovered === index" :text="gauge.displayName"/>
+        </transition>
+      </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>

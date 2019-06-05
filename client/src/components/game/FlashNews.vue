@@ -1,13 +1,15 @@
 <template>
-  <div class="flash-news">
-    <div class="flash-news__title">
-      <p>Flash News</p>
-    </div>
+  <transition name="fade-scale" appear>
+    <div class="flash-news">
+      <div class="flash-news__title">
+        <p>Flash News</p>
+      </div>
 
-    <div class="flash-news__texts">
-      <p>Les ressources sont bientôt limitées. Faites attention à votre consommation !</p>
+      <div class="flash-news__texts">
+        <p>Les ressources sont bientôt limitées. Faites attention à votre consommation !</p>
+      </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>

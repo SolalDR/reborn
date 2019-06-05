@@ -1,30 +1,32 @@
 <template>
-  <div class="inventory">
-    <div class="inventory__categories">
-      <category
-        v-for="(category, index) in categories"
-        :key="`category-${index}`"
-        :category="{index: index, ...category}"
-        :is-current="category.slug === currentCategory.slug"
-        @setCurrentCategory="setCurrentCategory(category)"/>
-    </div>
+  <transition name="fade-scale" appear>
+    <div class="inventory">
+      <div class="inventory__categories">
+        <category
+          v-for="(category, index) in categories"
+          :key="`category-${index}`"
+          :category="{index: index, ...category}"
+          :is-current="category.slug === currentCategory.slug"
+          @setCurrentCategory="setCurrentCategory(category)"/>
+      </div>
 
-    <div class="inventory__list">
-      <model
-        v-for="(model, index) in models"
-       :key="`model-${index}`"
-       :model="{index: index, ...model}"
-       :money="money"
-       :is-current="model.name === currentModel.name"
-       @setCurrentModel="setCurrentModel(model)"/>
-      <skill
-        v-for="(skill, index) in skills"
-       :key="`skill-${index}`"
-       :skill="{index: index, ...skill}"
-       :is-current="skill.slug === currentSkill.slug"
-       @setCurrentSkill="setCurrentSkill(skill)"/>
+      <div class="inventory__list">
+        <model
+          v-for="(model, index) in models"
+         :key="`model-${index}`"
+         :model="{index: index, ...model}"
+         :money="money"
+         :is-current="model.name === currentModel.name"
+         @setCurrentModel="setCurrentModel(model)"/>
+        <skill
+          v-for="(skill, index) in skills"
+         :key="`skill-${index}`"
+         :skill="{index: index, ...skill}"
+         :is-current="skill.slug === currentSkill.slug"
+         @setCurrentSkill="setCurrentSkill(skill)"/>
+      </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>

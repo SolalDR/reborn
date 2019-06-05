@@ -1,0 +1,15 @@
+.fade-up {
+  &-enter-active {
+    transition: all .3s ease;
+  }
+
+  &-leave-active {
+    transition: all .5s cubic-bezier(0.82, 0.04, 0, 1.04);
+  }
+
+  &-enter,
+  &-leave-to {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}

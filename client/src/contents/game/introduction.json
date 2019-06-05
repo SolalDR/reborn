@@ -1,0 +1,63 @@
+{
+  "title": "Vous incarnez",
+  "city": {
+    "name": "La Civilisation",
+    "explanations": [
+      [
+        "Vous êtes à la tête des survivants.",
+        "Tous ont faim et besoin d’un toit. Tentez de bâtir une nouvelle civilisation viable."
+      ],
+      [
+        "Pour cela, il va falloir prélever des ressources à la nature.",
+        "Mais attention, celles-ci sont disponibles en nombre limité et il ne faudrait ",
+        "pas reproduire les erreurs du passé."
+      ]
+    ]
+  },
+  "nature": {
+    "name": "La Nature",
+    "explanations": [
+      [
+        "Alors que de récents évènements ont déséquilibré la biodiversité et pollué la terre,",
+        "de frêles humains viennent de s’établir dans les parages"
+      ],
+      [
+        "Pour survivre, les humains ont besoin de vos ressources.",
+        "Veillez à leur fournir de quoi se développer mais ne les laissez pas détruire leur environnement,",
+        "ils en ont besoin pour vivre même s’ils peinent à le comprendre."
+      ]
+    ]
+  },
+  "start": "Démarrer la partie",
+  "waiting": "En attente de votre adversaire...",
+  "tips": {
+    "city": [
+      [
+        "Surveillez vos jauges, la partie s’arrête",
+        "si une jauge atteint un niveau critique."
+      ],
+      [
+        "Pour faire remonter vos jauges,",
+        "construisez des bâtiments."
+      ],
+      [
+        "Sans ressources, pas de bâtiments !",
+        "Cliquez sur une ressource pour la collecter."
+      ]
+    ],
+    "nature": [
+      [
+        "Surveillez vos jauges, la partie s’arrête",
+        "si une jauge atteint un niveau critique."
+      ],
+      [
+        "Pour faire remonter vos jauges,",
+        "développez vos ressources."
+      ],
+      [
+        "Les déchets font baisser votre jauge pureté.",
+        "Veillez à vous en débarrasser le plus vite possible."
+      ]
+    ]
+  }
+}
