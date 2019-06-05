@@ -69,6 +69,7 @@ export default {
 
 <style lang="scss">
   $opacity: .75;
+  $animations-delay: 1s;
 
   .overlay {
     z-index: 1;
@@ -143,11 +144,24 @@ export default {
 
       .cross {
         cursor: pointer;
+        opacity: 0;
         position: fixed;
-        top: 10%;
+        top: 7rem;
         right: 10%;
         width: 4.3rem;
         height: 4.3rem;
+        animation: cross-enter 1.8s cubic-bezier(0, .01, 0, 1) $animations-delay * 1.6;
+        animation-fill-mode: forwards;
+
+        @keyframes cross-enter {
+          0% {
+            transform: translateX(2.5rem);
+          }
+          100% {
+            opacity: 1;
+            transform: translateX(-2.5rem);
+          }
+        }
 
         &:hover {
           .line {
@@ -184,7 +198,7 @@ export default {
       .header,
       .body,
       .footer {
-        @include letterBounce(1.8s);
+        @include letterBounce(1.8s, $animations-delay);
       }
 
       .footer {

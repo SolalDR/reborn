@@ -24,7 +24,9 @@
              v-html="$splitWithSpan(member)"></p>
         </div>
 
-        <p v-html="$splitWithSpan(texts.content.thanks)"></p>
+        <p v-for="(text, index) in texts.content.thanks"
+           :key="`thanks-${index}`"
+           v-html="$splitWithSpan(text)"></p>
       </div>
     </template>
   </overlay>

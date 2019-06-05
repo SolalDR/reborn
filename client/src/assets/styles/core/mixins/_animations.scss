@@ -1,4 +1,4 @@
-@mixin letterBounce($duration: 5s, $bounce-out: false) {
+@mixin letterBounce($duration: 5s, $delay: 0s, $bounce-out: false) {
   $animation-name: "";
   @if($bounce-out) {
     $animation-name: letterBounceInOut;
@@ -19,14 +19,14 @@
 
     @for $i from 1 to 400 {
       &:nth-child(#{$i}) {
-        animation-delay: $i*0.007s;
+        animation-delay: $delay + $i * 0.007s;
       }
     }
 
     @keyframes letterBounceIn {
       0% {
         opacity: 0;
-        transform: translateY(40rem);
+        transform: translateY(18rem);
       }
       100% {
         opacity: 1;

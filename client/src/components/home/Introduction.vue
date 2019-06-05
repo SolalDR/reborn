@@ -62,7 +62,7 @@ export default {
         text-align: center;
         @include fontSize(30);
         line-height: 4.2rem;
-        @include letterBounce($animation-duration, true);
+        @include letterBounce($animation-duration, 0s, true);
       }
     }
   }
