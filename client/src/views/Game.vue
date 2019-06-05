@@ -3,14 +3,12 @@
     <scene @mounted="onWebGLInit"/>
     <div v-if="isLoading" class="game__loading-overlay"></div>
 
-    <transition name="fade-down">
-      <p v-if="status !== 'playing' && status !== 'initializing'"
-         @click="muteAll"
-         class="mute__cta cta"
-         :class="{'mute__cta--muted': isMuted}">
-        Chuuut
-      </p>
-    </transition>
+    <p v-if="status !== 'playing' && status !== 'initializing'"
+       @click="muteAll"
+       class="mute__cta cta"
+       :class="{'mute__cta--muted': isMuted}">
+      Chuuut
+    </p>
 
     <!-- IsStarting -->
     <overlay v-if="isStarting" :appear="false" :is-transparent="!isLoading" fade-out="true">

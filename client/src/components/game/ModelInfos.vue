@@ -1,14 +1,16 @@
 <template>
-  <div class="model-infos">
-    <template v-if="model">
-      <span>{{ model.displayName }}</span>
-      <span v-for="(modifier, index) in model.states.mounted.recurModifiers"
-            :key="`model-infos-modifier-${index}`">
-        {{ modifier.value > 0 ? '+' : '-' }} {{ modifier.name }} {{ modifier.value }}/an
-      </span>
-      <span v-if="this.$game.player.role.name === 'city'">X {{ -model.states.creation.enterModifiers.find(modifier => modifier.name === 'money').value }}</span>
-    </template>
-  </div>
+  <transition name="fade-scale" appear>
+    <div class="model-infos">
+      <template v-if="model">
+        <span>{{ model.displayName }}</span>
+        <span v-for="(modifier, index) in model.states.mounted.recurModifiers"
+              :key="`model-infos-modifier-${index}`">
+          {{ modifier.value > 0 ? '+' : '-' }} {{ modifier.name }} {{ modifier.value }}/an
+        </span>
+        <span v-if="this.$game.player.role.name === 'city'">X {{ -model.states.creation.enterModifiers.find(modifier => modifier.name === 'money').value }}</span>
+      </template>
+    </div>
+  </transition>
 </template>
 
 <script>

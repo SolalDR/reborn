@@ -2,9 +2,7 @@
   <div class="home">
     <video class="trailer" src="@/assets/video/trailer.mp4" autoplay playsinline muted loop></video>
 
-    <transition name="fade-down">
-      <p class="mute__cta" :class="{'mute__cta--muted': isMuted}" @click="muteAll">Chuuut</p>
-    </transition>
+    <p class="mute__cta" :class="{'mute__cta--muted': isMuted}" @click="muteAll">Chuuut</p>
 
     <landing v-if="status === 'landing'"/>
     <introduction v-if="status === 'introduction'" :skip-intro="goToLanding"/>

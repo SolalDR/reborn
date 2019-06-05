@@ -1,20 +1,22 @@
 <template>
-  <div class="indicator-list">
-    <div v-for="(indicator, index) in list"
-         :key="index"
-         class="indicator"
-         @mouseover="indexHovered = index"
-         @mouseleave="indexHovered = null">
-      <img :src="icons[indicator.slug]" :alt="indicator.name">
-      <span>{{ indicator.value }}</span>
+  <transition name="fade-scale" appear>
+    <div class="indicator-list">
+      <div v-for="(indicator, index) in list"
+           :key="index"
+           class="indicator"
+           @mouseover="indexHovered = index"
+           @mouseleave="indexHovered = null">
+        <img :src="icons[indicator.slug]" :alt="indicator.name">
+        <span>{{ indicator.value }}</span>
 
-      <transition name="fade">
-        <hover-infos v-if="indexHovered === index" :text="indicator.displayName"/>
-      </transition>
+        <transition name="fade">
+          <hover-infos v-if="indexHovered === index" :text="indicator.displayName"/>
+        </transition>
+      </div>
+
+      <img @click="$emit('showSettings', true)" :src="icons.settings" alt="Paramètres" class="indicator">
     </div>
-
-    <img @click="$emit('showSettings', true)" :src="icons.settings" alt="Paramètres" class="indicator">
-  </div>
+  </transition>
 </template>
 
 <script>
