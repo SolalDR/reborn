@@ -62,7 +62,7 @@ class OrbitControls {
         this.target.clone()
           .sub(this.object.position)
           .normalize(),
-        this.axeRotation
+        this.axeRotation,
       );
     }
   }

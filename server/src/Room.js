@@ -85,6 +85,7 @@ export default class Room extends Emitter {
       this.dispatchToPlayers('skill:unavailable', args)
     });
     this.game.skillsManager.on('skill:start', (args) => {
+      // console.log('skill:start', args.skill);
       this.dispatchToPlayers('skill:start', args)
     });
 

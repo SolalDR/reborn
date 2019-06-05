@@ -21,7 +21,7 @@ class Skill extends Emitter {
     role = "nature",
     duration = 1000,
     durationInterval = 60000,
-    constraint = "",
+    constraint = null,
     regularConstraintOrder = true,
     category = null,
     zoneRadius = 0
@@ -39,17 +39,14 @@ class Skill extends Emitter {
 
     this.startedAt = 0;
     this.refill = true;
-    this.allowedConstraint = false;
+    this.allowedConstraint = constraint ? false : true;
   }
 
   start() {
     if (!(this.refill && this.allowedConstraint)) return false;
     this.startedAt = Date.now();
     this.refill = false;
-    this.emit('start', {
-      startedAt: this.startedAt,
-      availableAt: this.startedAt + this.durationInterval,
-    });
+    this.emit('start', this.infos);
 
     setTimeout(()=>{
       this.refill = true;
@@ -72,6 +69,18 @@ class Skill extends Emitter {
 
   get available() {
     return this.checkAvailable(true);
+  }
+
+  get infos() {
+    return {
+      startedAt: this.startedAt,
+      availableAt: this.startedAt + this.durationInterval,
+      role: this.role,
+      duration: this.duration,
+      category: this.category,
+      refill: this.refill,
+      allowedConstraint: this.allowedConstraint,
+    }
   }
 }
 

@@ -1,8 +1,3 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 49.11 6.69">
-  <title>Fichier 1</title>
-  <g id="33e33791-a2fc-48a3-a1dd-776fc8f2ff84" data-name="Calque 2">
-    <g id="716ca8d3-a031-49bf-90cd-4585bbf92944" data-name="Calque 1">
-      <path d="M48.75,3.6a8.76,8.76,0,0,1-12.39,0h0L33.62.72l-2.9,2.91a8.76,8.76,0,0,1-12.39,0h0L15.46.72,12.75,3.6a8.77,8.77,0,0,1-12.4,0h0" fill="none" stroke="#1d1d1b" stroke-miterlimit="10"/>
-    </g>
-  </g>
+  <path d="M48.75,3.6a8.76,8.76,0,0,1-12.39,0h0L33.62.72l-2.9,2.91a8.76,8.76,0,0,1-12.39,0h0L15.46.72,12.75,3.6a8.77,8.77,0,0,1-12.4,0h0"/>
 </svg>

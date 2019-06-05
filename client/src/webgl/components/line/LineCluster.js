@@ -38,7 +38,16 @@ export default class LineCluster extends Cluster {
       program.fragmentShader = `varying float vDashOffset;\n\r${program.fragmentShader}`;
       program.fragmentShader = program.fragmentShader.replace(
         'c.a *= ceil(mod(vCounters + dashOffset, dashArray) - (dashArray * dashRatio));',
-        'c.a *= ceil(mod(vCounters + dashOffset + vDashOffset, dashArray) - (dashArray * dashRatio));',
+        [
+          'float offset = dashOffset + vDashOffset;',
+          '#ifdef MIN_OFFSET',
+          'offset = max(offset, minOffset);',
+          '#endif',
+          '#ifdef MAX_OFFSET',
+          'offset = min(offset, maxOffset);',
+          '#endif',
+          'c.a *= ceil(mod(vCounters + offset, dashArray) - (dashArray * dashRatio));',
+        ].join('\n\r'),
       );
     };
   }

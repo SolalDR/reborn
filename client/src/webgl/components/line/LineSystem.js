@@ -22,6 +22,8 @@ export default class LineSystem {
     opacity = 1,
     side = THREE.DoubleSide,
     limit = 100,
+    minOffset = null,
+    maxOffset = null,
   } = {}) {
     const line = new MeshLine();
     line.setGeometry(geometry);
@@ -42,7 +44,12 @@ export default class LineSystem {
       transparent,
       opacity,
       side,
+      minOffset,
+      maxOffset,
     });
+
+    if (minOffset) this.material.defines.MIN_OFFSET = '';
+    if (maxOffset) this.material.defines.MAX_OFFSET = '';
 
     return new LineCluster(line.geometry, this.material, {
       limit,

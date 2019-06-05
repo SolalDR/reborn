@@ -6,7 +6,8 @@
     "dev": "vue-cli-service serve",
     "webgl": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "eslint": "node_modules/.bin/eslint ./ --fix"
   },
   "dependencies": {
     "@solaldr/animate": "^0.1.1",

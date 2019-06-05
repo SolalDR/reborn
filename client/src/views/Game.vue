@@ -18,7 +18,7 @@
       <gauge-list :list="this.gauges"/>
       <years-counter :currentYear="year"/>
       <indicator-list :list="this.indicators" @showSettings="showSettings = true"/>
-      <inventory :money="money" @selectModel="onSelectModel" @selectSkill="onSelectSkill"/>
+      <inventory :money="money" @selectModel="onSelectModel" @selectSkill="onLaunchSkill"/>
       <model-infos :model="currentModel"/>
       <flash-news/>
       <transition name="fade">
@@ -113,10 +113,10 @@ export default {
     'game:start': function (args) { this.onGameStart(args); },
     'game:end': function (args) { this.onGameEnd(args); },
     'notification:send': function () { this.onNotificationSend(); },
-    'skill:start': function(args) { this.onSkillStart(args) },
-    'skill:available': function(args) { this.onSkillAvailable(args) },
-    'skill:unavailable': function(args) { this.onSkillUnavailable(args) },
-    'rythm:change': function(args) { this.onRythmChange(args) },
+    'skill:start': function (args) { this.onSkillStart(args); },
+    'skill:available': function (args) { this.onSkillAvailable(args); },
+    'skill:unavailable': function (args) { this.onSkillUnavailable(args); },
+    'rythm:change': function (args) { this.onRythmChange(args); },
   },
 
   created() {
@@ -179,18 +179,7 @@ export default {
     // Quand un utilisateur click sur un model du rack
     onSelectModel(model) {
       if (model) {
-        // TODO: change to selectedModel
-        this.currentSkill = null;
         this.currentModel = model;
-      }
-    },
-
-    // Quand un utilisateur click sur un skill du rack
-    onSelectSkill(skill) {
-      if (skill) {
-        // TODO: change to selectedModel
-        this.currentModel = null;
-        this.currentSkill = skill;
       }
     },
 
@@ -204,9 +193,6 @@ export default {
 
       // When clicking an empty cell
       this.$webgl.on('selectCell', item => this.onAddItem(item));
-
-      // When clicking on clickMap
-      this.$webgl.on('clickMap', item => this.onLaunchSkill(item));
 
       // When user click on an object in the scene
       this.$webgl.on('selectItem', (item) => {
@@ -234,17 +220,14 @@ export default {
       console.log('Try Again');
     },
 
-    onLaunchSkill(item) {
-      if (!this.currentSkill) return;
-      const params = { ...item, skill: this.currentSkill.slug, position: this.$webgl.map.grid.getCell(item.position)};
-
+    onLaunchSkill(skill) {
+      const requestParams = { ...skill, skill: skill.slug };
       if (!config.server.enabled) {
-        const zone = this.$webgl.map.grid.captureZone(params.position, this.currentSkill.zoneRadius);
-        this.onSkillStart({ ...params, gridCases: zone });
+        this.onSkillStart(requestParams);
         return;
       }
       this.$store.commit('debug/log', { content: 'skill:start (emit)', label: 'socket' });
-      this.$socket.emit('skill:start', params);
+      this.$socket.emit('skill:start', requestParams);
     },
 
     onAddItem(item) {
@@ -287,13 +270,13 @@ export default {
           duration: 600,
         });
 
-        item.gridCases.forEach(gridCaseInfos => {
+        item.gridCases.forEach((gridCaseInfos) => {
           if (gridCaseInfos) {
             this.$webgl.map.grid.get(gridCaseInfos).reference = gridCaseInfos.reference;
           }
         });
 
-        const prefix = this.$game.player.role.name + '_add_';
+        const prefix = `${this.$game.player.role.name}_add_`;
         const entityModel = this.$game.entityModels.get(item.model);
         if (this.$sound.has(prefix + entityModel.category)) {
           this.$sound.play(prefix + entityModel.category);
@@ -312,18 +295,18 @@ export default {
     onEntityRemove({ model, uuid, gridCases }) {
       this.$store.commit('debug/log', { content: `entity:remove (receive) with uuid: ${uuid}`, label: 'socket' });
 
-      const prefix = this.$game.player.role.name + '_remove';
+      const prefix = `${this.$game.player.role.name}_remove`;
       const entityModel = this.$game.entityModels.get(model);
       this.$sound.play(prefix);
 
       this.$webgl.models[model].removeEntity(uuid);
 
       if (gridCases) {
-        gridCases.forEach(gridCaseInfos => {
+        gridCases.forEach((gridCaseInfos) => {
           this.$webgl.map.grid.get(gridCaseInfos).reference = null;
         });
       } else {
-        console.warn("Game:onEntityRemove: No gridcases");
+        console.warn('Game:onEntityRemove: No gridcases');
       }
     },
 
@@ -332,7 +315,7 @@ export default {
       const skillEffect = this.$webgl.skills.get(item.skill);
       if (!skillEffect) return;
       skillEffect.launch(item, this.$webgl);
-      this.$sound.play('skill_earthquake');
+      this.$sound.play(`skill_${item.skill}`);
     },
 
     onSkillAvailable(args) {
@@ -346,7 +329,7 @@ export default {
     },
 
     onRythmChange(speed) {
-      this.$sound.playSample('drum_' + speed);
+      this.$sound.playSample(`drum_${speed}`);
     },
 
     onTimelineTick({ metrics, elapsed }) {

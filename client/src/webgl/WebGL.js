@@ -5,8 +5,8 @@ import GUI from '@/plugins/GUI';
 import modelsConfig from '@/config/models';
 import AssetsManager from '@/services/assets/Manager';
 import store from '@/services/store';
-import animate from "@solaldr/animate";
-import theme from "@/config/theme";
+import animate from '@solaldr/animate';
+import theme from '@/config/theme';
 
 // Core
 import Raycaster from './core/Raycaster';
@@ -70,9 +70,9 @@ export default class WebGL extends Emitter {
 
   initSkills() {
     this.skills = new Map();
-    Object.keys(skills).forEach(key => {
+    Object.keys(skills).forEach((key) => {
       const skillConstructor = skills[key];
-      this.skills.set(key, new skillConstructor());
+      this.skills.set(key, new skillConstructor(this));
     });
   }
 
@@ -168,26 +168,28 @@ export default class WebGL extends Emitter {
 
     this.ambientLight = new THREE.AmbientLight(
       theme.light.ambient.color,
-      theme.light.ambient.intensity
+      theme.light.ambient.intensity,
     );
 
     this.scene.add(this.ambientLight);
 
     this.directionalLight = new THREE.DirectionalLight(
       theme.light.directional.color,
-      theme.light.directional.intensity
+      theme.light.directional.intensity,
     );
 
     this.directionalLight.castShadow = true;
     this.directionalLight.shadow.camera.near = 1;
     this.directionalLight.shadow.camera.far = 50;
     this.directionalLight.shadow.camera.right = 16;
-    this.directionalLight.shadow.camera.left = - 16;
-    this.directionalLight.shadow.camera.top  = 16;
-    this.directionalLight.shadow.camera.bottom = - 16;
+    this.directionalLight.shadow.camera.left = -16;
+    this.directionalLight.shadow.camera.top = 16;
+    this.directionalLight.shadow.camera.bottom = -16;
     this.directionalLight.shadow.mapSize.width = 2048;
     this.directionalLight.shadow.mapSize.height = 2048;
     this.directionalLight.shadow.bias = 0.005;
+
+    GUI.rendering.add(this.directionalLight.shadow, 'bias').step(0.0001);
 
     this.scene.add(this.directionalLight);
 
@@ -205,19 +207,19 @@ export default class WebGL extends Emitter {
 
     // If can click on map (dragged distance less than 10 & click duration less than 70ms)
     if ((delta < 10 || duration < 70) && this.raycaster.intersection && event.target === this.canvas) {
-      const { id, slot } = this.pickingInfos;       // Read in pickingScene
+      const { id, slot } = this.pickingInfos; // Read in pickingScene
       const mapInfos = {
-        gridCases: this.map.grid.getCellsFromBox().map(cell => cell ? cell.infos : null),
+        gridCases: this.map.grid.getCellsFromBox().map(cell => (cell ? cell.infos : null)),
         position: this.map.gridHelper.position,
         rotation: 0,
       };
-      if (id === 255 && slot === 255) {             // This place is free
+      if (id === 255 && slot === 255) { // This place is free
         this.emit('selectCell', mapInfos);
-      } else {                                      // There is already an entity
+      } else { // There is already an entity
         const model = this.findModelWithSlot(slot);
         const entity = model.getItem(id);
         if (entity) {
-          this.emit('selectItem', {...mapInfos, ...entity});
+          this.emit('selectItem', { ...mapInfos, ...entity });
         }
       }
 
@@ -276,7 +278,7 @@ export default class WebGL extends Emitter {
   renderPickScene() {
     this.pickingInfos = this.renderer.pick(mouse.position.x, mouse.position.y);
 
-    const {slot, id} = this.pickingInfos;
+    const { slot, id } = this.pickingInfos;
 
     // Different hovered love focus
     if (this.hoveredEntity && (this.hoveredEntity[0] !== slot && this.hoveredEntity[1] !== id)) {
@@ -284,25 +286,25 @@ export default class WebGL extends Emitter {
       const currentModel = this.findModelWithSlot(currentEntity[0]);
       const currentItem = currentModel.getItem(currentEntity[1]);
       const tmpScale = new THREE.Vector3();
-      animate.add({ from: currentItem.scale.x, to: 1, duration: 200 }).on('progress', ({value}) => {
-        currentModel.entityCluster.setScaleAt(currentEntity[1], tmpScale.set(value, value, value))
+      animate.add({ from: currentItem.scale.x, to: 1, duration: 200 }).on('progress', ({ value }) => {
+        currentModel.entityCluster.setScaleAt(currentEntity[1], tmpScale.set(value, value, value));
         currentModel.entityCluster.geometry.attributes.instanceScale.needsUpdate = true;
-      })
+      });
       this.hoveredEntity = null;
       this.map.gridHelper.visible = true;
     }
 
     if (slot !== 255 && id !== 255) {
-      if(!this.hoveredEntity || this.hoveredEntity[0] !== slot && this.hoveredEntity[1] !== id) {
+      if (!this.hoveredEntity || this.hoveredEntity[0] !== slot && this.hoveredEntity[1] !== id) {
         const hoveredEntity = [slot, id];
         const hoveredModel = this.findModelWithSlot(hoveredEntity[0]);
         const hoveredItem = hoveredModel.getItem(hoveredEntity[1]);
         const tmpScale = new THREE.Vector3();
-        if(hoveredItem) {
-          animate.add({ from: hoveredItem.scale.x, to: 1.2, duration: 200 }).on('progress', ({value}) => {
-            hoveredModel.entityCluster.setScaleAt(hoveredEntity[1], tmpScale.set(value, value, value))
+        if (hoveredItem) {
+          animate.add({ from: hoveredItem.scale.x, to: 1.2, duration: 200 }).on('progress', ({ value }) => {
+            hoveredModel.entityCluster.setScaleAt(hoveredEntity[1], tmpScale.set(value, value, value));
             hoveredModel.entityCluster.geometry.attributes.instanceScale.needsUpdate = true;
-          })
+          });
         }
         this.hoveredEntity = hoveredEntity;
         this.map.gridHelper.visible = false;
@@ -322,7 +324,7 @@ export default class WebGL extends Emitter {
     if (this.map) this.map.gridHelper.render();
     if (this.waves) this.waves.render();
     if (this.explosionEffect) this.explosionEffect.render();
-
+    if (this.smokes) this.smokes.render();
     this.worldScreen.render();
     this.renderer.render();
   }

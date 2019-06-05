@@ -50,9 +50,9 @@ export default {
   methods: {
     onMouseEnter(gauge, index) {
       if (index === this.indexHovered) return;
-      this.$sound.play('gauge_' + gauge.slug);
-    }
-  }
+      this.$sound.play(`gauge_${gauge.slug}`);
+    },
+  },
 };
 </script>
 
