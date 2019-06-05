@@ -1,43 +1,45 @@
 <template>
-  <div class="landing" key="landing">
-    <img class="logo" src="@/assets/img/logo.svg" alt="Logo Reborn">
+  <transition name="fade">
+    <div class="landing" key="landing">
+      <img class="logo" src="@/assets/img/logo.svg" alt="Logo Reborn">
 
-    <div class="actions">
-      <div class="actions__item">
-        <button class="cta--bordered" @click="joinRoom">Jouer</button>
+      <div class="actions">
+        <div class="actions__item">
+          <button class="cta--bordered" @click="joinRoom">Jouer</button>
 
-        <transition name="fade">
-          <div v-if="showJoinRoomInfos" class="item-infos">
-            <p>Personne dans les parages...</p>
-            <p class="italic">Vous avez un ami dispo ?</p>
-          </div>
-        </transition>
-      </div>
-
-      <div class="actions__item">
-        <button class="cta--bordered"
-                :class="{'cta--disabled': roomId}"
-                @click="createRoom">Challenger un ami</button>
-
-        <transition name="fade">
-          <div v-if="roomId" class="item-infos">
-            <div class="invite-link">
-              <!-- TODO: Replace with inviteLink -->
-              <p class="room-id cta--bordered">{{ roomId }}</p>
-
-              <div class="copy-to-clipboard" @click="copyToClipboard">
-                <img src="@/assets/icons/home/copy-to-clipboard.svg" alt="Copier le lien">
-              </div>
+          <transition name="fade">
+            <div v-if="showJoinRoomInfos" class="item-infos">
+              <p>Personne dans les parages...</p>
+              <p class="italic">Vous avez un ami dispo ?</p>
             </div>
+          </transition>
+        </div>
 
-            <!-- TODO: Add animation -->
-            <p v-if="!linkCopied" class="italic">Partagez ce lien avec un ami</p>
-            <p v-else>Lien copié !</p>
-          </div>
-        </transition>
+        <div class="actions__item">
+          <button class="cta--bordered"
+                  :class="{'cta--disabled': roomId}"
+                  @click="createRoom">Challenger un ami</button>
+
+          <transition name="fade">
+            <div v-if="roomId" class="item-infos">
+              <div class="invite-link">
+                <!-- TODO: Replace with inviteLink -->
+                <p class="room-id cta--bordered">{{ roomId }}</p>
+
+                <div class="copy-to-clipboard" @click="copyToClipboard">
+                  <img src="@/assets/icons/home/copy-to-clipboard.svg" alt="Copier le lien">
+                </div>
+              </div>
+
+              <!-- TODO: Add animation -->
+              <p v-if="!linkCopied" class="italic">Partagez ce lien avec un ami</p>
+              <p v-else>Lien copié !</p>
+            </div>
+          </transition>
+        </div>
       </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>
@@ -47,9 +49,7 @@ export default {
   name: 'landing',
   data() {
     return {
-      // Join
       showJoinRoomInfos: false,
-      // Create
       roomId: null,
       inviteLink: null,
       linkCopied: false,

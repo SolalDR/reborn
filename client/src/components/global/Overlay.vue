@@ -1,11 +1,14 @@
 <template>
   <transition name="overlay"
               :appear="appear ? true : false"
+              :leave-active-class="fadeOut ? 'fade-leave-active' : 'overlay-leave-active'"
               :leave-to-class="fadeOut ? 'fade-leave-to' : 'overlay-leave-to'">
-    <div class="overlay" :class="{'overlay--transparent': isTransparent}">
-      <div class="overlay__waves" :class="{'overlay__waves--bottom': bottomWaves}">
-        <div class="wave" :style="{'background-image': `url('${waveSrc}')`}"></div>
-        <div class="wave" :style="{'background-image': `url('${waveReversedSrc}')`}"></div>
+    <div class="overlay">
+      <div class="overlay__background" :class="{'overlay__background--transparent': isTransparent}">
+        <div class="waves-wrapper" :class="{'waves-wrapper--bottom': bottomWaves}">
+          <div class="wave" :style="{'background-image': `url('${waveSrc}')`}"></div>
+          <div class="wave" :style="{'background-image': `url('${waveReversedSrc}')`}"></div>
+        </div>
       </div>
 
       <div class="overlay__content">
@@ -14,15 +17,15 @@
           <span class="line"></span>
         </div>
 
-        <div class="header">
+        <div class="overlay__header header">
           <slot name="header"></slot>
         </div>
 
-        <div class="body">
+        <div class="overlay__body">
           <slot></slot>
         </div>
 
-        <div class="footer">
+        <div class="overlay__footer footer">
           <slot name="footer"></slot>
         </div>
       </div>
@@ -73,74 +76,88 @@ export default {
 
   .overlay {
     z-index: 1;
-    position: fixed;
+    position: absolute;
     top: 0;
-    left: 0;
-    @include useFlex();
-    width: 100vw;
+    right: 0;
+    width: 100%;
     height: 100vh;
-    background-color: getColor(mains, primary);
-    transition: background-color .65s ease;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
 
-    &--transparent {
-      background-color: rgba(getColor(mains, primary), $opacity);
-
-      .overlay__waves {
-        opacity: $opacity;
-      }
-    }
-
-    &__waves {
-      overflow: hidden;
-      position: absolute;
-      top: 1px;
+    &__background {
+      z-index: 0;
+      position: fixed;
+      top: 0;
       left: 0;
-      width: 100%;
-      height: 20vh;
-      transform: translateY(-100%);
+      @include useFlex();
+      width: 100vw;
+      height: 100vh;
+      background-color: getColor(mains, primary);
+      transition: background-color .65s ease;
 
-      @keyframes move-wave {
-        0% {
-          transform: translateX(0);
-        }
-        50% {
-          transform: translateX(-25%)
-        }
-        100% {
-          transform: translateX(-50%)
+      &--transparent {
+        background-color: rgba(getColor(mains, primary), $opacity);
+
+        .overlay__waves {
+          opacity: $opacity;
         }
       }
 
-      .wave {
+      .waves-wrapper {
+        overflow: hidden;
         position: absolute;
-        bottom: -1px;
+        top: 1px;
         left: 0;
-        width: 200%;
-        height: 100%;
-        background-repeat: repeat no-repeat;
-        background-position: 0 bottom;
-        transform-origin: center bottom;
-        background-size: 50% 50%;
+        width: 100%;
+        height: 20vh;
+        transform: translateY(-100%) translateZ(0);
+        will-change: transform;
 
-        &:first-of-type {
-          bottom: 25px;
-          animation: move-wave 3.5s linear infinite;
+        @keyframes move-wave {
+          0% {
+            transform: translateX(0) translateZ(0);
+          }
+          50% {
+            transform: translateX(-25%) translateZ(0);
+          }
+          100% {
+            transform: translateX(-50%) translateZ(0);
+          }
         }
 
-        &:last-of-type {
-          animation: move-wave 2s linear infinite;
-        }
-      }
+        .wave {
+          position: absolute;
+          bottom: -1px;
+          left: 0;
+          width: 200%;
+          height: 100%;
+          background-repeat: repeat no-repeat;
+          background-position: 0 bottom;
+          transform-origin: center bottom;
+          background-size: 50% 50%;
 
-      &--bottom {
-        top: initial;
-        bottom: 0;
-        transform: translateY(100%) rotate(180deg);
+          &:first-of-type {
+            bottom: 25px;
+            animation: move-wave 3.5s linear infinite;
+          }
+
+          &:last-of-type {
+            animation: move-wave 2s linear infinite;
+          }
+        }
+
+        &--bottom {
+          top: initial;
+          bottom: 0;
+          transform: translateY(100%) rotate(180deg);
+        }
       }
     }
 
     &__content {
       text-align: center;
+      @include letterBounce(1.8s, $animations-delay);
 
       .cross {
         cursor: pointer;
@@ -195,16 +212,8 @@ export default {
         }
       }
 
-      .header,
-      .body,
       .footer {
-        @include letterBounce(1.8s, $animations-delay);
-      }
-
-      .footer {
-        opacity: 0;
-        animation: fadeInUp 2s cubic-bezier(0.82, 0.04, 0, 1.04) 1 1.2s;
-        animation-fill-mode: forwards;
+        animation: fadeInUp 2s cubic-bezier(0.82, 0.04, 0, 1.04);
 
         @keyframes fadeInUp {
           0% {

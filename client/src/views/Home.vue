@@ -6,8 +6,8 @@
       <p class="mute__cta" :class="{'mute__cta--muted': isMuted}" @click="muteAll">Chuuut</p>
     </transition>
 
-    <introduction v-if="status === 'introduction'" :skip-intro="goToLanding"/>
     <landing v-if="status === 'landing'"/>
+    <introduction v-if="status === 'introduction'" :skip-intro="goToLanding"/>
     <about v-if="status === 'about'" :close-overlay="goToLanding"/>
 
     <transition name="fade-up">
@@ -51,6 +51,17 @@ export default {
     @include useFlex();
     width: 100vw;
     height: 100vh;
+
+    &__overlay {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+    }
 
     .trailer {
       object-fit: cover;

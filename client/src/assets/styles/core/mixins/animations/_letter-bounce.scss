@@ -6,16 +6,15 @@
     $animation-name: letterBounceIn;
   }
 
-  span {
+  .letter {
     display: inline-block;
     opacity: 0;
     animation: {
       name: $animation-name;
-      iteration-count: 1;
       duration: $duration;
       timing-function: cubic-bezier(0, .01, 0, 1);
+      fill-mode: forwards;
     }
-    animation-fill-mode: forwards;
 
     @for $i from 1 to 400 {
       &:nth-child(#{$i}) {
@@ -26,30 +25,30 @@
     @keyframes letterBounceIn {
       0% {
         opacity: 0;
-        transform: translateY(18rem);
+        transform: translateY(18rem) translateZ(0);
       }
       100% {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) translateZ(0);
       }
     }
 
     @keyframes letterBounceInOut {
       0% {
         opacity: 0;
-        transform: translateY(200%);
+        transform: translateY(200%) translateZ(0);
       }
       15% {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) translateZ(0);
       }
       85% {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) translateZ(0);
       }
       100% {
         opacity: 0;
-        transform: translateY(-200%);
+        transform: translateY(-200%) translateZ(0);
       }
     }
   }
