@@ -50,9 +50,8 @@ class Cluster {
          vec3 transformedNormal =  transposeMat3( inverse( mat3( modelViewMatrix * _instanceMatrix ) ) ) * objectNormal ;`,
       );
 
-      program.fragmentShader = THREE.ShaderLib.depth.fragmentShader
-    }
-
+      program.fragmentShader = THREE.ShaderLib.depth.fragmentShader;
+    };
   }
 
   setupInstanceGeometry() {

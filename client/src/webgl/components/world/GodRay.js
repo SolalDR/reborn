@@ -1,7 +1,7 @@
 import LineSystem from '../line/LineSystem';
 import GUI from '@/plugins/GUI';
 import config from '@/config/worlds';
-import theme from "@/config/theme";
+import theme from '@/config/theme';
 
 export default class GodRay {
   constructor({
@@ -36,7 +36,8 @@ export default class GodRay {
         position: new THREE.Vector3(
           Math.cos(angle) * radius,
           17,
-          Math.sin(angle) * radius + 5),
+          Math.sin(angle) * radius + 5,
+        ),
         rotation: new THREE.Euler(0.4, 0, 0),
         dashOffset: Math.random() * 2,
       });

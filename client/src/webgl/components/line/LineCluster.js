@@ -41,12 +41,12 @@ export default class LineCluster extends Cluster {
         [
           'float offset = dashOffset + vDashOffset;',
           '#ifdef MIN_OFFSET',
-            'offset = max(offset, minOffset);',
+          'offset = max(offset, minOffset);',
           '#endif',
           '#ifdef MAX_OFFSET',
-            'offset = min(offset, maxOffset);',
+          'offset = min(offset, maxOffset);',
           '#endif',
-          'c.a *= ceil(mod(vCounters + offset, dashArray) - (dashArray * dashRatio));'
+          'c.a *= ceil(mod(vCounters + offset, dashArray) - (dashArray * dashRatio));',
         ].join('\n\r'),
       );
     };

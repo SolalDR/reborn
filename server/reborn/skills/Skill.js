@@ -21,7 +21,8 @@ class Skill extends Emitter {
     role = "nature",
     duration = 1000,
     durationInterval = 60000,
-    constraint = "",
+    startRefillDelay = null,
+    constraint = null,
     regularConstraintOrder = true,
     category = null,
     zoneRadius = 0
@@ -39,7 +40,14 @@ class Skill extends Emitter {
 
     this.startedAt = 0;
     this.refill = true;
-    this.allowedConstraint = false;
+    this.allowedConstraint = constraint ? false : true;
+
+    if (waitRefill) {
+      setTimeout(()=>{
+        this.refill = true;
+        this.checkAvailable();
+      }, waitRefill);
+    }
   }
 
   start() {

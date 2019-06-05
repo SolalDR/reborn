@@ -3,8 +3,7 @@ import Grid from './Grid';
 import GridHelper from './GridHelper';
 import Bus from '@/plugins/Bus';
 import GUI from '@/plugins/GUI';
-import theme from "@/config/theme";
-
+import theme from '@/config/theme';
 
 
 export default class GameMap extends THREE.Group {
@@ -77,7 +76,7 @@ export default class GameMap extends THREE.Group {
   initCastEvent() {
     Bus.$on('cast', (intersection) => {
       if (intersection && intersection.face.normal.y > 0.99) {
-        if(this.gridHelper.status === 'out') {
+        if (this.gridHelper.status === 'out') {
           // this.gridHelper.visible = true;
         }
 
@@ -89,22 +88,21 @@ export default class GameMap extends THREE.Group {
 
         if (!a && this.gridHelper.status !== 'transparent') {
           this.gridHelper.status = 'transparent';
-          animate.add({ from: this.gridHelper.material.opacity, to: 0.4, duration: 200 }).on('progress', ({ value })=>{
+          animate.add({ from: this.gridHelper.material.opacity, to: 0.4, duration: 200 }).on('progress', ({ value }) => {
             this.gridHelper.material.opacity = value;
           });
-        } else if(this.gridHelper.status !== 'plain') {
+        } else if (this.gridHelper.status !== 'plain') {
           this.gridHelper.status = 'plain';
-          animate.add({ from: this.gridHelper.material.opacity, to: 1, duration: 200 }).on('progress', ({ value })=>{
+          animate.add({ from: this.gridHelper.material.opacity, to: 1, duration: 200 }).on('progress', ({ value }) => {
             this.gridHelper.material.opacity = value;
           });
         }
       } else {
         this.gridHelper.status = 'out';
-        animate.add({ from: this.gridHelper.material.opacity, to: 0, duration: 200 }).on('progress', ({ value })=>{
+        animate.add({ from: this.gridHelper.material.opacity, to: 0, duration: 200 }).on('progress', ({ value }) => {
           this.gridHelper.material.opacity = value;
         });
         // this.gridHelper.visible = false;
-
       }
     });
   }

@@ -1,8 +1,8 @@
-import Skill from "./Skill";
+import animate from '@solaldr/animate';
+import Skill from './Skill';
 import Reborn from '@/game';
-import animate from "@solaldr/animate";
-import theme from "@/config/theme";
-import AssetsManager from "@/services/assets/Manager";
+import theme from '@/config/theme';
+import AssetsManager from '@/services/assets/Manager';
 import { Smoke } from '../../world';
 
 export default class Epidemic {
@@ -18,29 +18,29 @@ export default class Epidemic {
     });
   }
 
-  launch({duration}, $webgl) {
-    var fromAmbient = theme.light.ambient;
-    var fromDirectional = theme.light.directional;
-    var fromAmbientColor = $webgl.ambientLight.color.clone();
-    var fromDirectionalColor = $webgl.ambientLight.color.clone();
-    var toAmbientColor = new THREE.Color(0, 0.5, 0);
-    var toDirectionalColor = new THREE.Color(1, 0, 0);
+  launch({ duration }, $webgl) {
+    const fromAmbient = theme.light.ambient;
+    const fromDirectional = theme.light.directional;
+    const fromAmbientColor = $webgl.ambientLight.color.clone();
+    const fromDirectionalColor = $webgl.ambientLight.color.clone();
+    const toAmbientColor = new THREE.Color(0, 0.5, 0);
+    const toDirectionalColor = new THREE.Color(1, 0, 0);
     this.smoke.mesh.material.uniforms.dashOffset.value = 2;
     this.scene.add(this.smoke.mesh);
 
     animate.add({
-      duration: 2000
+      duration: 2000,
     }).on('progress', ({ value }) => {
       $webgl.ambientLight.color.setRGB(
         THREE.Math.lerp(fromAmbientColor.r, toAmbientColor.r, value),
         THREE.Math.lerp(fromAmbientColor.g, toAmbientColor.g, value),
-        THREE.Math.lerp(fromAmbientColor.b, toAmbientColor.b, value)
+        THREE.Math.lerp(fromAmbientColor.b, toAmbientColor.b, value),
       );
 
       $webgl.directionalLight.color.setRGB(
         THREE.Math.lerp(fromDirectionalColor.r, toDirectionalColor.r, value),
         THREE.Math.lerp(fromDirectionalColor.g, toDirectionalColor.g, value),
-        THREE.Math.lerp(fromDirectionalColor.b, toDirectionalColor.b, value)
+        THREE.Math.lerp(fromDirectionalColor.b, toDirectionalColor.b, value),
       );
     });
 
@@ -56,20 +56,20 @@ export default class Epidemic {
 
     setTimeout(() => {
       animate.add({
-        duration: 1000
+        duration: 1000,
       }).on('progress', ({ value }) => {
         $webgl.ambientLight.color.setRGB(
           THREE.Math.lerp(toAmbientColor.r, fromAmbientColor.r, value),
           THREE.Math.lerp(toAmbientColor.g, fromAmbientColor.g, value),
-          THREE.Math.lerp(toAmbientColor.b, fromAmbientColor.b, value)
+          THREE.Math.lerp(toAmbientColor.b, fromAmbientColor.b, value),
         );
 
         $webgl.directionalLight.color.setRGB(
           THREE.Math.lerp(toDirectionalColor.r, fromDirectionalColor.r, value),
           THREE.Math.lerp(toDirectionalColor.g, fromDirectionalColor.g, value),
-          THREE.Math.lerp(toDirectionalColor.b, fromDirectionalColor.b, value)
+          THREE.Math.lerp(toDirectionalColor.b, fromDirectionalColor.b, value),
         );
       });
-    }, duration );
+    }, duration);
   }
 }

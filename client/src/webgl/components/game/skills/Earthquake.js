@@ -1,4 +1,4 @@
-import Skill from "./Skill";
+import Skill from './Skill';
 import mouse from '@/plugins/Mouse';
 import Reborn from '@/game';
 

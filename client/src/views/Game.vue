@@ -113,10 +113,10 @@ export default {
     'game:start': function (args) { this.onGameStart(args); },
     'game:end': function (args) { this.onGameEnd(args); },
     'notification:send': function () { this.onNotificationSend(); },
-    'skill:start': function(args) { this.onSkillStart(args) },
-    'skill:available': function(args) { this.onSkillAvailable(args) },
-    'skill:unavailable': function(args) { this.onSkillUnavailable(args) },
-    'rythm:change': function(args) { this.onRythmChange(args) },
+    'skill:start': function (args) { this.onSkillStart(args); },
+    'skill:available': function (args) { this.onSkillAvailable(args); },
+    'skill:unavailable': function (args) { this.onSkillUnavailable(args); },
+    'rythm:change': function (args) { this.onRythmChange(args); },
   },
 
   created() {
@@ -221,7 +221,7 @@ export default {
     },
 
     onLaunchSkill(skill) {
-      const requestParams = {...skill, skill: skill.slug};
+      const requestParams = { ...skill, skill: skill.slug };
       if (!config.server.enabled) {
         this.onSkillStart(requestParams);
         return;
@@ -270,13 +270,13 @@ export default {
           duration: 600,
         });
 
-        item.gridCases.forEach(gridCaseInfos => {
+        item.gridCases.forEach((gridCaseInfos) => {
           if (gridCaseInfos) {
             this.$webgl.map.grid.get(gridCaseInfos).reference = gridCaseInfos.reference;
           }
         });
 
-        const prefix = this.$game.player.role.name + '_add_';
+        const prefix = `${this.$game.player.role.name}_add_`;
         const entityModel = this.$game.entityModels.get(item.model);
         if (this.$sound.has(prefix + entityModel.category)) {
           this.$sound.play(prefix + entityModel.category);
@@ -295,18 +295,18 @@ export default {
     onEntityRemove({ model, uuid, gridCases }) {
       this.$store.commit('debug/log', { content: `entity:remove (receive) with uuid: ${uuid}`, label: 'socket' });
 
-      const prefix = this.$game.player.role.name + '_remove';
+      const prefix = `${this.$game.player.role.name}_remove`;
       const entityModel = this.$game.entityModels.get(model);
       this.$sound.play(prefix);
 
       this.$webgl.models[model].removeEntity(uuid);
 
       if (gridCases) {
-        gridCases.forEach(gridCaseInfos => {
+        gridCases.forEach((gridCaseInfos) => {
           this.$webgl.map.grid.get(gridCaseInfos).reference = null;
         });
       } else {
-        console.warn("Game:onEntityRemove: No gridcases");
+        console.warn('Game:onEntityRemove: No gridcases');
       }
     },
 
@@ -315,7 +315,7 @@ export default {
       const skillEffect = this.$webgl.skills.get(item.skill);
       if (!skillEffect) return;
       skillEffect.launch(item, this.$webgl);
-      this.$sound.play('skill_' + item.skill);
+      this.$sound.play(`skill_${item.skill}`);
     },
 
     onSkillAvailable(args) {
@@ -329,7 +329,7 @@ export default {
     },
 
     onRythmChange(speed) {
-      this.$sound.playSample('drum_' + speed);
+      this.$sound.playSample(`drum_${speed}`);
     },
 
     onTimelineTick({ metrics, elapsed }) {

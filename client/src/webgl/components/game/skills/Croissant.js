@@ -1,8 +1,8 @@
-import Skill from "./Skill";
+import animate from '@solaldr/animate';
+import Skill from './Skill';
 import Reborn from '@/game';
-import animate from "@solaldr/animate";
-import theme from "@/config/theme";
-import AssetsManager from "@/services/assets/Manager";
+import theme from '@/config/theme';
+import AssetsManager from '@/services/assets/Manager';
 import { GodRay } from '../../world';
 
 export default class Croissant {
@@ -18,17 +18,17 @@ export default class Croissant {
     });
   }
 
-  launch({duration}, $webgl) {
-    var fromAmbient = theme.light.ambient;
-    var fromDirectional = theme.light.directional;
-    var fromPosition = $webgl.directionalLight.position.clone();
-    var toPosition = new THREE.Vector3(0, 15, 5);
+  launch({ duration }, $webgl) {
+    const fromAmbient = theme.light.ambient;
+    const fromDirectional = theme.light.directional;
+    const fromPosition = $webgl.directionalLight.position.clone();
+    const toPosition = new THREE.Vector3(0, 15, 5);
     this.godRay.mesh.material.uniforms.dashOffset.value = 2;
     this.scene.add(this.godRay.mesh);
     console.log(this.godRay);
 
     animate.add({
-      duration: 2000
+      duration: 2000,
     }).on('progress', ({ value }) => {
       $webgl.ambientLight.intensity = THREE.Math.lerp(fromAmbient.intensity, 0.75, value);
       $webgl.directionalLight.intensity = THREE.Math.lerp(fromDirectional.intensity, 0.75, value);
@@ -47,12 +47,12 @@ export default class Croissant {
 
     setTimeout(() => {
       animate.add({
-        duration: 1000
+        duration: 1000,
       }).on('progress', ({ value }) => {
         $webgl.ambientLight.intensity = THREE.Math.lerp(0.75, fromAmbient.intensity, value);
         $webgl.directionalLight.intensity = THREE.Math.lerp(0.75, fromDirectional.intensity, value);
         $webgl.directionalLight.position.lerpVectors(toPosition, fromPosition, value);
       });
-    }, duration );
+    }, duration);
   }
 }

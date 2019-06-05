@@ -1,5 +1,5 @@
-import defaultTheme from "./_default";
+import defaultTheme from './_default';
 
 export default [
-  defaultTheme
-]
+  defaultTheme,
+];

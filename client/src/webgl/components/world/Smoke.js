@@ -1,7 +1,7 @@
 import LineSystem from '../line/LineSystem';
 import GUI from '@/plugins/GUI';
 import config from '@/config/worlds';
-import theme from "@/config/theme";
+import theme from '@/config/theme';
 
 export default class Smoke {
   constructor({
@@ -36,7 +36,8 @@ export default class Smoke {
         position: new THREE.Vector3(
           Math.cos(angle) * radius,
           10 + Math.random() * 10,
-          Math.sin(angle) * radius),
+          Math.sin(angle) * radius,
+        ),
         rotation: new THREE.Euler(0, Math.random(), 0),
         dashOffset: Math.random() * 2,
       });

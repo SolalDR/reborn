@@ -40,10 +40,10 @@ class Grid extends Reborn.Grid {
 
   getCellsFromBox(box = this.box) {
     const distance = new THREE.Vector2().copy(box.max).sub(box.min).addScalar(1);
-    var cells = [];
+    const cells = [];
     for (let i = 0; i < distance.x; i++) {
       for (let j = 0; j < distance.y; j++) {
-        cells.push(this.get({ x: box.min.x + i, y: box.min.y + j }))
+        cells.push(this.get({ x: box.min.x + i, y: box.min.y + j }));
       }
     }
 
@@ -78,7 +78,7 @@ class Grid extends Reborn.Grid {
     const distance = new THREE.Vector2().copy(this.box.max).sub(this.box.min).addScalar(1);
     for (let i = 0; i < distance.x; i++) {
       for (let j = 0; j < distance.y; j++) {
-        let currentCell = this.get({ x: this.box.min.x + i, y: this.box.min.y + j });
+        const currentCell = this.get({ x: this.box.min.x + i, y: this.box.min.y + j });
         if (currentCell === null || currentCell.reference !== null) {
           return false;
         }

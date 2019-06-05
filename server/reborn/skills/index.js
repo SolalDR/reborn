@@ -12,7 +12,7 @@ export default [
     slug: "night",
     role: "nature",
     duration: 7000,
-    constraint: "purity-low",
+    constraint: null,
     category: "skill"
   },
   {
@@ -20,7 +20,7 @@ export default [
     slug: "croissant",
     role: "nature",
     duration: 7000,
-    constraint: "purity-low",
+    constraint: null,
     category: "skill"
   },
   {
@@ -28,7 +28,7 @@ export default [
     slug: "epidemic",
     role: "nature",
     duration: 7000,
-    constraint: "purity-low",
+    constraint: null,
     category: "skill"
-  }
+  },
 ];
