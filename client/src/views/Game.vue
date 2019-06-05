@@ -313,9 +313,7 @@ export default {
 
     onSkillStart(item) {
       const skillEffect = this.$webgl.skills.get(item.skill);
-      console.log(item, skillEffect);
       if (!skillEffect) return;
-      console.log(skillEffect);
       skillEffect.launch(item, this.$webgl);
       this.$sound.play(`skill_${item.skill}`);
     },
