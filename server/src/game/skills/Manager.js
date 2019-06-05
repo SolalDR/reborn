@@ -31,6 +31,15 @@ export default class SkillsManager extends Emitter {
         })
       }
 
+      game.on('start', () => {
+        if (skillInfos.startRefillDelay) {
+          setTimeout(()=>{
+            skill.refill = true;
+            skill.checkAvailable();
+          }, skillInfos.startRefillDelay);
+        }
+      });
+
       skill.on('available', () => this.emit('skill:available', skill.slug));
       skill.on('unavailable', () => this.emit('skill:unavailable', skill.slug));
       skill.on('start', (args) => this.emit('skill:start', {...args, skill: skill.slug}));

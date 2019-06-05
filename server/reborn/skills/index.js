@@ -12,6 +12,8 @@ export default [
     slug: "night",
     role: "nature",
     duration: 7000,
+    // startRefillDelay: 60000,
+    startRefillDelay: 1000,
     constraint: null,
     category: "skill"
   },
@@ -20,6 +22,8 @@ export default [
     slug: "croissant",
     role: "nature",
     duration: 7000,
+    // startRefillDelay: 30000,
+    startRefillDelay: 2000,
     constraint: null,
     category: "skill"
   },
@@ -27,6 +31,8 @@ export default [
     name: "Epidémie",
     slug: "epidemic",
     role: "nature",
+    // startRefillDelay: 45000,
+    startRefillDelay: 3000,
     duration: 7000,
     constraint: null,
     category: "skill"
