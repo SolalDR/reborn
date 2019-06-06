@@ -79,7 +79,7 @@ class Control {
     timingFunction = 'linear',
   } = {}) {
     const duration = speed * count;
-    animate.add({ duration, timingFunction }).on('progress', (event) => {
+    animate.add({ duration, timingFunction }).on('progress', (event) => {
       const rotation = Math.sin((event.value * Math.PI * 2) * count) * intensity;
       this.orbit.axeRotation = rotation;
     });

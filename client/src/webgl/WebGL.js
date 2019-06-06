@@ -256,19 +256,22 @@ export default class WebGL extends Emitter {
         model = models[Math.floor(Math.random() * models.length)];
         const coords = this.map.grid.getCoord(i);
         const size = this.game.entityModels.get(model).size;
-        // const hasSpace = this.map.grid.checkSpace(
-        //   new THREE.Vector3(coords.x, this.map.grid[i].altitude, coords.y),
-        //   new THREE.Vector2(size[0], size[1]),
-        // );
+        const hasSpace = this.map.grid.checkSpace(
+          new THREE.Vector3(coords.x, this.map.grid[i].altitude, coords.y),
+          new THREE.Vector2(size[0], size[1]),
+        );
 
-        entities.push({
-          model,
-          gridCases: this.map.grid.getCellsFromBox().map(cell => cell.infos),
-          position: new THREE.Vector3(coords.x, this.map.grid[i].altitude, coords.y),
-          rotation: 0,
-        });
+        if (hasSpace) {
+          entities.push({
+            model,
+            gridCases: this.map.grid.getCellsFromBox().map(cell => cell.infos),
+            position: new THREE.Vector3(coords.x, this.map.grid[i].altitude, coords.y),
+            rotation: 0,
+          });
+        }
       }
     }
+
     return entities;
   }
 

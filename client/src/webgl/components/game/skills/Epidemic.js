@@ -1,6 +1,4 @@
 import animate from '@solaldr/animate';
-import Skill from './Skill';
-import Reborn from '@/game';
 import theme from '@/config/theme';
 import AssetsManager from '@/services/assets/Manager';
 import { Smoke } from '../../world';
@@ -21,8 +19,8 @@ export default class Epidemic {
   launch({ duration }, $webgl) {
     const fromAmbient = theme.light.ambient;
     const fromDirectional = theme.light.directional;
-    const fromAmbientColor = $webgl.ambientLight.color.clone();
-    const fromDirectionalColor = $webgl.ambientLight.color.clone();
+    const fromAmbientColor = new THREE.Color(fromAmbient.color);
+    const fromDirectionalColor = new THREE.Color(fromDirectional.color);
     const toAmbientColor = new THREE.Color(0, 0.5, 0);
     const toDirectionalColor = new THREE.Color(1, 0, 0);
     this.smoke.mesh.material.uniforms.dashOffset.value = 2;

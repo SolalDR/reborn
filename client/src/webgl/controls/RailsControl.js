@@ -63,7 +63,7 @@ class RailsControl extends Emitter {
     const diff = to.clone().sub(from);
 
     // Test if it's a useless anim
-    if (from.equals(to)) return;
+    if (from.equals(to)) return null;
 
     // Register animation globally
     const a = animate.add({
@@ -97,7 +97,7 @@ class RailsControl extends Emitter {
     const diff = to.clone().sub(from);
 
     // Test if it's a useless anim
-    if (from.clone().normalize().equals(to.clone().normalize())) return;
+    if (from.clone().normalize().equals(to.clone().normalize())) return null;
 
     // Register animation globally
     const a = animate.add({
