@@ -17,7 +17,7 @@ export default class Tree extends Metric {
     });
 
     this.list = models.reduce((acc, model) => {
-      if (model.category == 'plant' || model.category == 'tree') {
+      if (model.category === 'plant' || model.category === 'tree') {
         acc.push(model.slug);
       }
       return acc;

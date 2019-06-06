@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 import coal_factory from './coal_factory';
 import house from './house';
 import rock from './rock';
@@ -25,6 +27,7 @@ import solar_panel from './solar_panel';
 import sorting_center from './sorting_center';
 import tough_tree from './tough_tree';
 import uranium_deposit from './uranium_deposit';
+import waste from './waste';
 
 export default [
   coal_factory,
@@ -54,4 +57,5 @@ export default [
   sorting_center,
   tough_tree,
   uranium_deposit,
+  waste,
 ];

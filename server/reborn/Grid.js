@@ -85,6 +85,18 @@ export default class Grid extends Array {
   }
 
   /**
+   * Get the 3D position of the gridCase's center
+   * @param {GridCase} gridCase
+   */
+  getGridCasePosition(gridCase) {
+    return {
+      x: gridCase.x - this.size[0] / 2 + 0.5,
+      y: gridCase.altitude,
+      z: gridCase.y - this.size[1] / 2 + 0.5,
+    };
+  }
+
+  /**
    * A getter method
    * @param {Integer} x
    * @param {Integer} y

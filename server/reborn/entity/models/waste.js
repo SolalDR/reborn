@@ -1,8 +1,8 @@
 export default {
-  slug: 'garbage',
+  slug: 'waste',
   category: null,
   role: null,
-  name: 'Garbage',
+  name: 'Waste',
   displayName: 'Déchets',
   states: {
     mounted: {
