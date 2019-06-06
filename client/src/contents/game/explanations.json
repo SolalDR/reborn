@@ -1,0 +1,66 @@
+{
+  "title": "La civilisation a survécu",
+  "suffix": "ans",
+  "explanations": {
+    "purity": {
+      "city": [
+        "La pollution des sols, de l’eau et de l’air a atteint",
+        "un niveau si élevé que la terre est devenue invivable.",
+        "Votre population n’a pas survécu."
+      ],
+      "nature": [
+        "La pollution a atteint des sommets, rendant les sols arides et l’air irrespirable,",
+        "portant atteinte à la biodiversité et tuant la communauté de survivants.",
+        "Un conseil, pensez à supprimer les déchets produits par la civilisation la prochaine fois."
+      ]
+    },
+    "biodiversity": {
+      "city": [
+        "Une des particularités de l’homme, c’est d’apprendre de ses erreurs… comme de les reproduire.",
+        "Par votre faute, une majorité des espèces de l’île a disparu.",
+        "Sans biodiversité, pas d’humanité. Tous vos survivants ont péri."
+      ],
+      "nature": [
+        "Les humains sont des animaux comme les autres mais si vous devez en prendre soin,",
+        "cela ne signifie pas que vous ne devez rien faire lorsqu’ils s’acharnent à vous détruire",
+        "et par là même à se détruire eux-mêmes.",
+        "La prochaine fois, utilisez les pouvoirs à votre disposition."
+      ]
+    },
+    "food": {
+      "city": [
+        "Malheureux ! Votre population est morte de faim, tout espoir est perdu...",
+        "On recommence ?"
+      ],
+      "nature": [
+        "Les humains sont morts de faim !",
+        "On vous avait pourtant dit de ne pas jouer avec votre grand-mère !"
+      ]
+    },
+    "energy": {
+      "city": [
+        "La montée de la demande en électricité a produit une surcharge du réseau.",
+        "Vos installations ont pris feu et tous vos survivants ont péri dans les flammes."
+      ],
+      "nature": [
+        "Après des dysfonctionnements majeurs dans leurs installations électriques,",
+        "les humains ont échoué à bâtir une civilisation pérenne et n’ont pas survécu.",
+        "Jouer à deux, c’est bien. Jouer avec quelqu’un de doué c’est mieux."
+      ]
+    },
+    "satisfaction": {
+      "city": [
+        "L’insatisfaction de votre population a rapidement créé des tensions dans votre communauté",
+        "et débouché sur un conflit fratricide. Personne n’a survécu."
+      ],
+      "nature": [
+        "Apparemment, même en situation de crise, les humains sont incapables de se gérer.",
+        "La communauté humaine s’est entretuée, provoquant la disparition d’une espèce si prometteuse.",
+        "Un nouvel essai sera peut être fructueux ?"
+      ]
+    }
+  },
+  "save": "Sauvegarder votre score",
+  "tryAgain": "Rejouer",
+  "share": "Partagez votre score sur les RS:{{{{"
+}

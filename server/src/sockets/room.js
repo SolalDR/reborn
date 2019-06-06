@@ -1,5 +1,5 @@
 import Room from '../Room';
-import Player from '../Player';
+import Player from '../game/Player';
 import Bus from "./../Bus";
 
 /**
@@ -15,7 +15,6 @@ export default {
   },
 
   join(roomId){
-    console.log(this.id, 'joined', roomId)
     const socketRooms = process.io.sockets.adapter.rooms
 
     // If creating the room
@@ -28,7 +27,7 @@ export default {
       room.addPlayer(new Player(client, this));
       this.emit('room:connect', {
         playerId: client.id,
-        roomId: room.id
+        verifiedRoomId: room.id
       });
       Bus.emit('room:add', this);
 
@@ -42,11 +41,11 @@ export default {
       room.addPlayer(player);
       this.emit('room:connect', {
         playerId: player.id,
-        roomId: room.id
+        verifiedRoomId: room.id
       });
       Bus.emit('rooms:update');
       if( room.players.size === 2 ){
-        room.launchGame();
+        room.createGame();
       }
     }
   }

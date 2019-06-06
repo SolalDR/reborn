@@ -1,22 +1,25 @@
+import animate from '@solaldr/animate';
 import Grid from './Grid';
-import Bus from '../../../plugins/Bus';
 import GridHelper from './GridHelper';
+import Bus from '@/plugins/Bus';
+import GUI from '@/plugins/GUI';
+import theme from '@/config/theme';
 
-const loader = new THREE.TextureLoader();
 
 export default class GameMap extends THREE.Group {
   constructor({
     resolution = 2,
     cellSize = 1,
     size = new THREE.Vector2(32, 32),
+    raycaster = null,
+    geometry = null,
+    gridDatas = null,
   } = {}) {
     super();
     this.size = size;
     this.cellSize = cellSize;
     this.resolution = resolution;
-
-    this.initFloor();
-    this.initWater();
+    this.raycaster = raycaster;
 
     const gridParams = {
       size,
@@ -25,82 +28,134 @@ export default class GameMap extends THREE.Group {
     };
 
     this.grid = new Grid(gridParams);
+    for (let i = 0; i < gridDatas.length; i++) {
+      this.grid.register(i, gridDatas[i]);
+    }
+
     this.gridHelper = new GridHelper(gridParams);
     this.gridHelper.setSize(1, 1);
 
+    this.add(this.gridHelper);
 
+    this.initCastEvent();
+    this.initWater();
+    this.initFloor(geometry);
+
+    // TODO: Add in config
+    // this.displayPlayground();
+  }
+
+  /**
+   * Affiche le sol
+   */
+  initFloor(geometry) {
+    const material = new THREE.MeshToonMaterial({
+      vertexColors: THREE.FaceColors,
+      specular: theme.map.specular,
+      reflectivity: theme.map.reflectivity,
+      shininess: theme.map.shininess,
+      flatShading: false,
+    });
+
+    GUI.map.addMaterial('Ground', material);
+
+    this.floor = new THREE.Mesh(geometry, material);
+    this.floor.castShadow = true;
+    this.floor.receiveShadow = true;
+    this.floor.geometry.computeFaceNormals();
+    this.floor.geometry.computeVertexNormals();
+    this.floor.position.y = 0.1;
+
+    this.add(this.floor);
+    this.raycaster.object = this.floor;
+  }
+
+  /**
+   * Init l'écoute de l'évenement de raycasting pour bouger le helper
+   */
+  initCastEvent() {
     Bus.$on('cast', (intersection) => {
-      if (intersection) {
-        this.gridHelper.visible = true;
-        const cell = this.grid.getCellFromUV(intersection.uv);
-        this.gridHelper.updatePosition(cell, intersection.uv);
-        if (!this.grid.checkIntersection(this.gridHelper.box)) {
-          this.gridHelper.material.color.set(0xFF0000);
-        } else {
-          this.gridHelper.material.color.set(0x00FF00);
+      if (intersection && intersection.face.normal.y > 0.99) {
+        if (this.gridHelper.status === 'out') {
+          // this.gridHelper.visible = true;
+        }
+
+        // Récupère les coordonnée de cellule courante
+        const cell = this.grid.getCell(intersection.point);
+        const a = this.grid.checkSpace(intersection.point, this.gridHelper.scale);
+        this.gridHelper.updatePosition(cell, intersection.point);
+
+
+        if (!a && this.gridHelper.status !== 'transparent') {
+          this.gridHelper.status = 'transparent';
+          animate.add({ from: this.gridHelper.material.opacity, to: 0.4, duration: 200 }).on('progress', ({ value }) => {
+            this.gridHelper.material.opacity = value;
+          });
+        } else if (this.gridHelper.status !== 'plain') {
+          this.gridHelper.status = 'plain';
+          animate.add({ from: this.gridHelper.material.opacity, to: 1, duration: 200 }).on('progress', ({ value }) => {
+            this.gridHelper.material.opacity = value;
+          });
         }
       } else {
-        this.gridHelper.visible = false;
+        this.gridHelper.status = 'out';
+        animate.add({ from: this.gridHelper.material.opacity, to: 0, duration: 200 }).on('progress', ({ value }) => {
+          this.gridHelper.material.opacity = value;
+        });
+        // this.gridHelper.visible = false;
       }
     });
-
-
-    this.add(this.grid);
-    this.add(this.gridHelper);
-    this.add(this.floor);
-    this.add(this.water);
   }
 
-
-  initFloor() {
-    const geometry = new THREE.BoxGeometry(
-      this.size.x * this.cellSize,
-      this.size.y * this.cellSize,
-      1.5,
-      this.size.x * this.resolution,
-      this.size.y * this.resolution,
-      1,
-    );
-
-    const material = new THREE.MeshToonMaterial({
-      color: 0xCDB380,
-      bumpScale: 0.1,
-      specular: 0x798133,
-      reflectivity: 0,
-      shininess: 0,
-      // flatShading: true,
+  /**
+   * Outil de debug pour afficher les case disponibles
+   */
+  displayPlayground() {
+    const geo = new THREE.PlaneGeometry(1, 1);
+    geo.rotateX(-Math.PI / 2);
+    const mat = new THREE.MeshBasicMaterial({
+      color: 0x00FF00,
+      transparent: true,
+      opacity: 0.5,
     });
 
-    loader.load('/game/ile.png', () => {
-      // material.displacementMap = texture;
-      // material.bumpMap = texture;
-      // material.displacementScale = 5;
-      // material.bumpScale = 5;
-      material.needsUpdate = true;
-    });
+    for (let i = 0; i < this.grid.size[0]; i++) {
+      for (let j = 0; j < this.grid.size[1]; j++) {
+        const cell = this.grid.get({ x: i, y: j });
 
-    loader.load('/game/ile_2.png', () => {
-      // material.map = texture;
-      material.needsUpdate = true;
-    });
+        if (cell) {
+          const mesh = new THREE.Mesh(geo, mat);
+          mesh.position.set(
+            i - this.grid.size[0] / 2 + 0.5,
+            cell.altitude,
+            j - this.grid.size[1] / 2 + 0.5,
+          );
 
-    geometry.rotateX(-Math.PI / 2);
-    this.floor = new THREE.Mesh(geometry, material);
-    this.floor.position.y = 0;
+          this.add(mesh);
+        }
+      }
+    }
   }
 
+  /**
+   * Afficher l'eau
+   */
   initWater() {
     const geometry = new THREE.PlaneGeometry(
-      this.size.x * this.cellSize * 10,
-      this.size.y * this.cellSize * 10,
+      this.size.x * this.cellSize * 100,
+      this.size.y * this.cellSize * 100,
     );
 
     const material = new THREE.MeshToonMaterial({
-      color: 0x036564,
-      // specular: 0x3f7a85,
+      color: theme.water.color,
+      specular: theme.water.specular,
+      shininess: 0,
     });
+
+    GUI.map.addMaterial('Water', material);
 
     geometry.rotateX(-Math.PI / 2);
     this.water = new THREE.Mesh(geometry, material);
+    this.add(this.water);
   }
 }

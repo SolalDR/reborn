@@ -1,4 +1,4 @@
-import Emitter from "./../../reborn/utils/Emitter";
+import Emitter from "../reborn/utils/Emitter";
 
 export default class Historic extends Emitter {
   constructor() {

@@ -1,6 +1,0 @@
-/**
- * @class
- */
-class Player {
-
-}

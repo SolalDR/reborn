@@ -1,0 +1,80 @@
+.cta {
+  @extend .bold;
+
+  outline: none;
+  cursor: pointer;
+  padding: 0;
+  color: getColor(basics, black);
+  @include fontSize(20);
+  font-weight: bold;
+  border: none;
+
+  &--absolute {
+    @extend .cta;
+
+    z-index: 2;
+    position: fixed;
+    right: $border-of-screen;
+    text-transform: uppercase;
+    @include fontSize(24);
+  }
+
+  &--bordered {
+    @extend .cta;
+
+    padding: 1.2rem;
+    width: 27rem;
+    background-color: getColor(basics, white);
+    border: .2rem solid getColor(basics, black);
+    border-radius: 1rem;
+    transition: all .3s ease;
+
+    &:hover {
+      box-shadow: .3rem .3rem 0 0 rgba(0, 0, 0, 1);
+      transform: translateX(-.3rem) scale(1.05);
+    }
+  }
+
+  &--disabled {
+    cursor: default;
+    opacity: .5;
+
+    &:hover {
+      box-shadow: none;
+      transform: inherit;
+    }
+  }
+}
+
+.mute__cta {
+  @extend .cta--absolute;
+  top: $border-of-screen;
+  @include fontSize(24);
+  transition: opacity .3s ease;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    width: 0;
+    height: .3rem;
+    background-color: getColor(basics, black);
+    transition: width .3s ease;
+  }
+
+  &--muted {
+    opacity: .3;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    &::after {
+      left: 0;
+      right: inherit;
+      width: 100%;
+    }
+  }
+}

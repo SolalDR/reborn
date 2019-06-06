@@ -5,46 +5,42 @@ class GridHelper extends THREE.Mesh {
     size = new THREE.Vector2(32, 32),
   } = {}) {
     super(
-      new THREE.PlaneGeometry(cellSize, cellSize),
+      new THREE.CircleGeometry(0.5, 16),
       new THREE.MeshBasicMaterial({
-        color: 0x00FF00,
+        color: 0xFFFFFF,
+        transparent: true,
+        opacity: 1,
       }),
     );
     this.size = size;
-    this.cell = null;
     this.box = new THREE.Box2();
 
     this.position.copy(position);
+    this.targetPosition = position.clone();
     this.rotation.x = -Math.PI / 2;
   }
 
-  updatePosition(cell, uv) {
-    // Update cell
-    this.cell = cell;
-
-    // Compute position
+  /**
+   * Compute the position of the zonnig center, default position is attribute to gridHelper
+   * @param {THREE.Vector2} cell The coordinates of the cell
+   * @param {THREE.Vector2} point The coordinates you need to compute
+   * @param {THREE.Vector2} position Target position
+   */
+  updatePosition(cell, point, position = this.targetPosition) {
     const x = !this.xPeer
       ? cell.x - this.size.x / 2 + 0.5
       : cell.x - this.size.x / 2 + (
-        (uv.x * this.size.x) % 1 > 0.5 ? 1 : 0
+        (point.x + this.size.x / 2) % 1 > 0.5 ? 1 : 0
       );
 
     const y = !this.yPeer
-      ? -cell.y + this.size.y / 2 - 0.5
-      : -cell.y + this.size.y / 2 + (
-        (uv.y * this.size.y) % 1 > 0.5 ? -1 : 0
+      ? cell.y - this.size.y / 2 + 0.5
+      : cell.y - this.size.y / 2 + (
+        (point.z + this.size.y / 2) % 1 > 0.5 ? 1 : 0
       );
-    this.position.set(x, 1.05, y);
 
-    // Compute bbox
-    this.box.min.x = cell.x - Math.floor(this.scale.x / 2) - (
-      this.xPeer && (uv.x * this.size.x) % 1 > 0.5 ? -1 : 0
-    );
-    this.box.min.y = cell.y - Math.floor(this.scale.y / 2) - (
-      this.yPeer && (uv.y * this.size.y) % 1 > 0.5 ? 1 : 0
-    );
-    this.box.max.x = this.box.min.x + this.scale.x - 1;
-    this.box.max.y = this.box.min.y + this.scale.y - 1;
+    position.set(x, point.y + 0.11, y);
+    this.position.y = point.y + 0.11;
   }
 
 
@@ -53,6 +49,13 @@ class GridHelper extends THREE.Mesh {
     this.scale.y = y;
     this.xPeer = this.scale.x % 2 === 0;
     this.yPeer = this.scale.y % 2 === 0;
+  }
+
+  render() {
+    this.position.copy(this.position.clone()
+      .add(this.targetPosition.clone()
+        .sub(this.position)
+        .multiplyScalar(0.3)));
   }
 }
 

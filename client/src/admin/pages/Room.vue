@@ -111,7 +111,7 @@
 </template>
 
 <script>
-import models from '../../../../reborn/entity/models';
+import models from '../../../../server/reborn/entity/models';
 
 import GridComponent from '../components/rooms/Grid.vue';
 import EntryComponent from '../components/rooms/Entry.vue';

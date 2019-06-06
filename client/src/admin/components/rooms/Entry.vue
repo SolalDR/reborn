@@ -21,17 +21,16 @@ export default {
 
   props: {
     entry: {
-      type: Object
-    }
-  }
-,
+      type: Object,
+    },
+  },
 
-data () {
-  return {
-    showDatas: false
-  }
-}
-}
+  data() {
+    return {
+      showDatas: false,
+    };
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -68,4 +67,3 @@ data () {
   }
 }
 </style>
-

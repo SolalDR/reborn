@@ -8,6 +8,7 @@
     "install": "concurrently \"npm run client:install\" \"npm run server:install\"",
     "server:build": "cd server && npm run build",
     "client:build": "cd client && npm run build",
+    "server:publish": "git subtree push --prefix server heroku master",
     "build": "concurrently \"npm run server:build\" \"npm run client:build\"",
     "server:dev": "cd server && npm run dev",
     "client:dev": "cd client && npm run dev",

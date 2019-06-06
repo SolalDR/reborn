@@ -4,36 +4,46 @@
   "private": true,
   "scripts": {
     "dev": "vue-cli-service serve",
+    "webgl": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "eslint": "node_modules/.bin/eslint ./ --fix"
   },
   "dependencies": {
     "@solaldr/animate": "^0.1.1",
     "@solaldr/emitter": "^0.1.0",
+    "dat.gui": "^0.7.6",
+    "firebase": "^5.11.1",
     "glslify-loader": "^2.0.0",
+    "postprocessing": "^6.2.1",
     "raw-loader": "^1.0.0",
     "register-service-worker": "^1.6.2",
+    "simplex-noise": "^2.4.0",
     "socket.io-client": "^2.2.0",
-    "three": "^0.102.1",
+    "three": "^0.103.0",
+    "three-dat.gui": "^1.0.2",
+    "three-svg-loader": "^0.2.4",
     "vue": "^2.6.6",
     "vue-material": "latest",
     "vue-router": "^3.0.1",
     "vue-socket.io": "^3.0.7",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "howler": "^2.1.2"
   },
   "devDependencies": {
     "@babel/preset-es2017": "^7.0.0-beta.53",
     "@vue/cli-plugin-babel": "^3.0.4",
     "@vue/cli-plugin-eslint": "^3.0.4",
     "@vue/cli-plugin-pwa": "^3.5.1",
-    "@vue/cli-service": "^3.0.4",
+    "@vue/cli-service": "^3.6.0",
     "@vue/eslint-config-airbnb": "^4.0.0",
     "babel-eslint": "^10.0.1",
-    "eslint": "^5.8.0",
+    "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.1.0",
     "vue-template-compiler": "^2.5.21",
-    "webpack": "^4.29.6"
+    "webpack": "^4.29.6",
+    "worker-loader": "^2.0.0"
   }
 }

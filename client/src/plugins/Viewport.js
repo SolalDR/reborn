@@ -12,6 +12,7 @@ const viewport = new Vue({
     window.addEventListener('resize', () => {
       this.width = window.innerWidth;
       this.height = window.innerHeight;
+      this.ratio = this.width / this.height;
       this.$emit('resize', this);
     });
   },

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import Emitter from '../../../../reborn/utils/Emitter';
+import Emitter from '@solaldr/emitter';
 
 window.THREE = THREE;
 /**

@@ -1,10 +1,13 @@
 {
   "name": "reborn-server",
   "version": "0.0.1",
+  "engines": {
+    "node": "10.0.0"
+  },
   "main": "index.js",
   "scripts": {
     "dev": "node ./index.js",
-    "build": "vue-cli-service build"
+    "start": "node ./index.js"
   },
   "dependencies": {
     "@solaldr/emitter": "^0.1.0",

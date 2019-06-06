@@ -21,7 +21,10 @@ class OrbitControls {
     this.look = look || this.target;
     this.phi = phi;
     this.theta = theta;
-    this.radius = radius || object.position.distanceTo(this.target);
+    this.radius = radius;
+    this.axeRotation = 0;
+    this.computePosition();
+    this.object.lookAt(this.look);
   }
 
   computePosition() {
@@ -55,6 +58,12 @@ class OrbitControls {
     if (this.enabled) {
       this.computePosition();
       this.object.lookAt(this.look);
+      this.object.rotateOnWorldAxis(
+        this.target.clone()
+          .sub(this.object.position)
+          .normalize(),
+        this.axeRotation,
+      );
     }
   }
 }

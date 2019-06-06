@@ -54,7 +54,7 @@ export default {
   },
 
   sockets: {
-    'admin:authenticate' (response) {
+    'admin:authenticate': function (response) {
       if (response.valid) {
         this.$store.commit('admin/updateToken', response.token);
         this.$router.push('/admin');
@@ -62,7 +62,7 @@ export default {
         this.form.error = 'Le mot de passe est faux';
         this.sending = false;
       }
-    }
+    },
   },
 
   methods: {

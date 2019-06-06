@@ -2,6 +2,11 @@ attribute vec3 instancePosition;
 attribute vec4 instanceQuaternion;
 attribute vec3 instanceScale;
 
+#ifdef PICKING
+  attribute vec3 instancePickingColor;
+  varying vec3 v_instancePickingColor;
+#endif
+
 mat3 inverse(mat3 m) {
   float a00 = m[0][0], a01 = m[0][1], a02 = m[0][2];
   float a10 = m[1][0], a11 = m[1][1], a12 = m[1][2];
