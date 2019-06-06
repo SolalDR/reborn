@@ -1,4 +1,4 @@
-import Emitter from "@solaldr/emitter";
+import Emitter from '@solaldr/emitter';
 
 /**
  * @param {Number|null} delay If this value is defined, the timeline will wait before executing the event
@@ -9,7 +9,8 @@ export default class TimelineEvent extends Emitter {
   constructor({
     timecode = null,
     duration = 0,
-  } = {}, datas){
+    delay = 0,
+  } = {}, datas) {
     super();
     this.timecode = timecode;
     this.datas = datas;
@@ -22,7 +23,7 @@ export default class TimelineEvent extends Emitter {
    * Return infos on timeline event to log it or add a message to the history
    * @return {string} The description of the event
    */
-  log(){
-    return `timecode: (${this.timecode}), ${this.datas.name ? this.datas.name : 'Anonyme'}; Number of execution: ${this.count}`
+  log() {
+    return `timecode: (${this.timecode}), ${this.datas.name ? this.datas.name : 'Anonyme'}; Number of execution: ${this.count}`;
   }
 }

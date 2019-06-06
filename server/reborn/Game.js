@@ -1,8 +1,8 @@
-import * as Reborn from "./index";
-import Emitter from "./utils/Emitter";
-import entityModels from "./entity/models";
-import metrics from "./metric"
-import World from "./World";
+import * as Reborn from './index';
+import Emitter from './utils/Emitter';
+import entityModels from './entity/models';
+import metrics from './metric';
+import World from './World';
 
 /**
  * @param {Player[]} players A list of players
@@ -12,8 +12,8 @@ class Game extends Emitter {
   constructor({
     players = [],
     seed = Math.random(),
-    createdAt = Date.now()
-  } = {}){
+    createdAt = Date.now(),
+  } = {}) {
     super();
     this.createdAt = createdAt;
     this.players = players;
@@ -27,25 +27,25 @@ class Game extends Emitter {
 
   initModels() {
     this.entityModels = new Map();
-    entityModels.forEach(model => {
+    entityModels.forEach((model) => {
       this.entityModels.set(model.slug, new Reborn.EntityModel({
         ...model,
-        game: this
+        game: this,
       }));
     });
   }
 
   initMetrics() {
     this.metrics = new Map();
-    metrics.forEach(metricConstructor => {
-      var metric = new metricConstructor();
+    metrics.forEach((MetricConstructor) => {
+      const metric = new MetricConstructor();
       this.metrics.set(metric.slug, metric);
     });
   }
 
   initWorld() {
     this.world = new World({
-      game: this
+      game: this,
     });
   }
 
@@ -61,14 +61,14 @@ class Game extends Emitter {
   /**
    * Finish the game
    */
-  finish(){
+  finish() {
     this.finishedAt = Date.now();
     this.status = Game.FINISHED;
 
     const timePlay = this.timePlay;
     const args = {
       timePlay,
-      ...this.infos
+      ...this.infos,
     };
     this.emit('end', args);
   }
@@ -80,7 +80,7 @@ class Game extends Emitter {
   /**
    * Return the players transformed in an array (originally a Map)
    */
-  get playersList(){
+  get playersList() {
     return Array.from(this.players.values());
   }
 
@@ -90,7 +90,7 @@ class Game extends Emitter {
    * - The grid size
    * @returns {{players: Player[], grid: Number[]}}
    */
-  get infos(){
+  get infos() {
     return {
       status: this.status,
       players: this.playersList.map(player => player.infos),
@@ -98,7 +98,7 @@ class Game extends Emitter {
       seed: this.seed,
       startedAt: this.startedAt ? this.startedAt : null,
       createdAt: this.createdAt,
-    }
+    };
   }
 }
 

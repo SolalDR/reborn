@@ -1,7 +1,7 @@
 export default {
-  slug: "wind_turbine",
-  category: "energy",
-  name: "Éolienne",
+  slug: 'wind_turbine',
+  category: 'energy',
+  name: 'Éolienne',
   role: 'city',
   states: {
     creation: {
@@ -9,13 +9,13 @@ export default {
         {
           name: 'money',
           value: -2500,
-          checkConstraint: true
+          checkConstraint: true,
         },
         {
           name: 'purity',
-          value: -3
-        }
-      ]
+          value: -3,
+        },
+      ],
     },
     mounted: {
       recurModifiers: [
@@ -27,7 +27,7 @@ export default {
           name: 'satisfaction',
           value: -0.2,
         },
-      ]
+      ],
     },
     destruction: {
       enterModifiers: [
@@ -35,8 +35,7 @@ export default {
           name: 'money',
           value: -500,
         },
-      ]
-    }
-  }
-}
-
+      ],
+    },
+  },
+};

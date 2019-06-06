@@ -1,17 +1,17 @@
 export default {
-  slug: "garbage",
+  slug: 'garbage',
   category: null,
   role: null,
-  name: "Garbage",
-  displayName: "Déchets",
+  name: 'Garbage',
+  displayName: 'Déchets',
   states: {
     mounted: {
       recurModifiers: [
         {
           name: 'purity',
-          value: -1
-        }
-      ]
-    }
-  }
-}
+          value: -1,
+        },
+      ],
+    },
+  },
+};

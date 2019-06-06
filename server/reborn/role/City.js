@@ -1,13 +1,13 @@
-import Role from "./Role";
+import Role from './Role';
 
 /**
  * @class
  * @extends Role
  */
 export default new class CityRole extends Role {
-  constructor(){
+  constructor() {
     super('city');
     this.gauges = ['food', 'energy', 'satisfaction'];
     this.indicators = ['money', 'population'];
   }
-}
+}();

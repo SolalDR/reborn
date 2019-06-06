@@ -1,4 +1,4 @@
-import Metric from "./Metric";
+import Metric from './Metric';
 
 /**
  * @deprecated
@@ -8,15 +8,15 @@ import Metric from "./Metric";
 export default class MetricModifier {
   constructor({
     name = null,
-    value = null
-  }){
+    value = null,
+  }) {
     if (Metric.LIST.indexOf(name) < 0) {
       console.error(`MetricModifier: The metric with name "${name}" is not defined`);
       return null;
     }
 
     if (isNaN(value)) {
-      console.error(`MetricModifier: value must be a number`);
+      console.error('MetricModifier: value must be a number');
       return null;
     }
 
@@ -39,7 +39,7 @@ export default class MetricModifier {
    * @param {Number} entry
    * @returns {Number}
    */
-  unapply(entry){
+  unapply(entry) {
     entry -= this.value;
     return entry;
   }
