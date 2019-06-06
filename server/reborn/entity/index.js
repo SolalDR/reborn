@@ -1,5 +1,5 @@
-import uuidGenerator from "../utils/uuid";
-import Emitter from "./../utils/Emitter";
+import uuidGenerator from '../utils/uuid';
+import Emitter from '../utils/Emitter';
 
 /**
  * @class Describe an entity based on a model
@@ -14,8 +14,8 @@ export default class Entity extends Emitter {
     position = null,
     rotation = null,
     model = null,
-    states = new Map()
-  }){
+    states = new Map(),
+  }) {
     super();
     this.uuid = uuid;
     this.position = position;
@@ -31,10 +31,10 @@ export default class Entity extends Emitter {
   }
 
   checkConstraint(modifiers) {
-    var constrained = false;
-    modifiers.forEach(modifier => {
+    let constrained = false;
+    modifiers.forEach((modifier) => {
       if (modifier.checkConstraint) {
-        const metric = this.model.game.metrics.get(modifier.name)
+        const metric = this.model.game.metrics.get(modifier.name);
         if (metric.checkLimit(metric.value + modifier.value, true)) {
           constrained = true;
         }
@@ -49,37 +49,37 @@ export default class Entity extends Emitter {
    * When the state creation is passed, it run Entity::mount()
    * @returns {void}
    */
-  create(){
+  create() {
     if (this.checkConstraint(this.model.states.creation.enterModifiers)) {
       this.valid = false;
       return null;
     }
 
     // If creation state
-    if(this.model.hasState('creation')) {
-
+    if (this.model.hasState('creation')) {
       this.on('add_state:creation', (creationState) => {
         this.once('remove_state:creation', () => {
           this.mount();
-        })
+        });
 
         // If there is a duration (wait and remove state)
         if (creationState.duration >= 0) {
           setTimeout(() => {
             this.removeState('creation');
           }, creationState.duration);
-          return;
+          return null;
         }
         // Else remove state just after
         this.removeState('creation');
-      })
+      });
 
       this.addState('living');
       this.addState('creation');
-      return;
     }
 
     this.mount();
+
+    return null;
   }
 
   /**
@@ -89,11 +89,11 @@ export default class Entity extends Emitter {
    */
   mount() {
     this.removeState('creation', true);
-    if( this.model.hasState('mounted')) {
-      this.on('add_state:mounted', ()=>{
+    if (this.model.hasState('mounted')) {
+      this.on('add_state:mounted', () => {
         this.once('remove_state:mounted', () => {
           this.destruct();
-        })
+        });
       });
       this.addState('mounted');
       return;
@@ -110,11 +110,11 @@ export default class Entity extends Emitter {
     // If state destruction is available
     this.removeState('mounted', true);
     this.removeState('creation', true);
-    if( this.model.hasState('destruction')) {
-      this.on('add_state:destruction', (destructionState)=>{
+    if (this.model.hasState('destruction')) {
+      this.on('add_state:destruction', (destructionState) => {
         this.once('remove_state:destruction', () => {
           this.removeAllState();
-        })
+        });
 
         // If there is a duration (wait and remove state)
         if (destructionState.duration >= 0) {
@@ -139,7 +139,7 @@ export default class Entity extends Emitter {
   /**
    * Remove all the states of the entity
    */
-  removeAllState(){
+  removeAllState() {
     // In this specific order
     this.removeState('living', true);
     this.removeState('destruction', true);
@@ -153,10 +153,10 @@ export default class Entity extends Emitter {
    * Add a state to an entity if it is defined in the model.
    * @param {String} name The name of the state
    * @param {Boolean} discret If true, the state will be added without firing an event
-   * @return {void|EntityState}
+   * @return {null|EntityState}
    */
-  addState(name, discret = false){
-    var state = this.model.states[name];
+  addState(name, discret = false) {
+    const state = this.model.states[name];
     if (state && !this.states.has(name)) {
       this.states.set(name, state);
       state.enter(this.model.game);
@@ -166,6 +166,7 @@ export default class Entity extends Emitter {
       }
       return state;
     }
+    return null;
   }
 
   /**
@@ -174,8 +175,8 @@ export default class Entity extends Emitter {
    * @param {Boolean} discret If true, the state will be removed without firing an event
    * @return {void|EntityState}
    */
-  removeState(name, discret = false){
-    var state = this.states.get(name);
+  removeState(name, discret = false) {
+    const state = this.states.get(name);
     if (state) {
       state.leave(this.model.game);
       this.states.delete(name);
@@ -183,12 +184,13 @@ export default class Entity extends Emitter {
         this.emit('update', this.infos);
         this.emit(`remove_state:${state.name}`, state);
       }
-      return;
     }
   }
 
   destroy() {
-    this.gridCases.forEach(gridCase => gridCase.reference = null);
+    this.gridCases.forEach((gridCase) => {
+      gridCase.reference = null;
+    });
     this.emit('destroy');
   }
 
@@ -204,7 +206,7 @@ export default class Entity extends Emitter {
    * Return infos on entity to send it to the socket
    * @return {Object} THe description of the entity
    */
-  get infos(){
+  get infos() {
     return {
       uuid: this.uuid,
       position: this.position,
@@ -212,6 +214,6 @@ export default class Entity extends Emitter {
       model: this.model.slug,
       states: Array.from(this.states.keys()),
       gridCases: this.gridCases.map(g => g.infos),
-    }
+    };
   }
 }

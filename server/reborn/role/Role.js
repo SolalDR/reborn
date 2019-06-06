@@ -1,11 +1,11 @@
-import models from "./../entity/models"
+import models from '../entity/models';
 /**
  * @class Represent a player role
  * @abstract
  * @param {String} name
  */
 export default class Role {
-  constructor(name){
+  constructor(name) {
     this.name = name;
     this.quests = [];
   }

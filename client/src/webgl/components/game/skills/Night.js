@@ -1,5 +1,3 @@
-import Skill from './Skill';
-import Reborn from '@/game';
 import animate from '@solaldr/animate';
 import theme from '@/config/theme';
 

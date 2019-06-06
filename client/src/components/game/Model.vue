@@ -33,11 +33,13 @@ export default {
     isCity() {
       return this.$game.player.role.name === 'city';
     },
+
     quantity() {
       if (this.$game.player.role.name === 'city') {
         const modelCost = this.model.states.creation.enterModifiers.find(modifier => modifier.name === 'money').value;
         return Math.floor(this.money / -modelCost);
       }
+      return '';
     },
   },
 };

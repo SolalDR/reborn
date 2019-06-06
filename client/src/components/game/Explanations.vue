@@ -40,14 +40,14 @@ export default {
   },
   data() {
     return {
-      texts: texts,
+      texts,
     };
   },
   computed: {
     explanations() {
       return texts.explanations.purity.city;
-    }
-  }
+    },
+  },
 };
 </script>
 

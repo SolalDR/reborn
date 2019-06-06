@@ -1,4 +1,4 @@
-import Emitter from "../reborn/utils/Emitter";
+import Emitter from '../reborn/utils/Emitter';
 
 export default class Historic extends Emitter {
   constructor() {
@@ -6,12 +6,12 @@ export default class Historic extends Emitter {
     this.entries = [];
   }
 
-  addEntry (type, eventName, datas) {
+  addEntry(type, eventName, datas) {
     const entry = {
-      datas: datas,
+      datas,
       date: new Date(),
-      eventName: eventName,
-      type: type
+      eventName,
+      type,
     };
 
     this.entries.push(entry);

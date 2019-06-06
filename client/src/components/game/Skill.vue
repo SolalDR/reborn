@@ -38,6 +38,7 @@ export default {
         const skillCost = this.skill.states.creation.enterModifiers.find(modifier => modifier.name === 'money').value;
         return Math.floor(this.money / -skillCost);
       }
+      return '';
     },
   },
 };

@@ -1,8 +1,7 @@
 if (process.env.NODE_ENV !== 'production') {
-  const dotenv = require('dotenv').config();
+  require('dotenv').config();
 }
 
-// Set options as a parameter, environment variable, or rc file.
-require = require("esm")(module)
-module.exports = require("./main.js")
+const mount = require('esm')(module);
 
+module.exports = mount('./main.js');

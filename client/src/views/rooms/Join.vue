@@ -22,6 +22,7 @@ export default {
   },
   mounted() {
     const roomId = this.$router.history.current.params.id;
+    if (navigator.userAgent.match(/^FacebookExternalHit\/.*?|Facebot/i)) return;
     this.$socket.emit('room:join', roomId);
     this.$store.commit('debug/log', { content: 'room:join (emit)', label: 'socket' });
     this.msg = `Joined ${roomId}`;

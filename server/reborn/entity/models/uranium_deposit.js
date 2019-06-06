@@ -1,36 +1,35 @@
 export default {
-  slug: "uranium_deposit",
-  category: "rock",
-  color: "#00FF00",
-  name: "Uranium Deposit",
+  slug: 'uranium_deposit',
+  category: 'rock',
+  color: '#00FF00',
+  name: 'Uranium Deposit',
   displayName: "Gisement d'uranium",
-  role: "nature",
+  role: 'nature',
   states: {
     creation: {
       duration: 1500,
       enterModifiers: [
         {
           name: 'purity',
-          value: 1
-        }
+          value: 1,
+        },
       ],
     },
     mounted: {
       recurModifiers: [
         {
           name: 'purity',
-          value: 0.75
-        }
-      ]
+          value: 0.75,
+        },
+      ],
     },
     destruction: {
       leaveModifiers: [
         {
           name: 'money',
-          value: 1000
-        }
-      ]
-    }
-  }
-}
-
+          value: 1000,
+        },
+      ],
+    },
+  },
+};

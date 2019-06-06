@@ -1,5 +1,6 @@
-import Bus from "./../Bus";
-import roomSocket from "./room";
+import Bus from '../Bus';
+import roomSocket from './room';
+
 process.token = '1234';
 
 /**
@@ -12,18 +13,18 @@ export default {
    * Authentification via admin:authenticate endpoint
    * @param {string} mdp
    */
-  authenticate(mdp){
-    if( mdp === process.env.MDP || process.env.DEBUG ){
+  authenticate(mdp) {
+    if (mdp === process.env.MDP || process.env.DEBUG) {
       this.emit('admin:authenticate', {
         valid: true,
-        token: process.token
-      })
+        token: process.token,
+      });
 
-      var onRoomListChange = () => {
+      const onRoomListChange = () => {
         roomSocket.list.call(this, {
-          token: process.token
+          token: process.token,
         });
-      }
+      };
 
       Bus.on('room:add', onRoomListChange);
       Bus.on('room:remove', onRoomListChange);
@@ -32,12 +33,12 @@ export default {
         Bus.off('room:add', onRoomListChange);
         Bus.off('room:remove', onRoomListChange);
         Bus.off('room:update', onRoomListChange);
-      })
+      });
       return;
     }
     this.emit('admin:authenticate', {
       valid: false,
-      token: null
+      token: null,
     });
   },
 
@@ -49,7 +50,7 @@ export default {
   startListen({ token, name }) {
     const room = process.rooms.get(name);
 
-    var self = this;
+    const self = this;
     if (token === process.token && room) {
       const tickCallback = (args) => {
         this.emit('admin:tick', args);
@@ -57,36 +58,36 @@ export default {
 
       const entityAddCallback = (entity) => {
         this.emit('entity:add', entity);
-      }
+      };
 
       const entityRemoveCallback = (entity) => {
         this.emit('entity:remove', entity);
-      }
+      };
 
       const entityUpdateCallback = (entity) => {
         this.emit('entity:update', entity);
-      }
+      };
 
       const entitiesListCallback = () => {
         const entities = room.game.world.entitiesList.map(e => e.infos);
         this.emit('room:entities', entities);
-      }
+      };
 
       const entriesHistoryUpdateCallback = (entry) => {
         this.emit('history:update', entry);
-      }
+      };
       room.historic.on('update', entriesHistoryUpdateCallback);
       this.on('history:list', () => {
         // const entries = room.historic.entries.map(e => e.infos);
         const entries = room.historic.entries;
-        this.emit('history:list', entries)
+        this.emit('history:list', entries);
       });
 
-      var isListeningGame = false;
+      let isListeningGame = false;
 
       // A listner
-      function gameListener() {
-        if(!room.game) return;
+      const gameListener = function gameListener() {
+        if (!room.game) return;
         isListeningGame = true;
         entitiesListCallback();
 
@@ -95,13 +96,13 @@ export default {
         room.game.world.on('entity:add', entityAddCallback);
         room.game.world.on('entity:remove', entityRemoveCallback);
         room.game.world.on('entity:update', entityUpdateCallback);
-        self.on('entity:add', (entity)=>{
-          var e = room.game.world.addEntity(entity);
+        self.on('entity:add', (entity) => {
+          room.game.world.addEntity(entity);
         });
         self.on('entity:remove', (uuid) => {
           room.game.world.removeEntity(room.game.world.entities.get(uuid));
         });
-      }
+      };
 
       this.emit('admin:listen', room.infos);
 
@@ -116,7 +117,7 @@ export default {
         room.game.world.off('entity:add', entityAddCallback);
         room.game.world.off('entity:remove', entityRemoveCallback);
         room.game.world.off('entity:update', entityUpdateCallback);
-      })
+      });
     }
   },
-}
+};

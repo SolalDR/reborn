@@ -1,6 +1,6 @@
 import Emitter from '@solaldr/emitter';
 import Constraint from './Constraint';
-import constraints from "./list";
+import constraints from './list';
 
 /**
  * @extends Emitter
@@ -8,13 +8,13 @@ import constraints from "./list";
  */
 class ConstraintManager extends Emitter {
   constructor({
-    game = null
+    game = null,
   } = {}) {
     super();
     this.game = game;
     this.constraints = new Map();
-    constraints.forEach(constraint => {
-      this.constraints.set(constraint.slug,  new Constraint(constraint));
+    constraints.forEach((constraint) => {
+      this.constraints.set(constraint.slug, new Constraint(constraint));
     });
 
     this.checkConstraints(true);
@@ -24,7 +24,7 @@ class ConstraintManager extends Emitter {
    * Check all the constraint, this method is called in the timeline:tick
    */
   checkConstraints(discret = false) {
-    this.constraints.forEach(constraint => {
+    this.constraints.forEach((constraint) => {
       constraint.check(this.game, discret);
     });
   }
@@ -33,9 +33,9 @@ class ConstraintManager extends Emitter {
     return this.constraints.get(constraintName);
   }
 
-  get infos(){
+  get infos() {
     return {
-      game: this.game
+      game: this.game,
     };
   }
 }
