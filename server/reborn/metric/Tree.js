@@ -10,6 +10,7 @@ export default class Tree extends Metric {
     super({
       name: "Tree",
       displayName: "Arbres",
+      slug: 'tree',
       min: 0,
       value: 0,
       recurentOperation: 0,

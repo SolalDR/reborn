@@ -9,6 +9,7 @@ export default class Money extends Metric {
     super({
       name: "Money",
       displayName: "Ressources",
+      slug: 'money',
       min: 0,
       max: Infinity,
       value: 0,

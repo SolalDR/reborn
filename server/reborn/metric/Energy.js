@@ -9,6 +9,7 @@ export default class Energy extends Metric {
     super({
       name: "Energy",
       displayName: "Énergie",
+      slug: 'energy',
       min: 0,
       max: 100,
       value: 30,
@@ -18,5 +19,6 @@ export default class Energy extends Metric {
 
   applyRecurentLogic(game) {
     this.value -= game.metrics.get('population').value * 0.0005;
+    this.value = 100;
   }
 }

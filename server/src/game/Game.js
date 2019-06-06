@@ -48,7 +48,6 @@ export default class Game extends Reborn.Game {
       });
 
       this.metrics.forEach(metric => metric.applyRecurentLogic(this));
-
       this.emit('tick', {
         metrics: metricsMap.map(m => m.infos),
         elapsed: Date.now() - this.startedAt

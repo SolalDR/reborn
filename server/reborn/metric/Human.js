@@ -9,6 +9,7 @@ export default class Human extends Metric {
     super({
       name: "Human",
       displayName: "Human",
+      slug: 'human',
       min: 0,
       max: 100,
       value: 36.6666,

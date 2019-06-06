@@ -9,6 +9,7 @@ export default class Food extends Metric {
     super({
       name: "Food",
       displayName: "Nourriture",
+      slug: 'food',
       min: 0,
       max: 100,
       value: 30,
