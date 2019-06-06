@@ -20,7 +20,5 @@ export default class Satisfaction extends Metric {
   applyRecurentLogic(game) {
     var intensityAlimentation = game.metrics.get('food').value / 100;
     var intensityEnergie = game.metrics.get('energy').value / 100;
-
-    // this.value *= (minRatio + (maxRatio - minRatio)*intensity);
   }
 }
