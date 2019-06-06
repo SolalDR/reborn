@@ -1,7 +1,6 @@
 import LineSystem from '../line/LineSystem';
 import GUI from '@/plugins/GUI';
 import config from '@/config/worlds';
-import theme from '@/config/theme';
 
 export default class GodRay {
   constructor({

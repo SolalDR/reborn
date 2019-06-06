@@ -6,7 +6,7 @@ export default class LineCluster extends Cluster {
    */
   setupMaterial() {
     this.material.onBeforeCompile = (program) => {
-      program.vertexShader = `${beforeVertexChunk}\n\r${program.vertexShader}`;
+      // program.vertexShader = `${beforeVertexChunk}\n\r${program.vertexShader}`;
 
       program.vertexShader = program.vertexShader.replace(
         '#include <begin_vertex>',

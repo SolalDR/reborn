@@ -1,9 +1,8 @@
-import { Howl, Howler } from 'howler';
+import { Howl } from 'howler';
 
 /**
  * @author SolalDR / https://solaldussout-revel.fr/
  */
-
 
 class SoundLoader {
   load(url, onLoad, onProgress, onError, datas = {}) {
@@ -13,7 +12,7 @@ class SoundLoader {
       // preload: true
     });
 
-    sound.once('load', () => {
+    sound.once('load', () => {
       onLoad(sound);
     });
   }

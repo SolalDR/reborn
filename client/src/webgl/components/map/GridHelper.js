@@ -1,7 +1,6 @@
 class GridHelper extends THREE.Mesh {
   constructor({
     position = new THREE.Vector3(),
-    cellSize = 1,
     size = new THREE.Vector2(32, 32),
   } = {}) {
     super(

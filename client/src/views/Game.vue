@@ -11,7 +11,7 @@
     </p>
 
     <!-- IsStarting -->
-    <overlay v-if="isStarting" :appear="false" :is-transparent="!isLoading" fade-out="true">
+    <overlay v-if="isStarting" :appear="false" :is-transparent="!isLoading" :fade-out="true">
       <transition name="fade" mode="out-in">
         <introduction v-if="status === 'pending'" @start="onPlayerReady"/>
         <countdown v-if="status === 'initializing'"/>
@@ -55,7 +55,7 @@
 
 <script>
 import Vue from 'vue';
-import uuid from '@/utils/uuid';
+import generateUuid from '@/utils/uuid';
 import Reborn from '../game';
 import Scene from '../components/game/Scene.vue';
 import Introduction from '../components/game/Introduction.vue';
@@ -247,7 +247,7 @@ export default {
       if (!this.currentModel) return;
       const params = { ...item, model: this.currentModel.slug };
       if (!config.server.enabled) {
-        this.onEntityAdd({ ...params, uuid: uuid(), states: ['mounted', 'living'] });
+        this.onEntityAdd({ ...params, uuid: generateUuid(), states: ['mounted', 'living'] });
         return;
       }
       this.$store.commit('debug/log', { content: 'entity:add (emit)', label: 'socket' });
@@ -309,7 +309,6 @@ export default {
       this.$store.commit('debug/log', { content: `entity:remove (receive) with uuid: ${uuid}`, label: 'socket' });
 
       const prefix = `${this.$game.player.role.name}_remove`;
-      const entityModel = this.$game.entityModels.get(model);
       this.$sound.play(prefix);
 
       this.$webgl.models[model].removeEntity(uuid);
@@ -355,7 +354,16 @@ export default {
       });
 
       this.year = Math.floor(elapsed / 1000); // One year per second
-      this.money = this.indicators.length > 0 ? this.indicators.find(indicator => indicator.name === 'Money').value : 0;
+
+      if (this.indicators.length > 0) {
+        if (this.indicators.find(indicator => indicator.slug === 'money')) {
+          this.money = this.indicators.find(indicator => indicator.slug === 'money').value;
+        } else {
+          this.money = 0;
+        }
+      } else {
+        this.money = 0;
+      }
     },
 
     onGameStart({ startedAt }) {
@@ -381,7 +389,7 @@ export default {
           entities.forEach((entity, i) => {
             setTimeout(() => {
               if (!config.server.enabled) {
-                this.onEntityAdd({ ...entity, uuid: uuid(), states: ['mounted', 'living'] });
+                this.onEntityAdd({ ...entity, uuid: generateUuid(), states: ['mounted', 'living'] });
                 return;
               }
               this.$socket.emit('entity:add', entity);
@@ -414,7 +422,7 @@ export default {
       }, Math.max(0, timeout + 1));
     },
 
-    onGameEnd(args) {
+    onGameEnd() {
       this.isEnded = true;
       this.status = 'explanations';
     },

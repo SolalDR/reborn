@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import Emitter from '@solaldr/emitter';
+import animate from '@solaldr/animate';
 
 window.THREE = THREE;
 /**
@@ -55,7 +56,6 @@ class RailsControl extends Emitter {
   moveTo(target = new THREE.Vector3(), {
     duration = this.config.animation.duration,
     timingFunction = this.config.animation.timingFunction,
-    complete = null,
   } = {}) {
     // Init
     const from = this.object.position.clone();
@@ -63,24 +63,21 @@ class RailsControl extends Emitter {
     const diff = to.clone().sub(from);
 
     // Test if it's a useless anim
-    if (from.equals(to)) return;
+    if (from.equals(to)) return null;
 
     // Register animation globally
-    const ease = anime.easing(timingFunction);
-    anime({
+    const a = animate.add({
       duration,
       timingFunction,
-      update: (anim) => {
-        const a = ease(anim.progress / 100);
-        this.object.position.copy(
-          from.clone().add(diff.clone().multiplyScalar(a)),
-        );
-      },
-      complete: (anim) => {
-        if (complete) complete();
-        this.dispatch('end:move', anim);
-      },
+    }).on('progress', ({ value }) => {
+      this.object.position.copy(
+        from.clone().add(diff.clone().multiplyScalar(value)),
+      );
+    }).on('end', () => {
+      this.dispatch('end:move', a);
     });
+
+    return a;
   }
 
   /**
@@ -92,7 +89,6 @@ class RailsControl extends Emitter {
   lookTo(target, {
     duration = this.config.animation.duration,
     timingFunction = this.config.animation.timingFunction,
-    complete = null,
   } = {}) {
     // Init
     const distance = this.object.position.distanceTo(target);
@@ -101,21 +97,19 @@ class RailsControl extends Emitter {
     const diff = to.clone().sub(from);
 
     // Test if it's a useless anim
-    if (from.clone().normalize().equals(to.clone().normalize())) return;
+    if (from.clone().normalize().equals(to.clone().normalize())) return null;
 
     // Register animation globally
-    const ease = anime.easing(timingFunction);
-    anime({
+    const a = animate.add({
       duration,
-      update: (anim) => {
-        const a = ease(anim.progress / 100);
-        this.object.lookAt(from.clone().add(diff.clone().multiplyScalar(a)));
-      },
-      complete: (anim) => {
-        if (complete) complete();
-        this.dispatch('end:look', anim);
-      },
+      timingFunction,
+    }).on('progress', ({ value }) => {
+      this.object.lookAt(from.clone().add(diff.clone().multiplyScalar(value)));
+    }).on('end', () => {
+      this.dispatch('end:look', a);
     });
+
+    return a;
   }
 }
 
