@@ -30,7 +30,7 @@ export default class Entity extends Emitter {
     this.create();
   }
 
-  checkConstraint(modifiers) {
+  checkConstraint(modifiers = []) {
     let constrained = false;
     modifiers.forEach((modifier) => {
       if (modifier.checkConstraint) {
@@ -50,7 +50,7 @@ export default class Entity extends Emitter {
    * @returns {void}
    */
   create() {
-    if (this.checkConstraint(this.model.states.creation.enterModifiers)) {
+    if (this.model.states.creation && this.checkConstraint(this.model.states.creation.enterModifiers)) {
       this.valid = false;
       return null;
     }

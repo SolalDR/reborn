@@ -6,7 +6,7 @@ export default class GridCase {
     this.x = x;
     this.y = y;
     this.altitude = altitude;
-    this.reference = null;
+    this.reference = reference;
   }
 
   get infos() {

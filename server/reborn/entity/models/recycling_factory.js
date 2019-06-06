@@ -7,19 +7,25 @@ export default {
   role: 'city',
   states: {
     creation: {
-      duration: 200,
       enterModifiers: [
         {
-          name: 'waste',
-          value: -0.5,
+          name: 'money',
+          value: -3000,
+          checkConstraint: true,
         },
       ],
     },
-    destruction: {
+    living: {
+      enterModifiers: [
+        {
+          name: 'waste',
+          value: -10,
+        },
+      ],
       leaveModifiers: [
         {
           name: 'waste',
-          value: 0.5,
+          value: 10,
         },
       ],
     },
