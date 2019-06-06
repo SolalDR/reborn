@@ -24,7 +24,4 @@ module.exports = {
     'arrow-body-style': 0,
     'css-rcurlyexpected': 0
   },
-  parserOptions: {
-    parser: 'babel-eslint',
-  },
 };
