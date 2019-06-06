@@ -19,7 +19,7 @@ export default class Population extends Metric {
 
   applyRecurentLogic(game) {
     var intensity = game.metrics.get('satisfaction').value/100;
-    var maxRatio = 1.05;
+    var maxRatio = 1.0125;
     var minRatio = 1;
 
     this.value *= (minRatio + (maxRatio - minRatio)*intensity);

@@ -21,7 +21,7 @@ export default {
     mounted: {
       recurModifiers: [
         {
-          name: 'alimentation',
+          name: 'food',
           value: 10
         },
         {

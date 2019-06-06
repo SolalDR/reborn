@@ -21,7 +21,7 @@ export default {
       recurModifiers: [
         {
           name: 'energy',
-          value: 1.5,
+          value: 2,
         },
         {
           name: 'satisfaction',

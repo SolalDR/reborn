@@ -12,7 +12,7 @@ export default class Energy extends Metric {
       slug: 'energy',
       min: 0,
       max: 100,
-      value: 30,
+      value: 50,
       recurentOperation: 0,
     })
   }
