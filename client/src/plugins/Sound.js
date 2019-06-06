@@ -9,11 +9,15 @@ class SoundManager extends Emitter {
     this.sounds = {};
     this.samples = {};
     this.prefix = 'sound_';
-    this.on('load', () => this._loaded = true);
+    this.on('load', () => {
+      this._loaded = true;
+    });
+
     AssetsManager.get('sounds').then((sounds) => {
       this.sounds = sounds;
       this.emit('load');
     });
+
     this.now = Date.now();
   }
 
@@ -21,7 +25,6 @@ class SoundManager extends Emitter {
     if (!this.sounds[this.prefix + name]) return;
     const player = () => this.sounds[this.prefix + name].play();
     if (!this._loaded) {
-      console.log('not loaded');
       this.once('load', player);
       return;
     }

@@ -4,9 +4,9 @@ import theme from '@/config/theme';
 const worker = new MyWorker();
 
 export default (seed = Math.random()) => {
-  // Seed random function
+  let s = seed;
   function random() {
-    const x = Math.cos(Math.sin(seed += 1.4215428299510) * 4.8025158293) * 14126.123423;
+    const x = Math.cos(Math.sin(s += 1.4215428299510) * 4.8025158293) * 14126.123423;
     return x - Math.floor(x);
   }
 
@@ -15,7 +15,7 @@ export default (seed = Math.random()) => {
   }
 
   function manageRand(value) {
-    return !isNaN(value)
+    return typeof value === 'number'
       ? value
       : randBetween(value[0], value[1]);
   }
@@ -39,75 +39,6 @@ export default (seed = Math.random()) => {
         },
       };
     }),
-    // stages: [
-    //   {
-    //     floorColor: new THREE.Color(0xf7c0a4),
-    //     wallColor: new THREE.Color(0xf9e78f),
-    //     shape: {
-    //       definition: 200,
-    //       radius: 16,
-    //       position: [0, 0],
-    //       noiseIntensity: 0.2 + 0.3 * random(),
-    //     },
-    //     height: 0.5,
-    //   },
-    //   {
-    //     floorColor: new THREE.Color(0xf4b295),
-    //     wallColor: new THREE.Color(0xf9e78f),
-    //     shape: {
-    //       definition: 64,
-    //       radius: 8,
-    //       position: [
-    //         random() * 8 - 4,
-    //         random() * 8 - 4,
-    //       ],
-    //       noiseIntensity: 0.2,
-    //     },
-    //     height: 1,
-    //   },
-    //   {
-    //     floorColor: new THREE.Color(0xf8dbca),
-    //     wallColor: new THREE.Color(0xf9e78f),
-    //     shape: {
-    //       definition: 64,
-    //       radius: 8,
-    //       position: [
-    //         random() * 8 - 4,
-    //         random() * 8 - 4,
-    //       ],
-    //       noiseIntensity: 0.2,
-    //     },
-    //     height: 2,
-    //   },
-    //   {
-    //     floorColor: new THREE.Color(0xf4b69d),
-    //     wallColor: new THREE.Color(0xf9e78f),
-    //     shape: {
-    //       definition: 48,
-    //       radius: 4,
-    //       position: [
-    //         random() * 4 - 2,
-    //         random() * 4 - 2,
-    //       ],
-    //       noiseIntensity: 0.1,
-    //     },
-    //     height: 4,
-    //   },
-    //   {
-    //     floorColor: new THREE.Color(0xf7ab9a),
-    //     wallColor: new THREE.Color(0xf9e78f),
-    //     shape: {
-    //       definition: 32,
-    //       radius: 2,
-    //       position: [
-    //         random() * 16 - 8,
-    //         random() * 16 - 8,
-    //       ],
-    //       noiseIntensity: 0.1,
-    //     },
-    //     height: random() * 5 + 6,
-    //   },
-    // ],
   });
 
   let resolver = null;

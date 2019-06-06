@@ -60,7 +60,7 @@ export default {
   },
 
   mounted() {
-    this.$bus.$on('shortcut', (key) => {
+    this.$bus.$on('shortcut', () => {
       // this.categoriesShortcuts(key);
       // this.entitiesShortcuts(key);
     });

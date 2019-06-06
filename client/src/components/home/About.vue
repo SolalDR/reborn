@@ -44,7 +44,7 @@ export default {
   props: ['closeOverlay'],
   data() {
     return {
-      texts: texts,
+      texts,
     };
   },
 };
