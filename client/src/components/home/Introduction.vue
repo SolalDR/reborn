@@ -2,7 +2,11 @@
   <overlay :appear="false" :is-transparent="false" :bottom-waves="true">
     <template #default>
       <div class="introduction__texts">
-        <p v-for="text in texts[currentIndex]" v-html="$splitWithSpan(text)" class="text"></p>
+        <p
+          v-for="(text, index) in texts[currentIndex]"
+          :key="`text-${index}`"
+          v-html="$splitWithSpan(text)"
+          class="text"></p>
       </div>
     </template>
 
@@ -13,7 +17,7 @@
 </template>
 
 <script>
-import texts from '@/contents/home/introduction'
+import texts from '@/contents/home/introduction';
 import Overlay from '../global/Overlay';
 
 export default {
@@ -27,7 +31,7 @@ export default {
   data() {
     return {
       currentIndex: 0,
-      texts: texts,
+      texts,
     };
   },
   mounted() {

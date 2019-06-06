@@ -71,8 +71,8 @@ export default class WebGL extends Emitter {
   initSkills() {
     this.skills = new Map();
     Object.keys(skills).forEach((key) => {
-      const skillConstructor = skills[key];
-      this.skills.set(key, new skillConstructor(this));
+      const SkillConstructor = skills[key];
+      this.skills.set(key, new SkillConstructor(this));
     });
   }
 
@@ -256,20 +256,17 @@ export default class WebGL extends Emitter {
         model = models[Math.floor(Math.random() * models.length)];
         const coords = this.map.grid.getCoord(i);
         const size = this.game.entityModels.get(model).size;
-        const hasSpace = this.map.grid.checkSpace(
-          new THREE.Vector3(coords.x, this.map.grid[i].altitude, coords.y),
-          new THREE.Vector2(size[0], size[1]),
-        );
+        // const hasSpace = this.map.grid.checkSpace(
+        //   new THREE.Vector3(coords.x, this.map.grid[i].altitude, coords.y),
+        //   new THREE.Vector2(size[0], size[1]),
+        // );
 
-        // if (hasSpace) {
         entities.push({
           model,
           gridCases: this.map.grid.getCellsFromBox().map(cell => cell.infos),
           position: new THREE.Vector3(coords.x, this.map.grid[i].altitude, coords.y),
           rotation: 0,
-          // rotation: new THREE.Euler(0, Math.floor(Math.random() * 4) * Math.PI / 2, 0),
         });
-        // }
       }
     }
     return entities;

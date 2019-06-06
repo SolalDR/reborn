@@ -22,7 +22,9 @@ module.exports = {
     'import/extensions': 0,
     'no-plusplus': 0,
     'arrow-body-style': 0,
-    'css-rcurlyexpected': 0
+    'css-rcurlyexpected': 0,
+    'no-underscore-dangle': 0,
+    'no-mixed-operators': 0,
   },
   parserOptions: {
     parser: 'babel-eslint',
