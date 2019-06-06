@@ -9,6 +9,7 @@ export default class Biodiversity extends Metric {
     super({
       name: "Biodiversity",
       displayName: "Biodiversité",
+      slug: 'biodiversity',
       min: 0,
       max: 100,
       value: 50,

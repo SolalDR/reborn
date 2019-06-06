@@ -10,6 +10,7 @@ export default class Rock extends Metric {
     super({
       name: "Rock",
       displayName: "Roches",
+      slug: 'rock',
       min: 0,
       value: 0,
       recurentOperation: 0,

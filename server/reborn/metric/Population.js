@@ -9,6 +9,7 @@ export default class Population extends Metric {
     super({
       name: "Population",
       displayName: "Population",
+      slug: 'population',
       min: 0,
       max: Infinity,
       value: 100,

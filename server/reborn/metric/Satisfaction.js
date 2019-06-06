@@ -9,6 +9,7 @@ export default class Satisfaction extends Metric {
     super({
       name: "Satisfaction",
       displayName: "Satisfaction",
+      slug: 'satisfaction',
       min: 0,
       max: 100,
       value: 50,
