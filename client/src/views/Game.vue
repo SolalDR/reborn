@@ -11,7 +11,7 @@
     </p>
 
     <!-- IsStarting -->
-    <overlay v-if="isStarting" :appear="false" :is-transparent="!isLoading" fade-out="true">
+    <overlay v-if="isStarting" :appear="false" :is-transparent="!isLoading" :fade-out="true">
       <transition name="fade" mode="out-in">
         <introduction v-if="status === 'pending'" @start="onPlayerReady"/>
         <countdown v-if="status === 'initializing'"/>
