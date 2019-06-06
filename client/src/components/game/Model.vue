@@ -4,7 +4,7 @@
        @mouseleave="isHovered = false"
        class="model"
        :class="{'model--current': isCurrent, 'model--hovered': isHovered}">
-    {{ model.name }}
+    <img :src="modelIcons[model.slug]" :alt="model.name">
 
     <transition name="fade">
       <div v-if="(isCity && isCurrent) || (isCity && isHovered)"
@@ -14,6 +14,9 @@
 </template>
 
 <script>
+import cityModels from '../../assets/icons/game/city/inventory/models';
+import natureModels from '../../assets/icons/game/nature/inventory/models';
+
 export default {
   name: 'model',
   props: {
@@ -34,11 +37,14 @@ export default {
       return this.$game.player.role.name === 'city';
     },
     quantity() {
-      if (this.$game.player.role.name === 'city') {
+      if (this.isCity) {
         const modelCost = this.model.states.creation.enterModifiers.find(modifier => modifier.name === 'money').value;
         return Math.floor(this.money / -modelCost);
       }
     },
+    modelIcons() {
+      return this.isCity ? cityModels : natureModels;
+    }
   },
 };
 </script>
