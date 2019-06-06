@@ -1,4 +1,4 @@
-import GridCase from "./GridCase";
+import GridCase from './GridCase';
 /**
  * @class Represent the world grid
  * @extends Array
@@ -6,9 +6,9 @@ import GridCase from "./GridCase";
  */
 export default class Grid extends Array {
   constructor({
-    size = [32, 32]
-  } = {}){
-    super(size[0]*size[1]);
+    size = [32, 32],
+  } = {}) {
+    super(size[0] * size[1]);
     this.fill(null);
     this.size = size;
   }
@@ -20,7 +20,8 @@ export default class Grid extends Array {
     this[index] = value ? new GridCase(
       Math.floor(index / this.size[0]),
       index % this.size[1],
-      value) : null;
+      value,
+    ) : null;
   }
 
   /**
@@ -29,13 +30,13 @@ export default class Grid extends Array {
    * @param {Integer[]} size An vec2 defining the size of the element
    * @returns {Boolean} Return true if there is space
    */
-  checkSpace(){
+  checkSpace() {
     return true;
   }
 
 
   checkCells(cells) {
-    for(let i = 0; i < cells.length; i++) {
+    for (let i = 0; i < cells.length; i++) {
       if (!cells[i]) return false;
       const cell = this.get(cells[i]);
       if (cell === null || cell.reference !== null) {
@@ -46,12 +47,12 @@ export default class Grid extends Array {
   }
 
   registerCells(cells, reference) {
-    var gridCases = [];
-    cells.forEach(cell => {
-      var gridCase = this.get(cell);
+    const gridCases = [];
+    cells.forEach((cell) => {
+      const gridCase = this.get(cell);
       gridCase.reference = reference;
       gridCases.push(gridCase);
-    })
+    });
     return gridCases;
   }
 
@@ -69,13 +70,13 @@ export default class Grid extends Array {
     for (let i = 0; i < distanceCoord[0]; i++) {
       for (let j = 0; j < distanceCoord[1]; j++) {
         const coord = [minCoord[0] + i, minCoord[1] + j];
-        var distanceFromCenter = Math.sqrt(
-          (coord[0] - cellCoord[0])**2
-           + (coord[1] - cellCoord[1])**2
+        const distanceFromCenter = Math.sqrt(
+          (coord[0] - cellCoord[0]) ** 2
+           + (coord[1] - cellCoord[1]) ** 2,
         );
 
-        if(distanceFromCenter < radius) {
-          cells.push(this.get({ x: coord[0], y: coord[1] }))
+        if (distanceFromCenter < radius) {
+          cells.push(this.get({ x: coord[0], y: coord[1] }));
         }
       }
     }
@@ -90,7 +91,7 @@ export default class Grid extends Array {
    * @return {null|Entity}
    */
   get(coord) {
-    return this[coord.x*this.size[0] + coord.y];
+    return this[coord.x * this.size[0] + coord.y];
   }
 
 
@@ -101,7 +102,7 @@ export default class Grid extends Array {
    * @param {Entity} entity
    */
   set(x, y, entity) {
-    this._grid[x*this.size[0] + y] = entity;
+    this._grid[x * this.size[0] + y] = entity;
   }
 
   /**
@@ -109,14 +110,14 @@ export default class Grid extends Array {
    * @return {Array}
    */
   get infos() {
-    var grid = [];
-    this.forEach(item => {
+    const grid = [];
+    this.forEach((item) => {
       if (item instanceof GridCase) {
         grid.push(item.infos);
-      } else if(item === null) {
+      } else if (item === null) {
         grid.push(null);
       }
-    })
+    });
     return grid;
   }
 }

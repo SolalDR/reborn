@@ -1,8 +1,8 @@
 export default {
-  slug: "playground",
-  category: "satisfaction",
-  name: "Playground",
-  displayName: "Aire de jeu",
+  slug: 'playground',
+  category: 'satisfaction',
+  name: 'Playground',
+  displayName: 'Aire de jeu',
   role: 'city',
   size: [2, 2],
   states: {
@@ -11,28 +11,27 @@ export default {
         {
           name: 'money',
           value: -1500,
-          checkConstraint: true
+          checkConstraint: true,
         },
         {
           name: 'satisfaction',
           value: 15,
-        }
-      ]
+        },
+      ],
     },
     living: {
       enterModifiers: [
         {
           name: 'waste',
-          value: 0.0025
-        }
+          value: 0.0025,
+        },
       ],
       leaveModifiers: [
         {
           name: 'waste',
-          value: -0.0025
-        }
-      ]
-    }
-  }
-}
-
+          value: -0.0025,
+        },
+      ],
+    },
+  },
+};

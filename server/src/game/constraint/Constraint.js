@@ -1,9 +1,9 @@
-import Emitter from "@solaldr/emitter";
+import Emitter from '@solaldr/emitter';
 
 class Constraint extends Emitter {
   constructor({
     slug = null,
-    test = () => console.warn('Constraint: No test is registered in this constraint.')
+    test = () => console.warn('Constraint: No test is registered in this constraint.'),
   }) {
     super();
     this.slug = slug;
@@ -13,12 +13,12 @@ class Constraint extends Emitter {
   }
 
   check(game, discret = false) {
-    var newValue = this.test(game);
-    this.changed = (this.value === newValue) ? false : true;
+    const newValue = this.test(game);
+    this.changed = this.value !== newValue;
     this.value = newValue;
-    if(this.changed && !discret) {
+    if (this.changed && !discret) {
       this.emit('change', {
-        regularOrder: this.value
+        regularOrder: this.value,
       });
     }
   }

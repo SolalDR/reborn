@@ -1,8 +1,8 @@
-import coal_factory from "./coal_factory";
-import house from "./house";
-import rock from "./rock";
-import wind_turbine from "./wind_turbine";
-import intensive_livestock from "./intensive_livestock";
+import coal_factory from './coal_factory';
+import house from './house';
+import rock from './rock';
+import wind_turbine from './wind_turbine';
+import intensive_livestock from './intensive_livestock';
 import big_flower from './big_flower';
 import centenary_tree from './centenary_tree';
 import allotment from './allotment';
@@ -53,5 +53,5 @@ export default [
   solar_panel,
   sorting_center,
   tough_tree,
-  uranium_deposit
-]
+  uranium_deposit,
+];
