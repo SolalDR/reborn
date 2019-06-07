@@ -32,7 +32,7 @@ export default class WebGL extends Emitter {
     this.canvas = canvas;
     this.game = game;
 
-    // Camera
+    // Camera<
     this.scene = new THREE.Scene();
     this.scene.name = 'main';
     this.camera = new THREE.PerspectiveCamera(45, Viewport.width / Viewport.height, 1, 500);
@@ -127,7 +127,7 @@ export default class WebGL extends Emitter {
       this.waves = new Waves({ path: images.wave_line.paths[0] });
       this.scene.add(this.waves.mesh);
 
-      this.birds = new Birds({ map: images.bird_map, alphaMap: images.bird_alpha });
+      this.birds = new Birds({ webgl: this, map: images.bird_map, alphaMap: images.bird_alpha });
       this.scene.add(this.birds.mesh);
 
       this.explosionEffect = new ExplosionEffect();
