@@ -12,10 +12,6 @@ export default {
           value: -12000,
           checkConstraint: true,
         },
-        {
-          name: 'purity',
-          value: -10,
-        },
       ],
     },
     mounted: {

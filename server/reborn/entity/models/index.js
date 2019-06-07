@@ -28,6 +28,7 @@ import sorting_center from './sorting_center';
 import tough_tree from './tough_tree';
 import uranium_deposit from './uranium_deposit';
 import waste from './waste';
+import garden from './garden';
 
 export default [
   coal_factory,
@@ -58,4 +59,5 @@ export default [
   tough_tree,
   uranium_deposit,
   waste,
+  garden,
 ];

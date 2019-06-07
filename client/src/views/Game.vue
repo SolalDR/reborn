@@ -215,8 +215,14 @@ export default {
       // When user click on an object in the scene
       this.$webgl.on('selectItem', (item) => {
         this.selectedEntity = item;
-        if (this.$game.entityModels.get(item.model).role === 'nature' && this.$game.player.role.name === 'city') {
-          this.onRemoveItem();
+
+        const modelRole = this.$game.entityModels.get(item.model).role;
+        const playerRole = this.$game.player.role.name;
+
+        if ((modelRole === 'nature' && playerRole === 'city') || (modelRole === null && playerRole === 'nature')) {
+          this.onRemoveItem({ force: true });
+        } else if (modelRole === 'nature' && playerRole === 'nature') {
+          this.selectedEntity = null; // unfocus
         }
       });
 
@@ -259,7 +265,7 @@ export default {
       this.$socket.emit('entity:add', params);
     },
 
-    onRemoveItem() {
+    onRemoveItem({ force }) {
       const params = {
         model: this.selectedEntity.model,
         uuid: this.selectedEntity.uuid,

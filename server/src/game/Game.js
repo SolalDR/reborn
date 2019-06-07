@@ -5,6 +5,7 @@ import NotificationManager from './notification/Manager';
 import SkillsManager from './skills/Manager';
 import World from './World';
 import Timeline from './timeline/Timeline';
+import config from '../config';
 
 export default class Game extends Reborn.Game {
   constructor({
@@ -21,7 +22,7 @@ export default class Game extends Reborn.Game {
 
     // Timeline
     this.timeline = new Timeline({
-      interval: 250,
+      interval: config.timeline.interval,
     });
 
     // ConstraintManager
@@ -38,13 +39,12 @@ export default class Game extends Reborn.Game {
       game: this,
     });
 
-    const timeRatio = 250 / 1000;
     const metricsMap = Array.from(this.metrics.values());
     this.timeline.on('tick', () => {
       this.constraintManager.checkConstraints();
 
       this.metrics.forEach((metric) => {
-        metric.value += metric.recurentOperation * timeRatio;
+        metric.value += metric.recurentOperation * config.timeline.ratio * config.metrics.ratio;
       });
 
       this.metrics.forEach(metric => metric.applyRecurentLogic(this));
