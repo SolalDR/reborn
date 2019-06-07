@@ -28,7 +28,7 @@
 import paths from './paths';
 
 export default {
-  name: 'icon',
+  name: 'gauge-icon',
   props: {
     isFilled: {
       type: Boolean,

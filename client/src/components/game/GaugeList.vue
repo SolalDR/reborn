@@ -6,9 +6,9 @@
            class="gauge"
            @mouseover="indexHovered = index"
            @mouseleave="indexHovered = null">
-        <icon :percent="gauge.value"
+        <gauge-icon :percent="gauge.value"
               :icon-name="gauge.slug"
-              @mouseover.native="onMouseEnter(gauge, index)"></icon>
+              @mouseover.native="onMouseEnter(gauge, index)"/>
 
         <transition name="fade">
           <hover-infos v-if="indexHovered === index" :text="gauge.displayName"/>
@@ -19,12 +19,12 @@
 </template>
 
 <script>
-import Icon from '../icons/Icon';
+import GaugeIcon from '../icons/GaugeIcon';
 import HoverInfos from './HoverInfos';
 
 export default {
   components: {
-    Icon,
+    GaugeIcon,
     HoverInfos,
   },
   props: {
