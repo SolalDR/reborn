@@ -1,16 +1,16 @@
 export default {
-  slug: 'organic_farm',
-  category: 'alimentation',
-  name: 'Organic Farm',
-  displayName: 'Ferme biologique',
+  slug: 'garden',
+  category: 'recycling',
+  color: '#00FF00',
+  name: 'Garden',
+  displayName: 'Jardin',
   role: 'city',
-  size: [3, 2],
   states: {
     creation: {
       enterModifiers: [
         {
           name: 'money',
-          value: -8000,
+          value: -500,
           checkConstraint: true,
         },
       ],
@@ -18,16 +18,8 @@ export default {
     mounted: {
       recurModifiers: [
         {
-          name: 'food',
-          value: 5,
-        },
-      ],
-    },
-    destruction: {
-      leaveModifiers: [
-        {
-          name: 'money',
-          value: -2000,
+          name: 'purity',
+          value: 0.5,
         },
       ],
     },
@@ -35,13 +27,13 @@ export default {
       enterModifiers: [
         {
           name: 'waste',
-          value: 0.3,
+          value: -0.5,
         },
       ],
       leaveModifiers: [
         {
           name: 'waste',
-          value: -0.3,
+          value: 0.5,
         },
       ],
     },
