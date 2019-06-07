@@ -19,7 +19,7 @@ export default {
     position: absolute;
     bottom: -1.5rem;
     left: 50%;
-    transform: translate(-50%, 100%);
+    transform: translate(calc(-50% - 1.5rem), 100%);
     padding: .5rem 1.5rem;
     background-color: rgba(getColor(basics, white), .5);
     border: 1px solid getColor(basics, black);

@@ -43,6 +43,12 @@ export default {
     @include centerAbsolute(33%);
     width: 90%;
 
+    img {
+      &:first-of-type {
+        transform: scaleX(-1);
+      }
+    }
+
     .years-value,
     .years-suffix {
       font-family: "DrukWide-Medium";

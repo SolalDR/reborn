@@ -50,5 +50,9 @@ export default {
 <style lang='scss'>
   .gauge-list {
     @include useFlex();
+
+    .gauge {
+      position: relative;
+    }
   }
 </style>
