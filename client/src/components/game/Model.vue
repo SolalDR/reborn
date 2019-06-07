@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import cityModels from '../../assets/icons/game/city/inventory/models';
-import natureModels from '../../assets/icons/game/nature/inventory/models';
+import cityIcons from '../../assets/icons/game/city/inventory/models';
+import natureIcons from '../../assets/icons/game/nature/inventory/models';
 
 export default {
   name: 'model',
@@ -43,8 +43,8 @@ export default {
       }
     },
     modelIcons() {
-      return this.isCity ? cityModels : natureModels;
-    }
+      return this.isCity ? cityIcons : natureIcons;
+    },
   },
 };
 </script>
@@ -59,7 +59,6 @@ export default {
     position: relative;
     width: $model-size;
     height: $model-size;
-    background-color: rgba(getColor(basics, white), .7);
     transition: all .3s ease;
 
     &--current,

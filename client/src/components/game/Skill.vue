@@ -4,7 +4,7 @@
        @mouseleave="isHovered = false"
        class="skill"
        :class="{'skill--current': isCurrent, 'skill--hovered': isHovered}">
-    {{ skill.name }}
+    <img :src="icons[skill.slug]" :alt="skill.name">
 
     <transition name="fade">
       <div v-if="(isCity && isCurrent) || (isCity && isHovered)"
@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import icons from '../../assets/icons/game/nature/inventory/skills';
+
 export default {
   name: 'skill',
   props: {
@@ -26,6 +28,7 @@ export default {
   },
   data() {
     return {
+      icons: icons,
       isHovered: false,
     };
   },
@@ -53,7 +56,6 @@ export default {
     position: relative;
     width: $skill-size;
     height: $skill-size;
-    background-color: rgba(getColor(basics, white), .7);
     transition: all .3s ease;
 
     &--current,

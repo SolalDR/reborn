@@ -13,11 +13,12 @@
       <div class="inventory__list">
         <model
           v-for="(model, index) in models"
-         :key="`model-${index}`"
-         :model="{index: index, ...model}"
-         :money="money"
-         :is-current="model.name === currentModel.name"
-         @setCurrentModel="setCurrentModel(model)"/>
+          :key="`model-${index}`"
+          :model="{index: index, ...model}"
+          :money="money"
+          :is-current="model.name === currentModel.name"
+          @setCurrentModel="setCurrentModel(model)"/>
+
         <skill
           v-for="(skill, index) in skills"
          :key="`skill-${index}`"
@@ -130,7 +131,6 @@ export default {
 <style lang="scss">
 .inventory {
   padding: 10px;
-  width: 26.5rem;
   height: 7.5rem;
   border-radius: 2.5rem;
   border: 2px solid getColor(basics, black);
@@ -151,7 +151,16 @@ export default {
   }
 
   &__list {
-    @include useFlex(space-between);
+    @include useFlex(flex-start);
+
+    .model,
+    .skill {
+      margin-right: 2rem;
+
+      &:last-of-type {
+        margin-right: 0;
+      }
+    }
   }
 }
 </style>
