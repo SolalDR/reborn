@@ -1,6 +1,6 @@
 export default {
   server: {
-    enabled: true,
+    enabled: false,
   },
   gui: {
     visible: false,

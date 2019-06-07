@@ -1,5 +1,5 @@
-import themes from "./themes";
-import Config from "@/utils/Config";
+import themes from './themes';
+import Config from '@/utils/Config';
 
 const themeConfig = {
   themes,

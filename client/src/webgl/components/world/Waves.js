@@ -1,7 +1,7 @@
 import LineSystem from '../line/LineSystem';
 import GUI from '@/plugins/GUI';
 import config from '@/config/worlds';
-import theme from "@/config/theme";
+import theme from '@/config/theme';
 
 export default class Waves {
   constructor({

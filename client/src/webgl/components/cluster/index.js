@@ -28,7 +28,7 @@ class Cluster {
 
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.mesh.castShadow = true;
-    this.mesh.receiveShadow = true;
+    this.mesh.receiveShadow = false;
 
     this.mesh.customDepthMaterial = this.material.clone();
     this.mesh.customDepthMaterial.depthPacking = THREE.RGBADepthPacking;
@@ -50,9 +50,8 @@ class Cluster {
          vec3 transformedNormal =  transposeMat3( inverse( mat3( modelViewMatrix * _instanceMatrix ) ) ) * objectNormal ;`,
       );
 
-      program.fragmentShader = THREE.ShaderLib.depth.fragmentShader
-    }
-
+      program.fragmentShader = THREE.ShaderLib.depth.fragmentShader;
+    };
   }
 
   setupInstanceGeometry() {

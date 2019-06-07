@@ -467,6 +467,12 @@ THREE.ShaderChunk.meshline_frag = [
   'uniform float visibility;',
   'uniform float alphaTest;',
   'uniform vec2 repeat;',
+  '#ifdef MIN_OFFSET',
+  'uniform float minOffset;',
+  '#endif',
+  '#ifdef MAX_OFFSET',
+  'uniform float maxOffset;',
+  '#endif',
   '',
   'varying vec2 vUV;',
   'varying vec4 vColor;',
@@ -513,6 +519,8 @@ function MeshLineMaterial(parameters) {
         visibility: { value: 1 },
         alphaTest: { value: 0 },
         repeat: { value: new THREE.Vector2(1, 1) },
+        minOffset: { value: 0 },
+        maxOffset: { value: 0 },
       }),
 
     vertexShader: THREE.ShaderChunk.meshline_vert,
@@ -685,6 +693,24 @@ function MeshLineMaterial(parameters) {
       },
       set(value) {
         this.uniforms.repeat.value.copy(value);
+      },
+    },
+    minOffset: {
+      enumerable: true,
+      get() {
+        return this.uniforms.minOffset.value;
+      },
+      set(value) {
+        this.uniforms.minOffset.value = value;
+      },
+    },
+    maxOffset: {
+      enumerable: true,
+      get() {
+        return this.uniforms.maxOffset.value;
+      },
+      set(value) {
+        this.uniforms.maxOffset.value = value;
       },
     },
   });

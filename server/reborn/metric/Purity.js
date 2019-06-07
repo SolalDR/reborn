@@ -9,7 +9,7 @@ export default class Purity extends Metric {
     super({
       name: "Purity",
       slug: "purity",
-      displayName: "Pureté",
+      displayName: "Pureté de l'environnement",
       min: 0,
       max: 100,
       value: 50,

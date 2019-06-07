@@ -1,15 +1,17 @@
 <template>
-  <div class="years-counter">
-    <img class="years-counter__background" src="@/assets/icons/game/common/countdown-bg.svg" alt="">
+  <transition name="fade-scale--translated" appear>
+    <div class="years-counter">
+      <img class="years-counter__background" src="@/assets/icons/game/common/countdown-bg.svg" alt="">
 
-    <div class="years-counter__content">
-      <img :src="imgPath" alt="">
-      <span class="years-value">{{ currentYear }}</span>
-      <img :src="imgPath" alt="">
+      <div class="years-counter__content">
+        <img :src="imgPath" alt="">
+        <span class="years-value">{{ currentYear }}</span>
+        <img :src="imgPath" alt="">
 
-      <div class="years-suffix">ans</div>
+        <div class="years-suffix">ans</div>
+      </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>
@@ -34,10 +36,18 @@ export default {
 
 <style lang="scss" scoped>
 .years-counter {
+  transform-origin: center top;
+
   &__content {
     @include useFlex(space-between);
     @include centerAbsolute(33%);
     width: 90%;
+
+    img {
+      &:first-of-type {
+        transform: scaleX(-1);
+      }
+    }
 
     .years-value,
     .years-suffix {

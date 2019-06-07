@@ -1,25 +1,24 @@
 <template>
   <div class="explanations">
-    <!-- TODO: Add clan name condition -->
     <div class="explanations__header header">
-      <p class="explanations__title bold">La civilisation a survécu</p>
-      <span class="explanations__score">999</span>
-      <span class="explanations__suffix">ans</span>
+      <p class="explanations__title bold" v-html="$splitWithSpan(texts.title)"></p>
+      <span class="explanations__score" v-html="$splitWithSpan('999')"></span>
+      <span class="explanations__suffix" v-html="$splitWithSpan(texts.suffix)"></span>
 
-      <p v-for="(text, index) in 2" :key="`explanations-text-${index}`" class="explanations__text">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-      </p>
+      <p v-for="(textLine, index) in explanations"
+         :key="`explanations-text-${index}`"
+         v-html="$splitWithSpan(textLine)"
+         class="explanations__text"></p>
     </div>
 
     <div class="explanations__footer footer">
       <div class="explanations__actions">
-        <p class="cta--bordered" @click="$emit('updateStatus', 'saving')">Sauvegarder votre score</p>
-        <p class="cta--bordered" @click="tryAgain">Rejouer</p>
+        <p class="cta--bordered" @click="$emit('updateStatus', 'saving')">{{ texts.save }}</p>
+        <p class="cta--bordered" @click="tryAgain">{{ texts.tryAgain }}</p>
       </div>
 
       <div class="explanations__share">
-        <p>Partagez votre score sur les RS:</p>
-        <!-- TODO: Add images -->
+        <p>{{ texts.share }}</p>
         <a href="https://twitter.com/" target="_blank">
           <img src="@/assets/icons/game/common/end/twitter.svg" alt="Twitter">
         </a>
@@ -32,11 +31,23 @@
 </template>
 
 <script>
+import texts from '@/contents/game/explanations';
+
 export default {
   name: 'explanations',
   props: {
     tryAgain: Function,
   },
+  data() {
+    return {
+      texts: texts,
+    };
+  },
+  computed: {
+    explanations() {
+      return texts.explanations.purity.city;
+    }
+  }
 };
 </script>
 
@@ -67,7 +78,7 @@ export default {
     }
 
     &__text {
-      margin-bottom: $space-l;
+      margin-bottom: $space-s;
       text-align: center;
     }
 

@@ -12,6 +12,7 @@ import snakeCase from "./../utils/snakeCase";
 export default class EntityModel {
   constructor({
     name = null,
+    displayName = null,
     slug = null,
     category = null,
     role = null,
@@ -21,6 +22,7 @@ export default class EntityModel {
     count = 0,
   }){
     this.name = name;
+    this.displayName = displayName;
     this.slug = slug === null ? snakeCase(name) : slug;
     this.game = game;
     this.size = size;

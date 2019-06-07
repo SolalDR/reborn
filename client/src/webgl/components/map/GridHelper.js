@@ -5,7 +5,7 @@ class GridHelper extends THREE.Mesh {
     size = new THREE.Vector2(32, 32),
   } = {}) {
     super(
-      new THREE.CircleGeometry( 0.5, 16 ),
+      new THREE.CircleGeometry(0.5, 16),
       new THREE.MeshBasicMaterial({
         color: 0xFFFFFF,
         transparent: true,
@@ -55,7 +55,7 @@ class GridHelper extends THREE.Mesh {
     this.position.copy(this.position.clone()
       .add(this.targetPosition.clone()
         .sub(this.position)
-        .multiplyScalar(0.3)))
+        .multiplyScalar(0.3)));
   }
 }
 

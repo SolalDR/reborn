@@ -1,7 +1,7 @@
 import * as Reborn from '../../../server/reborn';
 import store from '../services/store';
 import AssetsManager from '../services/assets/Manager';
-import theme, {themeConfig} from '../config/theme';
+import theme, { themeConfig } from '../config/theme';
 
 /**
  * @extends Reborn.Game

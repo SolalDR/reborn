@@ -1,30 +1,34 @@
 <template>
-  <div class="inventory">
-    <div class="inventory__categories">
-      <category
-        v-for="(category, index) in categories"
-        :key="`category-${index}`"
-        :category="{index: index, ...category}"
-        :is-current="category.slug === currentCategory.slug"
-        @setCurrentCategory="setCurrentCategory(category)"/>
-    </div>
+  <transition name="fade-scale" appear>
+    <div class="inventory">
+      <div class="inventory__categories">
+        <category
+          v-for="(category, index) in categories"
+          :key="`category-${index}`"
+          :category="{index: index, ...category}"
+          :is-current="category.slug === currentCategory.slug"
+          @setCurrentCategory="setCurrentCategory(category)"/>
+      </div>
 
-    <div class="inventory__list">
-      <model
-        v-for="(model, index) in models"
-       :key="`model-${index}`"
-       :model="{index: index, ...model}"
-       :money="money"
-       :is-current="model.name === currentModel.name"
-       @setCurrentModel="setCurrentModel(model)"/>
-      <skill
-        v-for="(skill, index) in skills"
-       :key="`skill-${index}`"
-       :skill="{index: index, ...skill}"
-       :is-current="skill.slug === currentSkill.slug"
-       @setCurrentSkill="setCurrentSkill(skill)"/>
+      <div class="inventory__list">
+        <model
+          v-for="(model, index) in models"
+          :key="`model-${index}`"
+          :model="{index: index, ...model}"
+          :money="money"
+          :is-current="model.name === currentModel.name"
+          @setCurrentModel="setCurrentModel"
+          @setHoveredModel="setHoveredModel"/>
+
+        <skill
+          v-for="(skill, index) in skills"
+         :key="`skill-${index}`"
+         :skill="{index: index, ...skill}"
+         :is-current="skill.slug === currentSkill.slug"
+         @setCurrentSkill="setCurrentSkill(skill)"/>
+      </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>
@@ -45,6 +49,7 @@ export default {
       currentCategory: 0,
       categories: [],
       currentModel: 0,
+      hoveredModel: 0,
       models: [],
       currentSkill: 0,
       skills: [],
@@ -75,8 +80,6 @@ export default {
 
     if (this.models[0]) {
       this.setCurrentModel(this.models[0]);
-    } else if(this.skills[0]) {
-      this.setCurrentSkill(this.skills[0]);
     }
   },
 
@@ -119,9 +122,13 @@ export default {
       this.$emit('selectModel', this.currentModel);
     },
 
+    setHoveredModel(model) {
+      this.hoveredModel = model;
+      this.$emit('hoveredModel', this.hoveredModel);
+    },
+
     setCurrentSkill(skill) {
       this.currentSkill = skill;
-      this.$webgl.map.gridHelper.setSize(1, 1);
       this.$emit('selectSkill', this.currentSkill);
     },
   },
@@ -130,8 +137,7 @@ export default {
 
 <style lang="scss">
 .inventory {
-  padding: 10px;
-  width: 26.5rem;
+  padding: 1rem 2rem;
   height: 7.5rem;
   border-radius: 2.5rem;
   border: 2px solid getColor(basics, black);
@@ -152,7 +158,20 @@ export default {
   }
 
   &__list {
-    @include useFlex(space-between);
+    @include useFlex(flex-start);
+
+    .model,
+    .skill {
+      img {
+        margin-right: 2rem;
+      }
+
+      &:last-of-type {
+        img {
+          margin-right: 0;
+        }
+      }
+    }
   }
 }
 </style>

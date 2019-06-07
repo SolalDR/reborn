@@ -1,5 +1,5 @@
 import MyWorker from './map.worker.js';
-import theme from "@/config/theme";
+import theme from '@/config/theme';
 
 const worker = new MyWorker();
 
@@ -34,11 +34,11 @@ export default (seed = Math.random()) => {
           noiseIntensity: manageRand(stage.noise),
           position: [
             manageRand(stage.position.x),
-            manageRand(stage.position.y)
+            manageRand(stage.position.y),
           ],
-        }
-      }
-    })
+        },
+      };
+    }),
     // stages: [
     //   {
     //     floorColor: new THREE.Color(0xf7c0a4),
