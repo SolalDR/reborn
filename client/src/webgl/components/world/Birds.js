@@ -1,11 +1,13 @@
 import vertexShader from './birds/birds.vert';
 import fragmentShader from './birds/birds.frag';
+import Simplex from 'simplex-noise';
 
 export default class Birds {
   constructor({
     map = null,
     alphaMap = null,
   }) {
+    this.noise = new Simplex();
     const geometry = new THREE.PlaneGeometry(1, 1, 2);
     geometry.rotateX(Math.PI / 2);
     const material = new THREE.ShaderMaterial({
@@ -26,6 +28,8 @@ export default class Birds {
       side: THREE.DoubleSide,
     });
 
+    this.mesh = new THREE.Group();
+
     this.mesh = new THREE.Mesh(geometry, material);
     this.mesh.position.set(0, 10, 0);
     console.log(this.mesh);
@@ -33,19 +37,21 @@ export default class Birds {
     this.lookTarget = new THREE.Vector3();
   }
 
+  computePositionAt(value, destination = new THREE.Vector3()) {
+    destination.set(
+      Math.cos(value) * (12 - this.noise.noise2D(value * 0.5, 0.1) * 2),
+      10 + this.noise.noise2D(value * 0.5, 0.3) * 2,
+      Math.sin(value) * (12 - this.noise.noise2D(value * 0.5, 0.5) * 2),
+    );
+    return destination;
+  }
+
   render() {
     this.mesh.material.uniforms.time.value += 0.1;
     const time = this.mesh.material.uniforms.time.value;
 
-    this.mesh.position.set(
-      Math.cos(time * 0.1) * 12,
-      10,
-      Math.sin(time * 0.1) * 12,
-    );
-
-    this.lookTarget.set(Math.cos(time * 0.1 + 0.26) * 12,
-      10,
-      Math.sin(time * 0.1 + 0.26) * 12);
+    this.computePositionAt(time * 0.1, this.mesh.position);
+    this.computePositionAt(time * 0.1 + 0.26, this.lookTarget);
 
     this.mesh.lookAt(this.lookTarget);
 
