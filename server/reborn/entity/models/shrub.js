@@ -1,6 +1,6 @@
 export default {
   slug: 'shrub',
-  category: 'plant',
+  category: 'tree',
   color: '#00FF00',
   name: 'Shrub',
   displayName: 'Arbuste',
