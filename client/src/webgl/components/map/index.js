@@ -41,6 +41,7 @@ export default class GameMap extends THREE.Group {
     this.initWater();
     this.initFloor(geometry);
 
+    console.log(this);
     // TODO: Add in config
     // this.displayPlayground();
   }
@@ -157,5 +158,25 @@ export default class GameMap extends THREE.Group {
     geometry.rotateX(-Math.PI / 2);
     this.water = new THREE.Mesh(geometry, material);
     this.add(this.water);
+  }
+
+  woobleAction({
+    count = 110,
+    speed = 60,
+    intensity = 0.4,
+    timingFunction = 'linear',
+  } = {}) {
+    const duration = speed * count;
+    animate.add({ duration, timingFunction }).on('progress', (event) => {
+      const rotation = Math.sin((event.value * Math.PI * 2) * count) * intensity;
+
+      this.floor.position.x = rotation;
+    }).on('end', () => {
+      this.floor.position.x = 0;
+    });
+  }
+
+  render() {
+    this.gridHelper.render();
   }
 }

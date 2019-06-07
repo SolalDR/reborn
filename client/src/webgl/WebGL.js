@@ -19,6 +19,7 @@ import generateMap from './components/map/generator/Generator';
 import WorldScreen from './components/WorldScreen.js';
 import { Waves } from './components/world';
 import ExplosionEffect from './components/game/effects/Explosion';
+import ParticleSystem from './components/game/effects/ParticleSystem';
 import EntityModelGroup from './components/game/EntityModelGroup';
 import skills from './components/game/skills';
 
@@ -33,6 +34,7 @@ export default class WebGL extends Emitter {
     this.game = game;
 
     // Camera
+    this.time = 0;
     this.scene = new THREE.Scene();
     this.scene.name = 'main';
     this.camera = new THREE.PerspectiveCamera(45, Viewport.width / Viewport.height, 1, 500);
@@ -129,6 +131,9 @@ export default class WebGL extends Emitter {
 
       this.explosionEffect = new ExplosionEffect();
       this.scene.add(this.explosionEffect.mesh);
+
+      // this.particleSystem = new ParticleSystem();
+      // this.scene.add(this.particleSystem.mesh);
 
       store.commit('debug/log', { content: 'webgl: initEnvironnment', label: 'webgl' });
     });
@@ -326,11 +331,13 @@ export default class WebGL extends Emitter {
     requestAnimationFrame(this.loop.bind(this));
     this.controls.loop();
     this.renderPickScene();
+    this.time += 17;
 
-    if (this.map) this.map.gridHelper.render();
-    if (this.waves) this.waves.render();
-    if (this.explosionEffect) this.explosionEffect.render();
-    if (this.smokes) this.smokes.render();
+    if (this.map) this.map.render(this.time);
+    if (this.waves) this.waves.render(this.time);
+    if (this.explosionEffect) this.explosionEffect.render(this.time);
+    if (this.smokes) this.smokes.render(this.time);
+    // if (this.particleSystem) this.particleSystem.render(this.time);
     this.worldScreen.render();
     this.renderer.render();
   }
