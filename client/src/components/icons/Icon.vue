@@ -6,7 +6,7 @@
        fill-rule="evenodd"
        class="icon"
        :class="gaugeFillClasses">
-    <clipPath id="clip-path">
+    <clipPath :id="`${iconName}-clip-path`">
       <rect x="0"
             :y="height"
             :width="height"
@@ -17,9 +17,9 @@
     <path :id="`${iconName}-path`"
           stroke="#000"
           stroke-width="2"
-          :d="paths[iconName]"/>
+          :d="paths[this.$game.player.role.name][iconName]"/>
 
-    <use class="icon-fill" clip-path="url(#clip-path)" :xlink:href="`#${iconName}-path`"/>
+    <use class="icon-fill" :clip-path="`url(#${iconName}-clip-path)`" :xlink:href="`#${iconName}-path`"/>
   </svg>
 
 </template>
@@ -39,7 +39,7 @@ export default {
   },
   data() {
     return {
-      height: 48,
+      height: 45,
       paths: paths,
     };
   },
@@ -65,11 +65,8 @@ export default {
 
   .icon {
     position: relative;
+    display: block;
     margin-right: 3rem;
-
-    &:last-of-type {
-      margin-right: 0;
-    }
 
     .icon-fill {
       transition: all .3s linear;
@@ -77,13 +74,13 @@ export default {
 
     &--high {
       .icon-fill {
-        fill: green;
+        fill: getColor(gauges, high);
       }
     }
 
     &--medium {
       .icon-fill {
-        fill: orange;
+        fill: getColor(gauges, medium);
       }
     }
 
@@ -104,7 +101,7 @@ export default {
       }
 
       .icon-fill {
-        fill: red;
+        fill: getColor(gauges, low);
       }
     }
   }

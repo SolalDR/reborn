@@ -1,6 +1,6 @@
 <template>
   <div>
-    <icon :percent="percent" :icon-name="'energy'"/>
+    <icon :percent="percent" icon-name="satisfaction"/>
   </div>
 </template>
 
