@@ -15,6 +15,7 @@ export default class Population extends Metric {
       value: 100,
       recurentOperation: 0,
     });
+    this.trueValue = this.value;
   }
 
   applyRecurentLogic(game) {
@@ -22,7 +23,7 @@ export default class Population extends Metric {
     const maxRatio = 1.0125;
     const minRatio = 1;
 
-    this.value *= (minRatio + (maxRatio - minRatio) * intensity);
-    this.value = Math.floor(this.value);
+    this.trueValue *= (minRatio + (maxRatio - minRatio) * intensity);
+    this.value = Math.floor(this.trueValue);
   }
 }

@@ -19,6 +19,5 @@ export default class Energy extends Metric {
 
   applyRecurentLogic(game) {
     this.value -= game.metrics.get('population').value * 0.0005;
-    this.value = 100;
   }
 }
