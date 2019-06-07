@@ -24,6 +24,7 @@ export default {
     background-color: rgba(getColor(basics, white), .5);
     border: 1px solid getColor(basics, black);
     border-radius: 1.3rem;
+    text-align: center;
     @include fontSize(12);
     font-family: "DrukText-Medium";
   }

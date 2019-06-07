@@ -17,7 +17,8 @@
           :model="{index: index, ...model}"
           :money="money"
           :is-current="model.name === currentModel.name"
-          @setCurrentModel="setCurrentModel(model)"/>
+          @setCurrentModel="setCurrentModel"
+          @setHoveredModel="setHoveredModel"/>
 
         <skill
           v-for="(skill, index) in skills"
@@ -48,6 +49,7 @@ export default {
       currentCategory: 0,
       categories: [],
       currentModel: 0,
+      hoveredModel: 0,
       models: [],
       currentSkill: 0,
       skills: [],
@@ -120,6 +122,11 @@ export default {
       this.$emit('selectModel', this.currentModel);
     },
 
+    setHoveredModel(model) {
+      this.hoveredModel = model;
+      this.$emit('hoveredModel', this.hoveredModel);
+    },
+
     setCurrentSkill(skill) {
       this.currentSkill = skill;
       this.$emit('selectSkill', this.currentSkill);
@@ -130,7 +137,7 @@ export default {
 
 <style lang="scss">
 .inventory {
-  padding: 10px;
+  padding: 1rem 2rem;
   height: 7.5rem;
   border-radius: 2.5rem;
   border: 2px solid getColor(basics, black);
@@ -155,10 +162,14 @@ export default {
 
     .model,
     .skill {
-      margin-right: 2rem;
+      img {
+        margin-right: 2rem;
+      }
 
       &:last-of-type {
-        margin-right: 0;
+        img {
+          margin-right: 0;
+        }
       }
     }
   }

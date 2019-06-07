@@ -23,8 +23,8 @@
       <gauge-list :list="this.gauges"/>
       <years-counter :currentYear="year"/>
       <indicator-list :list="this.indicators" @showSettings="showSettings = true"/>
-      <inventory :money="money" @selectModel="onSelectModel" @selectSkill="onLaunchSkill"/>
-      <model-infos :model="currentModel"/>
+      <inventory :money="money" @selectModel="onSelectModel" @hoveredModel="onHoverModel" @selectSkill="onLaunchSkill"/>
+      <model-infos :current-model="currentModel" :hovered-model="hoveredModel"/>
       <flash-news/>
       <transition name="fade">
         <settings v-if="showSettings" @closeSettings="showSettings = false"/>
@@ -101,6 +101,7 @@ export default {
       isMuted: false,
       showSettings: false,
       currentModel: null,
+      hoveredModel: null,
       currentSkill: null,
       currentCategory: null,
       gauges: null,
@@ -192,6 +193,10 @@ export default {
       if (model) {
         this.currentModel = model;
       }
+    },
+
+    onHoverModel (model) {
+      this.hoveredModel = model;
     },
 
     onWebGLInit() {
