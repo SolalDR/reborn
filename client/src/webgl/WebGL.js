@@ -99,6 +99,7 @@ export default class WebGL extends Emitter {
 
         if (modelsConfig.picking) {
           this.scene.add(this.models[modelName].pickingCluster.mesh);
+          this.scene.add(this.models[modelName].entityCluster.mesh.clone());
           this.renderer.pickingScene.add(this.models[modelName].entityCluster.mesh);
         } else {
           this.scene.add(this.models[modelName].entityCluster.mesh);
@@ -281,12 +282,17 @@ export default class WebGL extends Emitter {
     const { slot, id } = this.pickingInfos;
 
     // Different hovered love focus
-    if (this.hoveredEntity && (this.hoveredEntity[0] !== slot && this.hoveredEntity[1] !== id)) {
+    if (
+      this.hoveredEntity
+      && (
+        this.hoveredEntity[1] !== id || this.hoveredEntity[0] !== slot
+      )
+    ) {
       const currentEntity = this.hoveredEntity;
       const currentModel = this.findModelWithSlot(currentEntity[0]);
       const currentItem = currentModel.getItem(currentEntity[1]);
       const tmpScale = new THREE.Vector3();
-      animate.add({ from: currentItem.scale.x, to: 1, duration: 200 }).on('progress', ({ value }) => {
+      animate.add({ from: currentItem.scale.x, to: 1, duration: 100 }).on('progress', ({ value }) => {
         currentModel.entityCluster.setScaleAt(currentEntity[1], tmpScale.set(value, value, value));
         currentModel.entityCluster.geometry.attributes.instanceScale.needsUpdate = true;
       });
@@ -301,7 +307,7 @@ export default class WebGL extends Emitter {
         const hoveredItem = hoveredModel.getItem(hoveredEntity[1]);
         const tmpScale = new THREE.Vector3();
         if (hoveredItem) {
-          animate.add({ from: hoveredItem.scale.x, to: 1.2, duration: 200 }).on('progress', ({ value }) => {
+          animate.add({ from: hoveredItem.scale.x, to: 1.1, duration: 100 }).on('progress', ({ value }) => {
             hoveredModel.entityCluster.setScaleAt(hoveredEntity[1], tmpScale.set(value, value, value));
             hoveredModel.entityCluster.geometry.attributes.instanceScale.needsUpdate = true;
           });
