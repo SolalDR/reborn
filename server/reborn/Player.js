@@ -1,4 +1,4 @@
-import * as roles from "./role"
+import * as roles from './role';
 /**
  * Represent a player
  * @param {string} id
@@ -11,7 +11,7 @@ class Player {
   constructor({
     id = null,
     role = null,
-    status = Player.ACTIVE
+    status = Player.ACTIVE,
   }) {
     this.id = id;
     this.status = status;
@@ -22,7 +22,7 @@ class Player {
    * Assign a role to the user
    * @param {Reborn.Role} role
    */
-  assignRole(role){
+  assignRole(role) {
     if (typeof role === 'string') {
       this.role = role === roles.NatureRole.name
         ? roles.NatureRole
@@ -36,12 +36,12 @@ class Player {
    * Returns infos
    * @returns {{id: string, role: Role, status: Number}}
    */
-  get infos(){
+  get infos() {
     return {
       id: this.id,
       role: this.role ? this.role.name : null,
-      status: this.status
-    }
+      status: this.status,
+    };
   }
 }
 

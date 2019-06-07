@@ -1,12 +1,12 @@
 export default class GridCase {
   constructor(x, y, {
     altitude = 0,
-    reference = null
+    reference = null,
   } = {}) {
     this.x = x;
     this.y = y;
     this.altitude = altitude;
-    this.reference = null;
+    this.reference = reference;
   }
 
   get infos() {
@@ -15,6 +15,6 @@ export default class GridCase {
       y: this.y,
       altitude: this.altitude,
       reference: this.reference,
-    }
+    };
   }
 }

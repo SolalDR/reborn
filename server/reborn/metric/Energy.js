@@ -1,22 +1,24 @@
-import Metric from "./Metric";
+import Metric from './Metric';
 
 /**
  * Energy metric
  * @extends Metric
  */
 export default class Energy extends Metric {
-  constructor(){
+  constructor() {
     super({
-      name: "Energy",
-      displayName: "Énergie",
+      name: 'Energy',
+      displayName: 'Énergie',
+      slug: 'energy',
       min: 0,
       max: 100,
       value: 30,
       recurentOperation: 0,
-    })
+    });
   }
 
   applyRecurentLogic(game) {
     this.value -= game.metrics.get('population').value * 0.0005;
+    this.value = 100;
   }
 }

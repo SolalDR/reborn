@@ -1,27 +1,33 @@
 export default {
-  slug: "recycling_factory",
-  category: "recycling",
-  color: "#00FF00",
-  name: "Recycling Factory",
-  displayName: "Centre de recyclage",
-  role: "city",
+  slug: 'recycling_factory',
+  category: 'recycling',
+  color: '#00FF00',
+  name: 'Recycling Factory',
+  displayName: 'Centre de recyclage',
+  role: 'city',
   states: {
     creation: {
-      duration: 200,
+      enterModifiers: [
+        {
+          name: 'money',
+          value: -3000,
+          checkConstraint: true,
+        },
+      ],
+    },
+    living: {
       enterModifiers: [
         {
           name: 'waste',
-          value: -0.5
-        }
+          value: -10,
+        },
       ],
-    },
-    destruction: {
       leaveModifiers: [
         {
           name: 'waste',
-          value: 0.5
-        }
-      ]
-    }
-  }
-}
+          value: 10,
+        },
+      ],
+    },
+  },
+};

@@ -1,5 +1,3 @@
-import Emitter from "./../utils/Emitter";
-
 /**
  * @class Represent a state in the lifecycle of an Entity. It is the way to apply modification on the metrics.
  * @param {String} name The name availables are 'creation', 'mounted', 'destruction', 'living'
@@ -14,8 +12,8 @@ class EntityState {
     duration = null,
     enterModifiers = [],
     recurModifiers = [],
-    leaveModifiers = []
-  }){
+    leaveModifiers = [],
+  }) {
     this.name = name;
     this.duration = duration;
     if (EntityState.LIST.indexOf(this.name) < 0) {
@@ -34,20 +32,19 @@ class EntityState {
    * @todo Check if checkBefore exist
    * @returns {null}
    */
-  enter(game){
-    this.enterModifiers.forEach(modifier => {
-      var metric = game.metrics.get(modifier.name);
+  enter(game) {
+    this.enterModifiers.forEach((modifier) => {
+      const metric = game.metrics.get(modifier.name);
       if (metric) {
         metric.value += modifier.value;
       }
     });
 
-    this.recurModifiers.forEach(modifier => {
-      var metric = game.metrics.get(modifier.name);
+    this.recurModifiers.forEach((modifier) => {
+      const metric = game.metrics.get(modifier.name);
       if (metric) {
-        var timeScaledValue = modifier.value*(game.timeline.interval/1000);
+        const timeScaledValue = modifier.value * (game.timeline.interval / 1000);
         metric.recurentOperation += timeScaledValue;
-        return;
       }
     });
   }
@@ -57,25 +54,24 @@ class EntityState {
    * @param {Reborn.Game} game
    * @returns {null}
    */
-  leave(game){
-    this.leaveModifiers.forEach(modifier => {
-      var metric = game.metrics.get(modifier.name);
+  leave(game) {
+    this.leaveModifiers.forEach((modifier) => {
+      const metric = game.metrics.get(modifier.name);
       if (metric) {
         metric.value += modifier.value;
       }
     });
 
-    this.recurModifiers.forEach(modifier => {
-      var metric = game.metrics.get(modifier.name);
+    this.recurModifiers.forEach((modifier) => {
+      const metric = game.metrics.get(modifier.name);
       if (metric) {
-        var timeScaledValue = modifier.value*(game.timeline.interval/1000);
+        const timeScaledValue = modifier.value * (game.timeline.interval / 1000);
         metric.recurentOperation -= timeScaledValue;
-        return;
       }
     });
   }
 }
 
-EntityState.LIST = ["creation", "mounted", "destruction", "living"];
+EntityState.LIST = ['creation', 'mounted', 'destruction', 'living'];
 
 export default EntityState;

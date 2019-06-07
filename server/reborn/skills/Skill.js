@@ -1,5 +1,5 @@
-import Emitter from "./../utils/Emitter";
-import snakeCase from "./../utils/snakeCase";
+import Emitter from '../utils/Emitter';
+import snakeCase from '../utils/snakeCase';
 
 /**
  * @class
@@ -16,20 +16,20 @@ class Skill extends Emitter {
    * @property {boolean} refill true if the duration between started and current time is greater than durationInterval
    */
   constructor({
-    name = "",
-    slug = "",
-    role = "nature",
+    name = '',
+    slug = '',
+    role = 'nature',
     duration = 1000,
     durationInterval = 60000,
     constraint = null,
     regularConstraintOrder = true,
     category = null,
-    zoneRadius = 0
+    zoneRadius = 0,
   } = {}) {
     super();
     this.name = name;
     this.category = category;
-    this.slug = slug === "" ? snakeCase(name) : slug;
+    this.slug = slug === '' ? snakeCase(name) : slug;
     this.role = role;
     this.duration = duration;
     this.durationInterval = durationInterval;
@@ -39,7 +39,7 @@ class Skill extends Emitter {
 
     this.startedAt = 0;
     this.refill = true;
-    this.allowedConstraint = constraint ? false : true;
+    this.allowedConstraint = !constraint;
   }
 
   start() {
@@ -48,7 +48,7 @@ class Skill extends Emitter {
     this.refill = false;
     this.emit('start', this.infos);
 
-    setTimeout(()=>{
+    setTimeout(() => {
       this.refill = true;
       this.checkAvailable();
     }, this.durationInterval);
@@ -56,7 +56,7 @@ class Skill extends Emitter {
   }
 
   get isRefill() {
-    return Date.now() > this.startedAt + this.durationInterval ? true : false;
+    return Date.now() > this.startedAt + this.durationInterval;
   }
 
   checkAvailable(discret = false) {
@@ -80,7 +80,7 @@ class Skill extends Emitter {
       category: this.category,
       refill: this.refill,
       allowedConstraint: this.allowedConstraint,
-    }
+    };
   }
 }
 

@@ -1,4 +1,4 @@
-import * as Reborn from "../../reborn"
+import * as Reborn from '../../reborn';
 
 class Player extends Reborn.Player {
   /**
@@ -6,7 +6,7 @@ class Player extends Reborn.Player {
    * @param {Socket} clientSocket The socket id in the room
    * @param {Socker} socket The socket connection of the player
    */
-  constructor(clientSocket, socket){
+  constructor(clientSocket, socket) {
     super({
       id: clientSocket.id,
     });

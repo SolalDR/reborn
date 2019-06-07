@@ -36,11 +36,13 @@ export default {
     isCity() {
       return this.$game.player.role.name === 'city';
     },
+
     quantity() {
       if (this.isCity) {
         const modelCost = this.model.states.creation.enterModifiers.find(modifier => modifier.name === 'money').value;
         return Math.floor(this.money / -modelCost);
       }
+      return '';
     },
     modelIcons() {
       return this.isCity ? cityIcons : natureIcons;

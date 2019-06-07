@@ -4,7 +4,7 @@ import animate from '@solaldr/animate';
 import App from './App.vue';
 import router from './router';
 import store from './services/store';
-import splitWithSpan from './utils/split-with-span'
+import splitWithSpan from './utils/split-with-span';
 
 // Plugins
 import Viewport from './plugins/Viewport';

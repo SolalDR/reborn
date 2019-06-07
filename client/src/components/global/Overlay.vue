@@ -42,8 +42,8 @@ export default {
   name: 'overlay',
   data() {
     return {
-      waveSrc: waveSrc,
-      waveReversedSrc: waveReversedSrc,
+      waveSrc,
+      waveReversedSrc,
     };
   },
   props: {

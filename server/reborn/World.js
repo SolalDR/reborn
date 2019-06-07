@@ -1,6 +1,6 @@
-import Emitter from "./utils/Emitter";
-import Grid from "./Grid";
-import Entity from "./entity";
+import Emitter from './utils/Emitter';
+import Grid from './Grid';
+import Entity from './entity';
 
 /**
  * @class Represent a physic environnement
@@ -10,8 +10,8 @@ import Entity from "./entity";
  */
 export default class World extends Emitter {
   constructor({
-    game = null
-  } = {}){
+    game = null,
+  } = {}) {
     super();
     this.game = game;
     this.entities = new Map();
@@ -29,24 +29,24 @@ export default class World extends Emitter {
     model = null,
     position = null,
     rotation = null,
-  } = {}){
-    var entityModel = this.game.entityModels.get(model);
+  } = {}) {
+    const entityModel = this.game.entityModels.get(model);
     if (!entityModel) {
-      console.error(`World: Cannot add entity with model "${model}"`); return;
+      console.error(`World: Cannot add entity with model "${model}"`); return null;
     }
 
     if (!this.grid.checkCells(gridCases)) {
-      console.error(`World: Cannot add entity at this place`); return;
+      console.error('World: Cannot add entity at this place'); return null;
     }
 
-    var newEntity = new Entity({
+    const newEntity = new Entity({
       position,
       rotation,
       model: entityModel,
     });
 
-    if (!newEntity.valid) return;
-    var gridCasesCertified = this.grid.registerCells(gridCases, newEntity.uuid);
+    if (!newEntity.valid) return null;
+    const gridCasesCertified = this.grid.registerCells(gridCases, newEntity.uuid);
     newEntity.gridCases = gridCasesCertified;
 
 
@@ -55,12 +55,12 @@ export default class World extends Emitter {
     entityModel.count++;
     newEntity.on('update', (infos) => {
       this.emit('entity:update', infos);
-    })
+    });
 
     return newEntity;
   }
 
-  get entitiesList(){
+  get entitiesList() {
     return Array.from(this.entities.values());
   }
 
@@ -71,7 +71,7 @@ export default class World extends Emitter {
    */
   removeEntity(entity) {
     if (!entity) {
-      console.error(`World: Cannot remove entity "null"`); return;
+      console.error('World: Cannot remove entity "null"'); return;
     }
 
     entity.destruct();
@@ -80,4 +80,3 @@ export default class World extends Emitter {
     this.emit('entity:remove', entity.infos);
   }
 }
-
