@@ -22,9 +22,12 @@ module.exports = {
     'import/extensions': 0,
     'no-plusplus': 0,
     'arrow-body-style': 0,
-    'css-rcurlyexpected': 0
-  },
-  parserOptions: {
-    parser: 'babel-eslint',
+    'css-rcurlyexpected': 0,
+    'no-underscore-dangle': 0,
+    'no-mixed-operators': 0,
+    'import/no-unresolved': 0,
+    'prefer-rest-params': 0,
+    'class-methods-use-this': 0,
+    'no-continue': 0,
   },
 };

@@ -1,13 +1,13 @@
 <template>
   <transition name="fade-scale" appear>
     <div class="model-infos">
-      <template v-if="model">
-        <span>{{ model.displayName }}</span>
-        <span v-for="(modifier, index) in model.states.mounted.recurModifiers"
+      <template v-if="modelDisplayed">
+        <span>{{ modelDisplayed.displayName }}</span>
+        <span v-for="(modifier, index) in modelDisplayed.states.mounted.recurModifiers"
               :key="`model-infos-modifier-${index}`">
           {{ modifier.value > 0 ? '+' : '-' }} {{ modifier.name }} {{ modifier.value }}/an
         </span>
-        <span v-if="this.$game.player.role.name === 'city'">X {{ -model.states.creation.enterModifiers.find(modifier => modifier.name === 'money').value }}</span>
+        <span v-if="this.$game.player.role.name === 'city'">X {{ -modelDisplayed.states.creation.enterModifiers.find(modifier => modifier.name === 'money').value }}</span>
       </template>
     </div>
   </transition>
@@ -16,7 +16,17 @@
 <script>
 export default {
   name: 'model-infos',
-  props: ['model'],
+  props: ['currentModel', 'hoveredModel'],
+  data() {
+    return {
+      modelDisplayed: this.currentModel,
+    };
+  },
+  watch: {
+    hoveredModel() {
+      this.modelDisplayed = this.hoveredModel ? this.hoveredModel : this.currentModel;
+    },
+  },
 };
 </script>
 

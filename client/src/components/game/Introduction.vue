@@ -37,7 +37,7 @@ export default {
     return {
       currentTipIndex: 0,
       pending: false,
-      texts: texts,
+      texts,
     };
   },
 
@@ -66,8 +66,8 @@ export default {
     },
     updateCurrentTipIndex() {
       const maxLength = texts.tips[this.$game.player.role.name].length - 1;
-      this.currentTipIndex === maxLength ? this.currentTipIndex = 0 : this.currentTipIndex++;
-    }
+      this.currentTipIndex = this.currentTipIndex === maxLength ? 0 : this.currentTipIndex + 1;
+    },
   },
 };
 </script>

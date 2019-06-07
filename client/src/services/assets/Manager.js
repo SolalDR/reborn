@@ -5,7 +5,6 @@ import SVGLoader from 'three-svg-loader';
 import SoundLoader from './loaders/SoundLoader';
 import Loader from './Loader';
 import DRACOLoader from './loaders/DRACOLoader';
-
 import globalDatas from '../../datas/global';
 
 class Manager {

@@ -1,27 +1,33 @@
 export default {
-  slug: "sorting_center",
-  category: "recycling",
-  color: "#00FF00",
-  name: "Sorting Center",
-  displayName: "Centre de tri",
-  role: "city",
+  slug: 'sorting_center',
+  category: 'recycling',
+  color: '#00FF00',
+  name: 'Sorting Center',
+  displayName: 'Centre de tri',
+  role: 'city',
   states: {
     creation: {
-      duration: 200,
+      enterModifiers: [
+        {
+          name: 'money',
+          value: -5000,
+          checkConstraint: true,
+        },
+      ],
+    },
+    living: {
       enterModifiers: [
         {
           name: 'waste',
-          value: -0.5
-        }
+          value: -20,
+        },
       ],
-    },
-    destruction: {
       leaveModifiers: [
         {
           name: 'waste',
-          value: 0.5
-        }
-      ]
-    }
-  }
-}
+          value: 20,
+        },
+      ],
+    },
+  },
+};

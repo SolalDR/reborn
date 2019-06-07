@@ -13,11 +13,13 @@
       <div class="inventory__list">
         <model
           v-for="(model, index) in models"
-         :key="`model-${index}`"
-         :model="{index: index, ...model}"
-         :money="money"
-         :is-current="model.name === currentModel.name"
-         @setCurrentModel="setCurrentModel(model)"/>
+          :key="`model-${index}`"
+          :model="{index: index, ...model}"
+          :money="money"
+          :is-current="model.name === currentModel.name"
+          @setCurrentModel="setCurrentModel"
+          @setHoveredModel="setHoveredModel"/>
+
         <skill
           v-for="(skill, index) in skills"
          :key="`skill-${index}`"
@@ -47,6 +49,7 @@ export default {
       currentCategory: 0,
       categories: [],
       currentModel: 0,
+      hoveredModel: 0,
       models: [],
       currentSkill: 0,
       skills: [],
@@ -60,7 +63,7 @@ export default {
   },
 
   mounted() {
-    this.$bus.$on('shortcut', (key) => {
+    this.$bus.$on('shortcut', () => {
       // this.categoriesShortcuts(key);
       // this.entitiesShortcuts(key);
     });
@@ -119,6 +122,11 @@ export default {
       this.$emit('selectModel', this.currentModel);
     },
 
+    setHoveredModel(model) {
+      this.hoveredModel = model;
+      this.$emit('hoveredModel', this.hoveredModel);
+    },
+
     setCurrentSkill(skill) {
       this.currentSkill = skill;
       this.$emit('selectSkill', this.currentSkill);
@@ -129,8 +137,7 @@ export default {
 
 <style lang="scss">
 .inventory {
-  padding: 10px;
-  width: 26.5rem;
+  padding: 1rem 2rem;
   height: 7.5rem;
   border-radius: 2.5rem;
   border: 2px solid getColor(basics, black);
@@ -151,7 +158,20 @@ export default {
   }
 
   &__list {
-    @include useFlex(space-between);
+    @include useFlex(flex-start);
+
+    .model,
+    .skill {
+      img {
+        margin-right: 2rem;
+      }
+
+      &:last-of-type {
+        img {
+          margin-right: 0;
+        }
+      }
+    }
   }
 }
 </style>

@@ -9,28 +9,14 @@
 </template>
 
 <script>
-import AlimentationIcon from '../icons/city/AlimentationIcon';
-import FoodIcon from '../icons/city/FoodIcon';
-import EnergyIcon from '../icons/city/EnergyIcon';
-import RecyclingIcon from '../icons/city/RecyclingIcon';
-import SatisfactionIcon from '../icons/city/SatisfactionIcon';
-import PlantIcon from '../icons/nature/PlantIcon';
-import RockIcon from '../icons/nature/RockIcon';
-import SkillIcon from '../icons/nature/SkillIcon';
-import TreeIcon from '../icons/nature/TreeIcon';
+import CityIcons from '../icons/city';
+import NatureIcons from '../icons/nature';
 
 export default {
   name: 'category',
   components: {
-    TreeIcon,
-    SkillIcon,
-    RockIcon,
-    PlantIcon,
-    SatisfactionIcon,
-    RecyclingIcon,
-    EnergyIcon,
-    FoodIcon,
-    AlimentationIcon,
+    ...CityIcons,
+    ...NatureIcons,
   },
   data() {
     return {

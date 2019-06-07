@@ -1,6 +1,4 @@
 import animate from '@solaldr/animate';
-import Skill from './Skill';
-import Reborn from '@/game';
 import theme from '@/config/theme';
 import AssetsManager from '@/services/assets/Manager';
 import { GodRay } from '../../world';

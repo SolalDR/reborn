@@ -1,10 +1,10 @@
 <template>
-  <div @click="$emit('setCurrentModel', model.index)"
-       @mouseover="isHovered = true"
-       @mouseleave="isHovered = false"
+  <div @click="$emit('setCurrentModel', model)"
+       @mouseover="mouseOver"
+       @mouseleave="mouseLeave"
        class="model"
        :class="{'model--current': isCurrent, 'model--hovered': isHovered}">
-    {{ model.name }}
+    <img :src="modelIcons[model.slug]" :alt="model.name">
 
     <transition name="fade">
       <div v-if="(isCity && isCurrent) || (isCity && isHovered)"
@@ -14,6 +14,9 @@
 </template>
 
 <script>
+import cityIcons from '../../assets/icons/game/city/inventory/models';
+import natureIcons from '../../assets/icons/game/nature/inventory/models';
+
 export default {
   name: 'model',
   props: {
@@ -33,11 +36,26 @@ export default {
     isCity() {
       return this.$game.player.role.name === 'city';
     },
+
     quantity() {
-      if (this.$game.player.role.name === 'city') {
+      if (this.isCity) {
         const modelCost = this.model.states.creation.enterModifiers.find(modifier => modifier.name === 'money').value;
         return Math.floor(this.money / -modelCost);
       }
+      return '';
+    },
+    modelIcons() {
+      return this.isCity ? cityIcons : natureIcons;
+    },
+  },
+  methods: {
+    mouseOver() {
+      this.$emit('setHoveredModel', this.model);
+      this.isHovered = true;
+    },
+    mouseLeave() {
+      this.$emit('setHoveredModel', '');
+      this.isHovered = false;
     },
   },
 };
@@ -45,16 +63,18 @@ export default {
 
 <style lang="scss" scoped>
   .model {
-    $model-size: 5rem;
-
     cursor: pointer;
     opacity: .3;
     @include useFlex();
     position: relative;
-    width: $model-size;
-    height: $model-size;
-    background-color: rgba(getColor(basics, white), .7);
     transition: all .3s ease;
+
+    img {
+      $img-size: 5rem;
+
+      width: $img-size;
+      height: $img-size;
+    }
 
     &--current,
     &--hovered {
