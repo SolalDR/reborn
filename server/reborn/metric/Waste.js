@@ -11,7 +11,7 @@ export default class Waste extends Metric {
       displayName: 'Déchets',
       min: 0,
       max: 100,
-      value: 0,
+      value: 25,
       recurentOperation: 0,
     });
   }
