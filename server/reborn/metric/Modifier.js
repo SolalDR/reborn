@@ -15,7 +15,7 @@ export default class MetricModifier {
       return null;
     }
 
-    if (isNaN(value)) {
+    if (typeof value !== 'number') {
       console.error('MetricModifier: value must be a number');
       return null;
     }

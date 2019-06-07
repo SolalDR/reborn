@@ -384,7 +384,31 @@ export default {
         this.$store.commit('debug/log', { content: 'game: initializing', label: 'socket' });
         this.status = 'initializing';
         if (this.$game.player.role.name === 'nature' || !config.server.enabled) {
-          const entities = this.$webgl.fillRandom(['millenial_tree', 'common_flower', 'rock', 'centenary_tree']);
+          const entities = this.$webgl.fillRandom(
+            [
+              'rock',
+              'big_flower',
+              // 'big_flower',
+              // 'big_flower',
+              // 'centenary_tree',
+              'centenary_tree',
+              'centenary_tree',
+              // 'bush',
+              // 'cactus',
+              'cactus',
+              // 'common_flower',
+              'gem',
+              // 'millenial_tree',
+              'millenial_tree',
+              'millenial_tree',
+              // 'ore',
+              // 'ore',
+              'ore',
+              // 'shrub',
+              // 'tough_tree',
+              // 'uranium_deposit',
+            ],
+          );
           const interval = 5000 / entities.length;
           entities.forEach((entity, i) => {
             setTimeout(() => {

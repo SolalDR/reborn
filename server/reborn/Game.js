@@ -38,7 +38,7 @@ class Game extends Emitter {
   initMetrics() {
     this.metrics = new Map();
     metrics.forEach((MetricConstructor) => {
-      const metric = new MetricConstructor();
+      const metric = new MetricConstructor(this);
       this.metrics.set(metric.slug, metric);
     });
   }

@@ -8,6 +8,7 @@ import SatisfactionMetric from './Satisfaction';
 import HumanMetric from './Human';
 import TreeMetric from './Tree';
 import RockMetric from './Rock';
+import WasteMetric from './Waste';
 
 export default [
   BiodiversityMetric,
@@ -20,4 +21,5 @@ export default [
   HumanMetric,
   TreeMetric,
   RockMetric,
+  WasteMetric,
 ];
