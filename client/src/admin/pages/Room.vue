@@ -205,11 +205,8 @@ export default {
     onConnectRoom() {
       this.$socket.emit('history:list');
     },
+
     onAddEntity() {
-      this.$socket.emit('entity:add', {
-        position: this.currentCell.position,
-        model: this.entityModel,
-      });
       this.currentCell = false;
     },
 

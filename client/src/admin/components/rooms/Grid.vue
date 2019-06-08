@@ -53,6 +53,7 @@ export default {
 
       return 0.1;
     },
+
     onClick(i) {
       this.$emit('clickCell', {
         position: [i % this.size[0], Math.floor(i / this.size[1])],
