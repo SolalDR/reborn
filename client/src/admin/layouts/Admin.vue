@@ -66,3 +66,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.admin p {
+  font-family: Roboto,Noto Sans,-apple-system,BlinkMacSystemFont,sans-serif;
+}
+</style>

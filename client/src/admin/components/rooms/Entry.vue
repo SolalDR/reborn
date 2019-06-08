@@ -1,9 +1,9 @@
 <template>
   <div class="entry" :class="{'entry--error': entry.type === 'error'}">
-    <p class="date">{{ entry.date }}</p>
+    <p class="date">{{ this.date }}</p>
 
     <div class="content">
-      <p>{{ entry.eventName }}</p>
+      <p class="content__title">{{ entry.eventName }}</p>
       <div class="content__datas">
         <p class="content__datas__cta" @click="showDatas = !showDatas">
           {{ showDatas ? 'Masquer ' : 'Afficher ' }}les données
@@ -25,6 +25,14 @@ export default {
     },
   },
 
+  computed: {
+    date() {
+      const date = new Date(this.entry.date);
+      function pad(n) { return n < 10 ? `0${n}` : n; }
+      return `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+    },
+  },
+
   data() {
     return {
       showDatas: false,
@@ -36,13 +44,22 @@ export default {
 <style lang="scss" scoped>
 .entry {
   display: flex;
+  margin-bottom: 5px;
 
   .date {
-    // border-right: 1px solid black;
+    font-size: 1em;
+    margin-right: 15px;
   }
 
   .content {
     width: 100%;
+    position: relative;
+
+    &__title {
+      font-weight: bold;
+      margin-bottom: 10px;
+      font-size: 1.2em;
+    }
 
     > p {
       margin-bottom: 0;
@@ -53,7 +70,10 @@ export default {
 
       &__cta {
         cursor: pointer;
-        margin-top: 5px;
+        font-size: 1em;
+        position: absolute;
+        top: 2px;
+        right: 0;
       }
     }
   }

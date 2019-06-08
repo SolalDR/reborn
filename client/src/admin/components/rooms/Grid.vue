@@ -99,8 +99,8 @@ export default {
 <style lang="scss" scope>
 .grid {
   display: grid;
-  grid-template-columns: repeat(var(--width), 32px);
-  grid-template-rows: repeat(var(--height), 32px);
+  grid-template-columns: repeat(var(--width), 2vw);
+  grid-template-rows: repeat(var(--height), 2vw);
   width: 100%;
   &__cell {
     background-color: var(--color);
