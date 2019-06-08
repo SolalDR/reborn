@@ -13,7 +13,7 @@ export default class Birds {
     this.webgl = webgl;
     this.noise = new Simplex();
 
-    const boundingBoxGeometry = new THREE.SphereGeometry(2);
+    const boundingBoxGeometry = new THREE.SphereGeometry(1.15);
     const boundingBoxMaterial = new THREE.MeshBasicMaterial({
       color: '#FFF',
     });
@@ -21,7 +21,7 @@ export default class Birds {
     this.boundingBox.position.set(0, 10, 0);
 
 
-    const geometry = new THREE.PlaneGeometry(2.5, 2.5, 2);
+    const geometry = new THREE.PlaneGeometry(1, 1, 2);
     geometry.rotateX(Math.PI / 2);
     const material = new THREE.ShaderMaterial({
       uniforms: {
@@ -50,19 +50,20 @@ export default class Birds {
     mouse.$on('click', this.onMouseClick);
   }
 
-  onMouseClick = () => {
+  onMouseClick = ({ event }) => {
+    if (this.mesh.shooted || event.target !== this.webgl.canvas) return;
     this.raycaster.setFromCamera(mouse.normalized, this.webgl.camera);
     const intersects = this.raycaster.intersectObjects([this.boundingBox]);
-    console.log(intersects);
+
+    if (intersects[0]) this.shoot();
   }
 
   /**
    * @todo Play sound
-   * @todo Add raycaster
    */
   shoot() {
     this.mesh.shooted = true;
-
+    
     const from = this.mesh.position.clone();
     const target = this.lookTarget.clone().sub(from).multiplyScalar(1).add(from);
     target.y = -1;
@@ -82,6 +83,8 @@ export default class Birds {
       this.webgl.explosionEffect.explode({
         duration: 1500,
       });
+
+      this.mesh.parent.remove(this.mesh);
     }, 800);
   }
 
