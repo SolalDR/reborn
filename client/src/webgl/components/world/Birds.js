@@ -2,6 +2,7 @@ import vertexShader from './birds/birds.vert';
 import fragmentShader from './birds/birds.frag';
 import Simplex from 'simplex-noise';
 import animate from '@solaldr/animate';
+import mouse from '@/plugins/Mouse';
 
 export default class Birds {
   constructor({
@@ -11,7 +12,16 @@ export default class Birds {
   }) {
     this.webgl = webgl;
     this.noise = new Simplex();
-    const geometry = new THREE.PlaneGeometry(1, 1, 2);
+
+    const boundingBoxGeometry = new THREE.SphereGeometry(2);
+    const boundingBoxMaterial = new THREE.MeshBasicMaterial({
+      color: '#FFF',
+    });
+    this.boundingBox = new THREE.Mesh(boundingBoxGeometry, boundingBoxMaterial);
+    this.boundingBox.position.set(0, 10, 0);
+
+
+    const geometry = new THREE.PlaneGeometry(2.5, 2.5, 2);
     geometry.rotateX(Math.PI / 2);
     const material = new THREE.ShaderMaterial({
       uniforms: {
@@ -31,30 +41,28 @@ export default class Birds {
       side: THREE.DoubleSide,
     });
 
-    this.mesh = new THREE.Group();
-
     this.mesh = new THREE.Mesh(geometry, material);
     this.mesh.position.set(0, 10, 0);
-    console.log(this.mesh);
 
     this.lookTarget = new THREE.Vector3();
-    console.log(this);
+
+    this.raycaster = new THREE.Raycaster();
+    mouse.$on('click', this.onMouseClick);
   }
 
-  computePositionAt(value, destination = new THREE.Vector3()) {
-    destination.set(
-      Math.cos(value) * (14 + this.noise.noise2D(value * 0.5, 0.1) * 2),
-      10 + this.noise.noise2D(value * 0.5, 0.3) * 2,
-      Math.sin(value) * (14 + this.noise.noise2D(value * 0.5, 0.5) * 2),
-    );
-    return destination;
+  onMouseClick = () => {
+    this.raycaster.setFromCamera(mouse.normalized, this.webgl.camera);
+    const intersects = this.raycaster.intersectObjects([this.boundingBox]);
+    console.log(intersects);
   }
 
   /**
    * @todo Play sound
+   * @todo Add raycaster
    */
   shoot() {
     this.mesh.shooted = true;
+
     const from = this.mesh.position.clone();
     const target = this.lookTarget.clone().sub(from).multiplyScalar(1).add(from);
     target.y = -1;
@@ -77,21 +85,31 @@ export default class Birds {
     }, 800);
   }
 
+  computePositionAt(value, destination = new THREE.Vector3()) {
+    destination.set(
+      Math.cos(value) * (14 + this.noise.noise2D(value * 0.5, 0.1) * 2),
+      10 + this.noise.noise2D(value * 0.5, 0.3) * 2,
+      Math.sin(value) * (14 + this.noise.noise2D(value * 0.5, 0.5) * 2),
+    );
+    return destination;
+  }
+
   render() {
+    if (this.mesh.shooted) return;
 
     this.mesh.material.uniforms.time.value += 0.1;
     const time = this.mesh.material.uniforms.time.value;
 
-    if (this.mesh.shooted) return;
-
     this.computePositionAt(time * 0.1, this.mesh.position);
     this.computePositionAt(time * 0.1 + 0.26, this.lookTarget);
-
     this.mesh.lookAt(this.lookTarget);
+
+    this.boundingBox.matrixWorld.copy(this.mesh.matrixWorld);
+    this.boundingBox.modelViewMatrix.copy(this.mesh.modelViewMatrix);
 
     this.mesh.rotateOnWorldAxis(
       this.lookTarget.clone().sub(this.mesh.position).normalize(),
-      .6,
+      0.6,
     );
   }
 }

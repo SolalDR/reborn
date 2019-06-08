@@ -32,7 +32,6 @@ export default class WebGL extends Emitter {
     this.canvas = canvas;
     this.game = game;
 
-    // Camera<
     this.scene = new THREE.Scene();
     this.scene.name = 'main';
     this.camera = new THREE.PerspectiveCamera(45, Viewport.width / Viewport.height, 1, 500);

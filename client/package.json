@@ -12,9 +12,11 @@
   "dependencies": {
     "@solaldr/animate": "^0.1.1",
     "@solaldr/emitter": "^0.1.0",
+    "core-js": "^2.5.7",
     "dat.gui": "^0.7.6",
     "firebase": "^5.11.1",
     "glslify-loader": "^2.0.0",
+    "howler": "^2.1.2",
     "postprocessing": "^6.2.1",
     "raw-loader": "^1.0.0",
     "register-service-worker": "^1.6.2",
@@ -27,8 +29,7 @@
     "vue-material": "latest",
     "vue-router": "^3.0.1",
     "vue-socket.io": "^3.0.7",
-    "vuex": "^3.0.1",
-    "howler": "^2.1.2"
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@babel/preset-es2017": "^7.0.0-beta.53",

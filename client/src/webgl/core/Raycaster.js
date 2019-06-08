@@ -20,6 +20,7 @@ class Raycaster extends Emitter {
       if (this.object) {
         raycaster.setFromCamera(mouse.normalized, this.camera);
         const a = raycaster.intersectObject(this.object, false);
+
         if (a.length) {
           this.emit('cast', a[0]);
           Bus.$emit('cast', a[0]);
