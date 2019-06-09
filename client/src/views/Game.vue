@@ -26,9 +26,8 @@
       <inventory :money="money" @selectModel="onSelectModel" @hoveredModel="onHoverModel" @selectSkill="onLaunchSkill"/>
       <model-infos :current-model="currentModel" :hovered-model="hoveredModel"/>
       <flash-news/>
-      <transition name="fade">
-        <settings v-if="showSettings" @closeSettings="showSettings = false"/>
-      </transition>
+
+      <settings v-if="showSettings" @closeSettings="showSettings = false"/>
     </div>
 
     <!-- IsEnded -->
