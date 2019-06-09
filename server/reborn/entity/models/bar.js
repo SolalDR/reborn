@@ -19,17 +19,28 @@ export default {
         },
       ],
     },
+
+    destruction: {
+      enterModifiers: [
+        {
+          name: 'money',
+          value: -100,
+          checkConstraint: true,
+        },
+      ],
+    },
+
     living: {
       enterModifiers: [
         {
           name: 'waste',
-          value: 0.5,
+          value: 1,
         },
       ],
       leaveModifiers: [
         {
           name: 'waste',
-          value: -0.5,
+          value: -1,
         },
       ],
     },

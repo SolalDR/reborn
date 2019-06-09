@@ -18,6 +18,13 @@ export default class WorldScreen extends Emitter {
     });
   }
 
+  set(uuid, position) {
+    const element = this.elements.get(uuid);
+    if (element) {
+      element.position = position;
+    }
+  }
+
   remove(uuid) {
     this.elements.delete(uuid);
   }

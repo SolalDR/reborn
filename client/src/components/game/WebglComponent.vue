@@ -23,6 +23,12 @@ export default {
     },
   },
 
+  watch: {
+    position(next) {
+      this.$webgl.worldScreen.set(this.uuid, next);
+    },
+  },
+
   mounted() {
     this.$webgl.worldScreen.add(this.uuid, this.position, (x, y) => {
       this.$el.style.setProperty('--x', `${x}px`);

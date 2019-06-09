@@ -33,9 +33,11 @@ export default class EntityModel {
 
     // TODO Convert to Map
     this.states = {};
-    Object.keys(states).forEach((keyState) => {
+
+    const stateList = ['creation', 'destruction', 'mounted', 'living'];
+    stateList.forEach((keyState) => {
       const state = new EntityState({
-        ...states[keyState],
+        ...(states[keyState] ? states[keyState] : {}),
         name: keyState,
       });
       if (state) {

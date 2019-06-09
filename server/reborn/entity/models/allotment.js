@@ -32,10 +32,11 @@ export default {
       ],
     },
     destruction: {
-      leaveModifiers: [
+      enterModifiers: [
         {
           name: 'money',
           value: -100,
+          checkConstraint: true,
         },
       ],
     },
@@ -43,13 +44,13 @@ export default {
       enterModifiers: [
         {
           name: 'waste',
-          value: 0.5,
+          value: 1,
         },
       ],
       leaveModifiers: [
         {
           name: 'waste',
-          value: -0.5,
+          value: -1,
         },
       ],
     },

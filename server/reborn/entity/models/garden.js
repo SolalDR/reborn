@@ -23,17 +23,12 @@ export default {
         },
       ],
     },
-    living: {
+    destruction: {
       enterModifiers: [
         {
-          name: 'waste',
-          value: -0.5,
-        },
-      ],
-      leaveModifiers: [
-        {
-          name: 'waste',
-          value: 0.5,
+          name: 'money',
+          value: -100,
+          checkConstraint: true,
         },
       ],
     },
