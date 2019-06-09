@@ -23,19 +23,5 @@ export default {
         },
       ],
     },
-    living: {
-      enterModifiers: [
-        {
-          name: 'waste',
-          value: -0.5,
-        },
-      ],
-      leaveModifiers: [
-        {
-          name: 'waste',
-          value: 0.5,
-        },
-      ],
-    },
   },
 };
