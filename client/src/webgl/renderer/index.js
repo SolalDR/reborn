@@ -31,30 +31,12 @@ export default class Renderer {
   }
 
   pick(x, y) {
-    // const pixelRatio = this.renderer.getPixelRatio();
-    // this.camera.setViewOffset(
-    //   this.renderer.context.drawingBufferWidth,   // full width
-    //   this.renderer.context.drawingBufferHeight,  // full top
-    //   event.clientX * pixelRatio | 0,        // rect x
-    //   event.clientY * pixelRatio | 0,        // rect y
-    //   1,                                     // rect width
-    //   1,                                     // rect height
-    // );
     this.renderer.setRenderTarget(this.pickingTexture);
     this.renderer.render(this.pickingScene, this.camera);
     this.renderer.setRenderTarget(null);
-    // this.camera.clearViewOffset();
 
-    // this.renderer.readRenderTargetPixels(this.pickingTexture, 0, 0, 1, 1, pixelBuffer);
     const pixelBuffer = new Uint8Array(4);
-    this.renderer.readRenderTargetPixels(
-      this.pickingTexture,
-      x,
-      this.pickingTexture.height - y,
-      1,
-      1,
-      pixelBuffer,
-    );
+    this.renderer.readRenderTargetPixels(this.pickingTexture, x, this.pickingTexture.height - y, 1, 1, pixelBuffer);
 
     return {
       id: pixelBuffer[2],
@@ -70,7 +52,7 @@ export default class Renderer {
     this.renderer.shadowMapEnabled = true;
     this.renderer.shadowMap.type = THREE.BasicShadowMap;
     this.renderer.setClearColor(0xb7eeff);
-    this.renderer.setPixelRatio(1.5);
+    this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(Viewport.width, Viewport.height);
   }
 
@@ -107,6 +89,7 @@ export default class Renderer {
     Viewport.$on('resize', () => {
       this.renderer.setSize(Viewport.width, Viewport.height);
       this.composer.setSize(Viewport.width, Viewport.height);
+      this.pickingTexture.setSize(Viewport.width, Viewport.height);
       this.camera.aspect = Viewport.ratio;
       this.camera.updateProjectionMatrix();
     });
