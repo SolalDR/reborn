@@ -2,6 +2,7 @@ export default {
   slug: 'intensive_livestock',
   category: 'alimentation',
   name: 'Élevage intensif',
+  displayName: 'Élevage intensif',
   role: 'city',
   size: [3, 2],
   states: {

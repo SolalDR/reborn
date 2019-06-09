@@ -3,6 +3,7 @@ export default {
   category: 'energy',
   name: 'Éolienne',
   role: 'city',
+  displayName: 'Éolienne',
   states: {
     creation: {
       enterModifiers: [

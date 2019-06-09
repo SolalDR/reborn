@@ -1,13 +1,13 @@
 import animate from '@solaldr/animate';
 import theme from '@/config/theme';
 import AssetsManager from '@/services/assets/Manager';
-import { Smoke } from '../../world';
+import { SmokeCloud } from '../../world';
 
 export default class Epidemic {
   constructor($webgl) {
     this.scene = $webgl.scene;
     AssetsManager.get('images').then((images) => {
-      this.smoke = new Smoke({
+      this.smoke = new SmokeCloud({
         path: images.smoke_line.paths[0],
         maxOffset: 2,
         minOffset: -2,

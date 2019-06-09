@@ -2,6 +2,7 @@ export default {
   slug: 'intensive_culture',
   category: 'alimentation',
   name: 'Culture intensive',
+  displayName: 'Culture intensive',
   role: 'city',
   size: [3, 2],
   states: {

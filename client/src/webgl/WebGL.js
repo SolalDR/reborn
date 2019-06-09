@@ -19,8 +19,8 @@ import generateMap from './components/map/generator/Generator';
 import WorldScreen from './components/WorldScreen.js';
 import { Waves } from './components/world';
 import ExplosionEffect from './components/game/effects/Explosion';
-import ParticleSystem from './components/game/effects/ParticleSystem';
 import EntityModelGroup from './components/game/EntityModelGroup';
+import modelsConstructors from './components/game/models';
 import skills from './components/game/skills';
 
 
@@ -58,6 +58,8 @@ export default class WebGL extends Emitter {
     });
 
     this.hoveredEntity = null;
+
+    this.renderedModels = [];
   }
 
   init() {
@@ -93,11 +95,22 @@ export default class WebGL extends Emitter {
       });
 
       Object.keys(models).forEach((modelName, index) => {
-        this.models[modelName] = new EntityModelGroup(modelName, {
+        const EntityModelGroupConstructor = modelsConstructors[modelName]
+          ? modelsConstructors[modelName]
+          : EntityModelGroup;
+
+        this.models[modelName] = new EntityModelGroupConstructor(modelName, {
           geometry: models[modelName].scene.children[0].geometry,
           material,
           slot: index,
+          scene: this.scene,
         });
+
+        // Model has a render method
+        if (this.models[modelName].render) {
+          this.renderedModels.push(this.models[modelName]);
+        }
+
 
         if (modelsConfig.picking) {
           this.scene.add(this.models[modelName].pickingCluster.mesh);
@@ -116,7 +129,10 @@ export default class WebGL extends Emitter {
     };
 
     AssetsManager.get('models').then((models) => {
-      initModels(models);
+      // Wait for image to be loaded
+      AssetsManager.get('images').then(() => {
+        initModels(models);
+      });
     });
   }
 
@@ -336,7 +352,11 @@ export default class WebGL extends Emitter {
     if (this.map) this.map.render(this.time);
     if (this.waves) this.waves.render(this.time);
     if (this.explosionEffect) this.explosionEffect.render(this.time);
-    if (this.smokes) this.smokes.render(this.time);
+
+    this.renderedModels.forEach((model) => {
+      model.render();
+    });
+
     // if (this.particleSystem) this.particleSystem.render(this.time);
     this.worldScreen.render();
     this.renderer.render();

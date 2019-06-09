@@ -1,11 +1,13 @@
 import Birds from './Birds';
 import Waves from './Waves';
-import Smoke from './Smoke';
+import SmokeCloud from './SmokeCloud';
+import SmokeCluster from './SmokeCluster';
 import GodRay from './GodRay';
 
 export {
   Birds,
   Waves,
-  Smoke,
+  SmokeCluster,
+  SmokeCloud,
   GodRay,
 };
