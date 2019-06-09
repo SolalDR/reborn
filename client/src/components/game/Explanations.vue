@@ -2,7 +2,7 @@
   <div class="explanations">
     <div class="explanations__header header">
       <p class="explanations__title bold" v-html="$splitWithSpan(texts.title)"></p>
-      <span class="explanations__score" v-html="$splitWithSpan(score)"></span>
+      <span class="explanations__score" v-html="$splitWithSpan(score.toString())"></span>
       <span class="explanations__suffix" v-html="$splitWithSpan(texts.suffix)"></span>
 
       <p v-for="(textLine, index) in explanations"
@@ -37,12 +37,16 @@ export default {
   name: 'explanations',
   props: {
     score: Number,
+    endGameDatas: Object,
     tryAgain: Function,
   },
   data() {
     return {
       texts,
     };
+  },
+  mounted() {
+    console.log(this.endGameDatas);
   },
   computed: {
     explanations() {
