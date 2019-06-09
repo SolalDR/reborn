@@ -35,6 +35,7 @@ export default class Birds {
 
       const boundingBox = new THREE.Mesh(boundingBoxGeometry, boundingBoxMaterial);
       boundingBox.position.set(0, 10, 0);
+      boundingBox.index = i;
 
       this.boundingBoxexGroup.add(boundingBox);
     }
@@ -83,12 +84,12 @@ export default class Birds {
   /**
    * @todo Play sound
    */
-  shoot(intersectedObject) {
-    intersectedObject.shooted = true;
+  shoot(intersection) {
+    const intersectedMesh = this.meshesGroup.children[intersection.object.index];
+    intersectedMesh.shooted = true;
+    console.log(intersectedMesh);
 
-    console.log(intersectedObject);
-
-    const from = intersectedObject.object.position.clone();
+    const from = intersectedMesh.position.clone();
     const target = this.lookTarget.clone().sub(from).multiplyScalar(1).add(from);
     target.y = -1;
 
@@ -96,10 +97,10 @@ export default class Birds {
       duration: 1000,
       timingFunction: 'easeInQuad',
     }).on('progress', ({ value }) => {
-      intersectedObject.object.position.copy(
+      intersectedMesh.position.copy(
         from.clone().add(target.clone().sub(from).multiplyScalar(value)),
       );
-      intersectedObject.object.rotation.x += 0.05;
+      intersectedMesh.rotation.x += 0.05;
     });
 
     setTimeout(() => {
@@ -108,7 +109,8 @@ export default class Birds {
         duration: 1500,
       });
 
-      this.boundingBoxexGroup.remove(intersectedObject);
+      this.boundingBoxexGroup.children.splice(intersection.object.index, 0);
+      intersectedMesh.visible = false;
     }, 800);
   }
 
@@ -122,8 +124,9 @@ export default class Birds {
   }
 
   render() {
-    for (let i = 0; i < this.total; i++) {
+    for (let i = 0; i < this.meshesGroup.children.length; i++) {
       const mesh = this.meshesGroup.children[i];
+      console.log(mesh);
       if (mesh.shooted) continue;
       const boundingBoxe = this.boundingBoxexGroup.children[i];
 
