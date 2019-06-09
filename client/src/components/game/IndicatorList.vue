@@ -10,7 +10,7 @@
         <span>{{ indicator.value }}</span>
 
         <transition name="fade">
-          <hover-infos v-if="indexHovered === index" :text="indicator.displayName"/>
+          <hover-infos v-show="indexHovered === index" :text="indicator.displayName"/>
         </transition>
       </div>
 
