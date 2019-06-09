@@ -19,12 +19,18 @@ export default {
   props: ['currentModel', 'hoveredModel'],
   data() {
     return {
-      modelDisplayed: this.currentModel,
+      modelDisplayed: null,
     };
   },
+  mounted() {
+    this.modelDisplayed = this.currentModel;
+  },
   watch: {
-    hoveredModel() {
-      this.modelDisplayed = this.hoveredModel ? this.hoveredModel : this.currentModel;
+    currentModel(model) {
+      this.modelDisplayed = model;
+    },
+    hoveredModel(hoveredModel) {
+      this.modelDisplayed = hoveredModel ? hoveredModel : this.currentModel;
     },
   },
 };

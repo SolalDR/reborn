@@ -172,6 +172,14 @@ export default {
         }
       }
     }
+
+    .model {
+      &:last-of-type {
+        .model__quantity {
+          right: 0;
+        }
+      }
+    }
   }
 }
 </style>

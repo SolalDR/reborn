@@ -3,12 +3,11 @@
        @mouseover="mouseOver"
        @mouseleave="mouseLeave"
        class="model"
-       :class="{'model--current': isCurrent, 'model--hovered': isHovered}">
+       :class="{'model--current': isCurrent || isHovered}">
     <img :src="modelIcons[model.slug]" :alt="model.name">
 
     <transition name="fade">
-      <div v-if="(isCity && isCurrent) || (isCity && isHovered)"
-           class="model__quantity">{{ quantity }}</div>
+      <div v-if="isCity" class="model__quantity">{{ quantity }}</div>
     </transition>
   </div>
 </template>
@@ -74,8 +73,7 @@ export default {
       height: $img-size;
     }
 
-    &--current,
-    &--hovered {
+    &--current {
       opacity: 1;
     }
 
@@ -85,7 +83,7 @@ export default {
       @include useFlex();
       position: absolute;
       bottom: 0;
-      right: 0;
+      right: 2rem;
       transform: translate(50%, 30%);
       width: $model-quantity-size;
       height: $model-quantity-size;
