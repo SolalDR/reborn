@@ -60,6 +60,7 @@ export default {
     .indicator {
       position: relative;
       @include useFlex();
+      flex-wrap: nowrap;
       margin-right: 3rem;
 
       &:last-child,

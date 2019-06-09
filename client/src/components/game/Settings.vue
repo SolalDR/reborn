@@ -79,7 +79,7 @@ export default {
   }
 
   .settings__section {
-    margin-bottom: $space-xl;
+    margin: 0 auto $space-xl;
     width: 84rem;
 
     &-title {
