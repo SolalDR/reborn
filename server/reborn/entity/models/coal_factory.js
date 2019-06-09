@@ -2,7 +2,7 @@ export default {
   slug: 'coal_factory',
   category: 'energy',
   name: 'Coal Factory',
-  displayName: 'Usine à charbon',
+  displayName: 'Usine à charbon',
   role: 'city',
   states: {
     creation: {
@@ -18,6 +18,7 @@ export default {
         },
       ],
     },
+
     mounted: {
       recurModifiers: [
         {
@@ -30,14 +31,17 @@ export default {
         },
       ],
     },
+
     destruction: {
-      leaveModifiers: [
+      enterModifiers: [
         {
           name: 'money',
           value: -3000,
+          checkConstraint: true,
         },
       ],
     },
+
     living: {
       enterModifiers: [
         {

@@ -1,11 +1,13 @@
 .fade-scale,
 .fade-scale--translated {
   &-enter-active {
-    transition: all 1.2s ease;
+    --duration: 1.2s;
+    transition: all var(--duration) ease;
   }
 
   &-leave-active {
-    transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    --duration: 0.8s;
+    transition: all var(--duration) cubic-bezier(1.0, 0.5, 0.8, 1.0);
   }
 }
 

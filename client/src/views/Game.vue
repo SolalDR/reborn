@@ -44,12 +44,13 @@
       </transition>
     </overlay>
 
-    <webgl-component :position="selectedEntity.position" v-if="selectedEntity">
-      <p class="cta--bordered"
-         @click="onRemoveItem">
-        Delete <button @click.stop="selectedEntity = null">X</button>
-      </p>
+    <webgl-component :position="selectedEntity.position" v-if="selectedEntity" ref="destroy-bubble">
+      <transition name="fade-scale" mode="out-in" appear>
+        <webgl-destroy-bubble @click="onRemoveItem" v-if="selectedEntity"
+          :model="selectedEntity.model"/>
+      </transition>
     </webgl-component>
+
   </main>
 </template>
 
@@ -66,6 +67,7 @@ import Inventory from '../components/game/Inventory.vue';
 import Settings from '../components/game/Settings.vue';
 import YearsCounter from '../components/game/YearsCounter.vue';
 import WebglComponent from '../components/game/WebglComponent.vue';
+import WebglDestroyBubble from '../components/game/WebglDestroyBubble';
 import Overlay from '../components/global/Overlay';
 import Explanations from '../components/game/Explanations';
 import Saving from '../components/game/Saving';
@@ -90,6 +92,7 @@ export default {
     Introduction,
     Countdown,
     WebglComponent,
+    WebglDestroyBubble,
   },
 
   data() {
@@ -141,6 +144,11 @@ export default {
   },
 
   mounted() {
+    window.addEventListener('click', (event) => {
+      if (this.selectedEntity) {
+        this.selectedEntity = null;
+      }
+    });
     document.addEventListener('keydown', this.onKeyDown);
     this.$bus.$on('shortcut', (code) => {
       switch (code) {
@@ -195,7 +203,7 @@ export default {
       }
     },
 
-    onHoverModel (model) {
+    onHoverModel(model) {
       this.hoveredModel = model;
     },
 
@@ -214,16 +222,20 @@ export default {
 
       // When user click on an object in the scene
       this.$webgl.on('selectItem', (item) => {
-        this.selectedEntity = item;
+        setTimeout(() => {
+          this.selectedEntity = item;
 
-        const modelRole = this.$game.entityModels.get(item.model).role;
-        const playerRole = this.$game.player.role.name;
+          const modelRole = this.$game.entityModels.get(item.model).role;
+          const playerRole = this.$game.player.role.name;
 
-        if ((modelRole === 'nature' && playerRole === 'city') || (modelRole === null && playerRole === 'nature')) {
-          this.onRemoveItem({ force: true });
-        } else if (modelRole === 'nature' && playerRole === 'nature') {
-          this.selectedEntity = null; // unfocus
-        }
+          if ((modelRole === 'nature' && playerRole === 'city') || (modelRole === null && playerRole === 'nature')) {
+            this.onRemoveItem({ force: true });
+          } else if (
+            playerRole === 'nature' || (modelRole === null && playerRole === 'city')
+          ) {
+            this.selectedEntity = null;
+          }
+        }, 1);
       });
 
       if (!config.server.enabled) {
@@ -265,7 +277,7 @@ export default {
       this.$socket.emit('entity:add', params);
     },
 
-    onRemoveItem({ force }) {
+    onRemoveItem({ force } = {}) {
       const params = {
         model: this.selectedEntity.model,
         uuid: this.selectedEntity.uuid,

@@ -23,5 +23,14 @@ export default {
         },
       ],
     },
+    destruction: {
+      enterModifiers: [
+        {
+          name: 'money',
+          value: -100,
+          checkConstraint: true,
+        },
+      ],
+    },
   },
 };

@@ -27,10 +27,11 @@ export default {
       ],
     },
     destruction: {
-      leaveModifiers: [
+      enterModifiers: [
         {
           name: 'money',
-          value: -3000,
+          value: -4000,
+          checkConstraint: true,
         },
       ],
     },

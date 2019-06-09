@@ -35,6 +35,7 @@ export default {
         {
           name: 'money',
           value: -500,
+          checkConstraint: true,
         },
       ],
     },

@@ -12,10 +12,6 @@ export default {
           value: -6000,
           checkConstraint: true,
         },
-        // {
-        //   name: 'biodiversity',
-        //   value: -5,
-        // },
       ],
     },
     mounted: {
@@ -31,15 +27,12 @@ export default {
       ],
     },
     destruction: {
-      leaveModifiers: [
+      enterModifiers: [
         {
           name: 'money',
           value: -2000,
+          checkConstraint: true,
         },
-        // {
-        //   name: 'biodiversity',
-        //   value: 5,
-        // },
       ],
     },
     living: {
