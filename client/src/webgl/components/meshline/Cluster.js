@@ -6,8 +6,7 @@ export default class LineCluster extends Cluster {
    */
   setupMaterial() {
     this.material.onBeforeCompile = (program) => {
-      console.log(beforeVertexChunk);
-      program.vertexShader = `${beforeVertexChunk}\n\r${program.vertexShader}`;
+      // program.vertexShader = `${beforeVertexChunk}\n\r${program.vertexShader}`;
 
       program.vertexShader = program.vertexShader.replace(
         '#include <begin_vertex>',
@@ -19,8 +18,6 @@ export default class LineCluster extends Cluster {
         `mat4 _instanceMatrix = getInstanceMatrix();
          vec3 transformedNormal =  transposeMat3( inverse( mat3( modelViewMatrix * _instanceMatrix ) ) ) * objectNormal ;`,
       );
-
-      console.log(program.vertexShader);
     };
   }
 }

@@ -1,22 +1,10 @@
 <template>
-  <overlay>
-    <div class="join">
-      <loader/>
-    </div>
-  </overlay>
+  <div class="join"></div>
 </template>
 
 <script>
-import Loader from '../../components/global/Loader';
-import Overlay from '../../components/global/Overlay';
-
 export default {
   name: 'RoomJoin',
-
-  components: {
-    Overlay,
-    Loader,
-  },
 
   sockets: {
     'room:connect': function (args) {
@@ -34,6 +22,7 @@ export default {
   },
   mounted() {
     const roomId = this.$router.history.current.params.id;
+    if (navigator.userAgent.match(/^FacebookExternalHit\/.*?|Facebot/i)) return;
     this.$socket.emit('room:join', roomId);
     this.$store.commit('debug/log', { content: 'room:join (emit)', label: 'socket' });
     this.msg = `Joined ${roomId}`;
@@ -66,7 +55,8 @@ export default {
 
 <style lang="scss">
   .join {
-    @include useFlex();
+    width: 100vw;
     height: 100vh;
+    background-color: getColor(mains, primary);
   }
 </style>

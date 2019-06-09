@@ -27,6 +27,31 @@ class Cluster {
     this.setupMaterial();
 
     this.mesh = new THREE.Mesh(this.geometry, this.material);
+    this.mesh.castShadow = true;
+    this.mesh.receiveShadow = false;
+
+    this.mesh.customDepthMaterial = this.material.clone();
+    this.mesh.customDepthMaterial.depthPacking = THREE.RGBADepthPacking;
+    this.mesh.customDepthMaterial.clipping = true;
+    this.mesh.customDepthMaterial.onBeforeCompile = (program) => {
+      program.vertexShader = `${beforeVertexChunk}\n\r${program.vertexShader}`;
+      program.vertexShader = program.vertexShader.replace(
+        '#include <begin_vertex>',
+        [
+          'vec3 transformed = ( _instanceMatrix * vec4( position , 1. )).xyz;',
+          '#ifdef PICKING',
+          'v_instancePickingColor = instancePickingColor;',
+          '#endif',
+        ].join('\n\r'),
+      );
+      program.vertexShader = program.vertexShader.replace(
+        '#include <defaultnormal_vertex>',
+        `mat4 _instanceMatrix = getInstanceMatrix();
+         vec3 transformedNormal =  transposeMat3( inverse( mat3( modelViewMatrix * _instanceMatrix ) ) ) * objectNormal ;`,
+      );
+
+      program.fragmentShader = THREE.ShaderLib.depth.fragmentShader;
+    };
   }
 
   setupInstanceGeometry() {

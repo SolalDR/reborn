@@ -1,60 +1,64 @@
 <template>
   <main class="game">
     <scene @mounted="onWebGLInit"/>
+    <div v-if="isLoading" class="game__loading-overlay"></div>
+
+    <p v-if="status !== 'playing' && status !== 'initializing'"
+       @click="muteAll"
+       class="mute__cta cta"
+       :class="{'mute__cta--muted': isMuted}">
+      Chuuut
+    </p>
 
     <!-- IsStarting -->
-    <transition name="fade">
-      <overlay v-if="isStarting">
-        <transition name="fade" mode="out-in">
-          <loader v-if="status === 'loading'"/>
-          <introduction v-if="status === 'pending'" @start="onPlayerReady"/>
-          <countdown v-if="status === 'initializing'"/>
-        </transition>
-      </overlay>
-    </transition>
+    <overlay v-if="isStarting" :appear="false" :is-transparent="!isLoading" :fade-out="true">
+      <transition name="fade" mode="out-in">
+        <introduction v-if="status === 'pending'" @start="onPlayerReady"/>
+        <countdown v-if="status === 'initializing'"/>
+      </transition>
+    </overlay>
 
     <!-- IsPlaying -->
     <div class="game__interface" v-if="interfaceVisible">
       <gauge-list :list="this.gauges"/>
       <years-counter :currentYear="year"/>
       <indicator-list :list="this.indicators" @showSettings="showSettings = true"/>
-      <inventory :money="money" @selectModel="onSelectModel" @selectSkill="onSelectSkill"/>
-      <model-infos :model="currentModel"/>
+      <inventory :money="money" @selectModel="onSelectModel" @hoveredModel="onHoverModel" @selectSkill="onLaunchSkill"/>
+      <model-infos :current-model="currentModel" :hovered-model="hoveredModel"/>
       <flash-news/>
-      <transition name="fade">
-        <settings v-if="showSettings" @closeSettings="showSettings = false"/>
-      </transition>
+
+      <settings v-if="showSettings" @closeSettings="showSettings = false"/>
     </div>
 
     <!-- IsEnded -->
-    <transition name="fade">
-      <overlay v-if="isEnded">
-        <transition name="fade" mode="out-in">
-          <explanations v-if="status === 'explanations'"
-                        @updateStatus="updateStatus"
-                        :score="year"
-                        :tryAgain="tryAgain"/>
+    <overlay v-if="isEnded" :fade-in="true">
+      <transition name="fade" mode="out-in">
+        <explanations v-if="status === 'explanations'"
+                      :score="year"
+                      :tryAgain="tryAgain"
+                      @updateStatus="updateStatus"/>
 
-          <saving v-if="status === 'saving'"
-                  @updateStatus="updateStatus"
-                  :score="year"
-                  :endGameDatas="endGameDatas"
-                  :tryAgain="tryAgain"/>
-        </transition>
-      </overlay>
-    </transition>
+        <saving v-if="status === 'saving'"
+                :score="year"
+                :endGameDatas="endGameDatas"
+                :tryAgain="tryAgain"
+                @updateStatus="updateStatus"/>
+      </transition>
+    </overlay>
 
-    <webgl-component :position="selectedEntity.position" v-if="selectedEntity">
-      <p class="cta--bordered" @click="onRemoveItem">Delete <button @click.stop="selectedEntity = null">X</button></p>
+    <webgl-component :position="selectedEntity.position" v-if="selectedEntity" ref="destroy-bubble">
+      <transition name="fade-scale" mode="out-in" appear>
+        <webgl-destroy-bubble @click="onRemoveItem" v-if="selectedEntity"
+          :model="selectedEntity.model"/>
+      </transition>
     </webgl-component>
   </main>
 </template>
 
 <script>
 import Vue from 'vue';
-import uuid from '@/utils/uuid';
+import generateUuid from '@/utils/uuid';
 import Reborn from '../game';
-import Loader from '../components/global/Loader.vue';
 import Scene from '../components/game/Scene.vue';
 import Introduction from '../components/game/Introduction.vue';
 import Countdown from '../components/game/Countdown.vue';
@@ -64,6 +68,7 @@ import Inventory from '../components/game/Inventory.vue';
 import Settings from '../components/game/Settings.vue';
 import YearsCounter from '../components/game/YearsCounter.vue';
 import WebglComponent from '../components/game/WebglComponent.vue';
+import WebglDestroyBubble from '../components/game/WebglDestroyBubble';
 import Overlay from '../components/global/Overlay';
 import Explanations from '../components/game/Explanations';
 import Saving from '../components/game/Saving';
@@ -85,19 +90,22 @@ export default {
     IndicatorList,
     Scene,
     Inventory,
-    Loader,
     Introduction,
     Countdown,
     WebglComponent,
+    WebglDestroyBubble,
   },
 
   data() {
     return {
-      status: null, // null => loading => pending => initializing => playing => explanations => saving => leaderboard
+      status: null, // null => pending => initializing => playing => explanations => saving => leaderboard
       isStarting: true,
       isEnded: false,
+      isLoading: true,
+      isMuted: false,
       showSettings: false,
       currentModel: null,
+      hoveredModel: null,
       currentSkill: null,
       currentCategory: null,
       gauges: null,
@@ -117,9 +125,10 @@ export default {
     'game:start': function (args) { this.onGameStart(args); },
     'game:end': function (args) { this.onGameEnd(args); },
     'notification:send': function () { this.onNotificationSend(); },
-    'skill:start': function(args) { this.onSkillStart(args) },
-    'skill:available': function(args) { this.onSkillAvailable(args) },
-    'skill:unavailable': function(args) { this.onSkillUnavailable(args) },
+    'skill:start': function (args) { this.onSkillStart(args); },
+    'skill:available': function (args) { this.onSkillAvailable(args); },
+    'skill:unavailable': function (args) { this.onSkillUnavailable(args); },
+    'rythm:change': function (args) { this.onRythmChange(args); },
   },
 
   created() {
@@ -127,7 +136,7 @@ export default {
       this.$router.push('/');
       return;
     }
-    this.status = 'loading';
+    this.status = 'pending';
 
     // Create game
     Vue.prototype.$game = new Reborn.Game({
@@ -137,6 +146,11 @@ export default {
   },
 
   mounted() {
+    window.addEventListener('click', (event) => {
+      if (this.selectedEntity) {
+        this.selectedEntity = null;
+      }
+    });
     document.addEventListener('keydown', this.onKeyDown);
     this.$bus.$on('shortcut', (code) => {
       switch (code) {
@@ -158,6 +172,11 @@ export default {
   },
 
   methods: {
+    // TODO: Create common method
+    muteAll() {
+      this.isMuted = !this.isMuted;
+    },
+
     onKeyDown(event) {
       this.$bus.$emit('shortcut', event.which);
     },
@@ -182,40 +201,43 @@ export default {
     // Quand un utilisateur click sur un model du rack
     onSelectModel(model) {
       if (model) {
-        // TODO: change to selectedModel
-        this.currentSkill = null;
         this.currentModel = model;
       }
     },
 
-    // Quand un utilisateur click sur un skill du rack
-    onSelectSkill(skill) {
-      if (skill) {
-        // TODO: change to selectedModel
-        this.currentModel = null;
-        this.currentSkill = skill;
-      }
+    onHoverModel(model) {
+      this.hoveredModel = model;
     },
 
     onWebGLInit() {
       this.$store.commit('debug/log', { content: 'game: onWebGLInit', label: 'webgl' });
       this.$store.commit('debug/log', { content: 'game: pending', label: 'socket' });
       this.status = 'pending';
+      this.$sound.play('ambiance_sea');
+
+      this.isLoading = false;
 
       this.$socket.emit('grid:ready', this.$webgl.map.grid.infos);
 
       // When clicking an empty cell
       this.$webgl.on('selectCell', item => this.onAddItem(item));
 
-      // When clicking on clickMap
-      this.$webgl.on('clickMap', item => this.onLaunchSkill(item));
-
       // When user click on an object in the scene
       this.$webgl.on('selectItem', (item) => {
-        this.selectedEntity = item;
-        if (this.$game.entityModels.get(item.model).role === 'nature' && this.$game.player.role.name === 'city') {
-          this.onRemoveItem();
-        }
+        setTimeout(() => {
+          this.selectedEntity = item;
+
+          const modelRole = this.$game.entityModels.get(item.model).role;
+          const playerRole = this.$game.player.role.name;
+
+          if ((modelRole === 'nature' && playerRole === 'city') || (modelRole === null && playerRole === 'nature')) {
+            this.onRemoveItem({ force: true });
+          } else if (
+            playerRole === 'nature' || (modelRole === null && playerRole === 'city')
+          ) {
+            this.selectedEntity = null;
+          }
+        }, 1);
       });
 
       if (!config.server.enabled) {
@@ -236,32 +258,28 @@ export default {
       console.log('Try Again');
     },
 
-    onLaunchSkill(item) {
-      console.log('onLaunchSkill: skill', this.currentSkill);
-      if (!this.currentSkill) return;
-      const params = { ...item, skill: this.currentSkill.slug, position: this.$webgl.map.grid.getCell(item.position)};
-
+    onLaunchSkill(skill) {
+      const requestParams = { ...skill, skill: skill.slug };
       if (!config.server.enabled) {
-        const zone = this.$webgl.map.grid.captureZone(params.position, this.currentSkill.zoneRadius);
-        this.onSkillStart({ ...params, gridCases: zone });
+        this.onSkillStart(requestParams);
         return;
       }
       this.$store.commit('debug/log', { content: 'skill:start (emit)', label: 'socket' });
-      this.$socket.emit('skill:start', params);
+      this.$socket.emit('skill:start', requestParams);
     },
 
     onAddItem(item) {
       if (!this.currentModel) return;
       const params = { ...item, model: this.currentModel.slug };
       if (!config.server.enabled) {
-        this.onEntityAdd({ ...params, uuid: uuid(), states: ['mounted', 'living'] });
+        this.onEntityAdd({ ...params, uuid: generateUuid(), states: ['mounted', 'living'] });
         return;
       }
       this.$store.commit('debug/log', { content: 'entity:add (emit)', label: 'socket' });
       this.$socket.emit('entity:add', params);
     },
 
-    onRemoveItem() {
+    onRemoveItem({ force } = {}) {
       const params = {
         model: this.selectedEntity.model,
         uuid: this.selectedEntity.uuid,
@@ -290,11 +308,19 @@ export default {
           duration: 600,
         });
 
-        item.gridCases.forEach(gridCaseInfos => {
+        item.gridCases.forEach((gridCaseInfos) => {
           if (gridCaseInfos) {
             this.$webgl.map.grid.get(gridCaseInfos).reference = gridCaseInfos.reference;
           }
         });
+
+        const prefix = `${this.$game.player.role.name}_add_`;
+        const entityModel = this.$game.entityModels.get(item.model);
+        if (this.$sound.has(prefix + entityModel.category)) {
+          this.$sound.play(prefix + entityModel.category);
+        } else {
+          this.$sound.play(prefix + entityModel.role);
+        }
 
         model.addItem({
           ...item,
@@ -306,11 +332,19 @@ export default {
 
     onEntityRemove({ model, uuid, gridCases }) {
       this.$store.commit('debug/log', { content: `entity:remove (receive) with uuid: ${uuid}`, label: 'socket' });
+
+      const prefix = `${this.$game.player.role.name}_remove`;
+      this.$sound.play(prefix);
+
       this.$webgl.models[model].removeEntity(uuid);
 
-      gridCases.forEach(gridCaseInfos => {
-        this.$webgl.map.grid.get(gridCaseInfos).reference = null;
-      });
+      if (gridCases) {
+        gridCases.forEach((gridCaseInfos) => {
+          this.$webgl.map.grid.get(gridCaseInfos).reference = null;
+        });
+      } else {
+        console.warn('Game:onEntityRemove: No gridcases');
+      }
     },
 
 
@@ -318,6 +352,7 @@ export default {
       const skillEffect = this.$webgl.skills.get(item.skill);
       if (!skillEffect) return;
       skillEffect.launch(item, this.$webgl);
+      this.$sound.play(`skill_${item.skill}`);
     },
 
     onSkillAvailable(args) {
@@ -330,6 +365,10 @@ export default {
       // TODO
     },
 
+    onRythmChange(speed) {
+      this.$sound.playSample(`drum_${speed}`);
+    },
+
     onTimelineTick({ metrics, elapsed }) {
       this.gauges = metrics.filter((metric) => {
         return this.$game.player.role.gauges.indexOf(metric.slug) >= 0;
@@ -340,7 +379,16 @@ export default {
       });
 
       this.year = Math.floor(elapsed / 1000); // One year per second
-      this.money = this.indicators.length > 0 ? this.indicators.find(indicator => indicator.name === 'Money').value : 0;
+
+      if (this.indicators.length > 0) {
+        if (this.indicators.find(indicator => indicator.slug === 'money')) {
+          this.money = this.indicators.find(indicator => indicator.slug === 'money').value;
+        } else {
+          this.money = 0;
+        }
+      } else {
+        this.money = 0;
+      }
     },
 
     onGameStart({ startedAt }) {
@@ -360,11 +408,39 @@ export default {
       setTimeout(() => {
         this.$store.commit('debug/log', { content: 'game: initializing', label: 'socket' });
         this.status = 'initializing';
-        if (this.$game.player.role.name === 'nature') {
-          const entities = this.$webgl.fillRandom(['tree', 'rock', 'centenary_tree']);
+        if (this.$game.player.role.name === 'nature' || !config.server.enabled) {
+          const entities = this.$webgl.fillRandom(
+            [
+              'rock',
+              'big_flower',
+              // 'big_flower',
+              // 'big_flower',
+              // 'centenary_tree',
+              'centenary_tree',
+              'centenary_tree',
+              // 'bush',
+              // 'cactus',
+              'cactus',
+              // 'common_flower',
+              'gem',
+              // 'millenial_tree',
+              'millenial_tree',
+              'millenial_tree',
+              // 'ore',
+              // 'ore',
+              'ore',
+              // 'shrub',
+              // 'tough_tree',
+              // 'uranium_deposit',
+            ],
+          );
           const interval = 5000 / entities.length;
           entities.forEach((entity, i) => {
             setTimeout(() => {
+              if (!config.server.enabled) {
+                this.onEntityAdd({ ...entity, uuid: generateUuid(), states: ['mounted', 'living'] });
+                return;
+              }
               this.$socket.emit('entity:add', entity);
             }, i * interval);
           });
@@ -375,6 +451,23 @@ export default {
         this.$store.commit('debug/log', { content: 'game: playing', label: 'socket' });
         this.isStarting = false;
         this.status = 'playing';
+
+        this.$sound.addSample('drum_slow', 2000, [
+          { name: 'drum_slow_1', delay: 0 },
+          { name: 'drum_slow_2', delay: 1500 },
+        ]);
+
+        this.$sound.addSample('drum_medium', 1500, [
+          { name: 'drum_medium_1', delay: 0 },
+          { name: 'drum_medium_2', delay: 1000 },
+        ]);
+
+        this.$sound.addSample('drum_fast', 1000, [
+          { name: 'drum_fast_1', delay: 0 },
+          { name: 'drum_fast_2', delay: 750 },
+        ]);
+
+        this.$sound.playSample('drum_slow');
       }, Math.max(0, timeout + 1));
     },
 
@@ -403,6 +496,15 @@ export default {
   height: 100vh;
   overflow: hidden;
 
+  &__loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: getColor(mains, primary);
+  }
+
   &__interface {
     position: static;
 
@@ -410,16 +512,14 @@ export default {
       position: absolute;
     }
 
-    $padding: 3rem;
-
     .gauge-list {
-      top: $padding;
-      left: $padding;
+      top: $border-of-screen;
+      left: $border-of-screen;
     }
 
     .indicator-list {
-      top: $padding;
-      right: $padding;
+      top: $border-of-screen;
+      right: $border-of-screen;
     }
 
     .years-counter {
@@ -429,18 +529,18 @@ export default {
     }
 
     .inventory {
-      bottom: calc(#{$padding} + 3.6rem);
-      left: $padding;
+      bottom: calc(#{$border-of-screen} + 3.6rem);
+      left: $border-of-screen;
     }
 
     .model-infos {
-      bottom: $padding;
-      left: $padding;
+      bottom: $border-of-screen;
+      left: $border-of-screen;
     }
 
     .flash-news {
-      bottom: $padding;
-      right: $padding;
+      bottom: $border-of-screen;
+      right: $border-of-screen;
     }
   }
 }

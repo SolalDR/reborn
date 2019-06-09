@@ -1,7 +1,8 @@
 <template>
-  <overlay>
-    <div @click="$emit('closeSettings')" class="cross">X</div>
-
+  <overlay :has-cross="true"
+           :fade-in="true"
+           :fade-out="true"
+           @closeOverlay="$emit('closeSettings')">
     <template #header>
       <p class="title--wide">Paramètres</p>
     </template>
@@ -79,7 +80,7 @@ export default {
   }
 
   .settings__section {
-    margin-bottom: $space-xl;
+    margin: 0 auto $space-xl;
     width: 84rem;
 
     &-title {
@@ -112,8 +113,34 @@ export default {
         @include useFlex();
 
         .range {
+          appearance: none;
+          outline: none;
+          overflow: hidden;
+          display: block;
           margin-right: $space-m;
           width: 54rem;
+          background-color: transparent;
+
+          $size: 2.5rem;
+          &::-webkit-slider-runnable-track {
+            position: relative;
+            height: $size;
+            border: .2rem solid getColor(basics, black);
+            border-radius: 1.8rem;
+            background-color: getColor(basics, white);
+          }
+
+          &::-webkit-slider-thumb {
+            appearance: none;
+            cursor: pointer;
+            position: relative;
+            top: -.2rem;
+            right: -.1rem;
+            width: $size;
+            height: $size;
+            background-color: getColor(basics, black);
+            border-radius: 100%;
+          }
         }
 
         .mute {

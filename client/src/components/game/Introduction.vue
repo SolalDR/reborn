@@ -1,66 +1,72 @@
 <template>
   <div class="intro">
-    <p class="intro__incarnate">Vous incarnez</p>
+    <p class="intro__incarnate" v-html="$splitWithSpan(texts.title)"></p>
 
-    <p class="intro__title title--wide">{{ title }}</p>
-    <p v-for="(text, index) in texts"
-       :key="`intro-text-${index}`"
-       v-html="text"
-       class="intro__text"></p>
+    <p class="intro__title title--wide" v-html="$splitWithSpan(name)"></p>
+    <div v-for="(explanationGroup, index) in explanations"
+         :key="`explanation-group-${index}`"
+         class="intro__explanations">
+      <p v-for="(explanation, index) in explanationGroup"
+         :key="`explanation-${index}`"
+         v-html="$splitWithSpan(explanation)"></p>
+    </div>
 
     <div class="intro__footer footer">
       <div class="status">
-        <button v-if="!pending" @click="start" class="cta--bordered">Démarrer la partie</button>
-        <p v-if="pending">En attente de votre adversaire...</p>
+        <transition name="fade" mode="out-in">
+          <button v-if="!pending" @click="start" class="cta--bordered">{{ texts.start }}</button>
+          <p v-if="pending">{{ texts.waiting }}</p>
+        </transition>
       </div>
 
       <div class="tips">
-        <p v-html="currentTip" class="tip"></p>
+        <div v-for="(tip, index) in tips[currentTipIndex]" :key="`tip-${index}`">
+          <p v-html="$splitWithSpan(tip)" class="tip"></p>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import texts from '@/contents/game/introduction';
+
 export default {
   name: 'introduction',
   data() {
     return {
+      currentTipIndex: 0,
       pending: false,
-      tips: [
-        'Surveillez vos jauges,<br> la partie s’arrête si une jauge atteint un niveau critique.',
-      ],
+      texts,
     };
   },
 
   computed: {
-    title() {
-      return this.$game.player.role.name === 'city'
-        ? 'La Civilisation'
-        : 'La Nature';
+    name() {
+      return texts[this.$game.player.role.name].name;
     },
 
-    texts() {
-      return this.$game.player.role.name === 'city'
-        ? [
-          'Vous êtes à la tête des survivants.<br> Tous ont faim et besoin d’un toit. Tentez de bâtir une nouvelle civilisation viable.',
-          'Pour cela, il va falloir prélever des ressources à la nature.<br> Mais attention, celles-ci sont disponibles en nombre limité et il ne faudrait pas reproduire les erreurs du passé.',
-        ]
-        : [
-          'Lorem ipsum dolor sit amet consectetur adipisicing elit.<br> Impedit autem, tenetur, suscipit est veniam sit a, magnam libero explicabo commodi assumenda quam consequuntur!',
-          'Perferendis aspernatur illum velit repellat perspiciatis error.',
-        ];
+    explanations() {
+      return texts[this.$game.player.role.name].explanations;
     },
 
-    currentTip() {
-      return this.tips[0];
+    tips() {
+      return texts.tips[this.$game.player.role.name];
     },
+  },
+
+  mounted() {
+    setInterval(this.updateCurrentTipIndex, 8000);
   },
 
   methods: {
     start() {
       this.pending = true;
       this.$emit('start');
+    },
+    updateCurrentTipIndex() {
+      const maxLength = texts.tips[this.$game.player.role.name].length - 1;
+      this.currentTipIndex = this.currentTipIndex === maxLength ? 0 : this.currentTipIndex + 1;
     },
   },
 };
@@ -81,10 +87,10 @@ export default {
       @include fontSize(48);
     }
 
-    &__text {
+    &__explanations {
       margin: 0 auto $space-l;
-      max-width: 60rem;
       @include fontSize(18);
+      line-height: 2.4rem;
 
     }
 
@@ -99,7 +105,11 @@ export default {
       }
 
       .tips {
-        .tip {}
+        .tip {
+          @include fontSize(16);
+          @include letterBounce(8s, 0s, true);
+          line-height: 2.2rem;
+        }
       }
     }
   }

@@ -3,7 +3,7 @@ import Grid from './Grid';
 import GridHelper from './GridHelper';
 import Bus from '@/plugins/Bus';
 import GUI from '@/plugins/GUI';
-
+import theme from '@/config/theme';
 
 
 export default class GameMap extends THREE.Group {
@@ -41,6 +41,7 @@ export default class GameMap extends THREE.Group {
     this.initWater();
     this.initFloor(geometry);
 
+    console.log(this);
     // TODO: Add in config
     // this.displayPlayground();
   }
@@ -51,17 +52,21 @@ export default class GameMap extends THREE.Group {
   initFloor(geometry) {
     const material = new THREE.MeshToonMaterial({
       vertexColors: THREE.FaceColors,
-      bumpScale: 0.1,
-      specular: 0x798133,
-      reflectivity: 0,
-      shininess: 0,
+      specular: theme.map.specular,
+      reflectivity: theme.map.reflectivity,
+      shininess: theme.map.shininess,
       flatShading: false,
     });
 
     GUI.map.addMaterial('Ground', material);
 
     this.floor = new THREE.Mesh(geometry, material);
-    this.floor.position.y = -0.1;
+    this.floor.castShadow = true;
+    this.floor.receiveShadow = true;
+    this.floor.geometry.computeFaceNormals();
+    this.floor.geometry.computeVertexNormals();
+    this.floor.position.y = 0.1;
+
     this.add(this.floor);
     this.raycaster.object = this.floor;
   }
@@ -72,7 +77,7 @@ export default class GameMap extends THREE.Group {
   initCastEvent() {
     Bus.$on('cast', (intersection) => {
       if (intersection && intersection.face.normal.y > 0.99) {
-        if(this.gridHelper.status === 'out') {
+        if (this.gridHelper.status === 'out') {
           // this.gridHelper.visible = true;
         }
 
@@ -84,22 +89,21 @@ export default class GameMap extends THREE.Group {
 
         if (!a && this.gridHelper.status !== 'transparent') {
           this.gridHelper.status = 'transparent';
-          animate.add({ from: this.gridHelper.material.opacity, to: 0.4, duration: 200 }).on('progress', ({ value })=>{
+          animate.add({ from: this.gridHelper.material.opacity, to: 0.4, duration: 200 }).on('progress', ({ value }) => {
             this.gridHelper.material.opacity = value;
           });
-        } else if(this.gridHelper.status !== 'plain') {
+        } else if (this.gridHelper.status !== 'plain') {
           this.gridHelper.status = 'plain';
-          animate.add({ from: this.gridHelper.material.opacity, to: 1, duration: 200 }).on('progress', ({ value })=>{
+          animate.add({ from: this.gridHelper.material.opacity, to: 1, duration: 200 }).on('progress', ({ value }) => {
             this.gridHelper.material.opacity = value;
           });
         }
       } else {
         this.gridHelper.status = 'out';
-        animate.add({ from: this.gridHelper.material.opacity, to: 0, duration: 200 }).on('progress', ({ value })=>{
+        animate.add({ from: this.gridHelper.material.opacity, to: 0, duration: 200 }).on('progress', ({ value }) => {
           this.gridHelper.material.opacity = value;
         });
         // this.gridHelper.visible = false;
-
       }
     });
   }
@@ -144,8 +148,8 @@ export default class GameMap extends THREE.Group {
     );
 
     const material = new THREE.MeshToonMaterial({
-      color: 0x7AE2B6,
-      specular: 0x000000,
+      color: theme.water.color,
+      specular: theme.water.specular,
       shininess: 0,
     });
 
@@ -154,5 +158,25 @@ export default class GameMap extends THREE.Group {
     geometry.rotateX(-Math.PI / 2);
     this.water = new THREE.Mesh(geometry, material);
     this.add(this.water);
+  }
+
+  woobleAction({
+    count = 110,
+    speed = 60,
+    intensity = 0.4,
+    timingFunction = 'linear',
+  } = {}) {
+    const duration = speed * count;
+    animate.add({ duration, timingFunction }).on('progress', (event) => {
+      const rotation = Math.sin((event.value * Math.PI * 2) * count) * intensity;
+
+      this.floor.position.x = rotation;
+    }).on('end', () => {
+      this.floor.position.x = 0;
+    });
+  }
+
+  render() {
+    this.gridHelper.render();
   }
 }

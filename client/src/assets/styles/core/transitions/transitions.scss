@@ -1,1 +1,5 @@
-@import "./global/fade";
+@import "./fade/fade";
+@import "./fade/fade-scale";
+@import "./fade/fade-up";
+
+@import "components/overlay";

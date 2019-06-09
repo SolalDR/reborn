@@ -1,5 +1,5 @@
-import EntityState from "./State";
-import snakeCase from "./../utils/snakeCase";
+import EntityState from './State';
+import snakeCase from '../utils/snakeCase';
 
 /**
  * @class Describe an entity
@@ -12,6 +12,7 @@ import snakeCase from "./../utils/snakeCase";
 export default class EntityModel {
   constructor({
     name = null,
+    displayName = null,
     slug = null,
     category = null,
     role = null,
@@ -19,8 +20,9 @@ export default class EntityModel {
     states = {},
     game = null,
     count = 0,
-  }){
+  }) {
     this.name = name;
+    this.displayName = displayName;
     this.slug = slug === null ? snakeCase(name) : slug;
     this.game = game;
     this.size = size;
@@ -31,22 +33,24 @@ export default class EntityModel {
 
     // TODO Convert to Map
     this.states = {};
-    Object.keys(states).forEach(keyState => {
-      var state = new EntityState({
-        ...states[keyState],
-        name: keyState
+
+    const stateList = ['creation', 'destruction', 'mounted', 'living'];
+    stateList.forEach((keyState) => {
+      const state = new EntityState({
+        ...(states[keyState] ? states[keyState] : {}),
+        name: keyState,
       });
-      if( state) {
+      if (state) {
         this.states[keyState] = state;
       }
-    })
+    });
   }
 
   /**
    * @param {String} name Name of the state
    * @returns {Boolean}
    */
-  hasState(name){
+  hasState(name) {
     return !!this.states[name];
   }
 }

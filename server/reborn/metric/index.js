@@ -1,10 +1,14 @@
-import BiodiversityMetric from "./Biodiversity";
-import EnergyMetric from "./Energy";
-import FoodMetric from "./Food";
-import MoneyMetric from "./Money";
-import PurityMetric from "./Purity";
-import PopulationMetric from "./Population";
-import SatisfactionMetric from "./Satisfaction";
+import BiodiversityMetric from './Biodiversity';
+import EnergyMetric from './Energy';
+import FoodMetric from './Food';
+import MoneyMetric from './Money';
+import PurityMetric from './Purity';
+import PopulationMetric from './Population';
+import SatisfactionMetric from './Satisfaction';
+import HumanMetric from './Human';
+import TreeMetric from './Tree';
+import RockMetric from './Rock';
+import WasteMetric from './Waste';
 
 export default [
   BiodiversityMetric,
@@ -14,4 +18,8 @@ export default [
   PurityMetric,
   PopulationMetric,
   SatisfactionMetric,
-]
+  HumanMetric,
+  TreeMetric,
+  RockMetric,
+  WasteMetric,
+];

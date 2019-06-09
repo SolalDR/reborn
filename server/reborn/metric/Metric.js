@@ -1,5 +1,5 @@
-import Emitter from "../utils/Emitter";
-import snakeCase from "../utils/snakeCase";
+import Emitter from '../utils/Emitter';
+import snakeCase from '../utils/snakeCase';
 
 /**
  * @class
@@ -19,8 +19,8 @@ class Metric extends Emitter {
     min = null,
     max = null,
     recurentOperation = 0,
-    inclusiveSet = true
-  } = {}){
+    inclusiveSet = true,
+  } = {}) {
     super();
     this.name = name;
     this.displayName = displayName;
@@ -35,16 +35,16 @@ class Metric extends Emitter {
   /**
    * Setter of "value", clamp the value based on his limit
    */
-  set value(value){
-    if(isNaN(value)) return;
-    var tmpValue = value;
+  set value(value) {
+    if (isNaN(value)) return;
+    let tmpValue = value;
     if (this.max !== null) tmpValue = Math.min(this.max, tmpValue);
     if (this.min !== null) tmpValue = Math.max(this.min, tmpValue);
     this._value = tmpValue;
     this.checkLimit();
   }
 
-  get value(){
+  get value() {
     return this._value;
   }
 
@@ -55,7 +55,7 @@ class Metric extends Emitter {
       displayName: this.displayName,
       slug: this.slug,
       recurentOperation: this.recurentOperation,
-    }
+    };
   }
 
   update(infos) {
@@ -72,12 +72,12 @@ class Metric extends Emitter {
    * Check if a limit is reached and fire an event if it does
    * @returns {Boolean}
    */
-  checkLimit(value = this._value, discret = false){
+  checkLimit(value = this._value, discret = false) {
     if (
       this.inclusiveSet
-      ? value <= this.min|| value >= this.max
-      : value < this.min|| value > this.max
-      ) {
+        ? value <= this.min || value >= this.max
+        : value < this.min || value > this.max
+    ) {
       if (!discret) {
         this.emit('limitreached', this);
       }
@@ -90,4 +90,4 @@ class Metric extends Emitter {
 Metric.LIST = ['purity', 'bio_diversity', 'satisfaction', 'energy', 'alimentation', 'population', 'money'];
 
 export default Metric;
-export {default as Modifier} from "./Modifier";
+export { default as Modifier } from './Modifier';

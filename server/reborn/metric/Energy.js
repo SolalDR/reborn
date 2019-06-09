@@ -1,19 +1,20 @@
-import Metric from "./Metric";
+import Metric from './Metric';
 
 /**
  * Energy metric
  * @extends Metric
  */
 export default class Energy extends Metric {
-  constructor(){
+  constructor() {
     super({
-      name: "Energy",
-      displayName: "Énergie",
+      name: 'Energy',
+      displayName: 'Énergie',
+      slug: 'energy',
       min: 0,
       max: 100,
-      value: 30,
+      value: 50,
       recurentOperation: 0,
-    })
+    });
   }
 
   applyRecurentLogic(game) {

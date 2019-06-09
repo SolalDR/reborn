@@ -1,27 +1,33 @@
 import { Skill } from '../../../reborn';
 
+/**
+ * @constructor
+ * @param {Object} descriptor
+ */
 export default class EarthquakeSkill extends Skill {
-  constructor(descriptor) {
-    super(descriptor);
-  }
-
   start(item, game) {
-    var isStarted = super.start();
+    const isStarted = super.start();
     if (!isStarted) return;
-    const cells = game.world.grid.captureZone(item.position, this.zoneRadius);
+    const size = game.world.entities.size;
+    const stepDuration = this.duration / size;
+    const natureDestroyProbability = game.metrics.get('purity').value / 100;
+    const cityDestroyProbability = 1 - natureDestroyProbability;
 
-    cells.forEach(gridCase => {
-      if (gridCase && gridCase.reference) {
-        const reference = gridCase.reference;
-        const timeout = Math.random()*this.duration;
-        setTimeout(() => {
-          const entity = game.world.entities.get(gridCase.reference);
-          if (entity) {
-            game.world.removeEntity(entity);
-          }
-        }, timeout)
-      }
-    })
+    let index = 0;
+    game.world.entities.forEach((entity) => {
+      const reference = entity.uuid;
+      setTimeout(() => {
+        const actualEntity = game.world.entities.get(reference);
+        if (actualEntity) {
+          const proba = entity.model.role === 'nature'
+            ? natureDestroyProbability
+            : cityDestroyProbability;
+
+          if (Math.random() < proba) game.world.removeEntity(entity);
+        }
+      }, index * stepDuration);
+      index++;
+    });
     this.checkAvailable();
   }
 }

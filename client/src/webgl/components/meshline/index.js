@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+
 import * as THREE from 'three';
 
 function MeshLine() {
@@ -33,13 +35,13 @@ MeshLine.prototype.setGeometry = function (g, c) {
   // set the normals
   // g.computeVertexNormals();
   if (g instanceof THREE.Geometry) {
-    for (var j = 0; j < g.vertices.length; j++) {
+    for (let j = 0; j < g.vertices.length; j++) {
       const v = g.vertices[j];
-      var c = j / g.vertices.length;
+      const cj = j / g.vertices.length;
       this.positions.push(v.x, v.y, v.z);
       this.positions.push(v.x, v.y, v.z);
-      this.counters.push(c);
-      this.counters.push(c);
+      this.counters.push(cj);
+      this.counters.push(cj);
     }
   }
 
@@ -48,12 +50,12 @@ MeshLine.prototype.setGeometry = function (g, c) {
   }
 
   if (g instanceof Float32Array || g instanceof Array) {
-    for (var j = 0; j < g.length; j += 3) {
-      var c = j / g.length;
+    for (let j = 0; j < g.length; j += 3) {
+      const cj = j / g.length;
       this.positions.push(g[j], g[j + 1], g[j + 2]);
       this.positions.push(g[j], g[j + 1], g[j + 2]);
-      this.counters.push(c);
-      this.counters.push(c);
+      this.counters.push(cj);
+      this.counters.push(cj);
     }
   }
 
@@ -97,22 +99,22 @@ MeshLine.prototype.raycast = (function () {
 
       if (index !== null) {
         const indices = index.array;
-        var positions = attributes.position.array;
+        const positions = attributes.position.array;
 
-        for (var i = 0, l = indices.length - 1; i < l; i += step) {
+        for (let i = 0, l = indices.length - 1; i < l; i += step) {
           const a = indices[i];
           const b = indices[i + 1];
 
           vStart.fromArray(positions, a * 3);
           vEnd.fromArray(positions, b * 3);
 
-          var distSq = ray.distanceSqToSegment(vStart, vEnd, interRay, interSegment);
+          const distSq = ray.distanceSqToSegment(vStart, vEnd, interRay, interSegment);
 
           if (distSq > precisionSq) continue;
 
           interRay.applyMatrix4(this.matrixWorld); // Move back to world space for distance calculation
 
-          var distance = raycaster.ray.origin.distanceTo(interRay);
+          const distance = raycaster.ray.origin.distanceTo(interRay);
 
           if (distance < raycaster.near || distance > raycaster.far) continue;
 
@@ -130,19 +132,19 @@ MeshLine.prototype.raycast = (function () {
           });
         }
       } else {
-        var positions = attributes.position.array;
+        const positions = attributes.position.array;
 
-        for (var i = 0, l = positions.length / 3 - 1; i < l; i += step) {
+        for (let i = 0, l = positions.length / 3 - 1; i < l; i += step) {
           vStart.fromArray(positions, 3 * i);
           vEnd.fromArray(positions, 3 * i + 3);
 
-          var distSq = ray.distanceSqToSegment(vStart, vEnd, interRay, interSegment);
+          const distSq = ray.distanceSqToSegment(vStart, vEnd, interRay, interSegment);
 
           if (distSq > precisionSq) continue;
 
           interRay.applyMatrix4(this.matrixWorld); // Move back to world space for distance calculation
 
-          var distance = raycaster.ray.origin.distanceTo(interRay);
+          const distance = raycaster.ray.origin.distanceTo(interRay);
 
           if (distance < raycaster.near || distance > raycaster.far) continue;
 
@@ -164,14 +166,14 @@ MeshLine.prototype.raycast = (function () {
       const vertices = geometry.vertices;
       const nbVertices = vertices.length;
 
-      for (var i = 0; i < nbVertices - 1; i += step) {
-        var distSq = ray.distanceSqToSegment(vertices[i], vertices[i + 1], interRay, interSegment);
+      for (let i = 0; i < nbVertices - 1; i += step) {
+        const distSq = ray.distanceSqToSegment(vertices[i], vertices[i + 1], interRay, interSegment);
 
         if (distSq > precisionSq) continue;
 
         interRay.applyMatrix4(this.matrixWorld); // Move back to world space for distance calculation
 
-        var distance = raycaster.ray.origin.distanceTo(interRay);
+        const distance = raycaster.ray.origin.distanceTo(interRay);
 
         if (distance < raycaster.near || distance > raycaster.far) continue;
 
@@ -214,20 +216,20 @@ MeshLine.prototype.process = function () {
   this.indices_array = [];
   this.uvs = [];
 
-  for (var j = 0; j < l; j++) {
+  for (let j = 0; j < l; j++) {
     this.side.push(1);
     this.side.push(-1);
   }
 
   let w;
-  for (var j = 0; j < l; j++) {
+  for (let j = 0; j < l; j++) {
     if (this.widthCallback) w = this.widthCallback(j / (l - 1));
     else w = 1;
     this.width.push(w);
     this.width.push(w);
   }
 
-  for (var j = 0; j < l; j++) {
+  for (let j = 0; j < l; j++) {
     this.uvs.push(j / (l - 1), 0);
     this.uvs.push(j / (l - 1), 1);
   }
@@ -241,13 +243,13 @@ MeshLine.prototype.process = function () {
   }
   this.previous.push(v[0], v[1], v[2]);
   this.previous.push(v[0], v[1], v[2]);
-  for (var j = 0; j < l - 1; j++) {
+  for (let j = 0; j < l - 1; j++) {
     v = this.copyV3(j);
     this.previous.push(v[0], v[1], v[2]);
     this.previous.push(v[0], v[1], v[2]);
   }
 
-  for (var j = 1; j < l; j++) {
+  for (let j = 1; j < l; j++) {
     v = this.copyV3(j);
     this.next.push(v[0], v[1], v[2]);
     this.next.push(v[0], v[1], v[2]);
@@ -261,7 +263,7 @@ MeshLine.prototype.process = function () {
   this.next.push(v[0], v[1], v[2]);
   this.next.push(v[0], v[1], v[2]);
 
-  for (var j = 0; j < l - 1; j++) {
+  for (let j = 0; j < l - 1; j++) {
     const n = j * 2;
     this.indices_array.push(n, n + 1, n + 2);
     this.indices_array.push(n + 2, n + 1, n + 3);
@@ -392,7 +394,7 @@ THREE.ShaderChunk.meshline_vert = [
   '',
   '    vec2 res = i.xy / i.w;',
   '    res.x *= aspect;',
-  '	 vCounters = counters;',
+  '    vCounters = counters;',
   '    return res;',
   '',
   '}',
@@ -467,6 +469,12 @@ THREE.ShaderChunk.meshline_frag = [
   'uniform float visibility;',
   'uniform float alphaTest;',
   'uniform vec2 repeat;',
+  '#ifdef MIN_OFFSET',
+  'uniform float minOffset;',
+  '#endif',
+  '#ifdef MAX_OFFSET',
+  'uniform float maxOffset;',
+  '#endif',
   '',
   'varying vec2 vUV;',
   'varying vec4 vColor;',
@@ -513,6 +521,8 @@ function MeshLineMaterial(parameters) {
         visibility: { value: 1 },
         alphaTest: { value: 0 },
         repeat: { value: new THREE.Vector2(1, 1) },
+        minOffset: { value: 0 },
+        maxOffset: { value: 0 },
       }),
 
     vertexShader: THREE.ShaderChunk.meshline_vert,
@@ -685,6 +695,24 @@ function MeshLineMaterial(parameters) {
       },
       set(value) {
         this.uniforms.repeat.value.copy(value);
+      },
+    },
+    minOffset: {
+      enumerable: true,
+      get() {
+        return this.uniforms.minOffset.value;
+      },
+      set(value) {
+        this.uniforms.minOffset.value = value;
+      },
+    },
+    maxOffset: {
+      enumerable: true,
+      get() {
+        return this.uniforms.maxOffset.value;
+      },
+      set(value) {
+        this.uniforms.maxOffset.value = value;
       },
     },
   });

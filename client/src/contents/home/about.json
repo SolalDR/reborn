@@ -1,0 +1,18 @@
+{
+  "title": "À Propos",
+  "content": {
+    "title": "Ce site a été réalisé par une magic team.",
+    "designers": {
+      "title": "Designers",
+      "members": ["Allan Michel", "Matthieu Pajot"]
+    },
+    "developers": {
+      "title": "Developpeurs",
+      "members": ["Solal Revel", "Erwann Letue"]
+    },
+    "thanks": [
+      "Merci aux équipes pédagogiques de Gobelins",
+      "pour leur aide dans le développement du projet."
+    ]
+  }
+}

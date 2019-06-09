@@ -1,0 +1,29 @@
+.fade-scale,
+.fade-scale--translated {
+  &-enter-active {
+    --duration: 1.2s;
+    transition: all var(--duration) ease;
+  }
+
+  &-leave-active {
+    --duration: 0.8s;
+    transition: all var(--duration) cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  }
+}
+
+.fade-scale {
+  &-enter,
+  &-leave-to {
+    opacity: 0;
+    transform: scale(.8) !important;
+  }
+}
+
+.fade-scale--translated {
+  &-enter,
+  &-leave-to {
+    opacity: 0;
+    transform: translateX(-50%) scale(.8) !important;
+  }
+}
+

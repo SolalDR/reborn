@@ -1,22 +1,57 @@
 <template>
-  <div class="model-infos">
-    <template v-if="model">
-      <span>{{ model.displayName }}</span>
-      <span v-for="(modifier, index) in model.states.mounted.recurModifiers"
-            :key="`model-infos-modifier-${index}`">
-        {{ modifier.value > 0 ? '+' : '-' }} {{ modifier.name }} {{ modifier.value }}/an
-      </span>
-      <span v-if="this.$game.player.role.name === 'city'">X {{ -model.states.creation.enterModifiers.find(modifier => modifier.name === 'money').value }}</span>
-    </template>
-  </div>
+  <transition name="fade-scale" appear>
+    <div class="model-infos">
+      <template v-if="modelDisplayed">
+        <span>{{ modelDisplayed.displayName }}</span>
+
+        <div v-for="(modifier, index) in modelDisplayed.states.mounted.recurModifiers"
+              :key="`model-infos-modifier-${index}`">
+          <svg class="arrow"
+               :class="{'arrow--top': modifier.value > 0, 'arrow--bottom': modifier.value < 0}"
+               width="9"
+               height="15"
+               viewBox="0 0 9 15">
+            <path fill-rule="evenodd" d="M6 7v8H3V7H0l4.5-7L9 7H6z"/>
+          </svg>
+
+          <span class="icon">
+            <icon :icon-name="modifier.name" :is-filled="true"/>
+          </span>
+          <span>{{ modifier.value }}/an</span>
+        </div>
+
+        <span v-if="this.$game.player.role.name === 'city'" class="cost">
+          X {{ -modelDisplayed.states.creation.enterModifiers.find(modifier => modifier.name === 'money').value }}
+        </span>
+      </template>
+    </div>
+  </transition>
 </template>
 
 <script>
+import Icon from '../icons/Icon';
+
 export default {
   name: 'model-infos',
-  props: ['model'],
+  components: {
+    Icon,
+  },
+  props: ['currentModel', 'hoveredModel'],
+  data() {
+    return {
+      modelDisplayed: null,
+    };
+  },
   mounted() {
-    console.log(this.model);
+    this.modelDisplayed = this.currentModel;
+  },
+  watch: {
+    currentModel(model) {
+      this.modelDisplayed = model;
+    },
+    hoveredModel(hoveredModel) {
+      this.modelDisplayed = hoveredModel || this.currentModel;
+    },
   },
 };
 </script>
@@ -29,15 +64,55 @@ export default {
     background-color: rgba(getColor(basics, white), .7);
     border: 2px solid getColor(basics, black);
     border-radius: 1.3rem;
+    @include fontSize(12);
+    font-family: "DrukText-Bold";
 
-    span {
-      margin-right: 1.5rem;
-      @include fontSize(12);
-      font-family: "DrukText-Bold";
+    $margin-value: 1.5rem;
+    & > div {
+      @include useFlex();
+      margin-right: $margin-value;
+
+      &:first-of-type {
+        margin-left: $margin-value;
+      }
 
       &:last-of-type {
         margin-right: 0;
       }
+
+      & > * {
+        margin-right: .5rem;
+      }
+
+      .arrow {
+        &--top {
+          path {
+            fill: getColor(gauges, high);
+          }
+        }
+
+        &--bottom {
+          transform: rotate(180deg);
+
+          path {
+            fill: getColor(gauges, low);
+          }
+        }
+      }
+
+      .icon {
+        width: 1.6rem;
+        height: 1.6rem;
+
+        svg {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+
+    .cost {
+      margin-left: $margin-value;
     }
   }
 </style>

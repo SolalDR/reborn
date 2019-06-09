@@ -5,7 +5,6 @@
   "scripts": {
     "client:install": "cd client && npm install",
     "server:install": "cd server && npm install",
-    "install": "concurrently \"npm run client:install\" \"npm run server:install\"",
     "server:build": "cd server && npm run build",
     "client:build": "cd client && npm run build",
     "server:publish": "git subtree push --prefix server heroku master",
@@ -23,5 +22,11 @@
   "bugs": {
     "url": "https://github.com/SolalDR/reborn/issues"
   },
-  "homepage": "https://github.com/SolalDR/reborn#readme"
+  "homepage": "https://github.com/SolalDR/reborn#readme",
+  "devDependencies": {
+    "babel-eslint": "^10.0.1"
+  },
+  "dependencies": {
+    "eslint": "^5.16.0"
+  }
 }

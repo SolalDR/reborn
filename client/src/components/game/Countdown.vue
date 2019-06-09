@@ -1,6 +1,6 @@
 <template>
   <div class="countdown">
-    <p class="countdown__title">Création du terrain...</p>
+    <p class="countdown__title">Début de la survie dans</p>
     <p class="countdown__count">{{ countdown }}</p>
   </div>
 </template>

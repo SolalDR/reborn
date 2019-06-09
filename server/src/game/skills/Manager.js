@@ -1,4 +1,4 @@
-import Emitter from "@solaldr/emitter";
+import Emitter from '@solaldr/emitter';
 import { Skill } from '../../../reborn';
 import skills from '../../../reborn/skills';
 import skillsConstructors from './index';
@@ -6,36 +6,45 @@ import skillsConstructors from './index';
 
 export default class SkillsManager extends Emitter {
   constructor({
-    game = null
+    game = null,
   } = {}) {
     super();
     this.skills = new Map();
 
-    skills.forEach(skillInfos => {
-      const skillConstructor = skillsConstructors[skillInfos.slug]
+    skills.forEach((skillInfos) => {
+      const SkillConstructor = skillsConstructors[skillInfos.slug]
         ? skillsConstructors[skillInfos.slug]
-        : Skill
+        : Skill;
 
-      const skill = new skillConstructor(skillInfos);
+      const skill = new SkillConstructor(skillInfos);
 
-      if (skill.constraint) {
-        const constraint = game.constraintManager.get(skill.constraint);
-        if (!constraint) {
-          console.warn(`SkillsManager: There is no constraint with name: "${skill.constraint}"`);
-          return;
-        }
+      const constraint = game.constraintManager.get(skill.constraint);
+      if (skill.constraint !== null && !constraint) {
+        console.warn(`SkillsManager: There is no constraint with name: "${skill.constraint}"`);
+        return;
+      }
 
+      if (constraint) {
         constraint.on('change', ({ regularOrder }) => {
           skill.allowedConstraint = regularOrder === skill.regularConstraintOrder;
           skill.checkAvailable();
-        })
-
-        skill.on('available', () => this.emit('skill:available', skill.slug));
-        skill.on('unavailable', () => this.emit('skill:unavailable', skill.slug));
-        skill.on('start', (args) => this.emit('skill:start', {...args, skill: skill.slug}));
-
-        this.skills.set(skill.slug, skill);
+        });
       }
-    })
+
+      game.on('start', () => {
+        if (skillInfos.startRefillDelay) {
+          setTimeout(() => {
+            skill.refill = true;
+            skill.checkAvailable();
+          }, skillInfos.startRefillDelay);
+        }
+      });
+
+      skill.on('available', () => this.emit('skill:available', skill.slug));
+      skill.on('unavailable', () => this.emit('skill:unavailable', skill.slug));
+      skill.on('start', args => this.emit('skill:start', { ...args, skill: skill.slug }));
+
+      this.skills.set(skill.slug, skill);
+    });
   }
 }
