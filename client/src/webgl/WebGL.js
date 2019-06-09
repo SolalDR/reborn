@@ -127,7 +127,7 @@ export default class WebGL extends Emitter {
       this.scene.add(this.waves.mesh);
 
       this.birds = new Birds({ webgl: this, map: images.bird_map, alphaMap: images.bird_alpha });
-      this.scene.add(this.birds.mesh);
+      this.scene.add(this.birds.meshesGroup);
 
       this.explosionEffect = new ExplosionEffect();
       this.scene.add(this.explosionEffect.mesh);

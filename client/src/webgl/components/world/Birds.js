@@ -9,62 +9,86 @@ export default class Birds {
     webgl = null,
     map = null,
     alphaMap = null,
+    total = 9,
   }) {
     this.webgl = webgl;
+    this.map = map;
+    this.alphaMap = alphaMap;
+    this.total = total;
     this.noise = new Simplex();
-
-    const boundingBoxGeometry = new THREE.SphereGeometry(1.15);
-    const boundingBoxMaterial = new THREE.MeshBasicMaterial({
-      color: '#FFF',
-    });
-    this.boundingBox = new THREE.Mesh(boundingBoxGeometry, boundingBoxMaterial);
-    this.boundingBox.position.set(0, 10, 0);
-
-
-    const geometry = new THREE.PlaneGeometry(1, 1, 2);
-    geometry.rotateX(Math.PI / 2);
-    const material = new THREE.ShaderMaterial({
-      uniforms: {
-        time: {
-          value: 0,
-        },
-        map: {
-          value: map,
-        },
-        alphaMap: {
-          value: alphaMap,
-        },
-      },
-      vertexShader,
-      fragmentShader,
-      transparent: true,
-      side: THREE.DoubleSide,
-    });
-
-    this.mesh = new THREE.Mesh(geometry, material);
-    this.mesh.position.set(0, 10, 0);
-
     this.lookTarget = new THREE.Vector3();
-
     this.raycaster = new THREE.Raycaster();
+
+    this.initBoundingBoxe();
+    this.initGroup();
     mouse.$on('click', this.onMouseClick);
   }
 
-  onMouseClick = ({ event }) => {
-    if (this.mesh.shooted || event.target !== this.webgl.canvas) return;
-    this.raycaster.setFromCamera(mouse.normalized, this.webgl.camera);
-    const intersects = this.raycaster.intersectObjects([this.boundingBox]);
+  initBoundingBoxe = () => {
+    this.boundingBoxexGroup = new THREE.Group();
 
-    if (intersects[0]) this.shoot();
+    for (let i = 0; i < this.total; i++) {
+      const boundingBoxGeometry = new THREE.SphereGeometry(1.15);
+      const boundingBoxMaterial = new THREE.MeshBasicMaterial({
+        color: '#FFF',
+      });
+
+      const boundingBox = new THREE.Mesh(boundingBoxGeometry, boundingBoxMaterial);
+      boundingBox.position.set(0, 10, 0);
+
+      this.boundingBoxexGroup.add(boundingBox);
+    }
+  }
+
+  initGroup = () => {
+    this.meshesGroup = new THREE.Group();
+
+    for (let i = 0; i < this.total; i++) {
+      const geometry = new THREE.PlaneGeometry(1, 1, 2);
+      geometry.rotateX(Math.PI / 2);
+
+      const material = new THREE.ShaderMaterial({
+        uniforms: {
+          time: {
+            value: 0,
+          },
+          map: {
+            value: this.map,
+          },
+          alphaMap: {
+            value: this.alphaMap,
+          },
+        },
+        vertexShader,
+        fragmentShader,
+        transparent: true,
+        side: THREE.DoubleSide,
+      });
+
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.set(0, 10, 0);
+
+      this.meshesGroup.add(mesh);
+    }
+  }
+
+  onMouseClick = ({ event }) => {
+    if (event.target !== this.webgl.canvas) return;
+    this.raycaster.setFromCamera(mouse.normalized, this.webgl.camera);
+    const intersects = this.raycaster.intersectObjects(this.boundingBoxexGroup.children);
+
+    if (intersects[0]) this.shoot(intersects[0]);
   }
 
   /**
    * @todo Play sound
    */
-  shoot() {
-    this.mesh.shooted = true;
-    
-    const from = this.mesh.position.clone();
+  shoot(intersectedObject) {
+    intersectedObject.shooted = true;
+
+    console.log(intersectedObject);
+
+    const from = intersectedObject.object.position.clone();
     const target = this.lookTarget.clone().sub(from).multiplyScalar(1).add(from);
     target.y = -1;
 
@@ -72,10 +96,10 @@ export default class Birds {
       duration: 1000,
       timingFunction: 'easeInQuad',
     }).on('progress', ({ value }) => {
-      this.mesh.position.copy(
+      intersectedObject.object.position.copy(
         from.clone().add(target.clone().sub(from).multiplyScalar(value)),
       );
-      this.mesh.rotation.x += 0.05;
+      intersectedObject.object.rotation.x += 0.05;
     });
 
     setTimeout(() => {
@@ -84,7 +108,7 @@ export default class Birds {
         duration: 1500,
       });
 
-      this.mesh.parent.remove(this.mesh);
+      this.boundingBoxexGroup.remove(intersectedObject);
     }, 800);
   }
 
@@ -98,21 +122,25 @@ export default class Birds {
   }
 
   render() {
-    if (this.mesh.shooted) return;
+    for (let i = 0; i < this.total; i++) {
+      const mesh = this.meshesGroup.children[i];
+      if (mesh.shooted) continue;
+      const boundingBoxe = this.boundingBoxexGroup.children[i];
 
-    this.mesh.material.uniforms.time.value += 0.1;
-    const time = this.mesh.material.uniforms.time.value;
+      mesh.material.uniforms.time.value += 0.1;
+      const time = mesh.material.uniforms.time.value;
 
-    this.computePositionAt(time * 0.1, this.mesh.position);
-    this.computePositionAt(time * 0.1 + 0.26, this.lookTarget);
-    this.mesh.lookAt(this.lookTarget);
+      this.computePositionAt(i + time * 0.1, mesh.position);
+      this.computePositionAt(i + time * 0.1 + 0.26, this.lookTarget);
+      mesh.lookAt(this.lookTarget);
 
-    this.boundingBox.matrixWorld.copy(this.mesh.matrixWorld);
-    this.boundingBox.modelViewMatrix.copy(this.mesh.modelViewMatrix);
+      boundingBoxe.matrixWorld.copy(mesh.matrixWorld);
+      boundingBoxe.modelViewMatrix.copy(mesh.modelViewMatrix);
 
-    this.mesh.rotateOnWorldAxis(
-      this.lookTarget.clone().sub(this.mesh.position).normalize(),
-      0.6,
-    );
+      mesh.rotateOnWorldAxis(
+        this.lookTarget.clone().sub(mesh.position).normalize(),
+        0.6,
+      );
+    }
   }
 }
