@@ -1,25 +1,74 @@
 [
   {
-    "constraint": "money-low",
+    "constraint": "purity-low",
     "regularOrder": true,
     "role": "city",
     "stacks": [],
     "messages": [
       {
-        "name": "Notification 1",
-        "content": "Texte de la notification 1",
+        "name": "purity-low-1",
+        "category": "Pureté",
+        "content": "De récentes études affirment que le niveau de pollution de l’environnement serait critique. \"Fake news\" d’après le responsable du développement industriel de l’île.",
         "count": 0,
         "repeat": null
-      },
+      }
+    ]
+  },
+  {
+    "constraint": "biodiversity-low",
+    "regularOrder": true,
+    "role": "city",
+    "stacks": [],
+    "messages": [
       {
-        "name": "Notification 2",
-        "content": "Texte de la notification 2",
+        "name": "biodiversity-low-1",
+        "category": "Biodiversité",
+        "content": "On compte désormais plus d’abeilles en peluche que volantes. \n",
         "count": 0,
         "repeat": null
-      },
+      }
+    ]
+  },
+  {
+    "constraint": "food-low",
+    "regularOrder": true,
+    "role": "city",
+    "stacks": [],
+    "messages": [
       {
-        "name": "Notification 3",
-        "content": "Texte de la notification 3",
+        "name": "food-low-1",
+        "category": "Alimentation",
+        "content": "D’après le média indépendant, la mouette déchaînée, deux personnes sur trois seraient sous-alimentées sur l’île. Certains habitants appellent au développement de champs de culture intensifs pour sortir de la crise.",
+        "count": 0,
+        "repeat": null
+      }
+    ]
+  },
+  {
+    "constraint": "energy-low",
+    "regularOrder": true,
+    "role": "city",
+    "stacks": [],
+    "messages": [
+      {
+        "name": "energy-low-1",
+        "category": "Énergie",
+        "content": "Le leader du mouvement survivaliste jmenfoutiste pointe la responsabilité des énergies renouvelables dans la pénurie d’énergie à laquelle la communauté fait face. “ En plus, les éoliennes, ça détruit notre beau paysage ” aurait-il déclaré.",
+        "count": 0,
+        "repeat": null
+      }
+    ]
+  },
+  {
+    "constraint": "satisfaction-low",
+    "regularOrder": true,
+    "role": "city",
+    "stacks": [],
+    "messages": [
+      {
+        "name": "satisfaction-low-1",
+        "category": "Satisfaction",
+        "content": "Des mouvements de protestations ont émergé un peu partout dans l’île suite au mécontentement croissant de la population. Revêtus de gilets de sauvetage, les manifestants occupent les ronds points. Leur revendication : « On n’est pas contents ! ».",
         "count": 0,
         "repeat": null
       }
