@@ -237,7 +237,6 @@ export default class WebGL extends Emitter {
         const modelGroup = this.models[model];
         const entity = modelGroup.getItem(id);
 
-        console.log(modelGroup, model, id);
         if (entity) {
           this.emit('selectItem', { ...mapInfos, ...entity });
         }

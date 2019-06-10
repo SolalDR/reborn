@@ -28,7 +28,9 @@ export default (seed = Math.random()) => {
         floorColor: new THREE.Color(stage.floorColor),
         wallColor: new THREE.Color(stage.wallColor),
         height: manageRand(stage.height),
+        altitude: stage.altitude ? manageRand(stage.altitude) : 0,
         shape: {
+          rotation: stage.rotation ? stage.rotation : 0,
           definition: stage.definition,
           radius: manageRand(stage.radius),
           noiseIntensity: manageRand(stage.noise),

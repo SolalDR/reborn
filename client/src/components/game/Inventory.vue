@@ -36,6 +36,7 @@ import Model from './Model.vue';
 import Skill from './Skill.vue';
 import Category from './Category.vue';
 import Reborn from '../../game';
+import config from '@/config';
 
 export default {
   name: 'inventory',
@@ -71,7 +72,7 @@ export default {
     this.categories = [];
     Object.keys(Reborn.categories).forEach((key) => {
       const category = Reborn.categories[key];
-      if (category.role === this.$game.player.role.name) {
+      if (category.role === this.$game.player.role.name || config.sandbox) {
         this.categories.push(category);
       }
     });
@@ -104,13 +105,13 @@ export default {
     setCurrentCategory(category) {
       this.currentCategory = category;
       this.models = Array.from(this.$game.entityModels.values()).filter((model) => {
-        return model.role === this.$game.player.role.name
-          && model.category === this.currentCategory.slug;
+        return ((model.role === this.$game.player.role.name || config.sandbox)
+          && model.category === this.currentCategory.slug);
       });
 
       this.skills = Reborn.skills.filter((skill) => {
-        return skill.role === this.$game.player.role.name
-          && skill.category === this.currentCategory.slug;
+        return ((skill.role === this.$game.player.role.name || config.sandbox)
+          && skill.category === this.currentCategory.slug);
       });
 
       this.$emit('selectCategory', this.currentCategory);

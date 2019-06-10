@@ -5,4 +5,5 @@ export default {
   gui: {
     visible: false,
   },
+  sandbox: false,
 };

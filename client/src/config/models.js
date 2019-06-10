@@ -1,10 +1,22 @@
 export default {
   materials: {
-    // millenial_tree: {
-    // shininess: 0,
-    // emissive: new THREE.Color(0xFF0000),
-    // specular: new THREE.Color(0xFF0000),
-    // color: new THREE.Color(0xFF0000),
-    // }
+    centenary_tree: {
+      shininess: 0.2,
+    },
+    waste: {
+      shininess: 0.2,
+    },
+    millenial_tree: {
+      shininess: 0,
+    },
+    big_flower: {
+      shininess: 0,
+    },
+    cactus: {
+      shininess: 0,
+    },
+    common_flower: {
+      shininess: 0,
+    },
   },
 };
