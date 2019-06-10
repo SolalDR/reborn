@@ -137,10 +137,6 @@ export default {
   },
 
   created() {
-    if (!this.$store.state.game) {
-      this.$router.push('/');
-      return;
-    }
     this.status = 'pending';
 
     // Create game

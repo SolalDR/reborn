@@ -26,6 +26,10 @@ import './assets/styles/global/main.scss';
 animate.start();
 Vue.config.productionTip = false;
 
+router.beforeEach((to, from, next) => {
+  return to.name === 'game' && !from.name ? router.push({ name: 'home' }) : next();
+});
+
 // Components
 Vue.component('default-layout', DefaultLayout);
 Vue.component('admin-layout', AdminLayout);
