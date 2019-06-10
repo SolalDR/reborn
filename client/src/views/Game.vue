@@ -229,7 +229,7 @@ export default {
           const modelRole = this.$game.entityModels.get(item.model).role;
           const playerRole = this.$game.player.role.name;
 
-          if ((modelRole === 'nature' && playerRole === 'city') || (modelRole === null && playerRole === 'nature')) {
+          if ((modelRole === 'nature' && playerRole === 'city') || (modelRole === null && playerRole === 'nature') || config.sandbox) {
             this.onRemoveItem({ force: true });
           } else if (
             playerRole === 'nature' || (modelRole === null && playerRole === 'city')
@@ -314,12 +314,14 @@ export default {
           }
         });
 
-        const prefix = `${this.$game.player.role.name}_add_`;
-        const entityModel = this.$game.entityModels.get(item.model);
-        if (this.$sound.has(prefix + entityModel.category)) {
-          this.$sound.play(prefix + entityModel.category);
-        } else {
-          this.$sound.play(prefix + entityModel.role);
+        if (this.status === 'playing') {
+          const prefix = `${this.$game.player.role.name}_add_`;
+          const entityModel = this.$game.entityModels.get(item.model);
+          if (this.$sound.has(prefix + entityModel.category)) {
+            this.$sound.play(prefix + entityModel.category);
+          } else {
+            this.$sound.play(prefix + entityModel.role);
+          }
         }
 
         model.addItem({

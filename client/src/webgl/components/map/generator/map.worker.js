@@ -30,7 +30,6 @@ const generator = {
     for (let i = 0; i < definition; i += 1) {
       angle = stepAngle * i;
 
-      console.log(rotation);
       // Coordonnées dans le cercle
       tmpP.set(
         Math.cos(angle + rotation) * radius,

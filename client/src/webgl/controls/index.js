@@ -40,6 +40,20 @@ class Control {
     this.camera.lookAt(new THREE.Vector3(
       20.7190603197311, 0.779893851147104, 20.719060319731096,
     ));
+
+    console.log(this);
+  }
+
+  rotateIsland(duration = 34000, delay = 2000) {
+    animate.add({
+      from: 0,
+      to: Math.PI * 4,
+      duration,
+      delay,
+    }).on('progress', ({ value }) => {
+      this.orbit.theta = value;
+      this.orbit.axeRotation = 0;
+    });
   }
 
   initDragEvent() {

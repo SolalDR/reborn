@@ -19,7 +19,6 @@ for (let index = 0; index < count; index += 1) {
   });
 }
 
-console.log(strates);
 
 export default defaultTheme.extends({
   water: {
