@@ -38,6 +38,7 @@ export default class WebGL extends Emitter {
     this.scene = new THREE.Scene();
     this.scene.name = 'main';
     this.camera = new THREE.PerspectiveCamera(45, Viewport.width / Viewport.height, 1, 500);
+
     this.controls = new Controls({
       camera: this.camera,
     });
@@ -185,9 +186,6 @@ export default class WebGL extends Emitter {
    * @return {void}
    */
   initScene() {
-    this.camera.position.set(0, 30, 30);
-    this.camera.lookAt(new THREE.Vector3());
-
     this.ambientLight = new THREE.AmbientLight(
       theme.light.ambient.color,
       theme.light.ambient.intensity,

@@ -23,8 +23,11 @@ class OrbitControls {
     this.theta = theta;
     this.radius = radius;
     this.axeRotation = 0;
-    this.computePosition();
-    this.object.lookAt(this.look);
+
+    if (enabled) {
+      this.computePosition();
+      this.object.lookAt(this.look);
+    }
   }
 
   computePosition() {

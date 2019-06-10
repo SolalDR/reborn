@@ -23,7 +23,6 @@ export default class Croissant {
     const toPosition = new THREE.Vector3(0, 15, 5);
     this.godRay.mesh.material.uniforms.dashOffset.value = 2;
     this.scene.add(this.godRay.mesh);
-    console.log(this.godRay);
 
     animate.add({
       duration: 2000,

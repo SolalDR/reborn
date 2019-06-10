@@ -57,6 +57,5 @@ export default class LineSystem {
   }
 
   loop() {
-    console.log(this);
   }
 }

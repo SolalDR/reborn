@@ -419,6 +419,10 @@ export default {
         return this.$game.metrics.get(indicator).infos;
       });
 
+      this.$webgl.controls.rails.lookTo(new THREE.Vector3(0, 1, 0), { duration: 3000 }).on('end', () => {
+        this.$webgl.controls.orbit.enabled = true;
+      });
+
       setTimeout(() => {
         this.$store.commit('debug/log', { content: 'game: initializing', label: 'socket' });
         this.status = 'initializing';
@@ -486,7 +490,7 @@ export default {
     },
 
     onGameEnd(args) {
-      this.endGameDatas = args
+      this.endGameDatas = args;
       this.isEnded = true;
       this.status = 'explanations';
     },
