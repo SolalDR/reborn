@@ -3,6 +3,7 @@ import fragmentShader from './birds/birds.frag';
 import Simplex from 'simplex-noise';
 import animate from '@solaldr/animate';
 import mouse from '@/plugins/Mouse';
+import SoundManager from '@/plugins/Sound';
 
 export default class Birds {
   constructor({
@@ -70,9 +71,6 @@ export default class Birds {
     if (intersects[0]) this.shoot(intersects[0]);
   }
 
-  /**
-   * @todo Play sound
-   */
   shoot(intersection) {
     const intersectedMesh = this.meshesGroup.children[intersection.object.rank];
     intersectedMesh.shooted = true;
@@ -84,6 +82,9 @@ export default class Birds {
     const target = this.lookTarget.clone().sub(from).multiplyScalar(1).add(from);
     target.y = -1;
 
+    // TODO: PLay Sound
+    SoundManager.play('bird_shoot');
+
     animate.add({
       duration: 1000,
       timingFunction: 'easeInQuad',
@@ -92,9 +93,7 @@ export default class Birds {
         from.clone().add(target.clone().sub(from).multiplyScalar(value)),
       );
       intersectedMesh.rotation.x += 0.05;
-    });
-
-    setTimeout(() => {
+    }).on('end', () => {
       this.webgl.explosionEffect.mesh.position.set(target.x, 0.1, target.z);
       this.webgl.explosionEffect.explode({
         duration: 1500,
@@ -102,7 +101,7 @@ export default class Birds {
 
       this.boundingBoxesIntersected.splice(intersection.object.rank, 0);
       intersectedMesh.visible = false;
-    }, 800);
+    });
   }
 
   computePositionAt(value, destination = new THREE.Vector3()) {
