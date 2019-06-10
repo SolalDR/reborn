@@ -10,7 +10,7 @@
     "eslint": "node_modules/.bin/eslint ./ --fix"
   },
   "dependencies": {
-    "@solaldr/animate": "^0.1.1",
+    "@solaldr/animate": "^0.2.2",
     "@solaldr/emitter": "^0.1.0",
     "chart.js": "^2.8.0",
     "dat.gui": "^0.7.6",
