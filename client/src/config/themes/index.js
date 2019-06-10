@@ -25,11 +25,9 @@ import ile_montagneuse_arctique from './_ile_montagneuse_arctique';
 import ile_montagneuse_desert from './_ile_montagneuse_desert';
 import ile_montagneuse_lave from './_ile_montagneuse_lave';
 import ile_montagneuse_verdoyant from './_ile_montagneuse_verdoyant';
-import total from './_total';
 
 export default [
   defaultTheme,
-  // total,
   pics_agglo_arctique,
   pics_agglo_desert,
   pics_agglo_lave,
