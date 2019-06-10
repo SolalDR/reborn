@@ -20,7 +20,7 @@ export default {
       enterModifiers: [
         {
           name: 'money',
-          value: -100,
+          value: -600,
           checkConstraint: true,
         },
       ],

@@ -10,7 +10,7 @@ export default {
       enterModifiers: [
         {
           name: 'money',
-          value: -6000,
+          value: -5000,
           checkConstraint: true,
         },
       ],
@@ -19,11 +19,11 @@ export default {
       recurModifiers: [
         {
           name: 'food',
-          value: 10,
+          value: 6,
         },
         {
           name: 'purity',
-          value: -12,
+          value: -5,
         },
       ],
     },
@@ -31,7 +31,7 @@ export default {
       enterModifiers: [
         {
           name: 'money',
-          value: -2000,
+          value: -1000,
           checkConstraint: true,
         },
       ],

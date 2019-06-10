@@ -10,7 +10,7 @@ export default {
       enterModifiers: [
         {
           name: 'purity',
-          value: -0.5,
+          value: -0.3,
         },
         {
           name: 'money',
@@ -19,7 +19,7 @@ export default {
         },
         {
           name: 'satisfaction',
-          value: 10,
+          value: 3,
         },
       ],
     },
@@ -28,6 +28,10 @@ export default {
         {
           name: 'purity',
           value: -0.5,
+        },
+        {
+          name: 'energy',
+          value: -0.8,
         },
       ],
     },
@@ -44,13 +48,13 @@ export default {
       enterModifiers: [
         {
           name: 'waste',
-          value: 0.5,
+          value: 1,
         },
       ],
       leaveModifiers: [
         {
           name: 'waste',
-          value: -0.5,
+          value: -1,
         },
       ],
     },

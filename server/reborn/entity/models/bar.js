@@ -15,7 +15,7 @@ export default {
         },
         {
           name: 'satisfaction',
-          value: 15,
+          value: 5,
         },
       ],
     },
@@ -24,7 +24,7 @@ export default {
       enterModifiers: [
         {
           name: 'money',
-          value: -100,
+          value: -300,
           checkConstraint: true,
         },
       ],

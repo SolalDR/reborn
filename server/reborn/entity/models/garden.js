@@ -13,13 +13,17 @@ export default {
           value: -500,
           checkConstraint: true,
         },
+        {
+          name: 'satisfaction',
+          value: 4,
+        },
       ],
     },
     mounted: {
       recurModifiers: [
         {
           name: 'purity',
-          value: 0.5,
+          value: 1.5,
         },
       ],
     },

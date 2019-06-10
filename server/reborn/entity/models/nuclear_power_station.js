@@ -18,11 +18,11 @@ export default {
       recurModifiers: [
         {
           name: 'energy',
-          value: 15,
+          value: 12,
         },
         {
           name: 'purity',
-          value: -15,
+          value: -3,
         },
       ],
     },
@@ -30,7 +30,7 @@ export default {
       enterModifiers: [
         {
           name: 'money',
-          value: -4000,
+          value: -2400,
           checkConstraint: true,
         },
       ],
@@ -39,13 +39,13 @@ export default {
       enterModifiers: [
         {
           name: 'waste',
-          value: 5,
+          value: 10,
         },
       ],
       leaveModifiers: [
         {
           name: 'waste',
-          value: -5,
+          value: -10,
         },
       ],
     },

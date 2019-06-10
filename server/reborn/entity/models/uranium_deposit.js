@@ -19,7 +19,7 @@ export default {
       recurModifiers: [
         {
           name: 'purity',
-          value: 0.75,
+          value: 2.8,
         },
       ],
     },
@@ -27,7 +27,7 @@ export default {
       leaveModifiers: [
         {
           name: 'money',
-          value: 1000,
+          value: 3000,
         },
       ],
     },

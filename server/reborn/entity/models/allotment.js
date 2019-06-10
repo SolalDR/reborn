@@ -14,12 +14,12 @@ export default {
         },
         {
           name: 'money',
-          value: -500,
+          value: -1500,
           checkConstraint: true,
         },
         {
           name: 'satisfaction',
-          value: 10,
+          value: 5,
         },
       ],
     },
@@ -27,7 +27,11 @@ export default {
       recurModifiers: [
         {
           name: 'purity',
-          value: -0.5,
+          value: -2,
+        },
+        {
+          name: 'energy',
+          value: -0.8,
         },
       ],
     },
@@ -35,7 +39,7 @@ export default {
       enterModifiers: [
         {
           name: 'money',
-          value: -100,
+          value: -300,
           checkConstraint: true,
         },
       ],
@@ -44,13 +48,13 @@ export default {
       enterModifiers: [
         {
           name: 'waste',
-          value: 1,
+          value: 3,
         },
       ],
       leaveModifiers: [
         {
           name: 'waste',
-          value: -1,
+          value: -3,
         },
       ],
     },

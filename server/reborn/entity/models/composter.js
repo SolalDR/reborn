@@ -28,13 +28,13 @@ export default {
       enterModifiers: [
         {
           name: 'waste',
-          value: -1,
+          value: -3,
         },
       ],
       leaveModifiers: [
         {
           name: 'waste',
-          value: 1,
+          value: 3,
         },
       ],
     },

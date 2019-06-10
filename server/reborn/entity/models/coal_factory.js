@@ -14,7 +14,7 @@ export default {
         },
         {
           name: 'purity',
-          value: -10,
+          value: -8,
         },
       ],
     },
@@ -23,11 +23,11 @@ export default {
       recurModifiers: [
         {
           name: 'energy',
-          value: 10,
+          value: 8,
         },
         {
           name: 'purity',
-          value: -15,
+          value: -9,
         },
       ],
     },
@@ -36,7 +36,7 @@ export default {
       enterModifiers: [
         {
           name: 'money',
-          value: -3000,
+          value: -2000,
           checkConstraint: true,
         },
       ],
