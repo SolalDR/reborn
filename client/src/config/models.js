@@ -3,6 +3,9 @@ export default {
     centenary_tree: {
       shininess: 0.2,
     },
+    waste: {
+      shininess: 0.2,
+    },
     millenial_tree: {
       shininess: 0,
     },
