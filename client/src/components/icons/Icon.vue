@@ -17,7 +17,7 @@
     <path :id="`${iconName}-path`"
           stroke="#000"
           stroke-width="2"
-          :d="paths[$game.player.role.name][iconName]"/>
+          :d="paths[iconName]"/>
 
     <use class="icon-fill" :clip-path="`url(#${iconName}-clip-path)`" :xlink:href="`#${iconName}-path`"/>
   </svg>

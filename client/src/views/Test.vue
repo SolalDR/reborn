@@ -1,15 +1,17 @@
 <template>
   <div>
-    <icon :percent="percent" icon-name="satisfaction"/>
+    <flash-news/>
   </div>
 </template>
 
 <script>
 import Icon from '../components/icons/Icon';
+import FlashNews from "../components/game/FlashNews";
 
 export default {
   name: 'test',
   components: {
+    FlashNews,
     Icon,
   },
   data() {

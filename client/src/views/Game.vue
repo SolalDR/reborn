@@ -25,7 +25,7 @@
       <indicator-list :list="this.indicators" @showSettings="showSettings = true"/>
       <inventory :money="money" @selectModel="onSelectModel" @hoveredModel="onHoverModel" @selectSkill="onLaunchSkill"/>
       <model-infos :current-model="currentModel" :hovered-model="hoveredModel"/>
-      <flash-news/>
+      <flash-news :game-notification="gameNotification"/>
 
       <settings v-if="showSettings" @closeSettings="showSettings = false"/>
     </div>
@@ -113,6 +113,7 @@ export default {
       hoveredModel: null,
       currentSkill: null,
       currentCategory: null,
+      gameNotification: {},
       gauges: null,
       indicators: null,
       year: 0,
@@ -129,7 +130,7 @@ export default {
     'timeline:tick': function (args) { this.onTimelineTick(args); },
     'game:start': function (args) { this.onGameStart(args); },
     'game:end': function (args) { this.onGameEnd(args); },
-    'notification:send': function () { this.onNotificationSend(); },
+    'notification:send': function (args) { this.onNotificationSend(args); },
     'skill:start': function (args) { this.onSkillStart(args); },
     'skill:available': function (args) { this.onSkillAvailable(args); },
     'skill:unavailable': function (args) { this.onSkillUnavailable(args); },
@@ -491,7 +492,8 @@ export default {
       this.status = 'explanations';
     },
 
-    onNotificationSend() {
+    onNotificationSend(notification) {
+      this.gameNotification = notification;
       this.$store.commit('debug/log', { content: 'notification:send (receive)', label: 'socket' });
     },
 
