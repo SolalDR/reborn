@@ -15,6 +15,10 @@ class SoundLoader {
     sound.once('load', () => {
       onLoad(sound);
     });
+
+    sound.once('loaderror', () => {
+      onError(sound);
+    });
   }
 }
 

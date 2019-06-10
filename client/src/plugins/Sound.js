@@ -14,7 +14,6 @@ class SoundManager extends Emitter {
     });
 
     AssetsManager.get('sounds').then((sounds) => {
-      console.log('SOUNDS ----', sounds);
       this.sounds = sounds;
       this.emit('load');
     });
@@ -70,7 +69,6 @@ class SoundManager extends Emitter {
 
     sounds.forEach((sound) => {
       setTimeout(() => {
-        // console.log('-----playSound', sound.name);
         this.play(sound.name);
       }, sound.delay ? sound.delay : 0);
     });
