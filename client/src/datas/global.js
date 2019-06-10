@@ -41,6 +41,14 @@ export default {
           name: 'cloud_brush',
           path: '/img/cloud_brush.png',
         },
+        {
+          name: 'bird_map',
+          path: '/img/bird_map.jpg',
+        },
+        {
+          name: 'bird_alpha',
+          path: '/img/bird_alpha.jpg',
+        },
       ],
     },
   ],
