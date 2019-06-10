@@ -16,7 +16,7 @@ export default class Game extends Reborn.Game {
     this.currentModel = null;
     this.clusters = null;
 
-    const themeRank = Math.floor((0.32152425412 * 10000) % 10);
+    const themeRank = Math.floor((seed * 10000) % 100) % themeConfig.themes.length;
     const t = themeConfig.themes[themeRank]
       ? themeConfig.themes[themeRank]
       : themeConfig.themes[0];

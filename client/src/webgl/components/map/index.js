@@ -61,6 +61,7 @@ export default class GameMap extends THREE.Group {
     this.floor = new THREE.Mesh(geometry, material);
     this.floor.castShadow = true;
     this.floor.receiveShadow = true;
+    this.water.frustumCulled = false;
     this.floor.geometry.computeFaceNormals();
     this.floor.geometry.computeVertexNormals();
     this.floor.position.y = 0.1;
@@ -155,6 +156,8 @@ export default class GameMap extends THREE.Group {
 
     geometry.rotateX(-Math.PI / 2);
     this.water = new THREE.Mesh(geometry, material);
+    this.water.receiveShadow = true;
+    this.water.frustumCulled = false;
     this.add(this.water);
   }
 
@@ -167,7 +170,6 @@ export default class GameMap extends THREE.Group {
     const duration = speed * count;
     animate.add({ duration, timingFunction }).on('progress', (event) => {
       const rotation = Math.sin((event.value * Math.PI * 2) * count) * intensity;
-
       this.floor.position.x = rotation;
     }).on('end', () => {
       this.floor.position.x = 0;
