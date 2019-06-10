@@ -36,7 +36,7 @@ export default {
 
       setTimeout(() => {
         this.notifications = this.notifications.filter(notification => notification.id !== id);
-      }, 1000);
+      }, 400);
     });
   },
 };
@@ -53,7 +53,7 @@ export default {
 
 .fade-top-notif {
   &-enter-active, &-leave-active {
-    --duration: 1s;
+    --duration: .4s;
     transition-duration: var(--duration);
     transition-property: none;
   }
@@ -63,7 +63,7 @@ export default {
   //  }
 
   &-enter-active .notification__content {
-    --duration: 1s;
+    --duration: .4s;
     transition: {
       duration: var(--duration);
       timing-function: linear;
@@ -72,7 +72,7 @@ export default {
   }
 
   &-leave-active .notification__content {
-    --duration: 1s;
+    --duration: .4s;
     transition: {
       duration: var(--duration);
       timing-function: linear;
