@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Icon from '../components/icons/GaugeIcon';
+import Icon from '../components/icons/Icon';
 
 export default {
   name: 'test',

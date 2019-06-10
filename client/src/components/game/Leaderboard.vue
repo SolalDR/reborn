@@ -30,7 +30,7 @@ export default {
   .leaderboard {
     clear: both;
     overflow: auto;
-    margin-top: -10vh;
+    margin: -10vh auto 0;
     width: 87rem;
     text-align: left;
 
@@ -70,6 +70,7 @@ export default {
       overflow-y: scroll;
       display: block;
       width: 100%;
+      min-height: 30vh;
       max-height: 50vh;
     }
   }

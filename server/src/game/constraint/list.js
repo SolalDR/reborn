@@ -13,7 +13,6 @@ export default [
       || game.metrics.get('energy').value === game.metrics.get('energy').min
       || game.metrics.get('food').value === game.metrics.get('food').min
       || game.metrics.get('purity').value === game.metrics.get('purity').min
-      || game.metrics.get('population').value === game.metrics.get('population').min
       || game.metrics.get('satisfaction').value === game.metrics.get('satisfaction').min,
   },
   {
