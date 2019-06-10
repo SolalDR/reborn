@@ -25,8 +25,6 @@ export default class SmokeCluster extends Emitter {
       );
     });
 
-    console.log(this.geometry);
-
     this.cluster = new LineSystem(this.geometry, {
       lineWidth: 2,
       depthTest: true,

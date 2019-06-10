@@ -13,7 +13,7 @@ class Control {
   } = {}) {
     this.orbit = new OrbitControls({
       object: camera,
-      enabled: true,
+      enabled: false,
       look: new THREE.Vector3(0, 1, 0),
       radius: config.camera.radius.startAt,
       phi: config.camera.phi.startAt,
@@ -35,6 +35,11 @@ class Control {
     this.initDragEvent();
     this.initWheelEvent();
     this.initGUI();
+
+    this.camera.position.set(21.7190603197311, 16.779893851147104, 21.719060319731096);
+    const cameraLookStart = this.camera.position.clone();
+    cameraLookStart.y -= 10;
+    this.camera.lookAt(cameraLookStart);
   }
 
   initDragEvent() {

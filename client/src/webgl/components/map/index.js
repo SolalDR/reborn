@@ -40,7 +40,6 @@ export default class GameMap extends THREE.Group {
     this.initWater();
     this.initFloor(geometry);
 
-    console.log(this);
     // TODO: Add in config
     // this.displayPlayground();
   }

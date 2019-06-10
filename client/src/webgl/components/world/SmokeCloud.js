@@ -44,8 +44,6 @@ export default class SmokeCloud {
       });
     }
 
-
-    console.log(this.mesh.material);
     this.initGUI();
   }
 
