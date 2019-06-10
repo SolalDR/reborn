@@ -1,5 +1,4 @@
 export default {
-  picking: false,
   materials: {
     // millenial_tree: {
     // shininess: 0,

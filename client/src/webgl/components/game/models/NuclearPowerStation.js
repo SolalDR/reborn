@@ -13,10 +13,7 @@ export default class CoalFactory extends EntityModelGroup {
       limit: 500,
     });
 
-    if (args.scene) {
-      this.scene = args.scene;
-      this.scene.add(this.smokeCluster.mesh);
-    }
+    this.scene.add(this.smokeCluster.mesh);
 
     GUI.world.addMesh(`line-${name}`, this.smokeCluster.mesh);
   }

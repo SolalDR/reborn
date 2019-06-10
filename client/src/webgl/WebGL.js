@@ -2,7 +2,6 @@ import Emitter from '@solaldr/emitter';
 import Viewport from '@/plugins/Viewport';
 import mouse from '@/plugins/Mouse';
 import GUI from '@/plugins/GUI';
-import modelsConfig from '@/config/models';
 import AssetsManager from '@/services/assets/Manager';
 import store from '@/services/store';
 import animate from '@solaldr/animate';
@@ -104,7 +103,7 @@ export default class WebGL extends Emitter {
           geometry: models[modelName].scene.children[0].geometry,
           material,
           slot: index,
-          scene: this.scene,
+          webgl: this,
         });
 
         // Model has a render method
@@ -112,15 +111,7 @@ export default class WebGL extends Emitter {
           this.renderedModels.push(this.models[modelName]);
         }
 
-
-        if (modelsConfig.picking) {
-          this.scene.add(this.models[modelName].pickingCluster.mesh);
-          this.scene.add(this.models[modelName].entityCluster.mesh.clone());
-          this.renderer.pickingScene.add(this.models[modelName].entityCluster.mesh);
-        } else {
-          this.scene.add(this.models[modelName].entityCluster.mesh);
-          this.renderer.pickingScene.add(this.models[modelName].pickingCluster.mesh);
-        }
+        this.scene.add(this.models[modelName].entityCluster.mesh);
       });
 
       store.commit('debug/log', { content: 'webgl: initModels', label: 'webgl' });
@@ -151,9 +142,6 @@ export default class WebGL extends Emitter {
 
       this.explosionEffect = new ExplosionEffect();
       this.scene.add(this.explosionEffect.mesh);
-
-      // this.particleSystem = new ParticleSystem();
-      // this.scene.add(this.particleSystem.mesh);
 
       store.commit('debug/log', { content: 'webgl: initEnvironnment', label: 'webgl' });
     });
@@ -230,17 +218,26 @@ export default class WebGL extends Emitter {
 
     // If can click on map (dragged distance less than 10 & click duration less than 70ms)
     if ((delta < 10 || duration < 70) && this.raycaster.intersection && event.target === this.canvas) {
-      const { id, slot } = this.pickingInfos; // Read in pickingScene
+      let id = null;
+      let model = null;
+      if (this.pickingInfos) {
+        model = this.pickingInfos.match(/(.+?)-\d+$/)[1];
+        id = Number(this.pickingInfos.match(/.+?-(\d+)$/)[1]);
+      }
+
       const mapInfos = {
         gridCases: this.map.grid.getCellsFromBox().map(cell => (cell ? cell.infos : null)),
         position: this.map.gridHelper.position,
         rotation: 0,
       };
-      if (id === 255 && slot === 255) { // This place is free
+
+      if (!this.pickingInfos) { // This place is free
         this.emit('selectCell', mapInfos);
       } else { // There is already an entity
-        const model = this.findModelWithSlot(slot);
-        const entity = model.getItem(id);
+        const modelGroup = this.models[model];
+        const entity = modelGroup.getItem(id);
+
+        console.log(modelGroup, model, id);
         if (entity) {
           this.emit('selectItem', { ...mapInfos, ...entity });
         }
@@ -301,31 +298,36 @@ export default class WebGL extends Emitter {
   renderPickScene() {
     this.pickingInfos = this.renderer.pick(mouse.position.x, mouse.position.y);
 
-    const { slot, id } = this.pickingInfos;
+    let model = null;
+    let id = null;
 
-    // Different hovered love focus
-    if (
-      this.hoveredEntity
-      && (
-        this.hoveredEntity[1] !== id || this.hoveredEntity[0] !== slot
-      )
-    ) {
+    if (this.pickingInfos) {
+      model = this.pickingInfos.match(/(.+?)-\d+$/)[1];
+      id = Number(this.pickingInfos.match(/.+?-(\d+)$/)[1]);
+    }
+
+    // Si une entité était hover et que les nouvelles informations sont différentes
+    if (this.hoveredEntity && (this.hoveredEntity[1] !== id || this.hoveredEntity[0] !== model)) {
       const currentEntity = this.hoveredEntity;
-      const currentModel = this.findModelWithSlot(currentEntity[0]);
+      const currentModel = this.models[currentEntity[0]];
       const currentItem = currentModel.getItem(currentEntity[1]);
+
       const tmpScale = new THREE.Vector3();
       animate.add({ from: currentItem.scale.x, to: 1, duration: 100 }).on('progress', ({ value }) => {
         currentModel.entityCluster.setScaleAt(currentEntity[1], tmpScale.set(value, value, value));
         currentModel.entityCluster.geometry.attributes.instanceScale.needsUpdate = true;
       });
+
       this.hoveredEntity = null;
       this.map.gridHelper.visible = true;
     }
 
-    if (slot !== 255 && id !== 255) {
-      if (!this.hoveredEntity || this.hoveredEntity[0] !== slot && this.hoveredEntity[1] !== id) {
-        const hoveredEntity = [slot, id];
-        const hoveredModel = this.findModelWithSlot(hoveredEntity[0]);
+    // Si une mesh est casté
+    if (this.pickingInfos) {
+      // Si cette mesh est différente que celle d'avant
+      if (!this.hoveredEntity || this.hoveredEntity[0] !== model && this.hoveredEntity[1] !== id) {
+        const hoveredEntity = [model, id];
+        const hoveredModel = this.models[model];
         const hoveredItem = hoveredModel.getItem(hoveredEntity[1]);
         const tmpScale = new THREE.Vector3();
         if (hoveredItem) {

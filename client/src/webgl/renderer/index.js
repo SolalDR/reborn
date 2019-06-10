@@ -7,6 +7,7 @@ import SobelEffect from './effects/SobelEffect';
 import FilmEffect from './effects/FilmEffect';
 import GUI from '../../plugins/GUI';
 import theme from '@/config/theme';
+import mouse from '@/plugins/Mouse';
 
 let swap = 1;
 
@@ -21,7 +22,6 @@ export default class Renderer {
 
     this.camera = camera;
     this.clock = new THREE.Clock();
-
     this.gui = GUI.rendering;
 
     this.initPickingScene();
@@ -30,20 +30,14 @@ export default class Renderer {
     this.initEvents();
 
     this.initGUI();
+
+    this.raycaster = new THREE.Raycaster();
   }
 
-  pick(x, y) {
-    this.renderer.setRenderTarget(this.pickingTexture);
-    this.renderer.render(this.pickingScene, this.camera);
-    this.renderer.setRenderTarget(null);
-
-    const pixelBuffer = new Uint8Array(4);
-    this.renderer.readRenderTargetPixels(this.pickingTexture, x, this.pickingTexture.height - y, 1, 1, pixelBuffer);
-
-    return {
-      id: pixelBuffer[2],
-      slot: pixelBuffer[0],
-    };
+  pick() {
+    this.raycaster.setFromCamera(mouse.normalized, this.camera);
+    const intersects = this.raycaster.intersectObjects(this.pickingScene.children);
+    return intersects[0] ? intersects[0].object.name : null;
   }
 
   initRenderer() {
@@ -63,7 +57,6 @@ export default class Renderer {
     this.pickingScene = new THREE.Scene();
     this.pickingScene.name = 'picking';
     this.pickingScene.background = new THREE.Color(0xFFFFFF);
-    this.pickingTexture = new THREE.WebGLRenderTarget(Viewport.width, Viewport.height);
   }
 
   initComposer() {
@@ -92,7 +85,6 @@ export default class Renderer {
     Viewport.$on('resize', () => {
       this.renderer.setSize(Viewport.width, Viewport.height);
       this.composer.setSize(Viewport.width, Viewport.height);
-      this.pickingTexture.setSize(Viewport.width, Viewport.height);
       this.camera.aspect = Viewport.ratio;
       this.camera.updateProjectionMatrix();
     });
