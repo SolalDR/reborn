@@ -14,7 +14,7 @@ class Control {
     this.orbit = new OrbitControls({
       object: camera,
       enabled: true,
-      look: new THREE.Vector3(),
+      look: new THREE.Vector3(0, 1, 0),
       radius: config.camera.radius.startAt,
       phi: config.camera.phi.startAt,
       theta: config.camera.theta.startAt,

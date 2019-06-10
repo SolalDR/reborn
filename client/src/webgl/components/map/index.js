@@ -5,7 +5,6 @@ import Bus from '@/plugins/Bus';
 import GUI from '@/plugins/GUI';
 import theme from '@/config/theme';
 
-
 export default class GameMap extends THREE.Group {
   constructor({
     resolution = 2,
