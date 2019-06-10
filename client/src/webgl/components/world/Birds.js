@@ -9,12 +9,14 @@ export default class Birds {
     webgl = null,
     map = null,
     alphaMap = null,
-    total = 9,
+    total = 12,
+    size = 0.4,
   }) {
     this.webgl = webgl;
     this.map = map;
     this.alphaMap = alphaMap;
     this.total = total;
+    this.size = size;
     this.noise = new Simplex();
     this.lookTarget = new THREE.Vector3();
     this.raycaster = new THREE.Raycaster();
@@ -28,7 +30,7 @@ export default class Birds {
     this.boundingBoxexGroup = new THREE.Group();
 
     for (let i = 0; i < this.total; i++) {
-      const boundingBoxGeometry = new THREE.SphereGeometry(1.15);
+      const boundingBoxGeometry = new THREE.SphereGeometry(this.size * 1.3);
       const boundingBoxMaterial = new THREE.MeshBasicMaterial({
         color: '#FFF',
       });
@@ -45,7 +47,7 @@ export default class Birds {
     this.meshesGroup = new THREE.Group();
 
     for (let i = 0; i < this.total; i++) {
-      const geometry = new THREE.PlaneGeometry(1, 1, 2);
+      const geometry = new THREE.PlaneGeometry(this.size, this.size, 2);
       geometry.rotateX(Math.PI / 2);
 
       const material = new THREE.ShaderMaterial({
