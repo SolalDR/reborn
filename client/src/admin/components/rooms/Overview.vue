@@ -32,7 +32,7 @@ export default {
 
   data() {
     return {
-      currentTime: Math.floor((Date.now() - this.room.game.startedAt) * 0.001),
+      currentTime: this.room.game ? Math.floor((Date.now() - this.room.game.startedAt) * 0.001) : 0,
     };
   },
 

@@ -53,6 +53,7 @@ export default {
 
       return 0.1;
     },
+
     onClick(i) {
       this.$emit('clickCell', {
         position: [i % this.size[0], Math.floor(i / this.size[1])],
@@ -99,8 +100,8 @@ export default {
 <style lang="scss" scope>
 .grid {
   display: grid;
-  grid-template-columns: repeat(var(--width), 32px);
-  grid-template-rows: repeat(var(--height), 32px);
+  grid-template-columns: repeat(var(--width), 2vw);
+  grid-template-rows: repeat(var(--height), 2vw);
   width: 100%;
   &__cell {
     background-color: var(--color);
