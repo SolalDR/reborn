@@ -75,8 +75,15 @@ export default class Game extends Reborn.Game {
       this.emit('rythm:change', regularOrder ? 'medium' : 'slow');
     });
 
-    this.constraintManager.get('end-game').on('change', () => {
-      this.finish();
+    this.constraintManager.get('end-game').on('change', (args) => {
+      let reason;
+
+      const endGameMetrics = ['biodiversity', 'energy', 'food', 'purity', 'satisfaction'];
+      endGameMetrics.forEach((metricSlug) => {
+        if (this.metrics.get(metricSlug).value === 0) reason = metricSlug;
+      });
+
+      this.finish(reason);
       this.timeline.stop();
     });
   }

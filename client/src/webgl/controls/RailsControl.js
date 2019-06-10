@@ -74,7 +74,7 @@ class RailsControl extends Emitter {
         from.clone().add(diff.clone().multiplyScalar(value)),
       );
     }).on('end', () => {
-      this.dispatch('end:move', a);
+      this.emit('end:move', a);
     });
 
     return a;
@@ -106,7 +106,7 @@ class RailsControl extends Emitter {
     }).on('progress', ({ value }) => {
       this.object.lookAt(from.clone().add(diff.clone().multiplyScalar(value)));
     }).on('end', () => {
-      this.dispatch('end:look', a);
+      this.emit('end:look', a);
     });
 
     return a;

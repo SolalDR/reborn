@@ -1,11 +1,25 @@
+const minGaugeValue = 40;
+
 export default [
   {
-    slug: 'money-low',
-    test: game => game.metrics.get('money').value < 5000,
+    slug: 'purity-low',
+    test: game => game.metrics.get('purity').value < minGaugeValue,
   },
   {
-    slug: 'purity-low',
-    test: game => game.metrics.get('purity').value < 20,
+    slug: 'biodiversity-low',
+    test: game => game.metrics.get('biodiversity').value < minGaugeValue,
+  },
+  {
+    slug: 'food-low',
+    test: game => game.metrics.get('food').value < minGaugeValue,
+  },
+  {
+    slug: 'energy-low',
+    test: game => game.metrics.get('energy').value < minGaugeValue,
+  },
+  {
+    slug: 'satisfaction-low',
+    test: game => game.metrics.get('satisfaction').value < minGaugeValue,
   },
   {
     slug: 'end-game',
@@ -13,16 +27,7 @@ export default [
       || game.metrics.get('energy').value === game.metrics.get('energy').min
       || game.metrics.get('food').value === game.metrics.get('food').min
       || game.metrics.get('purity').value === game.metrics.get('purity').min
-      || game.metrics.get('population').value === game.metrics.get('population').min
       || game.metrics.get('satisfaction').value === game.metrics.get('satisfaction').min,
-  },
-  {
-    slug: 'satisfaction-low',
-    test: game => game.metrics.get('satisfaction').value < 25,
-  },
-  {
-    slug: 'energy-low',
-    test: game => game.metrics.get('energy').value < 25,
   },
   {
     slug: 'rythm-fast',

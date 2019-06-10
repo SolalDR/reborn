@@ -53,7 +53,14 @@ class Loader extends Emitter {
     return results;
   }
 
-  get(group = null) {
+  get(group = null, synchronous = false) {
+    if (synchronous) {
+      if (this.isLoaded(group)) {
+        return this.getFiles(group);
+      }
+      return false;
+    }
+
     return new Promise((resolve) => {
       if (this.isLoaded(group)) {
         resolve(this.getFiles(group));

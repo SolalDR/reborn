@@ -57,8 +57,8 @@ class Manager {
     this.loader.loadGroup('global');
   }
 
-  get(name) {
-    return this.loader.get(name);
+  get(name, synchronous = false) {
+    return this.loader.get(name, synchronous);
   }
 }
 

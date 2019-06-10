@@ -14,8 +14,8 @@
     }
   },
   {
-    "name": "sound_skill_fertil",
-    "path": "skill/fertil.mp3",
+    "name": "sound_skill_croissant",
+    "path": "skill/croissant.mp3",
     "datas": {
       "volume": 0.2
     }

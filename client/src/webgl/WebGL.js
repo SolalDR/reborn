@@ -2,7 +2,6 @@ import Emitter from '@solaldr/emitter';
 import Viewport from '@/plugins/Viewport';
 import mouse from '@/plugins/Mouse';
 import GUI from '@/plugins/GUI';
-import modelsConfig from '@/config/models';
 import AssetsManager from '@/services/assets/Manager';
 import store from '@/services/store';
 import animate from '@solaldr/animate';
@@ -17,9 +16,10 @@ import GameMap from './components/map';
 import Controls from './controls';
 import generateMap from './components/map/generator/Generator';
 import WorldScreen from './components/WorldScreen.js';
-import { Waves } from './components/world';
+import { Waves, Birds } from './components/world';
 import ExplosionEffect from './components/game/effects/Explosion';
 import EntityModelGroup from './components/game/EntityModelGroup';
+import modelsConstructors from './components/game/models';
 import skills from './components/game/skills';
 
 
@@ -33,9 +33,11 @@ export default class WebGL extends Emitter {
     this.game = game;
 
     // Camera
+    this.time = 0;
     this.scene = new THREE.Scene();
     this.scene.name = 'main';
     this.camera = new THREE.PerspectiveCamera(45, Viewport.width / Viewport.height, 1, 500);
+
     this.controls = new Controls({
       camera: this.camera,
     });
@@ -56,6 +58,8 @@ export default class WebGL extends Emitter {
     });
 
     this.hoveredEntity = null;
+
+    this.renderedModels = [];
   }
 
   init() {
@@ -91,20 +95,23 @@ export default class WebGL extends Emitter {
       });
 
       Object.keys(models).forEach((modelName, index) => {
-        this.models[modelName] = new EntityModelGroup(modelName, {
+        const EntityModelGroupConstructor = modelsConstructors[modelName]
+          ? modelsConstructors[modelName]
+          : EntityModelGroup;
+
+        this.models[modelName] = new EntityModelGroupConstructor(modelName, {
           geometry: models[modelName].scene.children[0].geometry,
           material,
           slot: index,
+          webgl: this,
         });
 
-        if (modelsConfig.picking) {
-          this.scene.add(this.models[modelName].pickingCluster.mesh);
-          this.scene.add(this.models[modelName].entityCluster.mesh.clone());
-          this.renderer.pickingScene.add(this.models[modelName].entityCluster.mesh);
-        } else {
-          this.scene.add(this.models[modelName].entityCluster.mesh);
-          this.renderer.pickingScene.add(this.models[modelName].pickingCluster.mesh);
+        // Model has a render method
+        if (this.models[modelName].render) {
+          this.renderedModels.push(this.models[modelName]);
         }
+
+        this.scene.add(this.models[modelName].entityCluster.mesh);
       });
 
       store.commit('debug/log', { content: 'webgl: initModels', label: 'webgl' });
@@ -114,7 +121,10 @@ export default class WebGL extends Emitter {
     };
 
     AssetsManager.get('models').then((models) => {
-      initModels(models);
+      // Wait for image to be loaded
+      AssetsManager.get('images').then(() => {
+        initModels(models);
+      });
     });
   }
 
@@ -126,6 +136,9 @@ export default class WebGL extends Emitter {
     AssetsManager.get('images').then((images) => {
       this.waves = new Waves({ path: images.wave_line.paths[0] });
       this.scene.add(this.waves.mesh);
+
+      this.birds = new Birds({ webgl: this, map: images.bird_map, alphaMap: images.bird_alpha });
+      this.scene.add(this.birds.meshesGroup);
 
       this.explosionEffect = new ExplosionEffect();
       this.scene.add(this.explosionEffect.mesh);
@@ -164,9 +177,6 @@ export default class WebGL extends Emitter {
    * @return {void}
    */
   initScene() {
-    this.camera.position.set(0, 30, 30);
-    this.camera.lookAt(new THREE.Vector3());
-
     this.ambientLight = new THREE.AmbientLight(
       theme.light.ambient.color,
       theme.light.ambient.intensity,
@@ -208,17 +218,25 @@ export default class WebGL extends Emitter {
 
     // If can click on map (dragged distance less than 10 & click duration less than 70ms)
     if ((delta < 10 || duration < 70) && this.raycaster.intersection && event.target === this.canvas) {
-      const { id, slot } = this.pickingInfos; // Read in pickingScene
+      let id = null;
+      let model = null;
+      if (this.pickingInfos) {
+        model = this.pickingInfos.match(/(.+?)-\d+$/)[1];
+        id = Number(this.pickingInfos.match(/.+?-(\d+)$/)[1]);
+      }
+
       const mapInfos = {
         gridCases: this.map.grid.getCellsFromBox().map(cell => (cell ? cell.infos : null)),
         position: this.map.gridHelper.position,
         rotation: 0,
       };
-      if (id === 255 && slot === 255) { // This place is free
+
+      if (!this.pickingInfos) { // This place is free
         this.emit('selectCell', mapInfos);
       } else { // There is already an entity
-        const model = this.findModelWithSlot(slot);
-        const entity = model.getItem(id);
+        const modelGroup = this.models[model];
+        const entity = modelGroup.getItem(id);
+
         if (entity) {
           this.emit('selectItem', { ...mapInfos, ...entity });
         }
@@ -279,31 +297,36 @@ export default class WebGL extends Emitter {
   renderPickScene() {
     this.pickingInfos = this.renderer.pick(mouse.position.x, mouse.position.y);
 
-    const { slot, id } = this.pickingInfos;
+    let model = null;
+    let id = null;
 
-    // Different hovered love focus
-    if (
-      this.hoveredEntity
-      && (
-        this.hoveredEntity[1] !== id || this.hoveredEntity[0] !== slot
-      )
-    ) {
+    if (this.pickingInfos) {
+      model = this.pickingInfos.match(/(.+?)-\d+$/)[1];
+      id = Number(this.pickingInfos.match(/.+?-(\d+)$/)[1]);
+    }
+
+    // Si une entité était hover et que les nouvelles informations sont différentes
+    if (this.hoveredEntity && (this.hoveredEntity[1] !== id || this.hoveredEntity[0] !== model)) {
       const currentEntity = this.hoveredEntity;
-      const currentModel = this.findModelWithSlot(currentEntity[0]);
+      const currentModel = this.models[currentEntity[0]];
       const currentItem = currentModel.getItem(currentEntity[1]);
+
       const tmpScale = new THREE.Vector3();
       animate.add({ from: currentItem.scale.x, to: 1, duration: 100 }).on('progress', ({ value }) => {
         currentModel.entityCluster.setScaleAt(currentEntity[1], tmpScale.set(value, value, value));
         currentModel.entityCluster.geometry.attributes.instanceScale.needsUpdate = true;
       });
+
       this.hoveredEntity = null;
       this.map.gridHelper.visible = true;
     }
 
-    if (slot !== 255 && id !== 255) {
-      if (!this.hoveredEntity || this.hoveredEntity[0] !== slot && this.hoveredEntity[1] !== id) {
-        const hoveredEntity = [slot, id];
-        const hoveredModel = this.findModelWithSlot(hoveredEntity[0]);
+    // Si une mesh est casté
+    if (this.pickingInfos) {
+      // Si cette mesh est différente que celle d'avant
+      if (!this.hoveredEntity || this.hoveredEntity[0] !== model && this.hoveredEntity[1] !== id) {
+        const hoveredEntity = [model, id];
+        const hoveredModel = this.models[model];
         const hoveredItem = hoveredModel.getItem(hoveredEntity[1]);
         const tmpScale = new THREE.Vector3();
         if (hoveredItem) {
@@ -326,11 +349,18 @@ export default class WebGL extends Emitter {
     requestAnimationFrame(this.loop.bind(this));
     this.controls.loop();
     this.renderPickScene();
+    this.time += 17;
 
-    if (this.map) this.map.gridHelper.render();
-    if (this.waves) this.waves.render();
-    if (this.explosionEffect) this.explosionEffect.render();
-    if (this.smokes) this.smokes.render();
+    if (this.map) this.map.render(this.time);
+    if (this.waves) this.waves.render(this.time);
+    if (this.explosionEffect) this.explosionEffect.render(this.time);
+    if (this.birds) this.birds.render();
+
+    this.renderedModels.forEach((model) => {
+      model.render();
+    });
+
+    // if (this.particleSystem) this.particleSystem.render(this.time);
     this.worldScreen.render();
     this.renderer.render();
   }

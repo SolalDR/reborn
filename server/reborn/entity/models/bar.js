@@ -15,21 +15,32 @@ export default {
         },
         {
           name: 'satisfaction',
-          value: 15,
+          value: 5,
         },
       ],
     },
+
+    destruction: {
+      enterModifiers: [
+        {
+          name: 'money',
+          value: -300,
+          checkConstraint: true,
+        },
+      ],
+    },
+
     living: {
       enterModifiers: [
         {
           name: 'waste',
-          value: 0.5,
+          value: 1,
         },
       ],
       leaveModifiers: [
         {
           name: 'waste',
-          value: -0.5,
+          value: -1,
         },
       ],
     },

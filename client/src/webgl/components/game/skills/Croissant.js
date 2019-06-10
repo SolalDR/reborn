@@ -23,18 +23,19 @@ export default class Croissant {
     const toPosition = new THREE.Vector3(0, 15, 5);
     this.godRay.mesh.material.uniforms.dashOffset.value = 2;
     this.scene.add(this.godRay.mesh);
-    console.log(this.godRay);
 
     animate.add({
       duration: 2000,
+      timingFunction: 'easeInQuart',
     }).on('progress', ({ value }) => {
-      $webgl.ambientLight.intensity = THREE.Math.lerp(fromAmbient.intensity, 0.75, value);
-      $webgl.directionalLight.intensity = THREE.Math.lerp(fromDirectional.intensity, 0.75, value);
+      $webgl.ambientLight.intensity = THREE.Math.lerp(fromAmbient.intensity, 0.65, value);
+      $webgl.directionalLight.intensity = THREE.Math.lerp(fromDirectional.intensity, 0.65, value);
       $webgl.directionalLight.position.lerpVectors(fromPosition, toPosition, value);
     });
 
     animate.add({
       duration: duration + 2000,
+      timingFunction: 'easeInOutSine',
       from: 2,
       to: -4,
     }).on('progress', ({ value }) => {
@@ -46,6 +47,7 @@ export default class Croissant {
     setTimeout(() => {
       animate.add({
         duration: 1000,
+        timingFunction: 'easeOutQuart',
       }).on('progress', ({ value }) => {
         $webgl.ambientLight.intensity = THREE.Math.lerp(0.75, fromAmbient.intensity, value);
         $webgl.directionalLight.intensity = THREE.Math.lerp(0.75, fromDirectional.intensity, value);

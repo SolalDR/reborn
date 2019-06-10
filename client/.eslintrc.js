@@ -38,7 +38,8 @@ module.exports = {
     'prefer-rest-params': 0,
     'class-methods-use-this': 0,
     'no-continue': 0,
-  },
+    'linebreak-style': 0
+},
   parserOptions: {
     parser: 'babel-eslint',
   },

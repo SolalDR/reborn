@@ -2,7 +2,7 @@
   <div class="explanations">
     <div class="explanations__header header">
       <p class="explanations__title bold" v-html="$splitWithSpan(texts.title)"></p>
-      <span class="explanations__score" v-html="$splitWithSpan('999')"></span>
+      <span class="explanations__score" v-html="$splitWithSpan(score.toString())"></span>
       <span class="explanations__suffix" v-html="$splitWithSpan(texts.suffix)"></span>
 
       <p v-for="(textLine, index) in explanations"
@@ -36,6 +36,8 @@ import texts from '@/contents/game/explanations';
 export default {
   name: 'explanations',
   props: {
+    score: Number,
+    endGameReason: String,
     tryAgain: Function,
   },
   data() {
@@ -45,7 +47,7 @@ export default {
   },
   computed: {
     explanations() {
-      return texts.explanations.purity.city;
+      return texts.explanations[this.endGameReason][this.$game.player.role.name];
     },
   },
 };

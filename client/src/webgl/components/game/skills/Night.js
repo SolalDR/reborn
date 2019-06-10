@@ -1,10 +1,11 @@
+/* eslint-disable */
 import animate from '@solaldr/animate';
 import theme from '@/config/theme';
 
 export default class Night {
   launch({ duration }, $webgl) {
-    if ($webgl.game.player.role.name === 'nature') return;
-
+    const intensityAmbient = $webgl.game.player.role.name === 'nature' ? 0.3 : 0.15;
+    const intensityDirectional = $webgl.game.player.role.name === 'nature' ? 0.3 : 0;
     const fromAmbient = theme.light.ambient;
     const fromDirectional = theme.light.directional;
     const fromAmbientColor = $webgl.ambientLight.color.clone();
@@ -12,9 +13,10 @@ export default class Night {
 
     animate.add({
       duration: 2000,
+      timingFunction: "easeOutCubic",
     }).on('progress', ({ value }) => {
-      $webgl.ambientLight.intensity = THREE.Math.lerp(fromAmbient.intensity, 0.15, value);
-      $webgl.directionalLight.intensity = THREE.Math.lerp(fromDirectional.intensity, 0, value);
+      $webgl.ambientLight.intensity = THREE.Math.lerp(fromAmbient.intensity, intensityAmbient, value);
+      $webgl.directionalLight.intensity = THREE.Math.lerp(fromDirectional.intensity, intensityDirectional, value);
       $webgl.ambientLight.color.setRGB(
         THREE.Math.lerp(fromAmbientColor.r, toAmbientColor.r, value),
         THREE.Math.lerp(fromAmbientColor.g, toAmbientColor.g, value),
@@ -25,9 +27,10 @@ export default class Night {
     setTimeout(() => {
       animate.add({
         duration: 1000,
+        timingFunction: "easeInCubic",
       }).on('progress', ({ value }) => {
-        $webgl.ambientLight.intensity = THREE.Math.lerp(0.15, fromAmbient.intensity, value);
-        $webgl.directionalLight.intensity = THREE.Math.lerp(0, fromDirectional.intensity, value);
+        $webgl.ambientLight.intensity = THREE.Math.lerp(intensityAmbient, fromAmbient.intensity, value);
+        $webgl.directionalLight.intensity = THREE.Math.lerp(intensityDirectional, fromDirectional.intensity, value);
         $webgl.ambientLight.color.setRGB(
           THREE.Math.lerp(toAmbientColor.r, fromAmbientColor.r, value),
           THREE.Math.lerp(toAmbientColor.g, fromAmbientColor.g, value),

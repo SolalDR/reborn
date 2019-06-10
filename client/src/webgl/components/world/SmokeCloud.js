@@ -2,7 +2,7 @@ import LineSystem from '../line/LineSystem';
 import GUI from '@/plugins/GUI';
 import config from '@/config/worlds';
 
-export default class Smoke {
+export default class SmokeCloud {
   constructor({
     path = null,
     minOffset = null,
@@ -17,7 +17,7 @@ export default class Smoke {
     });
 
     this.cluster = new LineSystem(this.geometry, {
-      limit: 500,
+      limit: 60,
       lineWidth: 2,
       depthTest: true,
       depthWrite: true,
@@ -26,9 +26,11 @@ export default class Smoke {
       dashOffset,
     });
 
+    this.mesh = this.cluster.mesh;
+    this.cluster.mesh.geometry.maxInstancedCount = 60;
     this.cluster.mesh.frustumCulled = false;
 
-    for (let i = 0; i < 500; i++) {
+    for (let i = 0; i < 60; i++) {
       const radius = Math.random() * 16;
       const angle = Math.random() * Math.PI * 2;
       this.cluster.addItem({
@@ -41,10 +43,7 @@ export default class Smoke {
         dashOffset: Math.random() * 2,
       });
     }
-    this.mesh = this.cluster.mesh;
-    this.mesh.geometry.maxInstancedCount = 60;
 
-    console.log(this.mesh.material);
     this.initGUI();
   }
 

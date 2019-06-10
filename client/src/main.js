@@ -9,7 +9,7 @@ import splitWithSpan from './utils/split-with-span';
 // Plugins
 import Viewport from './plugins/Viewport';
 import Socket from './plugins/Socket';
-import SoundPlugin from './plugins/Sound';
+import { SoundPlugin } from './plugins/Sound';
 import { VueBus } from './plugins/Bus';
 import { MousePlugin } from './plugins/Mouse';
 
@@ -25,6 +25,10 @@ import './assets/styles/global/main.scss';
 
 animate.start();
 Vue.config.productionTip = false;
+
+router.beforeEach((to, from, next) => {
+  return to.name === 'game' && !from.name ? router.push({ name: 'home' }) : next();
+});
 
 // Components
 Vue.component('default-layout', DefaultLayout);

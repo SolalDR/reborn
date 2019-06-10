@@ -159,15 +159,17 @@ export default {
       });
     },
     'entity:add': function (entity) {
-      if (!entity) return;
-      this.entities[entity.position[0] + entity.position[1] * 32] = {
-        ...entity,
-        color: '#2979ff',
-      };
+      entity.gridCases.forEach((gridCase) => {
+        this.entities[gridCase.x + gridCase.y * 32] = {
+          ...entity,
+          color: '#2979ff',
+        };
+      });
     },
     'entity:remove': function (entity) {
-      if (!entity) return;
-      this.entities[entity.position[0] + entity.position[1] * 32] = null;
+      entity.gridCases.forEach((gridCase) => {
+        this.entities[gridCase.x + gridCase.y * 32] = null;
+      });
     },
     'history:list': function (entries) {
       if (!entries) return;
@@ -203,11 +205,8 @@ export default {
     onConnectRoom() {
       this.$socket.emit('history:list');
     },
+
     onAddEntity() {
-      this.$socket.emit('entity:add', {
-        position: this.currentCell.position,
-        model: this.entityModel,
-      });
       this.currentCell = false;
     },
 

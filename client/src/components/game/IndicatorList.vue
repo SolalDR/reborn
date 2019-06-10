@@ -10,7 +10,7 @@
         <span>{{ indicator.value }}</span>
 
         <transition name="fade">
-          <hover-infos v-if="indexHovered === index" :text="indicator.displayName"/>
+          <hover-infos v-show="indexHovered === index" :text="indicator.displayName"/>
         </transition>
       </div>
 
@@ -60,6 +60,7 @@ export default {
     .indicator {
       position: relative;
       @include useFlex();
+      flex-wrap: nowrap;
       margin-right: 3rem;
 
       &:last-child,

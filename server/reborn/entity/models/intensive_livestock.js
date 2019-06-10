@@ -2,6 +2,7 @@ export default {
   slug: 'intensive_livestock',
   category: 'alimentation',
   name: 'Élevage intensif',
+  displayName: 'Élevage intensif',
   role: 'city',
   size: [3, 2],
   states: {
@@ -12,10 +13,6 @@ export default {
           value: -6000,
           checkConstraint: true,
         },
-        // {
-        //   name: 'biodiversity',
-        //   value: -5,
-        // },
       ],
     },
     mounted: {
@@ -31,28 +28,25 @@ export default {
       ],
     },
     destruction: {
-      leaveModifiers: [
+      enterModifiers: [
         {
           name: 'money',
-          value: -2000,
+          value: -1200,
+          checkConstraint: true,
         },
-        // {
-        //   name: 'biodiversity',
-        //   value: 5,
-        // },
       ],
     },
     living: {
       enterModifiers: [
         {
           name: 'waste',
-          value: 2,
+          value: 3,
         },
       ],
       leaveModifiers: [
         {
           name: 'waste',
-          value: -2,
+          value: -3,
         },
       ],
     },

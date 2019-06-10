@@ -76,7 +76,9 @@ export default {
       const entriesHistoryUpdateCallback = (entry) => {
         this.emit('history:update', entry);
       };
+
       room.historic.on('update', entriesHistoryUpdateCallback);
+
       this.on('history:list', () => {
         // const entries = room.historic.entries.map(e => e.infos);
         const entries = room.historic.entries;
@@ -86,10 +88,11 @@ export default {
       let isListeningGame = false;
 
       // A listner
-      const gameListener = function gameListener() {
+      const gameListener = () => {
         if (!room.game) return;
         isListeningGame = true;
         entitiesListCallback();
+        console.log('admin: Start listen to game');
 
         // entity
         room.game.on('tick', tickCallback);
@@ -110,14 +113,21 @@ export default {
       gameListener();
       room.on('start', gameListener);
 
-      // Remove events when admin disconnects
-      this.on('disconnect', () => {
-        room.game.off('tick', tickCallback);
+      const disconnect = () => {
         room.historic.off('update', entriesHistoryUpdateCallback);
-        room.game.world.off('entity:add', entityAddCallback);
-        room.game.world.off('entity:remove', entityRemoveCallback);
-        room.game.world.off('entity:update', entityUpdateCallback);
-      });
+        if (room.game) {
+          room.game.off('tick', tickCallback);
+        }
+
+        if (room.game.world) {
+          room.game.world.off('entity:add', entityAddCallback);
+          room.game.world.off('entity:remove', entityRemoveCallback);
+          room.game.world.off('entity:update', entityUpdateCallback);
+        }
+      };
+
+      // Remove events when admin disconnects
+      this.on('disconnect', disconnect);
     }
   },
 };

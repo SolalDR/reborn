@@ -3,6 +3,7 @@ export default {
   category: 'energy',
   name: 'Éolienne',
   role: 'city',
+  displayName: 'Éolienne',
   states: {
     creation: {
       enterModifiers: [
@@ -21,11 +22,7 @@ export default {
       recurModifiers: [
         {
           name: 'energy',
-          value: 2,
-        },
-        {
-          name: 'satisfaction',
-          value: -0.2,
+          value: 2.4,
         },
       ],
     },
@@ -34,6 +31,7 @@ export default {
         {
           name: 'money',
           value: -500,
+          checkConstraint: true,
         },
       ],
     },

@@ -8,10 +8,13 @@ export default class EntityModelGroup {
     geometry = null,
     material = null,
     slot = null,
+    webgl = null,
   } = {}) {
     this.name = name;
     this.material = material;
     this.slot = slot;
+    this.webgl = webgl;
+    this.scene = this.webgl.scene;
 
     // Prepare geometry
     this.geometry = geometry;
@@ -27,15 +30,15 @@ export default class EntityModelGroup {
     // Create picking geometry from bounding box
     this.pickingGeometry = new THREE.BoxBufferGeometry(boxSize.x, boxSize.y, boxSize.z);
     this.pickingGeometry.translate(0, boxSize.y / 2, 0);
+    this.pickingMaterial = new THREE.MeshBasicMaterial({
+      color: 0xFF0000,
+    });
+
     const hiddenLocation = new THREE.Vector3(0, 200, 0);
 
     // Create clusters
     this.entityCluster = new Cluster(this.geometry, material, {
       hiddenLocation,
-    });
-    this.pickingCluster = new Cluster(this.pickingGeometry, material, {
-      hiddenLocation,
-      picking: true,
     });
 
     // Enable GUI on the model
@@ -70,17 +73,18 @@ export default class EntityModelGroup {
       scale,
     });
 
-    const pickingColor = new THREE.Vector3(
-      this.slot / 256,
-      Math.floor(index / 256) / 256,
-      (index % 256) / 256,
-    );
+
+    const mesh = new THREE.Mesh(this.pickingGeometry, this.pickingMaterial);
+    mesh.position.copy(position);
+    mesh.name = `${this.name}-${index}`;
+    mesh.matrixWorld.setPosition(position);
+    mesh.modelViewMatrix.setPosition(position);
+
 
     // Wait before make the item pickable
     setTimeout(() => {
-      this.pickingCluster.addItem({
-        position, rotation, pickingColor, index, uuid,
-      });
+      this.webgl.renderer.pickingScene.add(mesh);
+      // console.log(mesh);
     }, duration);
 
     // Appear animation
@@ -128,7 +132,8 @@ export default class EntityModelGroup {
     const scale = new THREE.Vector3();
 
     // Disable picking on item
-    this.pickingCluster.removeItem(index);
+    const mesh = this.webgl.renderer.pickingScene.getObjectByName(`${this.name}-${index}`);
+    this.webgl.renderer.pickingScene.remove(mesh);
 
     // Disappear animation
     animate.add({

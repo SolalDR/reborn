@@ -2,6 +2,7 @@ export default {
   slug: 'intensive_culture',
   category: 'alimentation',
   name: 'Culture intensive',
+  displayName: 'Culture intensive',
   role: 'city',
   size: [3, 2],
   states: {
@@ -9,50 +10,43 @@ export default {
       enterModifiers: [
         {
           name: 'money',
-          value: -6000,
+          value: -5000,
           checkConstraint: true,
         },
-        // {
-        //   name: 'biodiversity',
-        //   value: -5,
-        // },
       ],
     },
     mounted: {
       recurModifiers: [
         {
           name: 'food',
-          value: 10,
+          value: 6,
         },
         {
           name: 'purity',
-          value: -12,
+          value: -5,
         },
       ],
     },
     destruction: {
-      leaveModifiers: [
+      enterModifiers: [
         {
           name: 'money',
-          value: -2000,
+          value: -1000,
+          checkConstraint: true,
         },
-        // {
-        //   name: 'biodiversity',
-        //   value: 5,
-        // },
       ],
     },
     living: {
       enterModifiers: [
         {
           name: 'waste',
-          value: 2,
+          value: 3,
         },
       ],
       leaveModifiers: [
         {
           name: 'waste',
-          value: -2,
+          value: -3,
         },
       ],
     },

@@ -11,7 +11,7 @@ export default {
       enterModifiers: [
         {
           name: 'purity',
-          value: 1,
+          value: 1.5,
         },
       ],
     },

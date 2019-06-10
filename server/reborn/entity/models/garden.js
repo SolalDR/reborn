@@ -13,27 +13,26 @@ export default {
           value: -500,
           checkConstraint: true,
         },
+        {
+          name: 'satisfaction',
+          value: 4,
+        },
       ],
     },
     mounted: {
       recurModifiers: [
         {
           name: 'purity',
-          value: 0.5,
+          value: 1.5,
         },
       ],
     },
-    living: {
+    destruction: {
       enterModifiers: [
         {
-          name: 'waste',
-          value: -0.5,
-        },
-      ],
-      leaveModifiers: [
-        {
-          name: 'waste',
-          value: 0.5,
+          name: 'money',
+          value: -100,
+          checkConstraint: true,
         },
       ],
     },

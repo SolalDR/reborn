@@ -13,8 +13,8 @@ class Control {
   } = {}) {
     this.orbit = new OrbitControls({
       object: camera,
-      enabled: true,
-      look: new THREE.Vector3(),
+      enabled: false,
+      look: new THREE.Vector3(0, 1, 0),
       radius: config.camera.radius.startAt,
       phi: config.camera.phi.startAt,
       theta: config.camera.theta.startAt,
@@ -35,6 +35,25 @@ class Control {
     this.initDragEvent();
     this.initWheelEvent();
     this.initGUI();
+
+    this.camera.position.set(21.7190603197311, 16.779893851147104, 21.719060319731096);
+    this.camera.lookAt(new THREE.Vector3(
+      20.7190603197311, 0.779893851147104, 20.719060319731096,
+    ));
+
+    console.log(this);
+  }
+
+  rotateIsland(duration = 34000, delay = 2000) {
+    animate.add({
+      from: 0,
+      to: Math.PI * 4,
+      duration,
+      delay,
+    }).on('progress', ({ value }) => {
+      this.orbit.theta = value;
+      this.orbit.axeRotation = 0;
+    });
   }
 
   initDragEvent() {

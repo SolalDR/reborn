@@ -10,12 +10,35 @@ export default {
       enterModifiers: [
         {
           name: 'money',
-          value: -1500,
+          value: -1200,
           checkConstraint: true,
         },
         {
           name: 'satisfaction',
-          value: 15,
+          value: 4,
+        },
+      ],
+    },
+    destruction: {
+      enterModifiers: [
+        {
+          name: 'money',
+          value: -240,
+          checkConstraint: true,
+        },
+      ],
+    },
+    living: {
+      enterModifiers: [
+        {
+          name: 'waste',
+          value: 0.5,
+        },
+      ],
+      leaveModifiers: [
+        {
+          name: 'waste',
+          value: -0.5,
         },
       ],
     },

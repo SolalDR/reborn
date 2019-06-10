@@ -6,6 +6,8 @@ import Viewport from '../../plugins/Viewport';
 import SobelEffect from './effects/SobelEffect';
 import FilmEffect from './effects/FilmEffect';
 import GUI from '../../plugins/GUI';
+import theme from '@/config/theme';
+import mouse from '@/plugins/Mouse';
 
 let swap = 1;
 
@@ -17,9 +19,9 @@ export default class Renderer {
   } = {}) {
     this.canvas = canvas;
     this.scene = scene;
+
     this.camera = camera;
     this.clock = new THREE.Clock();
-
     this.gui = GUI.rendering;
 
     this.initPickingScene();
@@ -28,38 +30,14 @@ export default class Renderer {
     this.initEvents();
 
     this.initGUI();
+
+    this.raycaster = new THREE.Raycaster();
   }
 
-  pick(x, y) {
-    // const pixelRatio = this.renderer.getPixelRatio();
-    // this.camera.setViewOffset(
-    //   this.renderer.context.drawingBufferWidth,   // full width
-    //   this.renderer.context.drawingBufferHeight,  // full top
-    //   event.clientX * pixelRatio | 0,        // rect x
-    //   event.clientY * pixelRatio | 0,        // rect y
-    //   1,                                     // rect width
-    //   1,                                     // rect height
-    // );
-    this.renderer.setRenderTarget(this.pickingTexture);
-    this.renderer.render(this.pickingScene, this.camera);
-    this.renderer.setRenderTarget(null);
-    // this.camera.clearViewOffset();
-
-    // this.renderer.readRenderTargetPixels(this.pickingTexture, 0, 0, 1, 1, pixelBuffer);
-    const pixelBuffer = new Uint8Array(4);
-    this.renderer.readRenderTargetPixels(
-      this.pickingTexture,
-      x,
-      this.pickingTexture.height - y,
-      1,
-      1,
-      pixelBuffer,
-    );
-
-    return {
-      id: pixelBuffer[2],
-      slot: pixelBuffer[0],
-    };
+  pick() {
+    this.raycaster.setFromCamera(mouse.normalized, this.camera);
+    const intersects = this.raycaster.intersectObjects(this.pickingScene.children);
+    return intersects[0] ? intersects[0].object.name : null;
   }
 
   initRenderer() {
@@ -69,8 +47,9 @@ export default class Renderer {
     });
     this.renderer.shadowMapEnabled = true;
     this.renderer.shadowMap.type = THREE.BasicShadowMap;
-    this.renderer.setClearColor(0xb7eeff);
-    this.renderer.setPixelRatio(1.5);
+    this.renderer.setClearColor(theme.water.color);
+    this.scene.background = new THREE.Color(theme.water.color);
+    this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(Viewport.width, Viewport.height);
   }
 
@@ -78,7 +57,6 @@ export default class Renderer {
     this.pickingScene = new THREE.Scene();
     this.pickingScene.name = 'picking';
     this.pickingScene.background = new THREE.Color(0xFFFFFF);
-    this.pickingTexture = new THREE.WebGLRenderTarget(Viewport.width, Viewport.height);
   }
 
   initComposer() {

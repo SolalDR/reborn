@@ -19,6 +19,7 @@ const generator = {
     radius = 16,
     position = new Vector2(),
     noiseIntensity = 0.2,
+    rotation = 0,
   } = {}) {
     const stepAngle = 2 * Math.PI / definition;
     let angle = 0;
@@ -31,8 +32,8 @@ const generator = {
 
       // Coordonnées dans le cercle
       tmpP.set(
-        Math.cos(angle) * radius,
-        Math.sin(angle) * radius,
+        Math.cos(angle + rotation) * radius,
+        Math.sin(angle + rotation) * radius,
       );
 
       // Coordonnées avec noise
@@ -61,6 +62,7 @@ const generator = {
   generateStageGeometry({
     shape = null,
     height = 0.5,
+    altitude = 0,
     wallColor = null,
     floorColor = null,
   } = {}) {
@@ -77,6 +79,10 @@ const generator = {
 
     // Rotate la géométrie pour avoir la shape vers le haut
     geometry.rotateX(-Math.PI / 2);
+    if (altitude !== 0) {
+      geometry.translate(0, altitude, 0);
+    }
+
 
     geometry.faces.forEach((face) => {
       // Si la normal ne pointe pas vers le haut, c'est le mur
@@ -213,10 +219,11 @@ const generator = {
         shape,
         floorColor: stage.floorColor,
         wallColor: stage.wallColor,
+        altitude: stage.altitude,
       });
     });
 
-    this.removeExtraFaces();
+    // this.removeExtraFaces();
     // this.generateColors();
     const results = this.cast(this.mesh);
     this.validateGrid(results);

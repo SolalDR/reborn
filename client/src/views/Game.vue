@@ -25,31 +25,36 @@
       <indicator-list :list="this.indicators" @showSettings="showSettings = true"/>
       <inventory :money="money" @selectModel="onSelectModel" @hoveredModel="onHoverModel" @selectSkill="onLaunchSkill"/>
       <model-infos :current-model="currentModel" :hovered-model="hoveredModel"/>
-      <flash-news/>
-      <transition name="fade">
-        <settings v-if="showSettings" @closeSettings="showSettings = false"/>
-      </transition>
+      <flash-news :game-notification="gameNotification"/>
+
+      <settings v-if="showSettings" @closeSettings="showSettings = false"/>
     </div>
 
     <!-- IsEnded -->
     <overlay v-if="isEnded" :fade-in="true">
       <transition name="fade" mode="out-in">
         <explanations v-if="status === 'explanations'"
-                      @updateStatus="updateStatus"
-                      :tryAgain="tryAgain"/>
+                      :score="year"
+                      :end-game-reason="endGameDatas.reason"
+                      :tryAgain="tryAgain"
+                      @updateStatus="updateStatus"/>
 
         <saving v-if="status === 'saving'"
-                @updateStatus="updateStatus"
-                :tryAgain="tryAgain"/>
+                :score="year"
+                :end-game-datas="endGameDatas"
+                :tryAgain="tryAgain"
+                @updateStatus="updateStatus"/>
       </transition>
     </overlay>
 
-    <webgl-component :position="selectedEntity.position" v-if="selectedEntity">
-      <p class="cta--bordered"
-         @click="onRemoveItem">
-        Delete <button @click.stop="selectedEntity = null">X</button>
-      </p>
+    <webgl-component :position="selectedEntity.position" v-if="selectedEntity" ref="destroy-bubble">
+      <transition name="fade-scale" mode="out-in" appear>
+        <webgl-destroy-bubble @click="onRemoveItem" v-if="selectedEntity"
+          :model="selectedEntity.model"/>
+      </transition>
     </webgl-component>
+
+    <world-notification />
   </main>
 </template>
 
@@ -66,12 +71,14 @@ import Inventory from '../components/game/Inventory.vue';
 import Settings from '../components/game/Settings.vue';
 import YearsCounter from '../components/game/YearsCounter.vue';
 import WebglComponent from '../components/game/WebglComponent.vue';
+import WebglDestroyBubble from '../components/game/WebglDestroyBubble';
 import Overlay from '../components/global/Overlay';
 import Explanations from '../components/game/Explanations';
 import Saving from '../components/game/Saving';
 import config from '../config';
 import ModelInfos from '../components/game/ModelInfos';
 import FlashNews from '../components/game/FlashNews';
+import WorldNotification from '../components/game/WorldNotification';
 
 export default {
   name: 'Game',
@@ -90,6 +97,8 @@ export default {
     Introduction,
     Countdown,
     WebglComponent,
+    WebglDestroyBubble,
+    WorldNotification,
   },
 
   data() {
@@ -104,12 +113,14 @@ export default {
       hoveredModel: null,
       currentSkill: null,
       currentCategory: null,
+      gameNotification: {},
       gauges: null,
       indicators: null,
       year: 0,
       money: null,
       position: new THREE.Vector3(0, 0.1, 8),
       selectedEntity: null,
+      endGameDatas: {},
     };
   },
 
@@ -119,7 +130,7 @@ export default {
     'timeline:tick': function (args) { this.onTimelineTick(args); },
     'game:start': function (args) { this.onGameStart(args); },
     'game:end': function (args) { this.onGameEnd(args); },
-    'notification:send': function () { this.onNotificationSend(); },
+    'notification:send': function (args) { this.onNotificationSend(args); },
     'skill:start': function (args) { this.onSkillStart(args); },
     'skill:available': function (args) { this.onSkillAvailable(args); },
     'skill:unavailable': function (args) { this.onSkillUnavailable(args); },
@@ -127,10 +138,6 @@ export default {
   },
 
   created() {
-    if (!this.$store.state.game) {
-      this.$router.push('/');
-      return;
-    }
     this.status = 'pending';
 
     // Create game
@@ -141,6 +148,9 @@ export default {
   },
 
   mounted() {
+    window.addEventListener('click', () => {
+      if (this.selectedEntity) this.selectedEntity = null;
+    });
     document.addEventListener('keydown', this.onKeyDown);
     this.$bus.$on('shortcut', (code) => {
       switch (code) {
@@ -195,7 +205,7 @@ export default {
       }
     },
 
-    onHoverModel (model) {
+    onHoverModel(model) {
       this.hoveredModel = model;
     },
 
@@ -214,16 +224,20 @@ export default {
 
       // When user click on an object in the scene
       this.$webgl.on('selectItem', (item) => {
-        this.selectedEntity = item;
+        setTimeout(() => {
+          this.selectedEntity = item;
 
-        const modelRole = this.$game.entityModels.get(item.model).role;
-        const playerRole = this.$game.player.role.name;
+          const modelRole = this.$game.entityModels.get(item.model).role;
+          const playerRole = this.$game.player.role.name;
 
-        if ((modelRole === 'nature' && playerRole === 'city') || (modelRole === null && playerRole === 'nature')) {
-          this.onRemoveItem({ force: true });
-        } else if (modelRole === 'nature' && playerRole === 'nature') {
-          this.selectedEntity = null; // unfocus
-        }
+          if ((modelRole === 'nature' && playerRole === 'city') || (modelRole === null && playerRole === 'nature') || config.sandbox) {
+            this.onRemoveItem({ force: true });
+          } else if (
+            playerRole === 'nature' || (modelRole === null && playerRole === 'city')
+          ) {
+            this.selectedEntity = null;
+          }
+        }, 1);
       });
 
       if (!config.server.enabled) {
@@ -265,13 +279,14 @@ export default {
       this.$socket.emit('entity:add', params);
     },
 
-    onRemoveItem({ force }) {
+    onRemoveItem({ force } = {}) {
       const params = {
         model: this.selectedEntity.model,
         uuid: this.selectedEntity.uuid,
       };
 
       this.selectedEntity = null;
+
       if (!config.server.enabled) {
         this.onEntityRemove(params);
         return;
@@ -300,12 +315,14 @@ export default {
           }
         });
 
-        const prefix = `${this.$game.player.role.name}_add_`;
-        const entityModel = this.$game.entityModels.get(item.model);
-        if (this.$sound.has(prefix + entityModel.category)) {
-          this.$sound.play(prefix + entityModel.category);
-        } else {
-          this.$sound.play(prefix + entityModel.role);
+        if (this.status === 'playing') {
+          const prefix = `${this.$game.player.role.name}_add_`;
+          const entityModel = this.$game.entityModels.get(item.model);
+          if (this.$sound.has(prefix + entityModel.category)) {
+            this.$sound.play(prefix + entityModel.category);
+          } else {
+            this.$sound.play(prefix + entityModel.role);
+          }
         }
 
         model.addItem({
@@ -322,6 +339,17 @@ export default {
       const prefix = `${this.$game.player.role.name}_remove`;
       this.$sound.play(prefix);
 
+      const entity = this.$webgl.models[model].getEntity(uuid);
+
+      this.$game.entityModels.get(model).states.destruction.leaveModifiers.forEach((modifer) => {
+        if (modifer.name === 'money') {
+          this.$bus.$emit('world:notification', {
+            content: modifer.value > 0 ? `+${modifer.value}` : modifer.value,
+            position: entity.position,
+          });
+        }
+      });
+
       this.$webgl.models[model].removeEntity(uuid);
 
       if (gridCases) {
@@ -332,7 +360,6 @@ export default {
         console.warn('Game:onEntityRemove: No gridcases');
       }
     },
-
 
     onSkillStart(item) {
       const skillEffect = this.$webgl.skills.get(item.skill);
@@ -389,6 +416,10 @@ export default {
 
       this.indicators = this.$game.player.role.indicators.map((indicator) => {
         return this.$game.metrics.get(indicator).infos;
+      });
+
+      this.$webgl.controls.rails.lookTo(new THREE.Vector3(0, 1, 0), { duration: 3000 }).on('end', () => {
+        this.$webgl.controls.orbit.enabled = true;
       });
 
       setTimeout(() => {
@@ -457,12 +488,14 @@ export default {
       }, Math.max(0, timeout + 1));
     },
 
-    onGameEnd() {
+    onGameEnd(args) {
+      this.endGameDatas = args;
       this.isEnded = true;
       this.status = 'explanations';
     },
 
-    onNotificationSend() {
+    onNotificationSend(notification) {
+      this.gameNotification = notification;
       this.$store.commit('debug/log', { content: 'notification:send (receive)', label: 'socket' });
     },
 

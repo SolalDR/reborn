@@ -1,7 +1,7 @@
 <template>
   <svg :viewBox="`0 0 ${height} ${height}`"
-       :width="this.height"
-       :height="this.height"
+       :width="height"
+       :height="height"
        :fill="isFilled ? 'black' : 'transparent'"
        fill-rule="evenodd"
        class="icon"
@@ -17,7 +17,7 @@
     <path :id="`${iconName}-path`"
           stroke="#000"
           stroke-width="2"
-          :d="paths[this.$game.player.role.name][iconName]"/>
+          :d="paths[iconName]"/>
 
     <use class="icon-fill" :clip-path="`url(#${iconName}-clip-path)`" :xlink:href="`#${iconName}-path`"/>
   </svg>
@@ -28,7 +28,7 @@
 import paths from './paths';
 
 export default {
-  name: 'gauge-icon',
+  name: 'icon',
   props: {
     isFilled: {
       type: Boolean,

@@ -69,7 +69,6 @@ class SoundManager extends Emitter {
 
     sounds.forEach((sound) => {
       setTimeout(() => {
-        // console.log('-----playSound', sound.name);
         this.play(sound.name);
       }, sound.delay ? sound.delay : 0);
     });
@@ -77,10 +76,12 @@ class SoundManager extends Emitter {
   }
 }
 
+const Manager = new SoundManager();
 const SoundPlugin = {
   install() {
-    Vue.prototype.$sound = new SoundManager();
+    Vue.prototype.$sound = Manager;
   },
 };
 
-export default SoundPlugin;
+export default Manager;
+export { SoundPlugin };

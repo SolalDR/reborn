@@ -11,7 +11,7 @@ export default {
       enterModifiers: [
         {
           name: 'purity',
-          value: 1,
+          value: 0.4,
         },
       ],
     },
@@ -19,7 +19,7 @@ export default {
       recurModifiers: [
         {
           name: 'purity',
-          value: 2,
+          value: 0.4,
         },
       ],
     },
@@ -27,7 +27,7 @@ export default {
       leaveModifiers: [
         {
           name: 'money',
-          value: 2000,
+          value: 200,
         },
       ],
     },
