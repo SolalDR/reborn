@@ -15,7 +15,7 @@ export default {
         },
         {
           name: 'satisfaction',
-          value: 4,
+          value: 5,
         },
       ],
     },
