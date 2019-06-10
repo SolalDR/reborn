@@ -49,15 +49,18 @@ export default {
 
 <style lang="scss" scoped>
   .skill {
-    $skill-size: 5rem;
-
     cursor: pointer;
     opacity: .3;
     @include useFlex();
     position: relative;
-    width: $skill-size;
-    height: $skill-size;
     transition: all .3s ease;
+
+    img {
+      $img-size: 5rem;
+
+      width: $img-size;
+      height: $img-size;
+    }
 
     &--current,
     &--hovered {

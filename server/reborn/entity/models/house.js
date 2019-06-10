@@ -19,7 +19,7 @@ export default {
         },
         {
           name: 'satisfaction',
-          value: 3,
+          value: 4,
         },
       ],
     },
@@ -48,13 +48,13 @@ export default {
       enterModifiers: [
         {
           name: 'waste',
-          value: 1,
+          value: 0.5,
         },
       ],
       leaveModifiers: [
         {
           name: 'waste',
-          value: -1,
+          value: -0.5,
         },
       ],
     },
