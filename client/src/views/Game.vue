@@ -35,7 +35,7 @@
       <transition name="fade" mode="out-in">
         <explanations v-if="status === 'explanations'"
                       :score="year"
-                      :end-game-datas="endGameDatas"
+                      :end-game-reason="endGameDatas.reason"
                       :tryAgain="tryAgain"
                       @updateStatus="updateStatus"/>
 

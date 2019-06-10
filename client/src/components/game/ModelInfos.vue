@@ -17,7 +17,7 @@
           <span class="icon">
             <icon :icon-name="modifier.name" :is-filled="true"/>
           </span>
-          <span>{{ modifier.value }}/an</span>
+          <span>{{ modifier.value * 4 }}/an</span>
         </div>
 
         <span v-if="this.$game.player.role.name === 'city'" class="cost">

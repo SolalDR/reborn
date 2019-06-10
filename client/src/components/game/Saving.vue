@@ -11,7 +11,7 @@
     <div class="saving__footer footer">
       <transition name="fade">
         <div v-if="canSave" class="saving__save-form">
-          <p class="saving__title">Vous avez survécu 999 ans</p>
+          <p class="saving__title">Vous avez survécu {{ score }} ans</p>
           <input ref="inputName" type="text">
           <p @click="saveScore" class="cta--bordered">Valider</p>
         </div>

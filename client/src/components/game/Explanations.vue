@@ -37,7 +37,7 @@ export default {
   name: 'explanations',
   props: {
     score: Number,
-    endGameDatas: Object,
+    endGameReason: String,
     tryAgain: Function,
   },
   data() {
@@ -45,12 +45,9 @@ export default {
       texts,
     };
   },
-  mounted() {
-    console.log(this.endGameDatas);
-  },
   computed: {
     explanations() {
-      return texts.explanations.purity.city;
+      return texts.explanations[this.endGameReason][this.$game.player.role.name];
     },
   },
 };
