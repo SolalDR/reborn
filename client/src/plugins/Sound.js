@@ -14,6 +14,7 @@ class SoundManager extends Emitter {
     });
 
     AssetsManager.get('sounds').then((sounds) => {
+      console.log('SOUNDS ----', sounds);
       this.sounds = sounds;
       this.emit('load');
     });
@@ -77,10 +78,12 @@ class SoundManager extends Emitter {
   }
 }
 
+const Manager = new SoundManager();
 const SoundPlugin = {
   install() {
-    Vue.prototype.$sound = new SoundManager();
+    Vue.prototype.$sound = Manager;
   },
 };
 
-export default SoundPlugin;
+export default Manager;
+export { SoundPlugin };

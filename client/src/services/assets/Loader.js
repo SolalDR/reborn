@@ -55,6 +55,8 @@ class Loader extends Emitter {
 
   get(group = null, synchronous = false) {
     if (synchronous) {
+      console.log('SYNCHRONOUS-------', group);
+
       if (this.isLoaded(group)) {
         return this.getFiles(group);
       }
@@ -63,11 +65,15 @@ class Loader extends Emitter {
 
     return new Promise((resolve) => {
       if (this.isLoaded(group)) {
+        console.log('1-------', group);
         resolve(this.getFiles(group));
         return;
       }
 
+      console.log('2-------', group);
+
       this.on(`load:${group}`, (results) => {
+        console.log('3-------', group);
         resolve(results);
       });
     });
