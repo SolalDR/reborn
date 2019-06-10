@@ -51,6 +51,7 @@
       </transition>
     </webgl-component>
 
+    <world-notification />
   </main>
 </template>
 
@@ -74,6 +75,7 @@ import Saving from '../components/game/Saving';
 import config from '../config';
 import ModelInfos from '../components/game/ModelInfos';
 import FlashNews from '../components/game/FlashNews';
+import WorldNotification from '../components/game/WorldNotification';
 
 export default {
   name: 'Game',
@@ -93,6 +95,7 @@ export default {
     Countdown,
     WebglComponent,
     WebglDestroyBubble,
+    WorldNotification,
   },
 
   data() {
@@ -144,10 +147,8 @@ export default {
   },
 
   mounted() {
-    window.addEventListener('click', (event) => {
-      if (this.selectedEntity) {
-        this.selectedEntity = null;
-      }
+    window.addEventListener('click', () => {
+      if (this.selectedEntity) this.selectedEntity = null;
     });
     document.addEventListener('keydown', this.onKeyDown);
     this.$bus.$on('shortcut', (code) => {
@@ -284,6 +285,7 @@ export default {
       };
 
       this.selectedEntity = null;
+
       if (!config.server.enabled) {
         this.onEntityRemove(params);
         return;
@@ -334,6 +336,17 @@ export default {
       const prefix = `${this.$game.player.role.name}_remove`;
       this.$sound.play(prefix);
 
+      const entity = this.$webgl.models[model].getEntity(uuid);
+
+      this.$game.entityModels.get(model).states.destruction.leaveModifiers.forEach((modifer) => {
+        if (modifer.name === 'money') {
+          this.$bus.$emit('world:notification', {
+            content: modifer.value > 0 ? `+${modifer.value}` : modifer.value,
+            position: entity.position,
+          });
+        }
+      });
+
       this.$webgl.models[model].removeEntity(uuid);
 
       if (gridCases) {
@@ -344,7 +357,6 @@ export default {
         console.warn('Game:onEntityRemove: No gridcases');
       }
     },
-
 
     onSkillStart(item) {
       const skillEffect = this.$webgl.skills.get(item.skill);
