@@ -2,6 +2,7 @@
   <transition name="overlay"
               :appear="appear ? true : false"
               :enter-class="fadeIn ? 'fade-enter' : 'overlay-enter'"
+              :enter-active-class="fadeIn ? 'fade-enter-active' : 'overlay-enter-active'"
               :leave-active-class="fadeOut ? 'fade-leave-active' : 'overlay-leave-active'"
               :leave-to-class="fadeOut ? 'fade-leave-to' : 'overlay-leave-to'">
     <div class="overlay">
@@ -13,7 +14,10 @@
       </div>
 
       <div class="overlay__content">
-        <div class="cross" v-if="hasCross" @click="$emit('closeOverlay')">
+        <div v-if="hasCross"
+             class="cross"
+             :class="{'cross--no-enter-delay': fadeIn}"
+             @click="$emit('closeOverlay')">
           <span class="line"></span>
           <span class="line"></span>
         </div>
@@ -26,7 +30,7 @@
           <slot></slot>
         </div>
 
-        <div class="overlay__footer footer">
+        <div class="overlay__footer footer" :class="{'overlay__footer--no-enter-delay': fadeIn}">
           <slot name="footer"></slot>
         </div>
       </div>
@@ -191,6 +195,11 @@ export default {
           transform: scale(1.2);
         }
 
+        &--no-enter-delay {
+          animation-duration: 1s;
+          animation-delay: 0s !important;
+        }
+
         .line {
           position: absolute;
           top: 50%;
@@ -210,7 +219,7 @@ export default {
         }
       }
 
-      .footer {
+      .overlay__footer {
         animation: fadeInUp 2s cubic-bezier(0.82, 0.04, 0, 1.04);
 
         @keyframes fadeInUp {
@@ -223,6 +232,11 @@ export default {
           100% {
             opacity: 1;
           }
+        }
+
+        &--no-enter-delay {
+          animation-duration: 1s;
+          animation-timing-function: cubic-bezier(0, .01, 0, 1);
         }
       }
     }

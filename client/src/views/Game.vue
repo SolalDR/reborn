@@ -26,21 +26,24 @@
       <inventory :money="money" @selectModel="onSelectModel" @hoveredModel="onHoverModel" @selectSkill="onLaunchSkill"/>
       <model-infos :current-model="currentModel" :hovered-model="hoveredModel"/>
       <flash-news/>
-      <transition name="fade">
-        <settings v-if="showSettings" @closeSettings="showSettings = false"/>
-      </transition>
+
+      <settings v-if="showSettings" @closeSettings="showSettings = false"/>
     </div>
 
     <!-- IsEnded -->
     <overlay v-if="isEnded" :fade-in="true">
       <transition name="fade" mode="out-in">
         <explanations v-if="status === 'explanations'"
-                      @updateStatus="updateStatus"
-                      :tryAgain="tryAgain"/>
+                      :score="year"
+                      :end-game-reason="endGameDatas.reason"
+                      :tryAgain="tryAgain"
+                      @updateStatus="updateStatus"/>
 
         <saving v-if="status === 'saving'"
-                @updateStatus="updateStatus"
-                :tryAgain="tryAgain"/>
+                :score="year"
+                :end-game-datas="endGameDatas"
+                :tryAgain="tryAgain"
+                @updateStatus="updateStatus"/>
       </transition>
     </overlay>
 
@@ -116,6 +119,7 @@ export default {
       money: null,
       position: new THREE.Vector3(0, 0.1, 8),
       selectedEntity: null,
+      endGameDatas: {},
     };
   },
 
@@ -481,7 +485,8 @@ export default {
       }, Math.max(0, timeout + 1));
     },
 
-    onGameEnd() {
+    onGameEnd(args) {
+      this.endGameDatas = args
       this.isEnded = true;
       this.status = 'explanations';
     },

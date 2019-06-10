@@ -61,12 +61,13 @@ class Game extends Emitter {
   /**
    * Finish the game
    */
-  finish() {
+  finish(reason) {
     this.finishedAt = Date.now();
     this.status = Game.FINISHED;
 
     const timePlay = this.timePlay;
     const args = {
+      reason,
       timePlay,
       ...this.infos,
     };
