@@ -1,5 +1,5 @@
 <template>
-  <div class="layout layout-default">
+  <div class="layout default-layout">
     <!--<div id="nav" class="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
@@ -9,4 +9,11 @@
   </div>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.default-layout {
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+</style>

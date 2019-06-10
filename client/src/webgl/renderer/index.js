@@ -6,6 +6,7 @@ import Viewport from '../../plugins/Viewport';
 import SobelEffect from './effects/SobelEffect';
 import FilmEffect from './effects/FilmEffect';
 import GUI from '../../plugins/GUI';
+import theme from '@/config/theme';
 
 let swap = 1;
 
@@ -17,6 +18,7 @@ export default class Renderer {
   } = {}) {
     this.canvas = canvas;
     this.scene = scene;
+
     this.camera = camera;
     this.clock = new THREE.Clock();
 
@@ -51,7 +53,8 @@ export default class Renderer {
     });
     this.renderer.shadowMapEnabled = true;
     this.renderer.shadowMap.type = THREE.BasicShadowMap;
-    this.renderer.setClearColor(0xb7eeff);
+    this.renderer.setClearColor(theme.water.color);
+    this.scene.background = new THREE.Color(theme.water.color);
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(Viewport.width, Viewport.height);
   }
