@@ -1,0 +1,9 @@
+[
+  {
+    "name": "sound_bird_shoot",
+    "path": "world/bird_shoot.mp3",
+    "datas": {
+      "volume": 2
+    }
+  }
+]

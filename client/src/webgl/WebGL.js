@@ -17,7 +17,7 @@ import GameMap from './components/map';
 import Controls from './controls';
 import generateMap from './components/map/generator/Generator';
 import WorldScreen from './components/WorldScreen.js';
-import { Waves } from './components/world';
+import { Waves, Birds } from './components/world';
 import ExplosionEffect from './components/game/effects/Explosion';
 import EntityModelGroup from './components/game/EntityModelGroup';
 import modelsConstructors from './components/game/models';
@@ -145,6 +145,9 @@ export default class WebGL extends Emitter {
     AssetsManager.get('images').then((images) => {
       this.waves = new Waves({ path: images.wave_line.paths[0] });
       this.scene.add(this.waves.mesh);
+
+      this.birds = new Birds({ webgl: this, map: images.bird_map, alphaMap: images.bird_alpha });
+      this.scene.add(this.birds.meshesGroup);
 
       this.explosionEffect = new ExplosionEffect();
       this.scene.add(this.explosionEffect.mesh);
@@ -350,6 +353,7 @@ export default class WebGL extends Emitter {
     if (this.map) this.map.render(this.time);
     if (this.waves) this.waves.render(this.time);
     if (this.explosionEffect) this.explosionEffect.render(this.time);
+    if (this.birds) this.birds.render();
 
     this.renderedModels.forEach((model) => {
       model.render();

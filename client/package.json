@@ -26,7 +26,6 @@
     "three-dat.gui": "^1.0.2",
     "three-svg-loader": "^0.2.4",
     "vue": "^2.6.6",
-    "vue-chartjs": "^3.4.2",
     "vue-material": "latest",
     "vue-router": "^3.0.1",
     "vue-socket.io": "^3.0.7",
