@@ -21,56 +21,43 @@ export default class Birds {
     this.lookTarget = new THREE.Vector3();
     this.raycaster = new THREE.Raycaster();
 
-    this.initBoundingBoxe();
     this.initGroup();
     mouse.$on('click', this.onMouseClick);
   }
 
-  initBoundingBoxe = () => {
-    this.boundingBoxexGroup = new THREE.Group();
-
-    for (let i = 0; i < this.total; i++) {
-      const boundingBoxGeometry = new THREE.SphereGeometry(this.size * 1.3);
-      const boundingBoxMaterial = new THREE.MeshBasicMaterial({
-        color: '#FFF',
-      });
-
-      const boundingBox = new THREE.Mesh(boundingBoxGeometry, boundingBoxMaterial);
-      boundingBox.position.set(0, 10, 0);
-      boundingBox.index = i;
-
-      this.boundingBoxexGroup.add(boundingBox);
-    }
-  }
 
   initGroup = () => {
     this.meshesGroup = new THREE.Group();
+    this.boundingBoxes = [];
+    this.boundingBoxesIntersected = [];
+
+    const boundingBoxGeometry = new THREE.SphereGeometry(this.size * 1.45);
+    const boundingBoxMaterial = new THREE.MeshBasicMaterial();
+
+    const geometry = new THREE.PlaneGeometry(this.size, this.size, 2);
+    geometry.rotateX(Math.PI / 2);
+    this.material = new THREE.ShaderMaterial({
+      vertexShader,
+      fragmentShader,
+      uniforms: {
+        time: { value: 0 },
+        map: { value: this.map },
+        alphaMap: { value: this.alphaMap },
+      },
+      transparent: true,
+      side: THREE.DoubleSide,
+    });
 
     for (let i = 0; i < this.total; i++) {
-      const geometry = new THREE.PlaneGeometry(this.size, this.size, 2);
-      geometry.rotateX(Math.PI / 2);
+      const boundingBox = new THREE.Mesh(boundingBoxGeometry, boundingBoxMaterial);
+      boundingBox.rank = i;
 
-      const material = new THREE.ShaderMaterial({
-        uniforms: {
-          time: {
-            value: 0,
-          },
-          map: {
-            value: this.map,
-          },
-          alphaMap: {
-            value: this.alphaMap,
-          },
-        },
-        vertexShader,
-        fragmentShader,
-        transparent: true,
-        side: THREE.DoubleSide,
-      });
-
-      const mesh = new THREE.Mesh(geometry, material);
+      const mesh = new THREE.Mesh(geometry, this.material);
       mesh.position.set(0, 10, 0);
+      mesh.rank = i;
 
+      this.boundingBoxes.push(boundingBox);
+      this.boundingBoxesIntersected.push(boundingBox);
       this.meshesGroup.add(mesh);
     }
   }
@@ -78,7 +65,7 @@ export default class Birds {
   onMouseClick = ({ event }) => {
     if (event.target !== this.webgl.canvas) return;
     this.raycaster.setFromCamera(mouse.normalized, this.webgl.camera);
-    const intersects = this.raycaster.intersectObjects(this.boundingBoxexGroup.children);
+    const intersects = this.raycaster.intersectObjects(this.boundingBoxesIntersected);
 
     if (intersects[0]) this.shoot(intersects[0]);
   }
@@ -87,11 +74,13 @@ export default class Birds {
    * @todo Play sound
    */
   shoot(intersection) {
-    const intersectedMesh = this.meshesGroup.children[intersection.object.index];
+    const intersectedMesh = this.meshesGroup.children[intersection.object.rank];
     intersectedMesh.shooted = true;
-    console.log(intersectedMesh);
 
     const from = intersectedMesh.position.clone();
+
+    const time = intersectedMesh.material.uniforms.time.value;
+    this.computePositionAt(intersectedMesh.rank + time * 0.1 + 0.26, this.lookTarget);
     const target = this.lookTarget.clone().sub(from).multiplyScalar(1).add(from);
     target.y = -1;
 
@@ -111,7 +100,7 @@ export default class Birds {
         duration: 1500,
       });
 
-      this.boundingBoxexGroup.children.splice(intersection.object.index, 0);
+      this.boundingBoxesIntersected.splice(intersection.object.rank, 0);
       intersectedMesh.visible = false;
     }, 800);
   }
@@ -126,17 +115,16 @@ export default class Birds {
   }
 
   render() {
+    this.material.uniforms.time.value += 0.1;
+    const time = this.material.uniforms.time.value;
+
     for (let i = 0; i < this.meshesGroup.children.length; i++) {
       const mesh = this.meshesGroup.children[i];
-      console.log(mesh);
       if (mesh.shooted) continue;
-      const boundingBoxe = this.boundingBoxexGroup.children[i];
+      const boundingBoxe = this.boundingBoxes[mesh.rank];
 
-      mesh.material.uniforms.time.value += 0.1;
-      const time = mesh.material.uniforms.time.value;
-
-      this.computePositionAt(i + time * 0.1, mesh.position);
-      this.computePositionAt(i + time * 0.1 + 0.26, this.lookTarget);
+      this.computePositionAt(mesh.rank + time * 0.1, mesh.position);
+      this.computePositionAt(mesh.rank + time * 0.1 + 0.26, this.lookTarget);
       mesh.lookAt(this.lookTarget);
 
       boundingBoxe.matrixWorld.copy(mesh.matrixWorld);
