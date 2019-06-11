@@ -22,7 +22,6 @@ export default {
     // Check if mounted
     let needLoad = 2;
     const checkWebGLMounted = () => {
-      console.log('check webgl mounted');
       needLoad--;
       if (needLoad === 0) this.$emit('mounted');
     };

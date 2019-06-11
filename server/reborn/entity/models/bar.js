@@ -4,7 +4,7 @@ export default {
   name: 'Bar',
   displayName: 'Bar',
   role: 'city',
-  size: [2, 2],
+  size: [1, 1],
   states: {
     creation: {
       enterModifiers: [
@@ -26,6 +26,12 @@ export default {
           name: 'money',
           value: -300,
           checkConstraint: true,
+        },
+      ],
+      leaveModifiers: [
+        {
+          name: 'satisfaction',
+          value: -3,
         },
       ],
     },

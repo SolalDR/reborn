@@ -41,7 +41,8 @@ Vue.use(VueMaterial);
 Vue.use(MousePlugin);
 Vue.use(SoundPlugin);
 Vue.use(Viewport);
-Vue.use(Socket);
+
+if (Socket) Vue.use(Socket);
 
 Vue.component('router-link', Vue.options.components.RouterLink);
 Vue.component('router-view', Vue.options.components.RouterView);

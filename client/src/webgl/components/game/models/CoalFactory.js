@@ -2,6 +2,8 @@ import EntityModelGroup from '../EntityModelGroup';
 import SmokeCluster from '../../world/SmokeCluster';
 import AssetsManager from '@/services/assets/Manager';
 import GUI from '@/plugins/GUI';
+import config from '@/config';
+
 
 export default class CoalFactory extends EntityModelGroup {
   constructor(name, args) {
@@ -14,8 +16,6 @@ export default class CoalFactory extends EntityModelGroup {
     });
 
     this.scene.add(this.smokeCluster.mesh);
-
-    GUI.world.addMesh(`line-${name}`, this.smokeCluster.mesh);
   }
 
   addItem({
@@ -64,5 +64,12 @@ export default class CoalFactory extends EntityModelGroup {
 
   render() {
     this.smokeCluster.mesh.material.uniforms.dashOffset.value -= 0.015;
+  }
+
+  initGUI() {
+    super.initGUI();
+    if (config.gui.models) {
+      GUI.world.addMesh(`line-${this.name}`, this.smokeCluster.mesh);
+    }
   }
 }

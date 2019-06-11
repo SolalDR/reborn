@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
-import SVGLoader from 'three-svg-loader';
+import SVGLoader from './loaders/SVGLoader';
 import SoundLoader from './loaders/SoundLoader';
 import Loader from './Loader';
 import DRACOLoader from './loaders/DRACOLoader';

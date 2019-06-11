@@ -4,7 +4,7 @@ export default {
   name: 'Organic Farm',
   displayName: 'Ferme biologique',
   role: 'city',
-  size: [3, 2],
+  size: [2, 2],
   states: {
     creation: {
       enterModifiers: [
@@ -37,6 +37,12 @@ export default {
           name: 'money',
           value: -700,
           checkConstraint: true,
+        },
+      ],
+      leaveModifiers: [
+        {
+          name: 'satisfaction',
+          value: -0.9,
         },
       ],
     },

@@ -2,6 +2,7 @@ import animate from '@solaldr/animate';
 import Cluster from '../cluster';
 import GUI from '@/plugins/GUI';
 import modelsConfig from '@/config/models';
+import config from '@/config';
 
 export default class EntityModelGroup {
   constructor(name, {
@@ -41,15 +42,14 @@ export default class EntityModelGroup {
       hiddenLocation,
     });
 
-    // Enable GUI on the model
-    GUI.world.addMaterial(this.name, this.entityCluster.material);
-
     // Custom material edition
     if (modelsConfig.materials[this.name]) {
       Object.keys(modelsConfig.materials[this.name]).forEach((key) => {
         this.entityCluster.material[key] = modelsConfig.materials[this.name][key];
       });
     }
+
+    this.initGUI();
   }
 
   /**
@@ -157,5 +157,14 @@ export default class EntityModelGroup {
    */
   removeEntity(uuid) {
     return this.removeItem(this.entityCluster.getIndex(uuid));
+  }
+
+  /**
+   * Enable GUI on the model
+   */
+  initGUI() {
+    if (config.gui.models) {
+      GUI.world.addMaterial(this.name, this.entityCluster.material);
+    }
   }
 }

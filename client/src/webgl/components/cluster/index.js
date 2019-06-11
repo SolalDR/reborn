@@ -230,9 +230,6 @@ class Cluster {
     );
   }
 
-  /**
-   * @TODO
-   */
   getRotationAt(index) {
     const a = this.geometry.attributes.instanceQuaternion;
     return new THREE.Quaternion(
@@ -243,9 +240,6 @@ class Cluster {
     );
   }
 
-  /**
-   * @TODO
-   */
   getPickingColorAt(index) {
     const a = this.geometry.attributes.instancePickingColor;
     return new THREE.Vector3(
