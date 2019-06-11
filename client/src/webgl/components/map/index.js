@@ -85,22 +85,48 @@ export default class GameMap extends THREE.Group {
         this.gridHelper.updatePosition(cell, intersection.point);
 
 
-        if (!a && this.gridHelper.status !== 'transparent') {
-          this.gridHelper.status = 'transparent';
-          animate.add({ from: this.gridHelper.material.opacity, to: 0.4, duration: 200 }).on('progress', ({ value }) => {
-            this.gridHelper.material.opacity = value;
-          });
-        } else if (this.gridHelper.status !== 'plain') {
-          this.gridHelper.status = 'plain';
-          animate.add({ from: this.gridHelper.material.opacity, to: 1, duration: 200 }).on('progress', ({ value }) => {
-            this.gridHelper.material.opacity = value;
-          });
+        if (!a) {
+          // this.gridHelper.status = 'transparent';
+          // const fromColor = this.gridHelper.material.color.clone();
+          const toColorRed = new THREE.Color(0xFF8894);
+          this.gridHelper.material.color.setRGB(toColorRed.r, toColorRed.g, toColorRed.b);
+          this.gridHelper.material.opacity = 0.5;
+          // const fromOpacity = this.gridHelper.material.opacity;
+          // const toOpacity = 0.5;
+
+          // animate.add({ duration: 200 }).on('progress', ({ value }) => {
+          //   this.gridHelper.material.color.setRGB(
+          //     THREE.Math.lerp(fromColor.r, toColorRed.r, value),
+          //     THREE.Math.lerp(fromColor.g, toColorRed.g, value),
+          //     THREE.Math.lerp(fromColor.b, toColorRed.b, value),
+          //   );
+          //   this.gridHelper.material.opacity = THREE.Math.lerp(fromOpacity, toOpacity, value);
+          // });
+        } else {
+          // this.gridHelper.status = 'plain';
+          // const fromColor = this.gridHelper.material.color.clone();
+          // const toColorRed = new THREE.Color(0x000000);
+          // const fromOpacity = this.gridHelper.material.opacity;
+          // const toOpacity = 0.5;
+          this.gridHelper.material.color.setRGB(0, 0, 0);
+          this.gridHelper.material.opacity = 0.5;
+
+
+          // animate.add({ duration: 200 }).on('progress', ({ value }) => {
+          //   this.gridHelper.material.color.setRGB(
+          //     THREE.Math.lerp(fromColor.r, toColorRed.r, value),
+          //     THREE.Math.lerp(fromColor.g, toColorRed.g, value),
+          //     THREE.Math.lerp(fromColor.b, toColorRed.b, value),
+          //   );
+          //   this.gridHelper.material.opacity = THREE.Math.lerp(fromOpacity, toOpacity, value);
+          // });
         }
       } else {
         this.gridHelper.status = 'out';
-        animate.add({ from: this.gridHelper.material.opacity, to: 0, duration: 200 }).on('progress', ({ value }) => {
-          this.gridHelper.material.opacity = value;
-        });
+        this.gridHelper.material.opacity = 0;
+        // animate.add({ from: this.gridHelper.material.opacity, to: 0, duration: 100 }).on('progress', ({ value }) => {
+        //   this.gridHelper.material.opacity = value;
+        // });
       }
     });
   }
