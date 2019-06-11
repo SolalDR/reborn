@@ -54,7 +54,7 @@
       </transition>
     </webgl-component>
 
-    <world-notification />
+    <world-notification v-if="this.$game.player.role.name === 'city'" />
   </main>
 </template>
 
