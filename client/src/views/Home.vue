@@ -2,7 +2,7 @@
   <div class="home">
     <video class="trailer" src="@/assets/video/trailer.mp4" autoplay playsinline muted loop></video>
 
-    <p class="mute__cta" :class="{'mute__cta--muted': isMuted}" @click="muteAll">Chuuut</p>
+    <mute-button v-if="status !== 'playing' && status !== 'initializing'" />
 
     <introduction v-if="status === 'introduction'" :skip-intro="goToLanding"/>
     <landing v-if="status === 'landing'"/>
@@ -18,6 +18,7 @@
 import Introduction from '../components/home/Introduction';
 import Landing from '../components/home/Landing';
 import About from '../components/home/About';
+import MuteButton from '../components/global/MuteButton';
 
 export default {
   name: 'home',
@@ -25,6 +26,7 @@ export default {
     Introduction,
     Landing,
     About,
+    MuteButton,
   },
   data() {
     return {
