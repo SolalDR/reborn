@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home';
-import Test from './views/Test';
 
 import adminRoutes from './admin/routes';
 
@@ -16,17 +15,12 @@ export default new Router({
       component: Home,
     },
     {
-      path: '/test',
-      name: 'test',
-      component: Test,
-    },
-    {
-      path: '/rooms/:id/join',
+      path: '/:id/join',
       name: 'join-room',
       component: () => import('./views/rooms/Join.vue'),
     },
     {
-      path: '/rooms/:id',
+      path: '/room/:id',
       name: 'game',
       component: () => import('./views/Game.vue'),
     },
