@@ -5,6 +5,7 @@ export default {
   name: 'Garden',
   displayName: 'Jardin',
   role: 'city',
+  size: [1, 1],
   states: {
     creation: {
       enterModifiers: [
@@ -33,6 +34,12 @@ export default {
           name: 'money',
           value: -100,
           checkConstraint: true,
+        },
+      ],
+      leaveModifiers: [
+        {
+          name: 'satisfaction',
+          value: -2.5,
         },
       ],
     },

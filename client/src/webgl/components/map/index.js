@@ -4,6 +4,7 @@ import GridHelper from './GridHelper';
 import Bus from '@/plugins/Bus';
 import GUI from '@/plugins/GUI';
 import theme from '@/config/theme';
+import config from '../../../config';
 
 export default class GameMap extends THREE.Group {
   constructor({
@@ -39,9 +40,7 @@ export default class GameMap extends THREE.Group {
     this.initCastEvent();
     this.initWater();
     this.initFloor(geometry);
-
-    // TODO: Add in config
-    // this.displayPlayground();
+    this.initGUI();
   }
 
   /**
@@ -102,7 +101,6 @@ export default class GameMap extends THREE.Group {
         animate.add({ from: this.gridHelper.material.opacity, to: 0, duration: 200 }).on('progress', ({ value }) => {
           this.gridHelper.material.opacity = value;
         });
-        // this.gridHelper.visible = false;
       }
     });
   }
@@ -127,7 +125,7 @@ export default class GameMap extends THREE.Group {
           const mesh = new THREE.Mesh(geo, mat);
           mesh.position.set(
             i - this.grid.size[0] / 2 + 0.5,
-            cell.altitude,
+            cell.altitude + 0.2,
             j - this.grid.size[1] / 2 + 0.5,
           );
 
@@ -178,5 +176,11 @@ export default class GameMap extends THREE.Group {
 
   render() {
     this.gridHelper.render();
+  }
+
+  initGUI() {
+    if (config.debug.gridCases) {
+      this.displayPlayground();
+    }
   }
 }

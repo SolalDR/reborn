@@ -247,21 +247,6 @@ export default class WebGL extends Emitter {
   }
 
   /**
-   * A slot is an id set between 0 & 255. It represent the channel RED in the picking scene
-   * @param  {int} slot The slot of the model
-   * @return {EntityModel}
-   */
-  findModelWithSlot(slot) {
-    let model = null;
-    Object.keys(this.models).forEach((slug) => {
-      if (this.models[slug].slot === slot) {
-        model = this.models[slug];
-      }
-    });
-    return model;
-  }
-
-  /**
    * Run once when initializing
    * @param  {[string]} models
    * @param {} [varname] [description]

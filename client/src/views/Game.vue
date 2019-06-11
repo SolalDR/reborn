@@ -217,7 +217,9 @@ export default {
 
       this.isLoading = false;
 
-      this.$socket.emit('grid:ready', this.$webgl.map.grid.infos);
+      if (config.server.enabled) {
+        this.$socket.emit('grid:ready', this.$webgl.map.grid.infos);
+      }
 
       // When clicking an empty cell
       this.$webgl.on('selectCell', item => this.onAddItem(item));

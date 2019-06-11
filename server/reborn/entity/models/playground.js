@@ -4,7 +4,7 @@ export default {
   name: 'Playground',
   displayName: 'Aire de jeu',
   role: 'city',
-  size: [2, 2],
+  size: [1, 1],
   states: {
     creation: {
       enterModifiers: [
@@ -25,6 +25,12 @@ export default {
           name: 'money',
           value: -240,
           checkConstraint: true,
+        },
+      ],
+      leaveModifiers: [
+        {
+          name: 'satisfaction',
+          value: -2.5,
         },
       ],
     },

@@ -4,7 +4,7 @@ export default {
   name: 'Outdoor Breeding',
   displayName: 'Elevage extérieur',
   role: 'city',
-  size: [3, 2],
+  size: [2, 3],
   states: {
     creation: {
       enterModifiers: [
@@ -33,6 +33,12 @@ export default {
           name: 'money',
           value: -800,
           checkConstraint: true,
+        },
+      ],
+      leaveModifiers: [
+        {
+          name: 'satisfaction',
+          value: -0.7,
         },
       ],
     },

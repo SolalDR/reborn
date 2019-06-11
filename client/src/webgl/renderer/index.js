@@ -45,7 +45,7 @@ export default class Renderer {
       canvas: this.canvas,
       antialias: false,
     });
-    this.renderer.shadowMapEnabled = true;
+    this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.BasicShadowMap;
     this.renderer.setClearColor(theme.water.color);
     this.scene.background = new THREE.Color(theme.water.color);

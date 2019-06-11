@@ -79,7 +79,7 @@ class Grid extends Reborn.Grid {
     for (let i = 0; i < distance.x; i++) {
       for (let j = 0; j < distance.y; j++) {
         const currentCell = this.get({ x: this.box.min.x + i, y: this.box.min.y + j });
-        if (currentCell === null || currentCell.reference !== null) {
+        if (!currentCell || currentCell.reference !== null) {
           return false;
         }
       }

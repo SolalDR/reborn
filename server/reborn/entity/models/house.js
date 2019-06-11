@@ -43,6 +43,12 @@ export default {
           checkConstraint: true,
         },
       ],
+      leaveModifiers: [
+        {
+          name: 'satisfaction',
+          value: -2,
+        },
+      ],
     },
     living: {
       enterModifiers: [

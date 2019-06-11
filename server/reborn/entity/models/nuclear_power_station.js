@@ -4,6 +4,7 @@ export default {
   name: 'Nuclear power station',
   displayName: 'Central nucléaire',
   role: 'city',
+  size: [2, 2],
   states: {
     creation: {
       enterModifiers: [
