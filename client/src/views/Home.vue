@@ -9,7 +9,7 @@
     <about v-if="status === 'about'" :close-overlay="goToLanding"/>
 
     <transition name="fade-up">
-      <p v-if="status === 'landing'" class="about__cta cta--absolute" @click="status = 'about'">A Propos</p>
+      <p v-if="status === 'landing'" class="about__cta cta--absolute" @click="status = 'about'">À Propos</p>
     </transition>
   </div>
 </template>

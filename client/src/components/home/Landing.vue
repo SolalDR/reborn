@@ -73,9 +73,7 @@ export default {
         this.$store.commit('debug/log', { content: 'home: createRoom', label: 'default' });
         this.roomId = Math.random().toString(36).substr(2, 9);
 
-        // TODO: Update this when domain name is available
-        // this.inviteLink = `${window.location.host}/#/${this.roomId}/join`;
-        this.inviteLink = `reborn.land/#/${this.roomId}/join`;
+        this.inviteLink = `${window.location.host}/#/${this.roomId}/join`;
 
         if (!config.server.enabled) {
           this.$store.commit('debug/log', { content: 'simulate room:join (emit)', label: 'socket' });
