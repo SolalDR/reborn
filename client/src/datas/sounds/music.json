@@ -4,7 +4,7 @@
     "path": "music/ambiance.mp3",
     "datas": {
       "loop": true,
-      "volume": 0.2,
+      "volume": 2,
       "autoplay": true
     }
   },
@@ -13,7 +13,7 @@
     "path": "music/ambiance_sea.mp3",
     "datas": {
       "loop": true,
-      "volume": 0.2
+      "volume": 0.3
     }
   },
   {
@@ -21,7 +21,7 @@
     "path": "music/drum_fast_1.mp3",
     "datas": {
       "loop": true,
-      "volume": 0.05
+      "volume": 0.3
     }
   },
   {
@@ -29,7 +29,7 @@
     "path": "music/drum_fast_2.mp3",
     "datas": {
       "loop": true,
-      "volume": 0.05
+      "volume": 0.3
     }
   },
   {
@@ -37,7 +37,7 @@
     "path": "music/drum_medium_1.mp3",
     "datas": {
       "loop": true,
-      "volume": 0.05
+      "volume": 0.3
     }
   },
   {
@@ -45,7 +45,7 @@
     "path": "music/drum_medium_2.mp3",
     "datas": {
       "loop": true,
-      "volume": 0.05
+      "volume": 0.3
     }
   },
   {
@@ -53,7 +53,7 @@
     "path": "music/drum_slow_1.mp3",
     "datas": {
       "loop": true,
-      "volume": 0.05
+      "volume": 0.3
     }
   },
   {
@@ -61,7 +61,7 @@
     "path": "music/drum_slow_2.mp3",
     "datas": {
       "loop": true,
-      "volume": 0.05
+      "volume": 0.3
     }
   }
 ]

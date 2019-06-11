@@ -159,6 +159,7 @@ export default {
         default: break;
       }
     });
+    console.log(this);
   },
 
   computed: {
@@ -381,6 +382,7 @@ export default {
     },
 
     onRythmChange(speed) {
+      console.log(`drum_${speed}`);
       this.$sound.playSample(`drum_${speed}`);
     },
 
@@ -485,8 +487,6 @@ export default {
           { name: 'drum_fast_1', delay: 0 },
           { name: 'drum_fast_2', delay: 750 },
         ]);
-
-        this.$sound.playSample('drum_slow');
       }, Math.max(0, timeout + 1));
     },
 
@@ -494,6 +494,7 @@ export default {
       this.endGameDatas = args;
       this.isEnded = true;
       this.status = 'explanations';
+      this.$sound.stopCurrentSample();
     },
 
     onNotificationSend(notification) {

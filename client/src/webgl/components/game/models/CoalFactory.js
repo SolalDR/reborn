@@ -57,9 +57,9 @@ export default class CoalFactory extends EntityModelGroup {
 
   removeItem(index) {
     super.removeItem(index);
-    this.smokeCluster.removeItem(index * 2);
-    this.smokeCluster.removeItem(index * 2 + 1);
-    this.smokeCluster.removeItem(index * 2 + 2);
+    this.smokeCluster.removeItem(index * 3);
+    this.smokeCluster.removeItem(index * 3 + 1);
+    this.smokeCluster.removeItem(index * 3 + 2);
   }
 
   render() {
