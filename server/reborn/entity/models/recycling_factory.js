@@ -5,6 +5,7 @@ export default {
   name: 'Recycling Factory',
   displayName: 'Centre de recyclage',
   role: 'city',
+  size: [2, 2],
   states: {
     creation: {
       enterModifiers: [

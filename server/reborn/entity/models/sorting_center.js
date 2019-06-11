@@ -5,6 +5,7 @@ export default {
   name: 'Sorting Center',
   displayName: 'Centre de tri',
   role: 'city',
+  size: [2, 2],
   states: {
     creation: {
       enterModifiers: [

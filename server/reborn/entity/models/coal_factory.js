@@ -4,6 +4,7 @@ export default {
   name: 'Coal Factory',
   displayName: 'Usine à charbon',
   role: 'city',
+  size: [2, 2],
   states: {
     creation: {
       enterModifiers: [

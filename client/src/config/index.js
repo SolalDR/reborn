@@ -4,6 +4,11 @@ export default {
   },
   gui: {
     visible: false,
+    models: false,
+  },
+  debug: {
+    gridCases: false,
+    logger: false,
   },
   sandbox: false,
 };

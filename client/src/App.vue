@@ -1,6 +1,6 @@
 <template>
   <div>
-    <logger />
+    <logger v-if="logger"/>
     <GUI />
     <component :is="layout">
       <router-view />
@@ -11,9 +11,15 @@
 <script>
 import Logger from './components/debug/Logger';
 import GUI from './components/debug/Gui';
+import config from '@/config';
 
 const layoutDefault = 'default';
 export default {
+  data() {
+    return {
+      logger: config.debug.logger,
+    };
+  },
   components: {
     Logger,
     GUI,
