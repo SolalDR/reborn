@@ -303,7 +303,7 @@ export default class WebGL extends Emitter {
       });
 
       this.hoveredEntity = null;
-      this.map.gridHelper.visible = true;
+      // this.map.gridHelper.visible = true;
     }
 
     // Si une mesh est casté
@@ -321,7 +321,7 @@ export default class WebGL extends Emitter {
           });
         }
         this.hoveredEntity = hoveredEntity;
-        this.map.gridHelper.visible = false;
+        // this.map.gridHelper.visible = false;
       }
     }
   }

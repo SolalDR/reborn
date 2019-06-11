@@ -4,24 +4,19 @@
       <template v-if="modelDisplayed">
         <span>{{ modelDisplayed.displayName }}</span>
 
-        <div v-for="(modifier, index) in modelDisplayed.states.mounted.recurModifiers"
-              :key="`model-infos-modifier-${index}`">
-          <svg class="arrow"
-               :class="{'arrow--top': modifier.value > 0, 'arrow--bottom': modifier.value < 0}"
-               width="9"
-               height="15"
-               viewBox="0 0 9 15">
-            <path fill-rule="evenodd" d="M6 7v8H3V7H0l4.5-7L9 7H6z"/>
-          </svg>
-
-          <span class="icon">
-            <icon :icon-name="modifier.name" :is-filled="true"/>
-          </span>
-          <span>{{ modifier.value * 4 }}/an</span>
-        </div>
+        <model-modifiers :modifiers="modelDisplayed.states.creation.enterModifiers.filter((modifier) => modifier.name !== 'money')"/>
+        <model-modifiers :modifiers="modelDisplayed.states.mounted.recurModifiers"
+                         :is-recurent="true"/>
 
         <span v-if="this.$game.player.role.name === 'city'" class="cost">
-          X {{ -modelDisplayed.states.creation.enterModifiers.find(modifier => modifier.name === 'money').value }}
+          <svg width="17" height="17" viewBox="0 0 17 17">
+            <path fill="#000"
+                  fill-rule="evenodd"
+                  stroke="#000"
+                  d="M16 10.82a7.113 7.113 0 0 0-6.375-7.023 1.18 1.18 0 0 0-.06-.686L12.25 1h-7.5l2.643 2.078a1.172 1.172 0 0 0-.072.725A7.113 7.113 0 0 0 1 10.87h.004v1.61H1v1.177A2.344 2.344 0 0 0 3.345 16h10.31A2.344 2.344 0 0 0 16 13.657V10.82z"/>
+          </svg>
+
+          {{ -modelDisplayed.states.creation.enterModifiers.find(modifier => modifier.name === 'money').value }}
         </span>
       </template>
     </div>
@@ -29,12 +24,12 @@
 </template>
 
 <script>
-import Icon from '../icons/Icon';
+import ModelModifiers from './ModelModifiers';
 
 export default {
   name: 'model-infos',
   components: {
-    Icon,
+    ModelModifiers,
   },
   props: ['currentModel', 'hoveredModel'],
   data() {
@@ -56,7 +51,9 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+  $margin-value: 1.5rem;
+
   .model-infos {
     @include useFlex();
     padding: 0 1.5rem;
@@ -67,9 +64,7 @@ export default {
     @include fontSize(12);
     font-family: "DrukText-Bold";
 
-    $margin-value: 1.5rem;
-    & > div {
-      @include useFlex();
+    .model-modifiers > div {
       margin-right: $margin-value;
 
       &:first-of-type {
@@ -79,40 +74,16 @@ export default {
       &:last-of-type {
         margin-right: 0;
       }
-
-      & > * {
-        margin-right: .5rem;
-      }
-
-      .arrow {
-        &--top {
-          path {
-            fill: getColor(gauges, high);
-          }
-        }
-
-        &--bottom {
-          transform: rotate(180deg);
-
-          path {
-            fill: getColor(gauges, low);
-          }
-        }
-      }
-
-      .icon {
-        width: 1.6rem;
-        height: 1.6rem;
-
-        svg {
-          width: 100%;
-          height: 100%;
-        }
-      }
     }
 
     .cost {
+      @include useFlex();
+      flex-wrap: nowrap;
       margin-left: $margin-value;
+
+      svg {
+        margin-right: .5rem;
+      }
     }
   }
 </style>

@@ -39,8 +39,8 @@
 </template>
 
 <script>
-import waveSrc from '@/assets/img/home/wave.png';
-import waveReversedSrc from '@/assets/img/home/wave-reversed.png';
+import waveSrc from '@/assets/img/overlay/wave.png';
+import waveReversedSrc from '@/assets/img/overlay/wave-reversed.png';
 
 export default {
   name: 'overlay',

@@ -7,7 +7,11 @@
     <img :src="modelIcons[model.slug]" :alt="model.name">
 
     <transition name="fade">
-      <div v-if="isCity" class="model__quantity">{{ quantity }}</div>
+      <div v-if="isCity"
+           class="model__quantity"
+           :class="{'model__quantity--disabled': quantity === 0}">
+        {{ quantity }}
+      </div>
     </transition>
   </div>
 </template>
@@ -63,20 +67,23 @@ export default {
 <style lang="scss" scoped>
   .model {
     cursor: pointer;
-    opacity: .3;
     @include useFlex();
     position: relative;
-    transition: all .3s ease;
 
     img {
       $img-size: 5rem;
+
+      opacity: .3;
+      transition: opacity .3s ease;
 
       width: $img-size;
       height: $img-size;
     }
 
     &--current {
-      opacity: 1;
+      img {
+        opacity: 1;
+      }
     }
 
     &__quantity {
@@ -94,6 +101,10 @@ export default {
       border-radius: 50%;
       @include fontSize(12);
       font-family: "DrukText-Medium";
+
+      &--disabled {
+        background-color: getColor(gauges, low);
+      }
     }
   }
 </style>

@@ -4,8 +4,8 @@
 
     <p class="mute__cta" :class="{'mute__cta--muted': isMuted}" @click="muteAll">Chuuut</p>
 
-    <landing v-if="status === 'landing'"/>
     <introduction v-if="status === 'introduction'" :skip-intro="goToLanding"/>
+    <landing v-if="status === 'landing'"/>
     <about v-if="status === 'about'" :close-overlay="goToLanding"/>
 
     <transition name="fade-up">
