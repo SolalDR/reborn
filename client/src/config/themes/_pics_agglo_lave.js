@@ -9,12 +9,12 @@ for (let index = 0; index < stagesIcebergCount; index += 1) {
     definition: 8,
     floorColor: 0x8da0a4,
     wallColor: 0x4a5a61,
-    radius: [1, 4],
+    radius: [1, 6],
     noise: 0.3,
     height: [1, 15], // random
     position: {
-      x: [-6, 6],
-      y: [-6, 6],
+      x: [-8, 8],
+      y: [-8, 8],
     },
   });
 }

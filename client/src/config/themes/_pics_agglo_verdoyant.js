@@ -9,12 +9,12 @@ for (let index = 0; index < stagesIcebergCount; index += 1) {
     definition: 8,
     floorColor: 0xa3ba5f,
     wallColor: 0xece4d4,
-    radius: [1, 4],
+    radius: [1, 6],
     noise: 0.3,
     height: [1, 15], // random
     position: {
-      x: [-6, 6],
-      y: [-6, 6],
+      x: [-8, 8],
+      y: [-8, 8],
     },
   });
 }
@@ -22,7 +22,7 @@ for (let index = 0; index < stagesIcebergCount; index += 1) {
 
 export default defaultTheme.extends({
   water: {
-    color: 0xE8F8FA,
+    color: 0x88d5d4,
   },
 
   map: {

@@ -19,11 +19,11 @@ export default {
       recurModifiers: [
         {
           name: 'food',
-          value: 10,
+          value: 8,
         },
         {
           name: 'purity',
-          value: -12,
+          value: -6,
         },
       ],
     },

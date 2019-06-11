@@ -13,8 +13,8 @@ for (let index = 0; index < stagesIcebergCount; index += 1) {
     noise: [0.1, 0, 5],
     height: [0.2, 2], // random
     position: {
-      x: [-16, 16],
-      y: [-16, 16],
+      x: [-13, 13],
+      y: [-13, 13],
     },
   });
 }
@@ -22,7 +22,7 @@ for (let index = 0; index < stagesIcebergCount; index += 1) {
 
 export default defaultTheme.extends({
   water: {
-    color: 0xE8F8FA,
+    color: 0x88d5d4,
   },
 
   map: {
