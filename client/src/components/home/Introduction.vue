@@ -73,7 +73,8 @@ export default {
       width: 100%;
       height: $height;
       background-color: rgb(122, 226, 182);
-      animation: gif-animation $animation-duration cubic-bezier(0, .01, 0, 1) infinite;
+      animation: gif-animation $animation-duration cubic-bezier(0, .01, 0, 1) 3;
+      animation-fill-mode: forwards;
 
       @keyframes gif-animation {
         0% {
@@ -113,7 +114,7 @@ export default {
     }
 
     &__texts {
-      animation: scaleContent $animation-duration linear infinite;
+      animation: scaleContent $animation-duration linear 3;
 
       .text {
         margin: 0 auto;
