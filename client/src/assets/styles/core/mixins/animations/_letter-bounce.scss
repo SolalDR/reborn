@@ -16,16 +16,17 @@
       fill-mode: forwards;
     }
 
-    @for $i from 1 to 400 {
+    @for $i from 1 to 120 {
       &:nth-child(#{$i}) {
         animation-delay: $delay + $i * 0.007s;
       }
     }
 
+    $translate-value: 40px;
     @keyframes letterBounceIn {
       0% {
         opacity: 0;
-        transform: translateY(18rem) translateZ(0);
+        transform: translateY($translate-value) translateZ(0);
       }
       100% {
         opacity: 1;
@@ -36,7 +37,8 @@
     @keyframes letterBounceInOut {
       0% {
         opacity: 0;
-        transform: translateY(200%) translateZ(0);
+        transform: translateY($translate-value) translateZ(0);
+        animation-timing-function: cubic-bezier(0, .1, 0, 1);
       }
       15% {
         opacity: 1;
@@ -45,10 +47,11 @@
       85% {
         opacity: 1;
         transform: translateY(0) translateZ(0);
+        animation-timing-function: ease-in;
       }
-      100% {
+      95% {
         opacity: 0;
-        transform: translateY(-200%) translateZ(0);
+        transform: translateY(-$translate-value) translateZ(0);
       }
     }
   }

@@ -143,6 +143,7 @@ export default class GameMap extends THREE.Group {
       opacity: 0.5,
     });
 
+    let count = 0;
     for (let i = 0; i < this.grid.size[0]; i++) {
       for (let j = 0; j < this.grid.size[1]; j++) {
         const cell = this.grid.get({ x: i, y: j });
@@ -154,11 +155,12 @@ export default class GameMap extends THREE.Group {
             cell.altitude + 0.2,
             j - this.grid.size[1] / 2 + 0.5,
           );
-
+          count ++;
           this.add(mesh);
         }
       }
     }
+    console.log('RATIO: ', count/1024);
   }
 
   /**
