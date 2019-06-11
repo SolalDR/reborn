@@ -1,7 +1,7 @@
 <template>
   <transition name="fade">
     <div class="landing" key="landing">
-      <img class="logo" src="@/assets/img/logo.svg" alt="Logo Reborn">
+      <img class="logo" src="@/assets/img/home/logo.svg" alt="Logo Reborn">
 
       <div class="actions">
         <div class="actions__item">
@@ -24,7 +24,7 @@
             <div v-if="roomId" class="item-infos">
               <div class="invite-link">
                 <!-- TODO: Replace with inviteLink -->
-                <p class="room-id cta--bordered">{{ roomId }}</p>
+                  <p class="room-id cta--bordered">{{ inviteLink }}</p>
 
                 <div class="copy-to-clipboard" @click="copyToClipboard">
                   <img src="@/assets/icons/home/copy-to-clipboard.svg" alt="Copier le lien">
@@ -73,7 +73,9 @@ export default {
         this.$store.commit('debug/log', { content: 'home: createRoom', label: 'default' });
         this.roomId = Math.random().toString(36).substr(2, 9);
 
-        this.inviteLink = `${window.location.origin}#/rooms/${this.roomId}/join`;
+        // TODO: Update this when domain name is available
+        // this.inviteLink = `${window.location.host}/#/${this.roomId}/join`;
+        this.inviteLink = `reborn.land/#/${this.roomId}/join`;
 
         if (!config.server.enabled) {
           this.$store.commit('debug/log', { content: 'simulate room:join (emit)', label: 'socket' });

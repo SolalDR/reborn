@@ -9,14 +9,14 @@
          :key="`explanations-text-${index}`"
          v-html="$splitWithSpan(textLine)"
          class="explanations__text"></p>
-    </div>
 
-    <div class="explanations__footer footer">
       <div class="explanations__actions">
         <p class="cta--bordered" @click="$emit('updateStatus', 'saving')">{{ texts.save }}</p>
         <p class="cta--bordered" @click="tryAgain">{{ texts.tryAgain }}</p>
       </div>
+    </div>
 
+    <div class="explanations__footer footer">
       <div class="explanations__share">
         <p>{{ texts.share }}</p>
         <a href="https://twitter.com/" target="_blank">
@@ -56,7 +56,7 @@ export default {
 <style lang="scss">
   .explanations {
     &__header {
-      top: 9rem;
+      top: 15rem;
     }
 
     &__title {
@@ -85,7 +85,7 @@ export default {
     }
 
     &__actions {
-      margin-bottom: $space-xxl;
+      margin-top: 10rem;
 
       .cta--bordered {
         margin: 0 auto 2rem;
