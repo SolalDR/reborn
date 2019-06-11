@@ -3,12 +3,7 @@
     <scene @mounted="onWebGLInit"/>
     <div v-if="isLoading" class="game__loading-overlay"></div>
 
-    <p v-if="status !== 'playing' && status !== 'initializing'"
-       @click="muteAll"
-       class="mute__cta cta"
-       :class="{'mute__cta--muted': isMuted}">
-      Chuuut
-    </p>
+    <mute-button v-if="status !== 'playing' && status !== 'initializing'" />
 
     <!-- IsStarting -->
     <overlay v-if="isStarting" :appear="false" :is-transparent="!isLoading" :fade-out="true">
@@ -79,6 +74,7 @@ import config from '../config';
 import ModelInfos from '../components/game/ModelInfos';
 import FlashNews from '../components/game/FlashNews';
 import WorldNotification from '../components/game/WorldNotification';
+import MuteButton from '../components/global/MuteButton';
 
 export default {
   name: 'Game',
@@ -99,6 +95,7 @@ export default {
     WebglComponent,
     WebglDestroyBubble,
     WorldNotification,
+    MuteButton,
   },
 
   data() {
@@ -107,7 +104,6 @@ export default {
       isStarting: true,
       isEnded: false,
       isLoading: true,
-      isMuted: false,
       showSettings: false,
       currentModel: null,
       hoveredModel: null,
@@ -173,11 +169,6 @@ export default {
   },
 
   methods: {
-    // TODO: Create common method
-    muteAll() {
-      this.isMuted = !this.isMuted;
-    },
-
     onKeyDown(event) {
       this.$bus.$emit('shortcut', event.which);
     },

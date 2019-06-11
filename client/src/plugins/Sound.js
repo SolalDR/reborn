@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import AssetsManager from '@/services/assets/Manager';
 import Emitter from '@solaldr/emitter';
+import { Howler } from 'howler';
 
 class SoundManager extends Emitter {
   constructor() {
@@ -9,6 +10,7 @@ class SoundManager extends Emitter {
     this.sounds = {};
     this.samples = {};
     this.prefix = 'sound_';
+    this.muted = false;
     this.on('load', () => {
       this._loaded = true;
     });
@@ -82,6 +84,16 @@ class SoundManager extends Emitter {
       const howl = this.sounds[this.prefix + sound.name];
       howl.once('end', () => howl.stop());
     });
+  }
+
+  unmute() {
+    this.muted = false;
+    Howler.volume(1);
+  }
+
+  mute() {
+    this.muted = true;
+    Howler.volume(0);
   }
 }
 
