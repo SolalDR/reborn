@@ -16,16 +16,17 @@
       fill-mode: forwards;
     }
 
-    @for $i from 1 to 400 {
+    @for $i from 1 to 120 {
       &:nth-child(#{$i}) {
         animation-delay: $delay + $i * 0.007s;
       }
     }
 
+    $translate-value: 5rem;
     @keyframes letterBounceIn {
       0% {
         opacity: 0;
-        transform: translateY(18rem) translateZ(0);
+        transform: translateY($translate-value) translateZ(0);
       }
       100% {
         opacity: 1;
@@ -36,7 +37,7 @@
     @keyframes letterBounceInOut {
       0% {
         opacity: 0;
-        transform: translateY(200%) translateZ(0);
+        transform: translateY($translate-value) translateZ(0);
       }
       15% {
         opacity: 1;
@@ -48,7 +49,7 @@
       }
       100% {
         opacity: 0;
-        transform: translateY(-200%) translateZ(0);
+        transform: translateY(-$translate-value) translateZ(0);
       }
     }
   }
