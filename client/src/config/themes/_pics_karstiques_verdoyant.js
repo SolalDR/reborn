@@ -22,7 +22,7 @@ for (let index = 0; index < stagesIcebergCount; index += 1) {
 
 export default defaultTheme.extends({
   water: {
-    color: 0xE8F8FA,
+    color: 0x88d5d4,
   },
 
   map: {
