@@ -39,10 +39,11 @@ export default [
   },
   {
     slug: 'rythm-medium',
-    test: game => game.metrics.get('satisfaction').value < 25
-      || game.metrics.get('purity').value < 25
-      || game.metrics.get('biodiversity').value < 25
-      || game.metrics.get('food').value < 25
-      || game.metrics.get('energy').value < 25,
+    value: false,
+    test: game => game.metrics.get('satisfaction').value < 35
+      || game.metrics.get('purity').value < 35
+      || game.metrics.get('biodiversity').value < 35
+      || game.metrics.get('food').value < 35
+      || game.metrics.get('energy').value < 35,
   },
 ];

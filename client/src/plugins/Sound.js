@@ -45,20 +45,23 @@ class SoundManager extends Emitter {
   }
 
 
-  playSample(name) {
-    const sounds = this.samples[name].sounds;
+  playSample(nameSample) {
+    // Si le sample est déjà jouer
+    if (this.currentSample && nameSample === this.currentSample.name) return;
+
+    const sounds = this.samples[nameSample].sounds;
+
+    // Si un sample est déjà en train d'être joué
     if (this.currentSample) {
-      const duration = this.currentSample.duration;
+      // Stop current sounds
+      // console.log(this.currentSample);
       this.currentSample.sounds.forEach((sound, index) => {
         const howl = this.sounds[this.prefix + sound.name];
         howl.once('end', () => {
-          if (index !== 0) {
-            setTimeout(() => howl.stop(), duration);
-          } else {
-            howl.stop();
-          }
+          // console.log(`end ${sound.name}`);
+          howl.stop();
           if (index === 0) {
-            this.playSample(name);
+            this.playSample(nameSample);
           }
         });
       });
@@ -66,15 +69,22 @@ class SoundManager extends Emitter {
       return;
     }
 
-
     sounds.forEach((sound) => {
       setTimeout(() => {
         this.play(sound.name);
       }, sound.delay ? sound.delay : 0);
     });
-    this.currentSample = this.samples[name];
+    this.currentSample = this.samples[nameSample];
+  }
+
+  stopCurrentSample() {
+    this.currentSample.sounds.forEach((sound) => {
+      const howl = this.sounds[this.prefix + sound.name];
+      howl.once('end', () => howl.stop());
+    });
   }
 }
+
 
 const Manager = new SoundManager();
 const SoundPlugin = {
