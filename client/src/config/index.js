@@ -1,6 +1,6 @@
 export default {
   server: {
-    enabled: true,
+    enabled: false,
   },
   gui: {
     visible: false,
@@ -9,6 +9,7 @@ export default {
   debug: {
     gridCases: false,
     logger: false,
+    role: 'city',
   },
   sandbox: false,
 };

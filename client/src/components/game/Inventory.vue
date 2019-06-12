@@ -69,6 +69,21 @@ export default {
       // this.entitiesShortcuts(key);
     });
 
+    window.addEventListener('keypress', (e) => {
+      console.log(e.code);
+      switch (e.code) {
+        case 'Digit1': this.setCategory(0); break; // touch 1
+        case 'Digit2': this.setCategory(1); break; // touch 2
+        case 'Digit3': this.setCategory(2); break; // touch 3
+        case 'Digit4': this.setCategory(3); break; // touch 4
+        case 'KeyQ': this.setModel(0); break; // touch Q
+        case 'KeyW': this.setModel(1); break; // touch W
+        case 'KeyE': this.setModel(2); break; // touch E
+        case 'KeyR': this.setModel(3); break; // touch R
+        default: break;
+      }
+    });
+
     this.categories = [];
     Object.keys(Reborn.categories).forEach((key) => {
       const category = Reborn.categories[key];
@@ -85,6 +100,20 @@ export default {
   },
 
   methods: {
+    setCategory(rank) {
+      this.categoryRank = rank;
+      this.setCurrentCategory(this.categories[rank]);
+    },
+
+    setModel(rank) {
+      this.modelRank = rank;
+      if (this.currentCategory.slug === 'skill') {
+        this.setCurrentSkill(this.skills[rank]);
+      } else {
+        this.setCurrentModel(this.models[rank]);
+      }
+    },
+
     keyHasShortcut(keyPress, keyCodes) {
       const keyIndex = keyCodes.indexOf(keyPress);
       return keyIndex;
