@@ -18,28 +18,8 @@ html {
 body {
   height: 100%;
   width: 100%;
+  overflow: hidden;
   line-height: inherit !important;
-}
-
-* {
-  &::selection {
-    background-color: getColor(mains, primary) !important;
-  }
-
-  &::-webkit-scrollbar-track {
-    background-color: getColor(basics, white);
-    border: 1px solid getColor(basics, black);
-    border-radius: 1.25rem;
-  }
-
-  &::-webkit-scrollbar {
-    width: 2.5rem;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: getColor(basics, black);
-    border-radius: 1.25rem;
-  }
 }
 
 h1,
@@ -60,25 +40,11 @@ a {
   text-decoration: none !important;
 }
 
+
 .bold {
   font-family: "DrukText-Bold";
 }
 
 .italic {
   font-family: "DrukText-MediumItalic";
-}
-
-.header,
-.footer {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.header {
-  top: 7rem;
-}
-
-.footer {
-  bottom: 6rem;
 }

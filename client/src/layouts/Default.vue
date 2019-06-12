@@ -16,4 +16,41 @@
   height: 100%;
   width: 100%;
 }
+
+.default-layout * {
+  &::selection {
+    background-color: getColor(mains, primary) !important;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: getColor(basics, white);
+    border: 1px solid getColor(basics, black);
+    border-radius: 1.25rem;
+  }
+
+  &::-webkit-scrollbar {
+    width: 2.5rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: getColor(basics, black);
+    border-radius: 1.25rem;
+  }
+}
+
+.header,
+.footer {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.header {
+  top: 7rem;
+}
+
+.footer {
+  bottom: 6rem;
+}
+
 </style>

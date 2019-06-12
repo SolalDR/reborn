@@ -68,6 +68,11 @@ export default {
 </script>
 
 <style>
+.admin-layout {
+  overflow-y: scroll;
+  height: 100vh;
+  width: 100%;
+}
 .admin p {
   font-family: Roboto,Noto Sans,-apple-system,BlinkMacSystemFont,sans-serif;
 }
